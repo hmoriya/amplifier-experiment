@@ -1,0 +1,166 @@
+# パラソルV3 → V4 マッピング定義
+
+version: "1.0"
+description: "コンサルティングツール（パラソルV3）からパラソルV4への変換マッピング"
+
+# レベルマッピングルール
+level_mappings:
+  # ビジネスケーパビリティ → 戦略ケーパビリティ
+  business_capability:
+    source_pattern: "BC-*"
+    target_level: "CL1"
+    transformation:
+      - extract: "name, description, value_proposition"
+      - enrich: "value_metrics, roi_targets"
+      - generate: "capability_id, parent_value_stream"
+
+  # サービス定義 → 戦術ケーパビリティ（マイクロサービス）
+  service_definition:
+    source_pattern: "MS-*"
+    target_level: "CL2"
+    transformation:
+      - extract: "service_name, bounded_context, api_endpoints"
+      - enrich: "microservice_patterns, technology_stack"
+      - generate: "service_id, deployment_config"
+
+  # ビジネスオペレーション → ビジネスオペレーション（強化）
+  business_operation:
+    source_pattern: "BO-*"
+    target_level: "CL3"
+    transformation:
+      - extract: "operation_name, trigger, process_flow"
+      - classify: "pattern (CRUD|Workflow|Analytics|Collaboration)"
+      - enrich: "preconditions, postconditions, business_rules"
+      - generate: "operation_id, api_design"
+
+  # ユースケース → 詳細ユースケース/ページ
+  use_case:
+    source_pattern: "UC-*"
+    target_level: "L4"
+    transformation:
+      - extract: "use_case_name, actors, flow"
+      - split: "pages, api_calls, components"
+      - enrich: "user_experience, error_handling"
+      - generate: "page_id, component_tree"
+
+# ドメインマッピング
+domain_mappings:
+  # タスク管理ドメイン
+  task_management:
+    v3_context: "BC-001 タスク管理"
+    v4_structure:
+      CL1:
+        id: "cl1-task-management-capability"
+        name: "タスク管理ケーパビリティ"
+        value_metrics:
+          - productivity_improvement: "30%"
+          - error_reduction: "50%"
+          - cycle_time_reduction: "40%"
+
+      CL2:
+        - id: "cl2-ms-task-core"
+          name: "タスク管理コアサービス"
+          operations: ["create", "update", "assign", "track"]
+
+        - id: "cl2-ms-task-analytics"
+          name: "タスク分析サービス"
+          operations: ["analyze", "report", "predict"]
+
+      CL3:
+        - id: "cl3-create-task"
+          pattern: "CRUD"
+          sub_pattern: "Create-with-validation"
+
+        - id: "cl3-update-task-status"
+          pattern: "Workflow"
+          sub_pattern: "State-transition"
+
+        - id: "cl3-analyze-task-metrics"
+          pattern: "Analytics"
+          sub_pattern: "Aggregation"
+
+      L4:
+        pages:
+          - id: "l4-task-list-page"
+            type: "list"
+            components: ["TaskGrid", "FilterPanel", "ActionBar"]
+
+          - id: "l4-task-detail-page"
+            type: "detail"
+            components: ["TaskForm", "StatusTracker", "CommentSection"]
+
+  # 収益最適化ドメイン
+  revenue_optimization:
+    v3_context: "Revenue Optimization Service"
+    v4_structure:
+      CL1:
+        id: "cl1-revenue-optimization"
+        name: "収益最適化ケーパビリティ"
+        value_metrics:
+          - revenue_increase: "25%"
+          - forecast_accuracy: "95%"
+          - optimization_efficiency: "80%"
+
+# エンティティマッピング
+entity_mappings:
+  Task:
+    v3_attributes:
+      - taskId
+      - title
+      - description
+      - status
+      - priority
+      - assigneeId
+      - dueDate
+
+    v4_enhancements:
+      - value_impact: "number"  # 価値への影響度
+      - capability_link: "string"  # ケーパビリティとの関連
+      - metrics: "object"  # 測定メトリクス
+
+    business_rules:
+      preserved:  # V3から継承
+        - "ステータス遷移ルール"
+        - "優先度設定ルール"
+        - "期限管理ルール"
+
+      added:  # V4で追加
+        - "価値影響度算出ルール"
+        - "ケーパビリティ貢献度ルール"
+
+# 変換パイプライン
+transformation_pipeline:
+  stages:
+    1_import:
+      - action: "extract_v3_designs"
+      - action: "parse_domain_language"
+      - action: "identify_bounded_contexts"
+
+    2_analyze:
+      - action: "map_to_v4_levels"
+      - action: "identify_patterns"
+      - action: "detect_relationships"
+
+    3_enrich:
+      - action: "add_value_metrics"
+      - action: "apply_zigzag_structure"
+      - action: "generate_missing_elements"
+
+    4_validate:
+      - action: "check_consistency"
+      - action: "verify_business_rules"
+      - action: "validate_relationships"
+
+    5_generate:
+      - action: "create_services"
+      - action: "create_operations"
+      - action: "create_pages"
+      - action: "create_tests"
+
+# 検証ルール
+validation_rules:
+  - rule: "すべてのV3要素がV4にマッピングされること"
+  - rule: "ビジネスルールが保持されること"
+  - rule: "価値メトリクスが定義されること"
+  - rule: "WHAT-HOW構造が維持されること"
+  - rule: "ドメイン境界が明確であること"

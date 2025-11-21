@@ -1,0 +1,16 @@
+parasol:
+  version: "4.0"
+  defaults:
+    architecture: clean-hexagonal
+    patterns:
+      auto_apply: true
+    knowledge:
+      collect: true
+
+phases:
+  - value-analysis
+  - capability-design
+  - domain-modeling
+  - operation-design
+  - implementation
+  - validation

@@ -1,0 +1,20 @@
+amplifier:
+  ddd:
+    enabled: true
+    workflow: standard
+    artifacts_path: .ddd
+
+  agents:
+    available:
+      - zen-architect
+      - modular-builder
+      - bug-hunter
+      - test-coverage
+
+  memory:
+    enabled: true
+    path: .amplifier/memory
+
+  synthesis:
+    enabled: true
+    auto_collect: true

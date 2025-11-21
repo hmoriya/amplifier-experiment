@@ -1,0 +1,28 @@
+project:
+  name: consulting-dashboard
+  type: enterprise
+  architecture: clean-hexagonal
+  description: "Consulting project management dashboard"
+
+parasol:
+  version: "4.0"
+  phases: all
+
+patterns:
+  auto_apply: true
+  library: ../../parasol/patterns
+
+knowledge:
+  collect: true
+  database: ../../parasol/knowledge/database
+
+capabilities:
+  L1:
+    - id: project-success
+      name: "Project Success Capability"
+  L2:
+    - id: task-management
+      name: "Task Management Capability"
+  L3:
+    - id: task-crud
+      name: "Task CRUD Operations"

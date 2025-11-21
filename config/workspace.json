@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "projects": {},
+  "defaults": {
+    "template": "parasol-standard",
+    "architecture": "clean-hexagonal"
+  },
+  "tools": {
+    "cli": "./tools/cli/parasol",
+    "vscode": "./tools/vscode-extension"
+  }
+}
