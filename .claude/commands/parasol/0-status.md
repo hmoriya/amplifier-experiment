@@ -18,6 +18,61 @@ description: Check project status (project:parasol)
 /parasol:status services     # サービス/BC状況
 ```
 
+
+
+## 🔧 プロジェクト検出
+
+**重要**: このコマンドはParasolプロジェクト内で実行する必要があります。
+
+### 自動検出
+
+コマンド実行時、以下の順序で `parasol.yaml` を自動探索：
+
+1. **カレントディレクトリ** (`.`)
+2. **親ディレクトリ** (`..`)
+3. **祖父ディレクトリ** (`../..`)
+
+### 検出成功
+
+```
+✅ プロジェクト検出: {project-name}
+
+プロジェクトディレクトリ: projects/{project-name}/
+出力先: projects/{project-name}/outputs/
+```
+
+プロジェクト設定を読み込み、Phase進捗を自動記録します。
+
+### 検出失敗
+
+```
+❌ Parasolプロジェクトが見つかりません
+
+📋 次のアクションを選択してください:
+
+1. 新しいプロジェクトを作成
+   → /parasol:project init {project-name}
+
+2. 既存プロジェクトに移動
+   → cd projects/{project-name}
+
+3. プロジェクト一覧を確認
+   → /parasol:project list
+```
+
+**ベストプラクティス**: プロジェクトディレクトリ内で作業
+```bash
+# 推奨
+cd projects/my-project
+/parasol:1-context
+
+# 非推奨（プロジェクトが検出されない）
+cd ~/somewhere-else
+/parasol:1-context  # ❌
+```
+
+詳細は `.claude/commands/parasol/_project-detection.md` を参照。
+
 ## 実行
 
 パラメータに応じて `outputs/` ディレクトリ構造をチェックし、適切なステータスレポートを生成します。

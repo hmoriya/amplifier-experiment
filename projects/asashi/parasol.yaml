@@ -1,0 +1,141 @@
+project:
+  name: asashi
+  display_name: Asashi
+  created: 2025-11-24T00:00:00Z
+  updated: 2025-11-24T04:19:04Z
+
+  # 自動設定（0-initで取得）
+  company_url: https://www.asahigroup-holdings.com
+  industry: 食品・飲料業界（酒類・飲料・食品）
+
+phases:
+  phase0:
+    name: "Initialize from URL"
+    status: completed
+    completed: 2025-11-24T04:19:04Z
+    source_url: https://www.asahigroup-holdings.com
+    pages_collected: 2
+    artifacts:
+      - raw-content.md
+      - structured-info.md
+      - analysis-report.md
+      - strategic-analysis.md
+
+  phase1:
+    name: "Context"
+    status: completed
+    completed: 2025-11-24T04:19:04Z
+    auto_generated: true
+    artifacts:
+      - organization-analysis.md (auto-generated)
+      - market-assessment.md (auto-generated)
+      - constraints.md (requires manual completion)
+      - stakeholder-map.md (auto-generated)
+
+  phase2:
+    name: "Value Definition"
+    status: in_progress
+    completed: null
+    auto_generated_initial: true
+    artifacts:
+      - value-definition.md (initial draft)
+      - value-streams-mapping.md (VS0-VS7 candidates)
+      - enterprise-activities.md (initial mapping)
+      - vs0-detail.md (detailed - completed)
+      - vs2-detail.md (detailed - completed)
+    value_streams:
+      VS0:
+        name: "ビジョン策定・戦略立案"
+        status: detailed
+        completed: 2025-11-25
+      VS1:
+        name: "市場機会発見・インサイト獲得"
+        status: initial
+      VS2:
+        name: "製品開発・イノベーション"
+        domain: "Core Domain"
+        status: detailed
+        completed: 2025-11-25
+      VS3:
+        name: "ブランディング・マーケティング"
+        status: initial
+      VS4:
+        name: "販売・流通・サプライチェーン"
+        status: initial
+      VS5:
+        name: "カスタマーサポート・品質保証"
+        status: initial
+      VS6:
+        name: "データ活用・DX"
+        status: initial
+      VS7:
+        name: "業務改善・オペレーショナルエクセレンス"
+        status: initial
+
+  phase3:
+    name: "Capabilities"
+    status: in_progress
+    completed: null
+    sub_phases:
+      cl1:
+        name: "Domain Classification"
+        status: completed
+        completed: 2025-11-26
+        artifacts:
+          - strategic-classification.md
+        results:
+          core_domains: ["VS2", "VS3"]
+          supporting_domains: ["VS1", "VS4", "VS5"]
+          generic_domains: ["VS0", "VS6", "VS7"]
+      cl2:
+        name: "Subdomain Design"
+        status: in_progress
+        value_streams:
+          VS2:
+            status: completed
+            completed: 2025-11-26
+            artifacts:
+              - vs2-subdomains.md
+            subdomains:
+              core: 5
+              supporting: 3
+              generic: 1
+      cl3:
+        name: "Bounded Context Definition"
+        status: in_progress
+        bounded_contexts:
+          vs2-fermentation-research:
+            status: completed
+            completed: 2025-11-26
+            artifacts:
+              - vs2-fermentation-research-bc.md
+            aggregates:
+              - YeastStrain
+              - FermentationExperiment
+              - ResearchProject
+              - MicrobialCulture
+
+  phase4:
+    name: "Architecture"
+    status: pending
+    completed: null
+
+  phase5:
+    name: "Software Design"
+    status: pending
+    completed: null
+
+  phase6:
+    name: "Implementation"
+    status: pending
+    completed: null
+
+  phase7:
+    name: "Platform"
+    status: pending
+    completed: null
+
+settings:
+  output_dir: ./outputs
+  auto_backup: true
+  validation_strict: false

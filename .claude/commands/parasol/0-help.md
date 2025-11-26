@@ -79,19 +79,27 @@ Parasol V4 Lite フレームワークの全体像を説明：
 - 成果物: organization-analysis.md, market-assessment.md, constraints.md, stakeholder-map.md
 
 **Phase 2: Value Definition（VSごと、反復可能）**
-- コマンド: `/parasol:2-value [vs-name]`
-- 成果物: value-definition.md, value-streams-mapping.md, enterprise-activities.md
+- コマンド: `/parasol:2-value [VS番号]`
+- 成果物: value-definition.md, value-streams-mapping.md, vs{N}-detail.md
 
-**Phase 3: Capabilities（段階的）**
-- 3a. CL1: `/parasol:3-capabilities cl1` - ドメイン分類
-- 3b. CL2: `/parasol:3-capabilities cl2 [domain]` - サブドメイン設計
-- 3c. CL3: `/parasol:3-capabilities cl3 [subdomain]` - BC定義
+**Phase 3: Capabilities（段階的、VS単位）**
+- 3a. CL1: `/parasol:3-capabilities cl1` - 全VSのドメイン分類
+- 3b. CL2: `/parasol:3-capabilities cl2 [VS番号]` - VS単位でサブドメイン設計
+  - 例: `/parasol:3-capabilities cl2 VS2` (製品開発)
+- 3c. CL3: `/parasol:3-capabilities cl3 [subdomain]` - サブドメインのBC定義
+  - 例: `/parasol:3-capabilities cl3 vs2-fermentation-tech`
 
 **Phase 4-7**: Architecture, Software, Implementation, Platform
 
 ### トピック: commands
 
 全コマンドのリファレンス：
+
+**プロジェクト管理**:
+- `/parasol:project init {name}` - 新規プロジェクト作成
+- `/parasol:project list` - プロジェクト一覧
+- `/parasol:project info` - 現在のプロジェクト情報
+- `/parasol:project status` - 進捗確認
 
 **コンテキスト管理**:
 - `/parasol:0-help [topic]` - ヘルプ
@@ -100,14 +108,17 @@ Parasol V4 Lite フレームワークの全体像を説明：
 
 **フェーズコマンド**:
 - `/parasol:1-context`
-- `/parasol:2-value [vs-name]`
-- `/parasol:3-capabilities <cl1|cl2|cl3> [name]`
+- `/parasol:2-value [VS番号]` - 例: `/parasol:2-value VS2`
+- `/parasol:3-capabilities cl1` - 全VSのドメイン分類
+- `/parasol:3-capabilities cl2 [VS番号]` - 例: `/parasol:3-capabilities cl2 VS2`
+- `/parasol:3-capabilities cl3 [subdomain]` - 例: `/parasol:3-capabilities cl3 vs2-fermentation-tech`
 - `/parasol:4-architecture`
 - `/parasol:5-software [service] [bc]`
 - `/parasol:6-implementation [service] [bc]`
 - `/parasol:7-platform`
 
 パラメータ規則：`[]` = オプション、`<>` = 必須、`|` = 選択肢
+VS番号形式：`VS0`, `VS1`, `VS2`, ... `VS7`
 
 ### トピック: concepts
 
@@ -130,9 +141,11 @@ DDD/マイクロサービスへの完全なマッピング：
 ```
 Value Stream (VS0-VS7)
     ↓
+Phase 2: VS詳細化 (vs{N}-detail.md)
+    ↓
 CL1: Domain Type Classification (Core/Supporting/Generic)
     ↓
-CL2: Subdomain ≈ Microservice Candidates
+CL2: VS単位でSubdomain設計 ≈ Microservice Candidates
     ↓
 CL3: Bounded Context = Team Boundaries
     ↓
@@ -141,14 +154,21 @@ Business Operations = Use Cases + UI
 L4: Aggregates, Entities, Value Objects
 ```
 
+**VS単位のサブドメイン分解**:
+- VS2 → vs2-subdomains.md → vs2-fermentation-tech-bc, vs2-product-dev-bc, ...
+- VS3 → vs3-subdomains.md → vs3-brand-mgmt-bc, vs3-campaign-bc, ...
+
 重要な対応関係とコンテキストマップパターンを説明。
 
 ### トピック: templates
 
 利用可能なテンプレート一覧：
 
-**Phase 2**: vs0-template.md, vs1-7-template.md
-**Phase 3**: domain-classification-template.md, subdomain-template.md, bounded-context-template.md
+**Phase 2**: vs{N}-detail.md（各VSの詳細定義）
+**Phase 3**:
+  - CL1: strategic-classification.md（ドメイン分類）
+  - CL2: vs{N}-subdomains.md（VS単位のサブドメイン設計）
+  - CL3: {subdomain-name}-bc.md（Bounded Context定義）
 **Phase 4**: service-boundary-template.md, context-map-template.md, adr-template.md
 **Phase 5**: domain-language-template.md, api-specification-template.md, database-design-template.md, use-case-template.md, page-definition-template.md
 
