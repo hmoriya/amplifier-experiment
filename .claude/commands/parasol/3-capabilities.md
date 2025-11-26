@@ -54,8 +54,8 @@ Value StreamsからDDD/マイクロサービスへの段階的な分解を行い
 ケイパビリティの階層的分解により、ビジネス価値からソフトウェア設計への橋渡しを行います：
 
 - **CL1**: 戦略的分類（Core/Supporting/Generic）
-- **CL2**: サブドメイン分解（≈マイクロサービス候補）
-- **CL3**: Bounded Context定義（チーム境界、モデル境界）
+- **CL2**: ビジネスオペレーション群の定義（≈マイクロサービス候補）
+- **CL3**: Bounded Context定義（業務ルール + 技術設計）
 
 
 
@@ -119,16 +119,16 @@ cd ~/somewhere-else
 ```
 Value Stream (WHAT: 価値創造の流れ)
 ↓ ZIGZAG
-CL1: Strategic (HOW: 戦略的にどう実現するか)
+CL1: Strategic (WHY: なぜ重要か、どこに投資するか)
 → Domain Classification (Core/Supporting/Generic)
 ↓ ZIGZAG
-CL2: Tactical (HOW: 戦術的にどう実現するか)
-→ Subdomain Decomposition
+CL2: Tactical (WHAT: どんな業務オペレーションを行うか)
+→ ビジネスオペレーション群の定義
 → Microservice Candidates
 ↓ ZIGZAG
-CL3: Operational (HOW: 運用的にどう実現するか)
+CL3: Operational (HOW: 業務をどう実行・実装するか)
+→ 業務ルール + 技術設計
 → Bounded Context Definition
-→ Team Boundaries
 ↓
 WHAT (システムレベルで何が必要か)
 → Aggregates, Entities, Value Objects (L4)
@@ -421,8 +421,8 @@ Task tool を使用して zen-architect (ARCHITECT mode) を起動：
 Parasol V4 Lite - Phase 3b: Subdomain Design (CL2)
 
 ## タスク
-Value Stream {vs-number}（{vs-name}）をサブドメインに分解してください。
-各サブドメインは将来のマイクロサービス候補となります。
+Value Stream {vs-number}（{vs-name}）をサブドメイン（ビジネスオペレーション群）に分解してください。
+各サブドメインは関連するビジネスオペレーションの集合であり、将来のマイクロサービス候補となります。
 
 ## 入力
 - vs{N}-detail.md: 該当VSの詳細定義（価値の流れ、活動、KPI等）
@@ -441,19 +441,21 @@ Value Stream {vs-number}（{vs-name}）をサブドメインに分解してく�
 
 ## 分解観点
 
-### サブドメイン候補の抽出
+### サブドメイン = ビジネスオペレーション群
+サブドメインは、関連するビジネスオペレーション（業務活動）をグループ化したものです。
 以下の観点から各ドメインをサブドメインに分解：
 
-1. **責務の凝集性**: 単一の明確な責務を持つか
-2. **変更の独立性**: 他と独立して変更できるか
-3. **チーム配置**: 独立したチームで開発・運用可能か
-4. **データ境界**: 独自のデータストアを持つべきか
-5. **スケーリング要件**: 独立したスケーリングが必要か
+1. **業務の関連性**: 関連するビジネスオペレーションがまとまっているか
+2. **責務の凝集性**: 単一の明確な責務を持つか
+3. **変更の独立性**: 他と独立して変更できるか
+4. **チーム配置**: 独立したチームで開発・運用可能か
+5. **データ境界**: 独自のデータストアを持つべきか
+6. **スケーリング要件**: 独立したスケーリングが必要か
 
 ### サブドメイン定義に含める情報
 - サブドメイン名（kebab-case）
 - 目的と責務
-- 主要なビジネス機能
+- **ビジネスオペレーション一覧**（このサブドメインで実行する業務活動）
 - 関連するValue Streams
 - データ所有範囲
 - 他サブドメインとの依存関係
@@ -538,10 +540,11 @@ Value Stream: VS{N} - {VS名}
 
 **目的**: {詳細な目的}
 
-**主要ビジネス機能**:
-- {機能1}
-- {機能2}
-- {機能3}
+**ビジネスオペレーション一覧**:
+このサブドメインで実行する業務活動：
+- {オペレーション1}: {説明}
+- {オペレーション2}: {説明}
+- {オペレーション3}: {説明}
 
 **対応する活動（Phase 2のValue Flowより）**:
 - A{X}: {活動名}
@@ -629,6 +632,7 @@ Parasol V4 Lite - Phase 3c: Bounded Context Definition (CL3)
 
 ## タスク
 サブドメイン "{subdomain-name}" のBounded Contextを定義してください。
+Bounded Contextは **ビジネスオペレーションの詳細** と **技術設計** の両方を含みます。
 
 ## 入力
 - vs{N}-subdomains.md: 該当VSのサブドメイン定義
@@ -637,35 +641,46 @@ Parasol V4 Lite - Phase 3c: Bounded Context Definition (CL3)
 
 ## Bounded Context 定義要素
 
+### 【ビジネス面】
+
 ### 1. コンテキスト概要
 - BC名（サブドメイン名 + "-bc"）
 - 目的と責務
 - チーム境界（このBCを担当するチーム）
 
-### 2. ユビキタス言語（Ubiquitous Language）
-このBC内で使用される主要な用語とその定義：
-- ドメインオブジェクト
-- ビジネスルール
-- プロセス
-- イベント
+### 2. ビジネスオペレーション詳細
+CL2で定義したオペレーション群の詳細：
+- **各オペレーションの実行手順**（業務フロー）
+- **業務ルール**（ビジネスルール、制約条件）
+- **入力/出力**（何を受け取り、何を生成するか）
+- **トリガー**（何がこのオペレーションを開始するか）
+
+### 3. ユビキタス言語（Ubiquitous Language）
+このBC内で使用される主要な**業務用語**とその定義：
+- ドメインオブジェクト（業務で扱うモノ・コト）
+- ビジネスルール（業務上の制約・ルール）
+- プロセス（業務フロー）
+- イベント（業務上の重要な出来事）
 
 **重要**: 他のBCと用語が重複しても、このBC内での意味を明確に定義
 
-### 3. 集約（Aggregates）
+### 【技術面】
+
+### 4. 集約（Aggregates）
 データ整合性の境界：
 - 集約ルート（Aggregate Root）
 - エンティティ（Entities）
 - 値オブジェクト（Value Objects）
-- 不変条件（Invariants）
+- 不変条件（Invariants）= 業務ルールの技術的表現
 
-### 4. ドメインイベント（Domain Events）
-BC外部に公開するイベント：
+### 5. ドメインイベント（Domain Events）
+BC外部に公開するイベント（業務上の重要な出来事）：
 - イベント名
 - ペイロード
-- 発生タイミング
+- 発生タイミング（どの業務オペレーションで発生するか）
 
-### 5. コンテキストマップ（Context Map）
-他のBCとの関係：
+### 6. コンテキストマップ（Context Map）
+他のBCとの関係（業務連携パターン）：
 - Customer-Supplier
 - Partnership
 - Published Language
@@ -673,7 +688,7 @@ BC外部に公開するイベント：
 - Conformist
 - Anticorruption Layer
 
-### 6. API契約（概要）
+### 7. API契約（概要）
 - 提供するAPI（エンドポイント概要）
 - 依存するAPI（他BCへの依存）
 
@@ -681,14 +696,17 @@ BC外部に公開するイベント：
 outputs/3-capabilities/bounded-context-design/{subdomain-name}-bc.md
 
 テンプレート構造：
+【ビジネス面】
 1. Bounded Context 概要
-2. ユビキタス言語
-3. 集約設計
-4. ドメインイベント
-5. Context Map（他BCとの関係）
-6. API契約概要
-7. 技術スタック推奨
-8. 次のステップ（Phase 4: Architecture）
+2. ビジネスオペレーション詳細（業務フロー、業務ルール）
+3. ユビキタス言語（業務用語）
+【技術面】
+4. 集約設計
+5. ドメインイベント
+6. Context Map（他BCとの関係）
+7. API契約概要
+8. 技術スタック推奨
+9. 次のステップ（Phase 4: Architecture）
 
 ## 制約
 - BC名は "{subdomain-name}-bc" 形式
