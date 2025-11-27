@@ -1,0 +1,87 @@
+project:
+  name: archway
+  description: アークウェイプロジェクト - ITサービス企業のDDD分析
+  created: 2025-01-26
+  updated: 2025-01-26
+  company:
+    name: アークウェイ株式会社
+    url: https://www.archway.co.jp/
+    industry: ITサービス業
+
+phases:
+  phase0:
+    status: completed
+    description: 初期化 - 企業情報の収集と分析
+    completed: 2025-01-26
+    outputs:
+      - analysis-report.md
+      - raw-content.md
+      - strategic-analysis.md
+      - structured-info.md
+    
+  phase1:
+    status: completed
+    description: コンテキスト - ステークホルダーと制約の分析
+    completed: 2025-01-26
+    outputs:
+      - stakeholder-map.md
+      - constraints.md
+      - organization-analysis.md
+      - market-assessment.md
+    
+  phase2:
+    status: completed
+    description: バリュー - 価値ストリームの定義
+    completed: 2025-01-26
+    outputs:
+      - value-definition.md
+      - value-streams-mapping.md
+      - enterprise-activities.md
+      - vs2-detail.md
+    
+  phase3:
+    status: in_progress
+    description: ケイパビリティ - ドメイン分析と境界付けられたコンテキスト
+    started: 2025-01-26
+    outputs:
+      - domain-classification/strategic-classification.md
+      - subdomain-design/
+      - bounded-context-design/
+    
+  phase4:
+    status: pending
+    description: 実装 - 技術実装パターン
+    outputs:
+      - implementation-patterns.md
+      - architecture-decisions.md
+    
+  phase5:
+    status: pending
+    description: アセンブリ - 統合パターン
+    outputs:
+      - integration-patterns.md
+      - assembly-strategies.md
+    
+  phase6:
+    status: pending
+    description: デプロイメント - 展開戦略
+    outputs:
+      - deployment-strategies.md
+      - rollout-plan.md
+    
+  phase7:
+    status: pending
+    description: プラットフォーム - 基盤設計
+    outputs:
+      - platform-architecture.md
+      - infrastructure-design.md
+
+settings:
+  output_dir: ./outputs
+  auto_backup: true
+  version_control: git
+  
+metadata:
+  framework: parasol-v4-lite
+  analysis_type: DDD-based strategic design
+  target_industry: IT Services
