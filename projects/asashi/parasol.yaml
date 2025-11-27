@@ -116,11 +116,18 @@ phases:
             status: completed
             completed: 2025-11-26
             artifacts:
-              - vs2-subdomains.md
+              - vs2-product-innovation/cl2-subdomain-design.md
+            subdomains:
+              core: 6
+              supporting: 4
+          VS3:
+            status: completed
+            completed: 2025-11-27
+            artifacts:
+              - vs3-branding-marketing/cl2-subdomain-design.md
             subdomains:
               core: 5
               supporting: 3
-              generic: 1
       cl3:
         name: "Bounded Context Definition"
         status: in_progress
@@ -135,6 +142,50 @@ phases:
               - FermentationExperiment
               - ResearchProject
               - MicrobialCulture
+          vs3-brand-strategy:
+            status: completed
+            completed: 2025-11-27
+            artifacts:
+              - brand-strategy-bc.md
+            aggregates:
+              - GlobalBrandStrategy
+              - BrandPortfolio
+              - BrandArchitecture
+          vs3-regional-brand-activation:
+            status: completed
+            completed: 2025-11-27
+            artifacts:
+              - regional-brand-activation-bc.md
+            aggregates:
+              - RegionalBrandStrategy
+              - LocalBrandPositioning
+          vs3-campaign-communications:
+            status: completed
+            completed: 2025-11-27
+            artifacts:
+              - campaign-communications-bc.md
+            aggregates:
+              - Campaign
+              - Persona
+              - CreativeLibrary
+          vs3-digital-marketing:
+            status: completed
+            completed: 2025-11-27
+            artifacts:
+              - digital-marketing-bc.md
+            aggregates:
+              - SocialMediaAccount
+              - DigitalAdCampaign
+              - Influencer
+          vs3-brand-experience:
+            status: completed
+            completed: 2025-11-27
+            artifacts:
+              - brand-experience-bc.md
+            aggregates:
+              - SponsorshipContract
+              - BrandEvent
+              - StorePromotion
 
   phase4:
     name: "Architecture"
