@@ -1,10 +1,10 @@
 ---
-description: Parasol V4 Lite workflow guide and help (project:parasol)
+description: Parasol V5 workflow guide and help (project:parasol)
 ---
 
-# Parasol V4 Lite - ヘルプシステム
+# Parasol V5 - ヘルプシステム
 
-Parasol V4 Lite フレームワークの包括的なガイドとヘルプを提供します。
+Parasol V5 フレームワークの包括的なガイドとヘルプを提供します。
 
 ## 使用方法
 
@@ -27,7 +27,7 @@ Parasol V4 Lite フレームワークの包括的なガイドとヘルプを提�
 トピック一覧とメインメニューを表示：
 
 ```
-📚 Parasol V4 Lite - ヘルプシステム
+📚 Parasol V5 - ヘルプシステム
 
 利用可能なヘルプトピック：
 
@@ -57,18 +57,41 @@ Parasol V4 Lite フレームワークの包括的なガイドとヘルプを提�
 3. `/parasol:3-capabilities cl1` でドメイン分類
 4. `/parasol:status` で進捗確認
 
-📖 詳細ガイド: parasol-v4-lite/FRAMEWORK-DESIGN.md
+📖 詳細ガイド: parasol-v5/FRAMEWORK-DESIGN.md
 ```
 
 ### トピック: overview
 
-Parasol V4 Lite フレームワークの全体像を説明：
+Parasol V5 フレームワークの全体像を説明：
 
 - 目的：ビジネス価値からソフトウェア設計への体系的な変換
 - 主要特徴：価値駆動、段階的分解、DDD統合、実装指向
 - 7つのフェーズ概要
 - ZIGZAG パターンの説明
 - 参照: `/parasol:0-help workflow` で詳細ワークフロー
+
+### 🎯 V5特有機能: 設計ストーリー出力
+
+Parasol V5の特徴的な機能として、**設計ストーリー（なぜそう設計したか）**の自動出力があります。
+
+#### 目的
+
+- **理解促進**: チーム全員が設計判断の背景を理解
+- **意思決定記録**: 後から見直す際に「なぜこうなっているか」がわかる
+- **学習資産**: プロジェクト固有の知見をナレッジとして蓄積
+
+#### 出力されるフェーズ
+
+| フェーズ | 設計ストーリー内容 |
+|----------|-------------------|
+| **Phase 2: 価値定義** | 価値分解・MSバックキャスティング・MS→VS変換の理由 |
+| **Phase 3: ケーパビリティ** | ドメイン分類・サブドメイン粒度・BC境界の理由、継承関係、重複回避の工夫 |
+| **Phase 4: アーキテクチャ** | サービス境界・Context Map・統合パターン選択の理由 |
+
+#### 設計ストーリーの参照
+
+- 業種別の設計ストーリー例: `parasol/patterns/value/industry-value-stream-patterns.md`
+- 価値方法論の設計背景: `.claude/commands/parasol/_value-methodology.md`
 
 ### トピック: workflow
 
@@ -176,4 +199,4 @@ L4: Aggregates, Entities, Value Objects
 
 ---
 
-📖 **詳細ガイド**: `parasol-v4-lite/FRAMEWORK-DESIGN.md`を参照
+📖 **詳細ガイド**: `parasol-v5/FRAMEWORK-DESIGN.md`を参照

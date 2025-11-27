@@ -39,6 +39,29 @@ VS2（製品開発・イノベーション）のCore活動領域を**10個のサ
 
 ---
 
+## 命名理由（Naming Rationale）
+
+各サブドメインの命名は、Parasol V4 Liteの命名ガイドラインに基づき、
+「XXX管理」パターンを避け、DXにふさわしい**進化・発展・改善**を表現しています。
+
+| サブドメイン | 日本語名 | 命名理由 |
+|-------------|---------|----------|
+| fermentation-research | 発酵研究 | 「発酵管理」ではなく「研究」を採用。100年以上の醸造技術を継続的に**進化**させる探究姿勢を表現。`-research`パターン（アクション型）を適用 |
+| ingredient-research | 素材研究 | 「素材管理」ではなく「研究」を採用。新素材発見と品質向上の継続的**探究**を表現。`-research`パターン（アクション型）を適用 |
+| functional-ingredients | 機能性成分研究 | 「機能性管理」ではなく具体的な研究対象を明示。健康効果のエビデンス構築という**発展**活動を表現 |
+| process-engineering | プロセス技術 | 「プロセス管理」ではなく「技術」を採用。研究から生産への橋渡しという技術的**構築**を表現。`-engineering`パターン（アクション型）を適用 |
+| premium-beer-development | プレミアムビール開発 | 製品カテゴリを明示し、`-development`で継続的な製品**進化**を表現。Asahi Super Dryの価値向上を意図 |
+| craft-innovation-development | クラフト・革新開発 | 「innovation」を含めることで既存製品改良ではなく**新規性・革新性**を強調。市場創造型の取り組みを表現 |
+| spirits-development | スピリッツ開発 | 蒸留酒カテゴリを明確化。`-development`で継続的な製品**創出**を表現 |
+| beverage-development | 飲料開発 | 非酒類製品を包括。健康・ウェルネス市場への**対応・進化**を含む |
+| sensory-evaluation | 官能評価 | 「品質管理」ではなく「評価」を採用。判断・フィードバックという**能動的活動**を表現。品質の門番としての役割を明確化 |
+| prototype-production | 試作生産 | 「試作管理」ではなく「生産」を採用。開発から量産への橋渡しという**生産活動**を明示 |
+
+**VS横断一意性**: 上記10個のサブドメイン名は、全VS（VS0〜VS7）において一意であることを確認済み。
+詳細は `.claude/commands/parasol/_capability-knowledge/registry.yaml` を参照。
+
+---
+
 ## 詳細設計
 
 ### 1. fermentation-research（発酵研究）

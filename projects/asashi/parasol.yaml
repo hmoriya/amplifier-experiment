@@ -24,33 +24,44 @@ phases:
   phase1:
     name: "Context"
     status: completed
-    completed: 2025-11-24T04:19:04Z
+    completed: 2025-11-27T00:00:00Z
     auto_generated: true
+    segment_pattern: 標準型
     artifacts:
       - organization-analysis.md (auto-generated)
       - market-assessment.md (auto-generated)
       - constraints.md (requires manual completion)
       - stakeholder-map.md (auto-generated)
+      - industry-segment-profile.md (completed)
 
   phase2:
     name: "Value Definition"
-    status: in_progress
-    completed: null
+    status: completed
+    completed: 2025-11-27T00:00:00Z
     auto_generated_initial: true
     artifacts:
       - value-definition.md (initial draft)
       - value-streams-mapping.md (VS0-VS7 candidates)
       - enterprise-activities.md (initial mapping)
       - vs0-detail.md (detailed - completed)
+      - vs1-detail.md (detailed - completed)
       - vs2-detail.md (detailed - completed)
+      - vs3-detail.md (detailed - completed)
+      - vs4-detail.md (detailed - completed)
+      - vs5-detail.md (detailed - completed)
+      - vs6-detail.md (detailed - completed)
+      - vs7-detail.md (detailed - completed)
     value_streams:
       VS0:
         name: "ビジョン策定・戦略立案"
+        domain: "Generic Domain"
         status: detailed
         completed: 2025-11-25
       VS1:
         name: "市場機会発見・インサイト獲得"
-        status: initial
+        domain: "Supporting Domain"
+        status: detailed
+        completed: 2025-11-27
       VS2:
         name: "製品開発・イノベーション"
         domain: "Core Domain"
@@ -58,19 +69,29 @@ phases:
         completed: 2025-11-25
       VS3:
         name: "ブランディング・マーケティング"
-        status: initial
+        domain: "Core Domain"
+        status: detailed
+        completed: 2025-11-27
       VS4:
         name: "販売・流通・サプライチェーン"
-        status: initial
+        domain: "Supporting Domain"
+        status: detailed
+        completed: 2025-11-27
       VS5:
         name: "カスタマーサポート・品質保証"
-        status: initial
+        domain: "Supporting Domain"
+        status: detailed
+        completed: 2025-11-27
       VS6:
         name: "データ活用・DX"
-        status: initial
+        domain: "Generic Domain"
+        status: detailed
+        completed: 2025-11-27
       VS7:
         name: "業務改善・オペレーショナルエクセレンス"
-        status: initial
+        domain: "Generic Domain"
+        status: detailed
+        completed: 2025-11-27
 
   phase3:
     name: "Capabilities"
@@ -95,11 +116,18 @@ phases:
             status: completed
             completed: 2025-11-26
             artifacts:
-              - vs2-subdomains.md
+              - vs2-product-innovation/cl2-subdomain-design.md
+            subdomains:
+              core: 6
+              supporting: 4
+          VS3:
+            status: completed
+            completed: 2025-11-27
+            artifacts:
+              - vs3-branding-marketing/cl2-subdomain-design.md
             subdomains:
               core: 5
               supporting: 3
-              generic: 1
       cl3:
         name: "Bounded Context Definition"
         status: in_progress
@@ -114,11 +142,87 @@ phases:
               - FermentationExperiment
               - ResearchProject
               - MicrobialCulture
+          vs3-brand-strategy:
+            status: completed
+            completed: 2025-11-27
+            artifacts:
+              - brand-strategy-bc.md
+            aggregates:
+              - GlobalBrandStrategy
+              - BrandPortfolio
+              - BrandArchitecture
+          vs3-regional-brand-activation:
+            status: completed
+            completed: 2025-11-27
+            artifacts:
+              - regional-brand-activation-bc.md
+            aggregates:
+              - RegionalBrandStrategy
+              - LocalBrandPositioning
+          vs3-campaign-communications:
+            status: completed
+            completed: 2025-11-27
+            artifacts:
+              - campaign-communications-bc.md
+            aggregates:
+              - Campaign
+              - Persona
+              - CreativeLibrary
+          vs3-digital-marketing:
+            status: completed
+            completed: 2025-11-27
+            artifacts:
+              - digital-marketing-bc.md
+            aggregates:
+              - SocialMediaAccount
+              - DigitalAdCampaign
+              - Influencer
+          vs3-brand-experience:
+            status: completed
+            completed: 2025-11-27
+            artifacts:
+              - brand-experience-bc.md
+            aggregates:
+              - SponsorshipContract
+              - BrandEvent
+              - StorePromotion
 
   phase4:
     name: "Architecture"
-    status: pending
-    completed: null
+    status: completed
+    completed: 2025-11-27T00:00:00Z
+    scope: VS2 (Product Innovation)
+    artifacts:
+      - service-boundaries.md
+      - context-map.md
+      - integration-patterns.md
+      - decisions/adr-001-microservices-architecture.md
+      - decisions/adr-002-kafka-event-bus.md
+      - decisions/adr-003-api-gateway.md
+      - decisions/adr-004-database-per-service.md
+      - decisions/adr-005-jwt-authentication.md
+    services:
+      - name: "Fermentation Research Service"
+        type: Core
+        bounded_contexts: [fermentation-research]
+      - name: "Ingredient Research Service"
+        type: Core
+        bounded_contexts: [ingredient-research, functional-ingredients]
+      - name: "Beer Development Service"
+        type: Core
+        bounded_contexts: [premium-beer-development, craft-innovation-development]
+      - name: "Spirits Development Service"
+        type: Core
+        bounded_contexts: [spirits-development]
+      - name: "Beverage Development Service"
+        type: Core
+        bounded_contexts: [beverage-development]
+      - name: "R&D Support Service"
+        type: Supporting
+        bounded_contexts: [sensory-evaluation, prototype-production]
+      - name: "Process Engineering Service"
+        type: Supporting
+        bounded_contexts: [process-engineering]
 
   phase5:
     name: "Software Design"

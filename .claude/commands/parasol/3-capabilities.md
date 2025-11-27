@@ -57,7 +57,227 @@ Value StreamsからDDD/マイクロサービスへの段階的な分解を行い
 - **CL2**: ビジネスオペレーション群の定義（≈マイクロサービス候補）
 - **CL3**: Bounded Context定義（業務ルール + 技術設計）
 
+## 🎯 V5特有機能: ケーパビリティ設計ストーリー出力
 
+**重要**: Parasol V5では、ケーパビリティ分解の各段階で**設計ストーリー（なぜそう設計したか）**を出力します。
+
+### 設計ストーリーの目的
+
+- **設計判断の可視化**: なぜこのドメイン分類か、なぜこの粒度で分解したかを明確に
+- **継承関係の明示**: Phase 2の価値定義からどう継承されたかを追跡可能に
+- **重複回避の説明**: 既存ケーパビリティとの重複をどう避けたかを記録
+
+### 出力タイミングと内容
+
+| フェーズ | 出力内容 |
+|----------|----------|
+| **CL1ドメイン分類** | なぜこのVSをCore/Supporting/Genericに分類したか |
+| **CL2サブドメイン設計** | なぜこの粒度で分解したか、Phase 2からの継承関係 |
+| **CL3 BC定義** | なぜこの境界でBCを切ったか、既存BCとの関係 |
+
+### 設計ストーリーテンプレート
+
+各成果物に以下の「設計ストーリー」セクションを含めます：
+
+```markdown
+## 設計ストーリー：なぜこのケーパビリティ構造なのか
+
+### 1. Phase 2からの継承
+
+**継承元（Value Definition）:**
+- VL2-1（製品イノベーション価値）→ VS2（製品開発）
+- VL3-1-1（発酵技術）→ fermentation-research サブドメイン
+
+**継承の理由:**
+[なぜこの価値要素がこのケーパビリティに対応するのか]
+
+### 2. ドメイン分類の理由（CL1）
+
+**Coreに分類した理由:**
+- [競争優位の源泉である根拠]
+- [他社が真似できない要素]
+
+**Supportingに分類した理由:**
+- [重要だが差別化要因ではない根拠]
+
+### 3. 参照した既存ケーパビリティ
+
+**registry.yamlから参照:**
+- `fermentation-research`: 類似プロジェクト（asashi）で定義済み → 命名パターンを踏襲
+- `product-development`: グローバルパターンとして存在 → 接頭辞でプロジェクト固有化
+
+**業界パターンから参照:**
+- `decomposition-patterns.md`: 製造業パターン「研究開発分離型」を適用
+
+### 4. 重複回避の工夫
+
+**命名での重複回避:**
+| 候補名 | 問題 | 採用名 | 回避方法 |
+|--------|------|--------|----------|
+| customer-management | VS3と重複 | vs2-customer-insights | VS接頭辞で区別 |
+| quality-control | 汎用的すぎる | quality-assurance-research | 目的を明確化 |
+
+**境界での重複回避:**
+- `ingredient-research` と `functional-ingredients` を分離した理由:
+  - 前者は「素材そのもの」の研究（原料チーム）
+  - 後者は「機能性成分」の研究（健康チーム）
+  - チーム境界とスキルセットが異なる
+
+### 5. サブドメイン粒度の決定理由（CL2）
+
+**分解基準:**
+| 基準 | 適用結果 |
+|------|----------|
+| チーム独立性 | 発酵研究は専門チーム → 独立サブドメイン |
+| データ境界 | 酵母データは機密性高 → 独立DB必要 |
+| 変更頻度 | 製品開発は高頻度 → 分離してデプロイ独立 |
+
+### 6. BC境界の決定理由（CL3）
+
+**集約ルート選定の理由:**
+- `YeastStrain` を集約ルートにした理由: 酵母株が全ての実験・培養の起点
+- `FermentationExperiment` を別集約にした理由: ライフサイクルが独立
+
+**イベント設計の理由:**
+- `YeastStrainRegistered` を公開イベントにした理由: 下流の製品開発チームが新酵母を検知する必要
+```
+
+### 参照すべきリソース
+
+| リソース | 用途 | パス |
+|----------|------|------|
+| **registry.yaml** | 既存ケーパビリティの重複チェック | `_capability-knowledge/registry.yaml` |
+| **decomposition-patterns.md** | 業界別分解パターン | `_capability-knowledge/patterns/` |
+| **examples/{project}.md** | 類似プロジェクトの学び | `_capability-knowledge/examples/` |
+| **Phase 2成果物** | 継承元の価値定義 | `outputs/2-value/` |
+
+---
+
+## 📛 命名ガイドライン
+
+**重要**: DXにふさわしい命名を行うため、「XXX管理」表現を避けてください。
+
+### 避けるべきパターン
+
+| 避ける表現 | 推奨表現 | 理由 |
+|-----------|---------|------|
+| `xxx-management` | `xxx-optimization`, `xxx-orchestration` | 静的→動的 |
+| `inventory-management` | `inventory-optimization` | 在庫は「最適化」する |
+| `order-management` | `order-fulfillment` | 注文の「充足」 |
+| `customer-management` | `customer-engagement` | 顧客との「関係構築」 |
+| `data-management` | `data-engineering` | データの「技術的構築」 |
+
+### 推奨パターン
+
+| パターン | 意味 | 例 |
+|---------|------|-----|
+| `xxx-research` | 研究・探究 | `fermentation-research` |
+| `xxx-development` | 開発・進化 | `beer-development` |
+| `xxx-engineering` | 技術的構築 | `process-engineering` |
+| `xxx-optimization` | 最適化 | `supply-optimization` |
+| `xxx-innovation` | 革新・創造 | `product-innovation` |
+
+**詳細**: `.claude/commands/parasol/_capability-naming-guide.md`
+
+---
+
+## 🔍 VS横断一意性チェック
+
+**重要**: ケーパビリティ名はValue Stream（VS）を横断して**唯一無二**である必要があります。
+
+### チェックタイミング
+
+- **CL2（サブドメイン設計）完了時**: 新規サブドメイン名を登録
+- **CL3（BC定義）完了時**: BC名を登録
+
+### チェック方法
+
+**ステップ1**: registry.yaml を読み込み
+```bash
+# 既存ケーパビリティを確認
+cat .claude/commands/parasol/_capability-knowledge/registry.yaml
+```
+
+**ステップ2**: 重複チェック
+```yaml
+# all_capability_names セクションで重複確認
+all_capability_names:
+  - fermentation-research        # asashi VS2
+  - ingredient-research          # asashi VS2
+  - customer-engagement          # 別プロジェクト VS3（重複NG）
+```
+
+**ステップ3**: 重複時の対処
+```
+⚠️ 重複検出: "customer-engagement" は既に登録済み
+
+対処オプション:
+1. VS接頭辞を追加: vs3-customer-engagement
+2. より具体的な名前に変更: b2b-customer-engagement
+3. 既存と統合可能か検討
+```
+
+### 自動チェック（AI実行時）
+
+CL2/CL3実行時、AIは以下を自動実行：
+
+1. `registry.yaml` を読み込み
+2. 新規ケーパビリティ名の重複チェック
+3. 類似名グループ（similar_name_groups）との照合
+4. 問題なければ `registry.yaml` に追加
+
+---
+
+## 📚 ナレッジベース活用
+
+ケーパビリティ分解の知見を蓄積・再利用するためのナレッジベースを提供します。
+
+### ディレクトリ構成
+
+```
+.claude/commands/parasol/_capability-knowledge/
+├── README.md                    # 概要
+├── registry.yaml                # ケーパビリティ登録簿（一意性管理）
+├── patterns/                    # パターン集
+│   ├── decomposition-patterns.md # 分解パターン
+│   └── naming-patterns.md       # 命名パターン（→ _capability-naming-guide.md）
+└── examples/                    # 事例集
+    └── {project-name}.md        # プロジェクト別の学び
+```
+
+### 活用タイミング
+
+**分解開始前**:
+1. `patterns/decomposition-patterns.md` で業界パターンを確認
+2. `examples/` で類似プロジェクトの学びを参照
+3. `registry.yaml` で既存ケーパビリティを把握
+
+**分解完了後**:
+1. `registry.yaml` に新規ケーパビリティを登録
+2. `examples/{project-name}.md` に学びを記録
+3. 新パターン発見時は `patterns/` に追加
+
+### AIへの指示
+
+CL2/CL3実行時、以下を自動実行：
+
+```yaml
+分解開始時:
+  - registry.yaml を読み込み、既存ケーパビリティを把握
+  - 業界パターンを patterns/decomposition-patterns.md から参照
+  - 命名ガイドライン _capability-naming-guide.md を適用
+
+分解完了時:
+  - 新規ケーパビリティを registry.yaml に追加
+  - 命名理由（naming_rationale）を記録
+  - 類似ケーパビリティとの関係を related_capabilities に記録
+
+プロジェクト完了時:
+  - examples/{project-name}.md に学びを記録
+  - 新パターン発見時は patterns/ に追加提案
+```
+
+---
 
 ## 🔧 プロジェクト検出
 
@@ -192,7 +412,7 @@ Task tool を使用して zen-architect (ANALYZE mode) を起動：
 
 プロンプト:
 """
-Parasol V4 Lite - Phase 3a: Domain Classification (CL1)
+Parasol V5 - Phase 3a: Domain Classification (CL1)
 
 ## タスク
 outputs/2-value/ の成果物を分析し、ドメインをCore/Supporting/Genericに分類してください。
@@ -439,7 +659,7 @@ Task tool を使用して zen-architect (ARCHITECT mode) を起動：
 
 プロンプト:
 """
-Parasol V4 Lite - Phase 3b: Subdomain Design (CL2)
+Parasol V5 - Phase 3b: Subdomain Design (CL2)
 
 ## タスク
 Value Stream {vs-number}（{vs-name}）をサブドメイン（ビジネスオペレーション群）に分解してください。
@@ -649,7 +869,7 @@ Task tool を使用して zen-architect (ARCHITECT mode) を起動：
 
 プロンプト:
 """
-Parasol V4 Lite - Phase 3c: Bounded Context Definition (CL3)
+Parasol V5 - Phase 3c: Bounded Context Definition (CL3)
 
 ## タスク
 サブドメイン "{subdomain-name}" のBounded Contextを定義してください。

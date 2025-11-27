@@ -2,7 +2,7 @@
 description: Check project status (project:parasol)
 ---
 
-# Parasol V4 Lite - ステータス確認
+# Parasol V5 - ステータス確認
 
 プロジェクトの進捗状況と成果物の完成度を確認します。
 
@@ -80,7 +80,7 @@ cd ~/somewhere-else
 ### パラメータなしの場合（全体ステータス）
 
 ```
-📊 Parasol V4 Lite - プロジェクトステータス
+📊 Parasol V5 - プロジェクトステータス
 
 プロジェクト: {プロジェクト名}
 最終更新: {日時}

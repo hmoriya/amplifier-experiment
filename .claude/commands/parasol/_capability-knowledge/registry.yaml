@@ -1,0 +1,227 @@
+# ケーパビリティ登録簿（Capability Registry）
+# VS横断での一意性を管理するためのレジストリ
+#
+# 目的:
+# - ケーパビリティ名の一意性を保証
+# - 類似命名の関係性を記録
+# - プロジェクト横断での再利用を促進
+#
+# 使い方:
+# - CL2/CL3完了時に新規ケーパビリティを追加
+# - 命名前に既存エントリを検索して重複を避ける
+# - 類似ケーパビリティがある場合は関係性を記録
+
+# =============================================================================
+# グローバルケーパビリティ（業界共通で使える汎用的な名前）
+# =============================================================================
+global_capabilities:
+  # 研究開発系
+  - name: market-research
+    category: research
+    description: 市場調査・分析
+
+  - name: customer-research
+    category: research
+    description: 顧客調査・インサイト発見
+
+  - name: competitive-intelligence
+    category: research
+    description: 競合分析・情報収集
+
+  # 顧客系
+  - name: customer-engagement
+    category: customer
+    description: 顧客エンゲージメント・関係構築
+
+  - name: customer-experience
+    category: customer
+    description: 顧客体験設計・最適化
+
+  # データ系
+  - name: data-engineering
+    category: data
+    description: データ基盤構築・ETL
+
+  - name: data-analytics
+    category: data
+    description: データ分析・可視化
+
+  - name: data-governance
+    category: data
+    description: データ品質・セキュリティ管理
+
+  # 共通業務系
+  - name: quality-assurance
+    category: quality
+    description: 品質保証・検査
+
+# =============================================================================
+# プロジェクト別ケーパビリティ
+# =============================================================================
+projects:
+  # ---------------------------------------------------------------------------
+  # asashi (アサヒグループホールディングス)
+  # ---------------------------------------------------------------------------
+  asashi:
+    project_name: asashi
+    company: Asahi Group Holdings
+    industry: 飲料・食品
+    created: 2025-11-26
+
+    capabilities:
+      # VS2: 製品開発・イノベーション - Core
+      - name: fermentation-research
+        vs: VS2
+        domain_type: Core
+        name_ja: 発酵研究
+        description: 酵母研究、発酵技術の基盤研究
+        naming_rationale: |
+          「発酵管理」ではなく「発酵研究」を採用。
+          100年以上の醸造技術を継続的に進化させる姿勢を表現。
+        related_capabilities: []
+
+      - name: ingredient-research
+        vs: VS2
+        domain_type: Core
+        name_ja: 素材研究
+        description: 原材料・素材の研究
+        naming_rationale: |
+          素材の「管理」ではなく「研究」。
+          新素材発見と品質向上の継続的探究を表現。
+        related_capabilities:
+          - functional-ingredients  # 機能性研究と連携
+
+      - name: premium-beer-development
+        vs: VS2
+        domain_type: Core
+        name_ja: プレミアムビール開発
+        description: Asahi Super Dry等のプレミアムビール製品開発
+        naming_rationale: |
+          製品カテゴリを明示し、開発（development）で
+          継続的な製品進化を表現。
+        related_capabilities:
+          - craft-innovation-development  # 同じ酒類開発
+
+      - name: craft-innovation-development
+        vs: VS2
+        domain_type: Core
+        name_ja: クラフト・革新開発
+        description: クラフトビール、限定品、革新的製品の開発
+        naming_rationale: |
+          「innovation」を含めることで、
+          既存製品の改良ではなく新規性・革新性を強調。
+        related_capabilities:
+          - premium-beer-development
+
+      - name: spirits-development
+        vs: VS2
+        domain_type: Core
+        name_ja: スピリッツ開発
+        description: ウイスキー、スピリッツの開発
+        naming_rationale: |
+          蒸留酒カテゴリを明確化。
+          「開発」で継続的な製品創出を表現。
+        related_capabilities: []
+
+      - name: beverage-development
+        vs: VS2
+        domain_type: Core
+        name_ja: 飲料開発
+        description: 清涼飲料、乳製品、機能性飲料の開発
+        naming_rationale: |
+          非酒類製品を包括。
+          健康・ウェルネス市場への対応を含む。
+        related_capabilities:
+          - functional-ingredients
+
+      # VS2: 製品開発・イノベーション - Supporting
+      - name: functional-ingredients
+        vs: VS2
+        domain_type: Supporting
+        name_ja: 機能性成分研究
+        description: 機能性成分・乳酸菌等の研究
+        naming_rationale: |
+          「機能性成分管理」ではなく「研究」。
+          健康効果のエビデンス構築を表現。
+        related_capabilities:
+          - ingredient-research
+          - beverage-development
+
+      - name: process-engineering
+        vs: VS2
+        domain_type: Supporting
+        name_ja: プロセス技術
+        description: 製造プロセス設計・スケールアップ
+        naming_rationale: |
+          「engineering」で技術的構築・改善を表現。
+          研究から生産への橋渡し役。
+        related_capabilities: []
+
+      - name: sensory-evaluation
+        vs: VS2
+        domain_type: Supporting
+        name_ja: 官能評価
+        description: 製品の官能評価（味・香り・外観）
+        naming_rationale: |
+          「評価」は判断・フィードバックを表現。
+          品質の門番としての役割を明確化。
+        related_capabilities: []
+
+      - name: prototype-production
+        vs: VS2
+        domain_type: Supporting
+        name_ja: 試作生産
+        description: パイロットプラントでの試作品製造
+        naming_rationale: |
+          「production」で生産活動を明示。
+          開発から量産への橋渡しを表現。
+        related_capabilities:
+          - process-engineering
+
+# =============================================================================
+# 一意性チェック用インデックス
+# =============================================================================
+# 全プロジェクトのケーパビリティ名を列挙（重複チェック用）
+all_capability_names:
+  - fermentation-research        # asashi
+  - ingredient-research          # asashi
+  - functional-ingredients       # asashi
+  - process-engineering          # asashi
+  - premium-beer-development     # asashi
+  - craft-innovation-development # asashi
+  - spirits-development          # asashi
+  - beverage-development         # asashi
+  - sensory-evaluation           # asashi
+  - prototype-production         # asashi
+
+# =============================================================================
+# 命名の類似グループ（混同防止）
+# =============================================================================
+similar_name_groups:
+  - group: research系
+    names:
+      - fermentation-research
+      - ingredient-research
+      - market-research
+      - customer-research
+    note: |
+      「XXX-research」は基盤研究・探究活動に使用。
+      「XXX-analysis」（分析）と区別すること。
+
+  - group: development系
+    names:
+      - premium-beer-development
+      - craft-innovation-development
+      - spirits-development
+      - beverage-development
+    note: |
+      「XXX-development」は製品/サービス開発に使用。
+      研究（research）との違いは製品化への直接性。
+
+  - group: engineering系
+    names:
+      - process-engineering
+      - data-engineering
+    note: |
+      「XXX-engineering」は技術的構築・最適化に使用。
+      開発（development）より技術寄り。
