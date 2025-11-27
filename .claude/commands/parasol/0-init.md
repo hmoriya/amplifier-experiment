@@ -2,7 +2,7 @@
 description: Initialize project from company URL (project:parasol)
 ---
 
-# Parasol V4 Lite - Phase 0: Initialize from URL
+# Parasol V5 - Phase 0: Initialize from URL
 
 会社のウェブサイトURLから自動的にプロジェクトコンテキストと価値定義の初期案を生成します。
 

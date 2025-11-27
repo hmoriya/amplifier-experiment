@@ -2,7 +2,7 @@
 description: Validate project consistency (project:parasol)
 ---
 
-# Parasol V4 Lite - バリデーション
+# Parasol V5 - バリデーション
 
 プロジェクト全体の一貫性と完全性を検証します。
 
@@ -198,7 +198,7 @@ Phase 7 の詳細検証：
 ## 検証結果レポート
 
 ```markdown
-# Parasol V4 Lite - 検証レポート
+# Parasol V5 - 検証レポート
 
 プロジェクト: {プロジェクト名}
 検証日時: {日時}

@@ -961,9 +961,9 @@ Phase 4で定義されたサービス/BC:
 
 ## 参考資料
 
-- **フレームワーク設計**: `parasol-v4-lite/FRAMEWORK-DESIGN.md`
+- **フレームワーク設計**: `parasol-v5/FRAMEWORK-DESIGN.md`
 - **consultingTool参照**: `/Users/hmoriya/Develop/github/github.com/hmoriya/consultingTool`
-- **テンプレート**: `parasol-v4-lite/templates/phase5/`
+- **テンプレート**: `parasol-v5/templates/phase5/`
 - `domain-language-template.md`
 - `api-specification-template.md`
 - `database-design-template.md`

@@ -2,7 +2,7 @@
 description: Project management (create, list, info) (project:parasol)
 ---
 
-# Parasol V4 Lite - Project Management
+# Parasol V5 - Project Management
 
 Parasolプロジェクトの作成、一覧表示、情報確認を行います。
 
@@ -136,7 +136,7 @@ projects/my-ecommerce-platform/outputs/ を作成
 ```markdown
 # My E-Commerce Platform
 
-Parasol V4 Lite プロジェクト
+Parasol V5 プロジェクト
 
 作成日: 2025-01-21
 

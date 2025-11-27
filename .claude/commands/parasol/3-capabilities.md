@@ -318,7 +318,7 @@ Task tool を使用して zen-architect (ANALYZE mode) を起動：
 
 プロンプト:
 """
-Parasol V4 Lite - Phase 3a: Domain Classification (CL1)
+Parasol V5 - Phase 3a: Domain Classification (CL1)
 
 ## タスク
 outputs/2-value/ の成果物を分析し、ドメインをCore/Supporting/Genericに分類してください。
@@ -565,7 +565,7 @@ Task tool を使用して zen-architect (ARCHITECT mode) を起動：
 
 プロンプト:
 """
-Parasol V4 Lite - Phase 3b: Subdomain Design (CL2)
+Parasol V5 - Phase 3b: Subdomain Design (CL2)
 
 ## タスク
 Value Stream {vs-number}（{vs-name}）をサブドメイン（ビジネスオペレーション群）に分解してください。
@@ -775,7 +775,7 @@ Task tool を使用して zen-architect (ARCHITECT mode) を起動：
 
 プロンプト:
 """
-Parasol V4 Lite - Phase 3c: Bounded Context Definition (CL3)
+Parasol V5 - Phase 3c: Bounded Context Definition (CL3)
 
 ## タスク
 サブドメイン "{subdomain-name}" のBounded Contextを定義してください。

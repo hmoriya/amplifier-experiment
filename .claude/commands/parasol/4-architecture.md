@@ -271,7 +271,7 @@ SLA: {目標}%
 
 ---
 
-**作成者:** Claude (Parasol V4 Lite)
+**作成者:** Claude (Parasol V5)
 **最終更新:** {date}
 ```
 
@@ -675,8 +675,8 @@ Phase 4完了前に確認すべき項目：
 
 ## 参考資料
 
-- **フレームワーク設計**: `parasol-v4-lite/FRAMEWORK-DESIGN.md`
-- **テンプレート**: `parasol-v4-lite/templates/phase4/`
+- **フレームワーク設計**: `parasol-v5/FRAMEWORK-DESIGN.md`
+- **テンプレート**: `parasol-v5/templates/phase4/`
 - `service-boundary-template.md`
 - `context-map-template.md`
 - `adr-template.md`

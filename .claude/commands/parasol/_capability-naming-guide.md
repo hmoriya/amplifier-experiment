@@ -1,6 +1,6 @@
 # ケーパビリティ命名ガイドライン
 
-**Parasol V4 Lite - DXにふさわしい命名規則**
+**Parasol V5 - DXにふさわしい命名規則**
 
 ---
 
@@ -187,7 +187,7 @@ capability:
 
 ## 参考リンク
 
-- Parasol V4 Lite 概念説明: `/parasol:0-help concepts`
+- Parasol V5 概念説明: `/parasol:0-help concepts`
 - ケーパビリティ分解コマンド: `/parasol:3-capabilities`
 - ナレッジベース: `.claude/commands/parasol/_capability-knowledge/`
 

@@ -2,7 +2,7 @@
 description: Platform and deployment setup (project:parasol)
 ---
 
-# Parasol V4 Lite - Phase 7: Platform
+# Parasol V5 - Phase 7: Platform
 
 プラットフォーム層の設計とインフラストラクチャ構成を定義します。
 
