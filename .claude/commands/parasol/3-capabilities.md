@@ -138,17 +138,38 @@ WHAT (システムレベルで何が必要か)
 
 ```
 outputs/3-capabilities/
-├── domain-classification/
-│   └── strategic-classification.md          # CL1: 全ドメインの分類
-├── subdomain-design/
-│   ├── vs2-subdomains.md                    # CL2: VS2（製品開発）のサブドメイン
-│   ├── vs3-subdomains.md                    # CL2: VS3（ブランディング）のサブドメイン
-│   ├── vs4-subdomains.md                    # CL2: VS4（販売・流通）のサブドメイン
-│   └── ...                                  # 各VSごとにファイル生成
-└── bounded-context-design/
-    ├── {subdomain-name}-bc.md               # CL3: 各サブドメインのBC定義
-    └── ...
+├── {vs-number}-{vs-slug}/            # VSディレクトリ（Phase 2から導出）
+│   ├── cl1-domain-classification.md  # CL1: 活動領域の分類
+│   ├── cl2-subdomain-design.md       # CL2: サブドメイン設計
+│   └── cl3-bounded-contexts/         # CL3: BC定義
+│       └── {subdomain}-bc.md
+└── ...
 ```
+
+### VSディレクトリ命名規則
+
+**重要**: ディレクトリ名はPhase 2の `value-streams-mapping.md` から動的に導出されます。
+
+**形式**: `{vs-number}-{vs-slug}`
+- `{vs-number}`: vs0, vs1, vs2, ... （VS番号）
+- `{vs-slug}`: VS名をkebab-caseに変換（日本語→英語→kebab-case）
+
+**導出プロセス**:
+1. `outputs/2-value/value-streams-mapping.md` を読み込み
+2. 各VSの名前を取得
+3. 名前をkebab-case英語に変換してディレクトリ名を生成
+
+**例（プロジェクトにより異なる）**:
+```
+Phase 2で定義されたVS:
+- VS0: ビジョン策定・戦略立案 → vs0-vision-strategy/
+- VS2: 製品開発・イノベーション → vs2-product-innovation/
+- VS2: 研究開発・技術革新 → vs2-research-development/  # 別プロジェクト
+```
+
+**プロジェクト固有のマッピング**:
+- コマンド実行時に `parasol.yaml` と `value-streams-mapping.md` を参照
+- プロジェクトごとに適切なディレクトリ名を自動決定
 
 ## Phase 3a: CL1 - Domain Classification
 
@@ -205,14 +226,15 @@ outputs/2-value/ の成果物を分析し、ドメインをCore/Supporting/Gener
 - 推奨投資配分: 10%（外部サービス購入推奨）
 
 ## 出力形式
-outputs/3-capabilities/domain-classification/strategic-classification.md
+outputs/3-capabilities/{vs-dir}/cl1-domain-classification.md
+
+※ {vs-dir} はPhase 2のVS定義から動的に決定（例: vs2-product-innovation/）
 
 テンプレート構造：
 1. ドメイン分類サマリー（Core/Supporting/Generic各リスト）
-2. 各ドメインの詳細
-- ドメイン名（kebab-case）
+2. 各活動領域の詳細
+- 活動領域名
 - 説明
-- 関連VS
 - 戦略的重要性 / 競争優位性 / 複雑度
 - 分類理由
 3. 投資配分推奨
@@ -220,22 +242,21 @@ outputs/3-capabilities/domain-classification/strategic-classification.md
 """
 ```
 
-**ステップ3**: zen-architectの出力を確認し、strategic-classification.md を生成
+**ステップ3**: zen-architectの出力を確認し、cl1-domain-classification.md を生成
 
 **ステップ4**: 結果レポート
 ```
-✅ CL1: Domain Classification 完了
+✅ CL1: Domain Classification ({vs-number}: {vs-name}) 完了
 
 分類結果:
-- Core Domains: 3 個 (VS2, VS3, VS4)
-- Supporting Domains: 4 個 (VS1, VS5, VS6, VS7)
-- Generic Domains: 1 個 (VS0)
+- Core Activities: X 個
+- Supporting Activities: X 個
+- Generic Activities: X 個
 
-成果物: outputs/3-capabilities/domain-classification/strategic-classification.md
+成果物: outputs/3-capabilities/{vs-dir}/cl1-domain-classification.md
 
-次のステップ（Core Domainから優先）:
-→ `/parasol:3-capabilities cl2 VS2` で VS2（製品開発）のサブドメイン設計
-→ `/parasol:3-capabilities cl2 VS3` で VS3（ブランディング）のサブドメイン設計
+次のステップ:
+→ `/parasol:3-capabilities cl2 {vs-number}` でサブドメイン設計
 ```
 
 ### テンプレート: strategic-classification.md
@@ -462,7 +483,9 @@ Value Stream {vs-number}（{vs-name}）をサブドメイン（ビジネスオ�
 - マイクロサービス候補としての評価
 
 ## 出力形式
-outputs/3-capabilities/subdomain-design/vs{N}-subdomains.md
+outputs/3-capabilities/{vs-dir}/cl2-subdomain-design.md
+
+※ {vs-dir} はPhase 2のVS定義から動的に決定
 
 テンプレート構造：
 1. Value Stream概要（名前、ドメインタイプ、目的）
@@ -473,31 +496,29 @@ outputs/3-capabilities/subdomain-design/vs{N}-subdomains.md
 6. 次のステップ（CL3: BC定義）
 
 ## 制約
-- サブドメイン名は kebab-case で統一（VSプレフィックス推奨: vs2-fermentation-tech）
+- サブドメイン名は kebab-case で統一
 - 各サブドメインは1つの明確な責務を持つ
 - サブドメイン数はVSの複雑度に応じて（Core VS: 4-6個、Supporting VS: 2-4個、Generic VS: 1-3個を目安）
 """
 ```
 
-**ステップ4**: zen-architectの出力を確認し、vs{N}-subdomains.md を生成
+**ステップ4**: zen-architectの出力を確認し、cl2-subdomain-design.md を生成
 
 **ステップ5**: 結果レポート
 ```
-✅ CL2: Subdomain Design (VS2: 製品開発・イノベーション) 完了
+✅ CL2: Subdomain Design ({vs-number}: {vs-name}) 完了
 
-ドメインタイプ: Core Domain
+ドメインタイプ: {Core/Supporting/Generic} Domain
 
 サブドメイン:
-- vs2-fermentation-tech: 発酵技術研究
-- vs2-product-development: 製品開発管理
-- vs2-quality-assurance: 品質保証・安全性
-- vs2-packaging-innovation: パッケージング革新
+- {subdomain-1}: {説明}
+- {subdomain-2}: {説明}
 ... (合計 X 個)
 
-成果物: outputs/3-capabilities/subdomain-design/vs2-subdomains.md
+成果物: outputs/3-capabilities/{vs-dir}/cl2-subdomain-design.md
 
 次のステップ:
-→ `/parasol:3-capabilities cl3 vs2-fermentation-tech` で各サブドメインのBC定義
+→ `/parasol:3-capabilities cl3 {subdomain-name}` で各サブドメインのBC定義
 ```
 
 ### テンプレート: vs{N}-subdomains.md
@@ -693,7 +714,9 @@ BC外部に公開するイベント（業務上の重要な出来事）：
 - 依存するAPI（他BCへの依存）
 
 ## 出力形式
-outputs/3-capabilities/bounded-context-design/{subdomain-name}-bc.md
+outputs/3-capabilities/{vs-dir}/cl3-bounded-contexts/{subdomain-name}-bc.md
+
+※ {vs-dir} はPhase 2のVS定義から動的に決定
 
 テンプレート構造：
 【ビジネス面】
@@ -744,11 +767,11 @@ Task tool を使用して api-contract-designer を起動：
 ✅ CL3: Bounded Context Definition ({subdomain-name}) 完了
 
 定義内容:
-- 集約: 3個（Product, Category, Attribute）
-- ドメインイベント: 5個
-- 関連BC: 4個（pricing-bc, inventory-bc, order-bc, recommendation-bc）
+- 集約: X個
+- ドメインイベント: X個
+- 関連BC: X個
 
-成果物: outputs/3-capabilities/bounded-context-design/{subdomain-name}-bc.md
+成果物: outputs/3-capabilities/{vs-dir}/cl3-bounded-contexts/{subdomain-name}-bc.md
 
 次のステップ:
 1. 他のサブドメインのBC定義を完了
