@@ -1,0 +1,76 @@
+{
+  "project": "asahi-group",
+  "phase": "2-value",
+  "extracted_at": "2025-11-27",
+  "source": "insight-synthesizer subagent",
+  "revolutionary_insights": [
+    {
+      "insight_id": "INS-001",
+      "title": "発酵プラットフォーム思考",
+      "description": "発酵技術を単なる製造手段ではなく、価値変換プラットフォームとして捉える",
+      "collision_concepts": ["発酵技術（100年の蓄積）", "プラットフォームビジネス"],
+      "emergent_properties": [
+        "酵母ライブラリ = API群",
+        "発酵プロセス = 変換エンジン",
+        "製品 = APIの呼び出し結果"
+      ],
+      "breakthrough_potential": "high",
+      "application": "VS2（製品開発）を発酵プラットフォームとして再定義"
+    },
+    {
+      "insight_id": "INS-002",
+      "title": "予期せぬ価値の計画的創出",
+      "description": "「期待を超える」を予測を裏切る驚きと解釈し、継続的イノベーションの必然性を導出",
+      "collision_concepts": ["期待を超えるおいしさ", "Serendipity（予期せぬ発見）"],
+      "emergent_properties": [
+        "酵母の突然変異を歓迎する文化",
+        "失敗実験からの価値発見システム",
+        "消費者との共創による予想外の価値"
+      ],
+      "breakthrough_potential": "medium-high",
+      "application": "研究開発プロセスへの「計画された偶然」の組み込み"
+    },
+    {
+      "insight_id": "INS-003",
+      "title": "VL1は変換関数",
+      "description": "VL1（最上位価値）は単なるスローガンではなく、MSからVSへの変換ルールとして機能",
+      "simplification_effect": "10x complexity reduction",
+      "cascade_effects": [
+        "新しいMSが追加されても、VL1適用でVSが自動導出可能",
+        "VSの優先順位がVL1との距離で決まる",
+        "Core/Supporting/Genericの判定が機械化可能"
+      ],
+      "application": "価値設計の自動化・標準化"
+    }
+  ],
+  "design_story_summary": {
+    "vl1_selection": {
+      "choice": "期待を超えるおいしさと楽しい生活文化の創造",
+      "reason": "発酵プラットフォーム思考により、ビールは出力の一つに過ぎないと再解釈",
+      "confidence": 0.85
+    },
+    "core_vs_selection": {
+      "choices": ["VS1（研究開発）", "VS2（製品開発）", "VS3（ブランド）"],
+      "reason": "VL1への直接貢献度が最高。発酵プラットフォームの源泉と出力を担う",
+      "confidence": 0.80
+    },
+    "ms_timeline": {
+      "choice": "3ヶ月単位×5段階",
+      "reason": "四半期レビューと整合。研究開発の自然なリズムに合致",
+      "confidence": 0.90
+    }
+  },
+  "meta_patterns": [
+    {
+      "pattern_name": "VS時間軸パターン",
+      "description": "VS0-7は左から右への時間の流れを内包する",
+      "abstract_form": "VS0-VS2（未来志向）、VS3-VS4（現在志向）、VS5-VS7（過去志向）",
+      "universality_score": 0.85
+    }
+  ],
+  "next_actions": [
+    "VS2（製品開発）のCL2/CL3展開 - 発酵プラットフォーム視点で再設計",
+    "VS3（ブランディング）の「予期せぬ価値」訴求 - Collision #2を反映",
+    "VS間の「変換インターフェース」定義 - プラットフォーム思考の実装"
+  ]
+}
