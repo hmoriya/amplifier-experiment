@@ -110,11 +110,13 @@ Parasol V5の特徴的な機能として、**設計ストーリー（なぜそ�
 - 成果物: value-definition.md, value-streams-mapping.md, vs{N}-detail.md
 
 **Phase 3: Capabilities（段階的、VS単位）**
-- 3a. CL1: `/parasol:3-capabilities cl1` - 全VSのドメイン分類
-- 3b. CL2: `/parasol:3-capabilities cl2 [VS番号]` - VS単位でサブドメイン設計
+- 3a. CL1: `/parasol:3-capabilities cl1` - 活動領域分類（Core/Supporting/Generic）
+- 3b. CL2: `/parasol:3-capabilities cl2 [VS番号]` - ケイパビリティ設計（サービス境界）
   - 例: `/parasol:3-capabilities cl2 VS2` (製品開発)
-- 3c. CL3: `/parasol:3-capabilities cl3 [subdomain]` - サブドメインのBC定義
-  - 例: `/parasol:3-capabilities cl3 vs2-fermentation-tech`
+- 3c. CL3: `/parasol:3-capabilities cl3 [capability]` - 業務オペレーション定義
+  - 例: `/parasol:3-capabilities cl3 fermentation-research`
+- 3d. BC: `/parasol:3-capabilities bc [capability]` - 実装設計（技術者向け）
+  - 例: `/parasol:3-capabilities bc fermentation-research`
 
 **Phase 4-7**: Architecture, Software, Implementation, Platform
 
@@ -136,9 +138,10 @@ Parasol V5の特徴的な機能として、**設計ストーリー（なぜそ�
 **フェーズコマンド**:
 - `/parasol:1-context`
 - `/parasol:2-value [VS番号]` - 例: `/parasol:2-value VS2`
-- `/parasol:3-capabilities cl1` - 全VSのドメイン分類
-- `/parasol:3-capabilities cl2 [VS番号]` - 例: `/parasol:3-capabilities cl2 VS2`
-- `/parasol:3-capabilities cl3 [subdomain]` - 例: `/parasol:3-capabilities cl3 vs2-fermentation-tech`
+- `/parasol:3-capabilities cl1` - 活動領域分類（CL1）
+- `/parasol:3-capabilities cl2 [VS番号]` - ケイパビリティ設計（CL2）
+- `/parasol:3-capabilities cl3 [capability]` - 業務オペレーション定義（CL3）
+- `/parasol:3-capabilities bc [capability]` - 実装設計（BC）
 - `/parasol:4-architecture`
 - `/parasol:5-software [service] [bc]`
 - `/parasol:6-implementation [service] [bc]`
@@ -153,13 +156,24 @@ VS番号形式：`VS0`, `VS1`, `VS2`, ... `VS7`
 
 **Value Stream (VS)**: 企業の価値創造の流れ（VS0-VS7）
 
-**Capability Hierarchy**:
-- CL1: 戦略的 - ドメイン分類（Core/Supporting/Generic）【WHY投資するか】
-- CL2: 戦術的 - ビジネスオペレーション群（サービス境界）【GROUP分割】
-- CL3: 運用的 - ビジネスオペレーション（業務活動）【WHAT何をするか】
-- BC: 実装 - Bounded Context（技術設計）【HOWどう実装するか】
+**Capability Hierarchy（ビジネスフレンドリーな4階層）**:
 
-**ZIGZAG パターン**: WHAT→HOW→WHAT の分解アプローチ
+```
+WHAT       →      HOW        →      WHAT       →      HOW
+何の領域?        どう組織?         何をする?         どう実装?
+    │               │                │                │
+   CL1            CL2              CL3              BC
+ 活動領域     ケイパビリティ     業務OP          実装設計
+ ─────────   ────────────     ─────────       ─────────
+  経営層        事業部長        業務担当         開発者
+```
+
+- **CL1 活動領域 (Activity Area)**: 【WHAT領域】経営層向け、投資判断単位（Core/Supporting/Generic）
+- **CL2 ケイパビリティ (Capability)**: 【HOW構造】事業部長向け、チーム境界・サービス境界（≈マイクロサービス候補）
+- **CL3 業務オペレーション (Business Operation)**: 【WHAT詳細】業務担当者向け、トリガー→活動→成果物
+- **BC 実装設計 (Bounded Context)**: 【HOW実装】開発者向け、集約/イベント/API契約
+
+**ZIGZAG パターン**: WHAT → HOW → WHAT → HOW の交互分解アプローチ
 
 ### トピック: mapping
 
@@ -170,20 +184,24 @@ Value Stream (VS0-VS7)
     ↓
 Phase 2: VS詳細化 (vs{N}-detail.md)
     ↓
-CL1: Domain Type Classification (Core/Supporting/Generic)
-    ↓ 【WHY】なぜ投資するか
-CL2: ビジネスオペレーション群 ≈ Microservice Candidates
-    ↓ 【GROUP】サービス境界の定義
-CL3: ビジネスオペレーション = 業務活動の詳細定義
-    ↓ 【WHAT】何をするか（トリガー/成果物）
-BC: Bounded Context = 技術設計（集約/イベント/API）
-    ↓ 【HOW】どう実装するか
+CL1: 活動領域 (Activity Area) ≈ Domain Classification
+    ↓ 【WHAT領域】経営層の投資判断単位
+CL2: ケイパビリティ (Capability) ≈ Subdomain / Microservice Candidates
+    ↓ 【HOW構造】チーム境界・サービス境界の定義
+CL3: 業務オペレーション (Business Operation) ≈ Use Case
+    ↓ 【WHAT詳細】具体的な業務活動（トリガー→活動→成果物）
+BC: 実装設計 (Bounded Context)
+    ↓ 【HOW実装】技術設計（集約/イベント/API契約）
 L4: Aggregates, Entities, Value Objects
 ```
 
-**VS単位のサブドメイン分解**:
-- VS2 → vs2-subdomains.md → vs2-fermentation-tech-bc, vs2-product-dev-bc, ...
-- VS3 → vs3-subdomains.md → vs3-brand-mgmt-bc, vs3-campaign-bc, ...
+**DDD対応表（技術者参照用）**:
+| Parasol用語 | DDD用語 | 備考 |
+|-------------|---------|------|
+| 活動領域 (CL1) | Domain + Strategic Classification | 投資判断を含む拡張 |
+| ケイパビリティ (CL2) | Subdomain | チーム境界の明示を追加 |
+| 業務オペレーション (CL3) | Use Case / Business Process | トリガー/成果物を構造化 |
+| 実装設計 (BC) | Bounded Context | 同一概念 |
 
 重要な対応関係とコンテキストマップパターンを説明。
 
@@ -216,9 +234,10 @@ Parasol V5 は Amplifier のサブエージェントと連携して、各フェ�
 | **Phase 2** | insight-synthesizer | 異なる概念間の革新的接続を発見 |
 | | knowledge-archaeologist | 業界の価値創造の進化を追跡 |
 | | zen-architect (ANALYZE) | 戦略的価値分析 |
-| **Phase 3** | zen-architect (ANALYZE) | CL1ドメイン分類 |
-| | zen-architect (ARCHITECT) | CL2サブドメイン設計 |
-| | api-contract-designer | CL3境界コンテキスト定義 |
+| **Phase 3** | zen-architect (ANALYZE) | CL1活動領域分類 |
+| | zen-architect (ARCHITECT) | CL2ケイパビリティ設計 |
+| | zen-architect (ARCHITECT) | CL3業務オペレーション定義 |
+| | zen-architect (ARCHITECT) + api-contract-designer | BC実装設計 |
 | **Phase 4** | zen-architect (ARCHITECT) | システム設計 |
 | | database-architect | データベース設計 |
 | | integration-specialist | 外部システム連携 |

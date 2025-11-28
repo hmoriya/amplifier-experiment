@@ -4,22 +4,24 @@ description: Capability decomposition (CL1/CL2/CL3) (project:parasol)
 
 # Phase 3: Capabilities - ケイパビリティ分解
 
-Value StreamsからDDD/マイクロサービスへの段階的な分解を行います。
+Value Streamsからビジネスオペレーション、実装設計への段階的な分解を行います。
 
 ## 使用方法
 
 ```bash
-# CL1: ドメイン分類（戦略的、全体俯瞰）
+# CL1: 活動領域分類（戦略的、投資判断）
 /parasol:3-capabilities cl1
 
-# CL2: サブドメイン設計（戦術的、Value Stream単位）
+# CL2: ケイパビリティ設計（戦術的、サービス境界）
 /parasol:3-capabilities cl2              # インタラクティブ選択
 /parasol:3-capabilities cl2 VS2          # VS2（製品開発）を直接指定
-/parasol:3-capabilities cl2 VS3          # VS3（ブランディング）を直接指定
 
-# CL3: Bounded Context定義（運用的、サブドメインごと）
-/parasol:3-capabilities cl3                      # インタラクティブ選択
-/parasol:3-capabilities cl3 product-catalog      # 直接指定
+# CL3: 業務オペレーション定義（運用的、業務活動）
+/parasol:3-capabilities cl3                           # インタラクティブ選択
+/parasol:3-capabilities cl3 fermentation-research     # 直接指定
+
+# BC: 実装設計（技術的、開発者向け）
+/parasol:3-capabilities bc fermentation-research      # 直接指定
 
 # CL3 + パラソルドメイン言語生成（V5新機能）
 /parasol:3-capabilities cl3 --with-domain-language
@@ -56,9 +58,10 @@ Value StreamsからDDD/マイクロサービスへの段階的な分解を行い
 
 ケイパビリティの階層的分解により、ビジネス価値からソフトウェア設計への橋渡しを行います：
 
-- **CL1**: 戦略的分類（Core/Supporting/Generic）
-- **CL2**: ビジネスオペレーション群の定義（≈マイクロサービス候補）
-- **CL3**: Bounded Context定義（業務ルール + 技術設計）
+- **CL1 活動領域**: 戦略的分類（Core/Supporting/Generic）- 経営層向け
+- **CL2 ケイパビリティ**: サービス境界の定義（≈マイクロサービス候補）- 事業部長向け
+- **CL3 業務オペレーション**: 具体的な業務活動の定義 - 業務担当者向け
+- **BC 実装設計**: 技術設計（集約/イベント/API）- 開発者向け
 
 ## 🎯 V5特有機能: ケーパビリティ設計ストーリー出力
 
@@ -339,96 +342,120 @@ cd ~/somewhere-else
 
 ### ケイパビリティ階層の定義
 
-**CL1/CL2/CL3/BC の役割分担**
+**ビジネスフレンドリーな4階層モデル**
+
+ZIGZAGパターン: **WHAT → HOW → WHAT → HOW**
 
 ```
 Value Stream (価値創造の流れ)
      │
      ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│ CL1: Strategic（戦略的）                                          │
+│ CL1: 活動領域 (Activity Area)                                    │
 │ ─────────────────────────────────────────────────────────────── │
-│ 【WHY】なぜ投資するか                                             │
-│ • Domain Classification: Core / Supporting / Generic            │
-│ • 投資配分の決定根拠                                              │
-│ • 競争優位性の源泉特定                                            │
+│ 【WHAT領域】何の活動領域か？                                       │
+│ • 対象: 経営層・事業企画                                          │
+│ • 目的: 投資判断・リソース配分の単位                               │
+│ • 分類: Core（差別化）/ Supporting（重要）/ Generic（標準）        │
+│ • 例: A1基盤技術研究, A2原料調達, A3酒類製品開発                   │
+│                                                                 │
+│ DDD対応: Domain Classification (Core/Supporting/Generic)         │
 └─────────────────────────────────────────────────────────────────┘
      │
      ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│ CL2: Tactical（戦術的）                                           │
+│ CL2: ケイパビリティ (Capability) ★メイン概念                       │
 │ ─────────────────────────────────────────────────────────────── │
-│ 【GROUP】ビジネスオペレーション群                                   │
-│ • 大きなケーパビリティを分割する際に必要                            │
-│ • サービス境界（≈マイクロサービス候補）の定義                        │
-│ • チーム境界・データ所有権の明確化                                  │
+│ 【HOW構造】どう組織するか？                                        │
+│ • 対象: 事業部長・プロダクトオーナー                               │
+│ • 目的: チーム境界・システム境界・データ所有権の定義                │
+│ • 粒度: 5-9名のチームで担当可能な範囲（≈マイクロサービス候補）      │
 │ • 例: fermentation-research, premium-beer-development           │
 │                                                                 │
-│ 【注意】小さなケーパビリティの場合、CL2をスキップしてCL3へ進むことも可 │
+│ 【注意】小さな活動領域はCL2をスキップしてCL3へ進むことも可          │
+│ DDD対応: Subdomain                                              │
 └─────────────────────────────────────────────────────────────────┘
      │
      ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│ CL3: Operational（運用的）                                        │
+│ CL3: 業務オペレーション (Business Operation)                       │
 │ ─────────────────────────────────────────────────────────────── │
-│ 【WHAT】具体的なビジネスオペレーション                              │
-│ • 各サービス境界内で実行する業務活動の一覧                          │
-│ • オペレーション定義: 説明 / トリガー / 成果物                      │
-│ • 管理するデータ（情報資産）の特定                                  │
-│ • 他サービスとの連携関係                                          │
+│ 【WHAT詳細】具体的に何をするか？                                   │
+│ • 対象: 業務担当者・ドメインエキスパート                           │
+│ • 目的: 日々の業務活動の定義                                      │
+│ • 構造: トリガー → 活動内容 → 成果物                              │
+│ • 粒度: 1日〜1週間で完結する業務単位                              │
+│ • 例: 酵母株探索・収集、酵母株育種・改良、発酵条件最適化           │
 │                                                                 │
-│ 例: 酵母株探索・収集、酵母株育種・改良、発酵条件最適化              │
+│ DDD対応: Use Case / Business Process                            │
 └─────────────────────────────────────────────────────────────────┘
      │
      ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│ BC: Bounded Context（実装設計）                                   │
+│ BC: 実装設計 (Bounded Context)                                   │
 │ ─────────────────────────────────────────────────────────────── │
-│ 【HOW】業務をどう実装するか                                        │
-│ • CL3のビジネスオペレーションを実装するための技術設計               │
-│ • Aggregates / Entities / Value Objects                        │
-│ • Domain Events（ドメインイベント）                               │
-│ • API契約 / Context Map                                         │
-│ • ユビキタス言語の定義                                            │
+│ 【HOW実装】どう実装するか？                                        │
+│ • 対象: 開発者・アーキテクト                                      │
+│ • 目的: CL3の業務オペレーションを実装するための技術設計            │
+│ • 内容: 集約 / ドメインイベント / API契約 / ユビキタス言語         │
+│ • 例: fermentation-research-bc                                  │
+│                                                                 │
+│ DDD対応: Bounded Context                                        │
 └─────────────────────────────────────────────────────────────────┘
+```
+
+### ZIGZAGパターンの説明
+
+```
+WHAT       →      HOW        →      WHAT       →      HOW
+何の領域?        どう組織?         何をする?         どう実装?
+    │               │                │                │
+   CL1            CL2              CL3              BC
+ 活動領域     ケイパビリティ     業務OP          実装設計
+ ─────────   ────────────     ─────────       ─────────
+  経営層        事業部長        業務担当         開発者
 ```
 
 ### CL2とCL3の違い（重要）
 
-| 観点 | CL2（ビジネスオペレーション群） | CL3（ビジネスオペレーション） |
-|------|-------------------------------|------------------------------|
-| **粒度** | サービス境界（複数オペレーションの集合） | 個別の業務活動 |
-| **目的** | どこで分割するか（境界設計） | 何をするか（業務定義） |
-| **出力** | サブドメイン一覧、関係図 | オペレーション詳細（トリガー/成果物） |
-| **スキップ** | 小さなケーパビリティなら省略可 | 必須（BCの入力となる） |
+| 観点 | CL2（ケイパビリティ） | CL3（業務オペレーション） |
+|------|----------------------|-------------------------|
+| **質問** | どう組織するか？ | 何をするか？ |
+| **対象** | 事業部長・PO | 業務担当者 |
+| **粒度** | 5-9名チーム単位 | 1日〜1週間の業務 |
+| **出力** | サービス境界、チーム境界 | オペレーション詳細（トリガー/成果物） |
+| **スキップ** | 小さな活動領域なら省略可 | 必須（BCの入力となる） |
 
 ### CL3とBCの違い（重要）
 
-| 観点 | CL3（ビジネスオペレーション） | BC（Bounded Context） |
-|------|------------------------------|----------------------|
-| **視点** | ビジネス視点（業務担当者向け） | 技術視点（開発者向け） |
-| **内容** | What: 何をするか | How: どう実装するか |
+| 観点 | CL3（業務オペレーション） | BC（実装設計） |
+|------|-------------------------|----------------|
+| **質問** | 何をするか？ | どう実装するか？ |
+| **対象** | 業務担当者 | 開発者 |
 | **言語** | 業務用語 | 技術用語 + ユビキタス言語 |
-| **出力** | オペレーション一覧 | 集約、イベント、API契約 |
+| **内容** | 業務フロー、業務ルール | 集約、イベント、API契約 |
 
 ### 実例：fermentation-research
 
 ```
-【CL2】ビジネスオペレーション群
-├── fermentation-research（発酵研究）← サービス境界
+【CL1】活動領域
+└── A1基盤技術研究 → Core Domain（競争優位の源泉）
+
+【CL2】ケイパビリティ（A1基盤技術研究内）
+├── fermentation-research（発酵研究）← チーム境界
 ├── ingredient-research（素材研究）
 └── ...
 
-【CL3】ビジネスオペレーション（fermentation-research内）
-├── 酵母株探索・収集
-│   └── トリガー: 研究計画 → 成果物: 酵母サンプル
-├── 酵母株育種・改良
-│   └── トリガー: 製品要件 → 成果物: 改良酵母株
-├── 発酵条件最適化
+【CL3】業務オペレーション（fermentation-research内）
+├── OP-FER-001: 酵母株探索・収集
+│   └── トリガー: 研究計画確定 → 成果物: 酵母サンプル
+├── OP-FER-002: 酵母株育種・改良
+│   └── トリガー: 製品要件受領 → 成果物: 改良酵母株
+├── OP-FER-003: 発酵条件最適化
 │   └── トリガー: 品質要件 → 成果物: 最適条件データ
 └── ...
 
-【BC】Bounded Context（技術設計）
+【BC】実装設計（fermentation-research-bc）
 ├── Aggregate: YeastStrain（酵母株）
 │   └── Entity: StrainVariant
 │   └── ValueObject: GeneticProfile, FermentationProfile
@@ -945,23 +972,23 @@ CL3: Bounded Context 定義
 ```
 
 
-## Phase 3c: CL3 - Bounded Context Definition
+## Phase 3c: CL3 - Business Operations Definition（業務オペレーション定義）
 
 ### コマンド
 
 ```bash
 /parasol:3-capabilities cl3                      # インタラクティブ選択
-/parasol:3-capabilities cl3 product-catalog-core # 直接指定
+/parasol:3-capabilities cl3 fermentation-research # 直接指定
 ```
 
 ### 実行フロー
 
-**ステップ1**: サブドメイン選択
-- パラメータなし → 全サブドメインリストからインタラクティブ選択
+**ステップ1**: ケイパビリティ選択
+- パラメータなし → 全ケイパビリティリストからインタラクティブ選択
 - パラメータあり → 直接実行
 
 **ステップ2**: CL2の成果物を確認
-- 該当するサブドメイン定義を vs{N}-subdomains.md から読み込み
+- 該当するケイパビリティ定義を cl2-subdomain-design.md から読み込み
 
 **ステップ3**: 🤖 zen-architect サブエージェントに委譲
 
@@ -970,173 +997,345 @@ Task tool を使用して zen-architect (ARCHITECT mode) を起動：
 
 プロンプト:
 """
-Parasol V5 - Phase 3c: Bounded Context Definition (CL3)
+Parasol V5 - Phase 3c: Business Operations Definition (CL3)
 
 ## タスク
-サブドメイン "{subdomain-name}" のBounded Contextを定義してください。
-Bounded Contextは **ビジネスオペレーションの詳細** と **技術設計** の両方を含みます。
+ケイパビリティ "{capability-name}" の業務オペレーションを定義してください。
+業務オペレーションは**業務担当者・ドメインエキスパート向け**の具体的な業務活動定義です。
 
 ## 入力
-- vs{N}-subdomains.md: 該当VSのサブドメイン定義
+- cl2-subdomain-design.md: 該当VSのケイパビリティ定義
 - vs{N}-detail.md: Value Streamの詳細定義
-- strategic-classification.md: ドメイン分類
+- cl1-domain-classification.md: ドメイン分類
 
-## Bounded Context 定義要素
+## 業務オペレーション定義要素
 
-### 【ビジネス面】
-
-### 1. コンテキスト概要
-- BC名（サブドメイン名 + "-bc"）
+### 1. ケイパビリティ概要
+- ケイパビリティ名
 - 目的と責務
-- チーム境界（このBCを担当するチーム）
+- 担当チーム・担当者
 
-### 2. ビジネスオペレーション詳細
-CL2で定義したオペレーション群の詳細：
-- **各オペレーションの実行手順**（業務フロー）
-- **業務ルール**（ビジネスルール、制約条件）
-- **入力/出力**（何を受け取り、何を生成するか）
-- **トリガー**（何がこのオペレーションを開始するか）
+### 2. 業務オペレーション一覧
+このケイパビリティで実行する業務活動：
+- **オペレーションID**: OP-{3letter}-{number} 形式
+- **オペレーション名**: 日本語での業務名
+- **トリガー**: 何がこの業務を開始するか
+- **活動内容**: 具体的な作業ステップ
+- **成果物**: この業務で生成されるもの
+- **業務ルール**: 守るべきルール・制約
 
-### 3. ユビキタス言語（Ubiquitous Language）
-このBC内で使用される主要な**業務用語**とその定義：
+### 3. 業務フロー
+オペレーション間の関係と流れ：
+- 前後関係（どの業務の後に実行されるか）
+- 並行実行可能な業務
+- 条件分岐
+
+### 4. 業務用語（ユビキタス言語の種）
+このケイパビリティで使用する主要な業務用語：
 - ドメインオブジェクト（業務で扱うモノ・コト）
-- ビジネスルール（業務上の制約・ルール）
-- プロセス（業務フロー）
-- イベント（業務上の重要な出来事）
+- 業務ルール用語
+- 状態遷移用語
 
-**重要**: 他のBCと用語が重複しても、このBC内での意味を明確に定義
-
-### 【技術面】
-
-### 4. 集約（Aggregates）
-データ整合性の境界：
-- 集約ルート（Aggregate Root）
-- エンティティ（Entities）
-- 値オブジェクト（Value Objects）
-- 不変条件（Invariants）= 業務ルールの技術的表現
-
-### 5. ドメインイベント（Domain Events）
-BC外部に公開するイベント（業務上の重要な出来事）：
-- イベント名
-- ペイロード
-- 発生タイミング（どの業務オペレーションで発生するか）
-
-### 6. コンテキストマップ（Context Map）
-他のBCとの関係（業務連携パターン）：
-- Customer-Supplier
-- Partnership
-- Published Language
-- Open Host Service
-- Conformist
-- Anticorruption Layer
-
-### 7. API契約（概要）
-- 提供するAPI（エンドポイント概要）
-- 依存するAPI（他BCへの依存）
+### 5. 管理データ
+このケイパビリティが管理するデータ：
+- マスタデータ
+- トランザクションデータ
+- 参照データ
 
 ## 出力形式
-outputs/3-capabilities/{vs-dir}/cl3-bounded-contexts/{subdomain-name}-bc.md
+outputs/3-capabilities/{vs-dir}/cl3-business-operations/{capability-name}-operations.md
 
 ※ {vs-dir} はPhase 2のVS定義から動的に決定
 
 テンプレート構造：
-【ビジネス面】
-1. Bounded Context 概要
-2. ビジネスオペレーション詳細（業務フロー、業務ルール）
-3. ユビキタス言語（業務用語）
-【技術面】
-4. 集約設計
-5. ドメインイベント
-6. Context Map（他BCとの関係）
-7. API契約概要
-8. 技術スタック推奨
-9. 次のステップ（Phase 4: Architecture）
+1. ケイパビリティ概要
+2. 業務オペレーション一覧（ID、名前、トリガー、成果物）
+3. 各オペレーションの詳細
+4. 業務フロー図
+5. 業務用語集
+6. 管理データ一覧
+7. 次のステップ（BC: 実装設計）
 
 ## 制約
-- BC名は "{subdomain-name}-bc" 形式
-- ユビキタス言語は明確に定義
-- 集約境界を明確に
-- 外部との依存は Context Map で表現
+- オペレーションIDは OP-{3letter}-{number} 形式
+- 粒度は 1日〜1週間で完結する業務単位
+- 技術用語は使わない（業務担当者向け）
 
-## --with-domain-language オプション指定時の追加タスク
+"""
+```
 
-パラソルドメイン言語定義を別ファイルで作成してください。
-ファイル名: {subdomain-name}-domain-language.md
+**ステップ4**: zen-architectの出力を確認し、{capability-name}-operations.md を生成
 
-以下の6セクションを含めること：
+**ステップ5**: 結果レポート
+```
+✅ CL3: Business Operations Definition ({capability-name}) 完了
 
-1. **Aggregates（集約）** - YAMLフォーマットで定義
-2. **Value Objects（値オブジェクト）** - 型定義と検証ルール
-3. **Domain Events（ドメインイベント）** - イベントとペイロード
-4. **Domain Services（ドメインサービス）** - 複雑なビジネスロジック
-5. **Repositories（リポジトリ）** - データアクセスインターフェース
-6. **ユビキタス言語辞書** - 日英対訳と定義
+定義内容:
+- 業務オペレーション: X個
+- 業務用語: X個
+- 管理データ: X種類
 
-詳細は .claude/commands/parasol/_parasol-domain-language-guide.md を参照。
+成果物:
+outputs/3-capabilities/{vs-dir}/cl3-business-operations/{capability-name}-operations.md
+
+次のステップ:
+1. 他のケイパビリティの業務オペレーション定義を完了
+2. 全CL3完了後 → `/parasol:3-capabilities bc {capability-name}` で実装設計
+```
+
+### テンプレート: {capability-name}-operations.md
+
+```markdown
+# 業務オペレーション: fermentation-research
+
+プロジェクト: {プロジェクト名}
+ケイパビリティ: fermentation-research（発酵研究）
+作成日: {日付}
+
+## 1. ケイパビリティ概要
+
+### 目的
+酵母株の探索・育種・発酵条件最適化を通じて、製品開発を支援する基盤技術研究
+
+### 担当チーム
+**発酵研究チーム**: 5名
+- 主任研究員: 1名
+- 研究員: 3名
+- 技術補助: 1名
+
+## 2. 業務オペレーション一覧
+
+| ID | オペレーション名 | トリガー | 成果物 |
+|----|-----------------|---------|--------|
+| OP-FER-001 | 酵母株探索・収集 | 研究計画確定 | 酵母サンプル |
+| OP-FER-002 | 酵母株育種・改良 | 製品要件受領 | 改良酵母株 |
+| OP-FER-003 | 発酵条件最適化 | 品質要件確定 | 最適条件データ |
+| OP-FER-004 | 発酵試験実施 | 酵母株選定完了 | 試験結果レポート |
+
+## 3. 各オペレーションの詳細
+
+### OP-FER-001: 酵母株探索・収集
+
+**トリガー**: 研究計画の確定
+
+**活動内容**:
+1. 候補酵母株のスクリーニング
+2. 特性評価（発酵力、香味成分）
+3. 有望株の選定・保存
+
+**成果物**: 酵母サンプル、特性評価データ
+
+**業務ルール**:
+- 最低3株以上を候補として選定
+- 食品安全基準への適合確認必須
+
+---
+
+### OP-FER-002: 酵母株育種・改良
+
+**トリガー**: 製品要件の受領
+
+**活動内容**:
+1. 育種目標の設定
+2. 交配・選抜
+3. 特性確認試験
+
+**成果物**: 改良酵母株、育種記録
+
+**業務ルール**:
+- 育種記録は全工程を詳細に記録
+- 親株情報の完全なトレーサビリティ
+
+---
+
+## 4. 業務フロー図
+
+```
+研究計画確定
+     │
+     ▼
+┌─────────────────┐
+│ OP-FER-001     │
+│ 酵母株探索・収集 │
+└────────┬────────┘
+         │
+         ▼
+製品要件受領 ─────────────┐
+         │               │
+         ▼               │
+┌─────────────────┐      │
+│ OP-FER-002     │      │
+│ 酵母株育種・改良 │      │
+└────────┬────────┘      │
+         │               │
+         ▼               ▼
+┌─────────────────┐  ┌─────────────────┐
+│ OP-FER-003     │  │ OP-FER-004     │
+│ 発酵条件最適化  │  │ 発酵試験実施   │
+└─────────────────┘  └─────────────────┘
+```
+
+## 5. 業務用語集
+
+| 用語 | 定義 |
+|------|------|
+| 酵母株 | 発酵に使用する酵母の系統 |
+| 育種 | 交配や選抜により優良な形質を持つ株を作出すること |
+| 発酵力 | 酵母が糖を分解してアルコールを生成する能力 |
+| 香味成分 | 発酵過程で生成される風味に影響する化合物 |
+
+## 6. 管理データ
+
+### マスタデータ
+- 酵母株マスタ（株ID、親株情報、特性）
+- 評価基準マスタ（評価項目、基準値）
+
+### トランザクションデータ
+- 特性評価結果
+- 育種記録
+- 発酵試験データ
+
+## 7. 次のステップ
+
+実装設計（BC）への移行：
+```bash
+/parasol:3-capabilities bc fermentation-research
+```
+```
+
+
+## Phase 3d: BC - Implementation Design（実装設計）
+
+### コマンド
+
+```bash
+/parasol:3-capabilities bc                       # インタラクティブ選択
+/parasol:3-capabilities bc fermentation-research # 直接指定
+```
+
+### 実行フロー
+
+**ステップ1**: ケイパビリティ選択
+- パラメータなし → CL3定義済みケイパビリティからインタラクティブ選択
+- パラメータあり → 直接実行
+
+**ステップ2**: CL3の成果物を確認
+- 該当する業務オペレーション定義を {capability-name}-operations.md から読み込み
+
+**ステップ3**: 🤖 zen-architect + api-contract-designer サブエージェントに委譲
+
+```
+Task tool を使用して zen-architect (ARCHITECT mode) を起動：
+
+プロンプト:
+"""
+Parasol V5 - Phase 3d: Implementation Design (BC)
+
+## タスク
+ケイパビリティ "{capability-name}" の実装設計（Bounded Context）を定義してください。
+実装設計は**開発者・アーキテクト向け**の技術設計文書です。
+
+## 入力
+- {capability-name}-operations.md: 業務オペレーション定義（CL3）
+- cl2-subdomain-design.md: ケイパビリティ定義
+- cl1-domain-classification.md: ドメイン分類
+
+## 実装設計要素
+
+### 1. Bounded Context 概要
+- BC名（{capability-name}-bc）
+- 目的と責務（技術観点）
+- 担当チーム
+
+### 2. ユビキタス言語（Ubiquitous Language）
+CL3の業務用語を技術用語にマッピング：
+- ドメインオブジェクト → エンティティ/値オブジェクト
+- 業務ルール → 不変条件/ドメインサービス
+- 業務イベント → ドメインイベント
+
+### 3. 集約設計（Aggregates）
+- 集約ルート（Aggregate Root）
+- エンティティ（Entities）
+- 値オブジェクト（Value Objects）
+- 不変条件（Invariants）
+
+### 4. ドメインイベント（Domain Events）
+- イベント名
+- ペイロード
+- 発生タイミング
+
+### 5. Context Map（他BCとの関係）
+- Upstream/Downstream関係
+- 統合パターン（Customer-Supplier, Partnership等）
+
+### 6. API契約（概要）
+- 提供API
+- 依存API
+
+### 7. 技術スタック推奨
+- 言語・フレームワーク
+- データベース
+- メッセージング
+
+## 出力形式
+outputs/3-capabilities/{vs-dir}/bounded-contexts/{capability-name}-bc.md
+
+テンプレート構造：
+1. BC概要
+2. ユビキタス言語
+3. 集約設計
+4. ドメインイベント
+5. Context Map
+6. API契約
+7. 技術スタック
+8. 次のステップ（Phase 4）
+
+## 制約
+- BC名は "{capability-name}-bc" 形式
+- CL3の業務オペレーションとの対応を明記
+- 技術用語と業務用語の対訳を含める
 """
 ```
 
 **ステップ4**: 必要に応じて api-contract-designer を追加起動
-
-BC定義が完了したら、より詳細なAPI契約設計が必要な場合：
 
 ```
 Task tool を使用して api-contract-designer を起動：
 
 プロンプト:
 """
-{subdomain-name}-bc のAPI契約を詳細設計してください。
+{capability-name}-bc のAPI契約を詳細設計してください。
 
-入力: {subdomain-name}-bc.md
+入力: {capability-name}-bc.md, {capability-name}-operations.md
 
 出力:
 - RESTful API仕様（主要エンドポイント）
 - リクエスト/レスポンス形式
 - エラーハンドリング
-- 認証・認可要件
 """
 ```
 
-**ステップ5**: zen-architect（+ api-contract-designer）の出力を確認し、{subdomain-name}-bc.md を生成
+**ステップ5**: zen-architect + api-contract-designer の出力を確認し、{capability-name}-bc.md を生成
 
-**ステップ6**: パラソルドメイン言語生成（--with-domain-language オプション時）
-
-`--with-domain-language` オプションが指定された場合、以下を追加実行：
-
+**ステップ6**: 結果レポート
 ```
-🤖 パラソルドメイン言語を生成中...
-
-生成内容:
-1. Aggregates（集約）
-2. Value Objects（値オブジェクト）  
-3. Domain Events（ドメインイベント）
-4. Domain Services（ドメインサービス）
-5. Repositories（リポジトリ）
-6. ユビキタス言語辞書
-
-成果物: outputs/3-capabilities/{vs-dir}/cl3-bounded-contexts/{subdomain-name}-domain-language.md
-```
-
-**ステップ7**: 結果レポート
-```
-✅ CL3: Bounded Context Definition ({subdomain-name}) 完了
+✅ BC: Implementation Design ({capability-name}-bc) 完了
 
 定義内容:
 - 集約: X個
 - ドメインイベント: X個
+- API: X個
 - 関連BC: X個
 
-成果物: 
-- outputs/3-capabilities/{vs-dir}/cl3-bounded-contexts/{subdomain-name}-bc.md
-- outputs/3-capabilities/{vs-dir}/cl3-bounded-contexts/{subdomain-name}-domain-language.md (--with-domain-language 指定時)
+成果物:
+outputs/3-capabilities/{vs-dir}/bounded-contexts/{capability-name}-bc.md
 
 次のステップ:
-1. 他のサブドメインのBC定義を完了
-2. パラソルドメイン言語からコード生成 → `/parasol:domain-language generate`
-3. 全BC完了後 → `/parasol:4-architecture` でContext Map統合
+1. 他のケイパビリティのBC定義を完了
+2. 全BC完了後 → `/parasol:4-architecture` でContext Map統合
 ```
 
-### テンプレート: {subdomain-name}-bc.md
+### テンプレート: {capability-name}-bc.md
 
 ```markdown
 # Bounded Context: product-catalog-core-bc
