@@ -76,7 +76,142 @@ Phase 3で定義したBounded Contextsを統合し、システム全体のアー
 | **配置** | 各成果物に埋め込み | decisions/ディレクトリに独立 |
 | **更新** | 設計変更時に更新 | 新規ADRで置換 |
 
+## 🤖 Amplifierサブエージェント連携
 
+Phase 4では以下のサブエージェントを活用して、アーキテクチャ設計を深化させます。
+
+### 使用するサブエージェント
+
+| サブエージェント | 用途 | 起動タイミング |
+|-----------------|------|---------------|
+| **zen-architect** (ARCHITECT) | システム設計、サービス境界決定 | 全体設計時 |
+| **database-architect** | データベース設計、永続化戦略 | データモデル設計時 |
+| **integration-specialist** | 外部システム連携、API設計 | 統合パターン決定時 |
+| **security-guardian** | セキュリティアーキテクチャレビュー | セキュリティ設計時 |
+
+### zen-architect (ARCHITECT mode) の活用
+
+サービス境界とContext Mapの設計を委譲します：
+
+```
+Task tool を使用して zen-architect (ARCHITECT mode) を起動：
+
+プロンプト:
+「Phase 3のBC定義を基に、サービスアーキテクチャを設計してください。
+
+入力:
+- Bounded Contexts: {bc_list_from_phase3}
+- Core/Supporting/Generic分類: {domain_classification}
+- 統合要件: {integration_requirements}
+
+設計タスク:
+1. BC→サービスのマッピング（1:1, N:1, 1:N）
+2. サービス間の依存関係とContext Map
+3. 統合パターンの選択（Customer-Supplier, Partnership等）
+4. 非機能要件（スケーラビリティ、可用性）への対応
+
+設計ストーリーも含めて出力してください。」
+```
+
+### database-architect の活用
+
+各サービスのデータ永続化戦略を設計します：
+
+```
+Task tool を使用して database-architect を起動：
+
+プロンプト:
+「以下のサービス群のデータベースアーキテクチャを設計してください。
+
+入力:
+- サービス一覧: {service_list}
+- 各サービスの集約ルート: {aggregates_per_service}
+- 整合性要件: {consistency_requirements}
+- クエリパターン: {expected_query_patterns}
+
+設計タスク:
+1. データベース選定（RDB/NoSQL/混合）の理由
+2. サービス毎のスキーマ概要
+3. 結果整合性 vs 強整合性の判断
+4. イベントソーシング適用の検討
+5. CQRS適用の検討
+
+出力:
+- database-strategy.md（戦略文書）
+- 各サービスのデータモデル概要
+- ADR: データベース選定理由」
+```
+
+### integration-specialist の活用
+
+外部システムやサービス間の統合を設計します：
+
+```
+Task tool を使用して integration-specialist を起動：
+
+プロンプト:
+「サービス間および外部システムとの統合アーキテクチャを設計してください。
+
+入力:
+- 内部サービス一覧: {internal_services}
+- 外部システム: {external_systems}
+- 統合パターン候補: {integration_patterns}
+
+設計タスク:
+1. 同期/非同期の選択と理由
+2. API Gateway設計
+3. イベントバス/メッセージブローカー設計
+4. サーキットブレーカー等のレジリエンスパターン
+5. 認証・認可アーキテクチャ
+
+出力:
+- integration-architecture.md
+- API仕様の方針
+- ADR: 統合パターン選択理由」
+```
+
+### security-guardian の活用（オプション）
+
+セキュリティ観点でのアーキテクチャレビューを実施：
+
+```
+Task tool を使用して security-guardian を起動：
+
+プロンプト:
+「設計されたアーキテクチャのセキュリティレビューを実施してください。
+
+入力:
+- アーキテクチャ概要: {architecture_overview}
+- 認証・認可設計: {auth_design}
+- データフロー: {data_flows}
+
+レビュー観点:
+1. OWASP Top 10への対応
+2. 認証・認可の適切性
+3. データ保護（暗号化、マスキング）
+4. 監査ログ設計
+5. セキュリティ境界の妥当性
+
+出力:
+- security-review.md
+- 推奨事項リスト
+- ADR: セキュリティ設計決定」
+```
+
+### サブエージェント出力の統合
+
+```
+outputs/4-architecture/
+├── architecture-overview.md     # 最終成果物
+├── database-strategy.md         # database-architect出力 ← New
+├── integration-architecture.md  # integration-specialist出力 ← New
+├── security-review.md           # security-guardian出力 ← New
+└── decisions/
+    ├── adr-001-*.md
+    └── adr-002-*.md
+```
+
+---
 
 ## 🔧 プロジェクト検出
 

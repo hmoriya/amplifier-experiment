@@ -278,10 +278,7 @@ class PatternMatcher:
                 return True
 
         # Check if pattern has been successful in similar contexts
-        if pattern.success_rate > 0.7:
-            return True
-
-        return False
+        return pattern.success_rate > 0.7
 
     def recommend_pattern(self, context: Any, problem_description: str) -> Pattern | None:
         """Recommend a pattern based on problem description"""

@@ -216,7 +216,7 @@ class CapabilityDesignPhase(PhaseBase):
         # Decompose L2 capabilities
         for l2_cap in context.capabilities.get("L2", []):
             # Generate 2-3 L3 capabilities per L2
-            for i in range(2):
+            for _i in range(2):
                 operational_caps.append(
                     {
                         "id": f"L3-{len(operational_caps) + 1:03d}",

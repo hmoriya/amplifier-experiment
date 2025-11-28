@@ -16,6 +16,7 @@ Parasol V5 フレームワークの包括的なガイドとヘルプを提供し
 /parasol:0-help concepts     # 主要概念の説明
 /parasol:0-help mapping      # DDD/マイクロサービスマッピング
 /parasol:0-help templates    # テンプレート一覧
+/parasol:0-help subagents    # Amplifierサブエージェント連携
 ```
 
 ## 実行
@@ -48,6 +49,9 @@ Parasol V5 フレームワークの包括的なガイドとヘルプを提供し
 
 6. **templates** - テンプレート一覧
    `/parasol:0-help templates`
+
+7. **subagents** - Amplifierサブエージェント連携
+   `/parasol:0-help subagents`
 
 ---
 
@@ -196,6 +200,72 @@ L4: Aggregates, Entities, Value Objects
 **Phase 5**: domain-language-template.md, api-specification-template.md, database-design-template.md, use-case-template.md, page-definition-template.md
 
 各フェーズのコマンドが自動的に適切なテンプレートを使用します。
+
+### トピック: subagents
+
+Parasol V5 は Amplifier のサブエージェントと連携して、各フェーズの品質を向上させます。
+
+#### フェーズ別サブエージェント一覧
+
+| フェーズ | サブエージェント | 用途 |
+|----------|-----------------|------|
+| **Phase 1** | concept-extractor | 業界知識・概念の抽出 |
+| | content-researcher | 既存資料からの知見収集 |
+| | zen-architect (ANALYZE) | 戦略的コンテキスト分析 |
+| **Phase 2** | insight-synthesizer | 異なる概念間の革新的接続を発見 |
+| | knowledge-archaeologist | 業界の価値創造の進化を追跡 |
+| | zen-architect (ANALYZE) | 戦略的価値分析 |
+| **Phase 3** | zen-architect (ANALYZE) | CL1ドメイン分類 |
+| | zen-architect (ARCHITECT) | CL2サブドメイン設計 |
+| | api-contract-designer | CL3境界コンテキスト定義 |
+| **Phase 4** | zen-architect (ARCHITECT) | システム設計 |
+| | database-architect | データベース設計 |
+| | integration-specialist | 外部システム連携 |
+| | security-guardian | セキュリティレビュー |
+| **Phase 5** | api-contract-designer | API仕様設計 |
+| | contract-spec-author | ドメイン言語仕様化 |
+| | database-architect | DBスキーマ最適化 |
+| **Phase 6** | modular-builder | モジュール単位コード生成 |
+| | test-coverage | テストカバレッジ分析 |
+| | bug-hunter | バグ検出・修正 |
+| | zen-architect (REVIEW) | コード品質レビュー |
+
+#### DDDワークフロー連携
+
+Parasol は Amplifier DDD ワークフロー（`/ddd:*`）と連携できます：
+
+```
+📋 Phase 5-6 での DDD ワークフロー活用
+
+1. /ddd:prime     - DDDコンテキストをロード
+2. /ddd:1-plan    - ドメイン設計の計画
+3. /ddd:2-docs    - ドキュメント生成
+4. /ddd:3-code-plan - 実装計画
+5. /ddd:4-code    - コード実装
+6. /ddd:5-finish  - クリーンアップ
+```
+
+#### ナレッジ蓄積
+
+各フェーズで抽出した概念やパターンをナレッジベースに蓄積：
+
+- `outputs/1-context/extracted-concepts.json` - 抽出された概念
+- `outputs/2-value/value-insights.json` - 価値洞察
+- `outputs/5-software/design-patterns.json` - 設計パターン
+- `outputs/6-implementation/implementation-learnings.json` - 実装学習
+
+#### サブエージェント起動方法
+
+各フェーズのコマンドファイルに詳細なプロンプト例があります：
+
+```
+Task tool を使用して {subagent-name} を起動：
+
+プロンプト:
+「{具体的な指示}」
+```
+
+詳細は各フェーズのコマンドファイル内「🤖 Amplifierサブエージェント連携」セクションを参照。
 
 ---
 

@@ -113,6 +113,80 @@ VL1 → VL2 → VL3
 
 **参照**: 業種別の設計ストーリー例は `parasol/patterns/value/industry-value-stream-patterns.md` を確認してください。
 
+## 🤖 Amplifierサブエージェント連携
+
+Phase 2では以下のサブエージェントを活用して、価値定義を深化させます。
+
+### 使用するサブエージェント
+
+| サブエージェント | 用途 | 起動タイミング |
+|-----------------|------|---------------|
+| **insight-synthesizer** | 異なる概念間の革新的接続を発見 | VL分解・VS設計時 |
+| **zen-architect** (ANALYZE) | 戦略的価値分析 | 価値構造の設計判断 |
+| **knowledge-archaeologist** | 業界の価値創造の進化を追跡 | 業界トレンド分析時 |
+
+### insight-synthesizer の活用
+
+Phase 1で抽出した概念と市場トレンドから、革新的な価値接続を発見します：
+
+```
+Task tool を使用して insight-synthesizer を起動：
+
+プロンプト:
+「以下の情報から、革新的な価値創造の機会を発見してください。
+
+入力:
+- 企業の強み: {capabilities_from_phase1}
+- 市場トレンド: {market_trends}
+- 競合の弱み: {competitor_gaps}
+- 顧客の未充足ニーズ: {unmet_needs}
+
+分析タスク:
+1. 強み × トレンド の掛け合わせで生まれる新価値
+2. 競合が見落としている価値領域
+3. 異業種からの価値移転可能性
+4. VL2軸の候補（差別化軸 vs 成長軸）
+
+出力:
+- 発見した革新的接続点のリスト
+- 各接続点の価値創造ポテンシャル評価
+- VL2分解への示唆」
+```
+
+### knowledge-archaeologist の活用
+
+業界における価値創造の歴史的進化を分析し、将来の方向性を予測します：
+
+```
+Task tool を使用して knowledge-archaeologist を起動：
+
+プロンプト:
+「{industry}業界における価値創造の進化を分析してください。
+
+分析観点:
+1. 過去10年の価値軸の変遷（価格→品質→体験→持続可能性など）
+2. 現在のCore価値とSupporting価値の境界
+3. 次の5年で予測される価値軸のシフト
+4. 「忘れられた価値」の再発見可能性
+
+出力:
+- 価値進化のタイムライン
+- 現在の価値競争の焦点
+- MS5設定への示唆（18ヶ月後の理想状態）」
+```
+
+### サブエージェント出力の統合
+
+```
+outputs/2-value/
+├── value-definition.md          # 最終成果物
+├── insight-synthesis.md         # insight-synthesizer出力 ← New
+├── value-evolution-analysis.md  # knowledge-archaeologist出力 ← New
+└── design-story.md              # 設計ストーリー（上記を統合）
+```
+
+---
+
 ## ⚠️ 重要: 業種によるVSパターンの違い
 
 業種によってステークホルダー構造が異なり、VSの設計パターンが変わります。

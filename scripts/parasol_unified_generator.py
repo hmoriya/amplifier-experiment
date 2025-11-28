@@ -159,7 +159,7 @@ class ParasolUnifiedGenerator:
         """L3能力と操作の親子関係を検証"""
         print("🔍 L3 Capability ⊃ Operations 関係を検証中...")
 
-        for cap_id, capability in self.capabilities.items():
+        for _cap_id, capability in self.capabilities.items():
             if capability.level == "L3":
                 if not capability.operations:
                     print(f"  ⚠️  {capability.name} に操作が定義されていません")
@@ -173,13 +173,13 @@ class ParasolUnifiedGenerator:
         # 能力階層の構築
         self.capability_hierarchy = {"L1": [], "L2": [], "L3": []}
 
-        for cap_id, capability in self.capabilities.items():
+        for _cap_id, capability in self.capabilities.items():
             self.capability_hierarchy[capability.level].append(capability)
 
         # 操作のパターン分類
         self.operation_patterns = {"CRUD": [], "Workflow": [], "Analytics": [], "Collaboration": []}
 
-        for op_id, operation in self.operations.items():
+        for _op_id, operation in self.operations.items():
             self.operation_patterns[operation.pattern].append(operation)
 
     def apply_v4_patterns(self):
@@ -507,10 +507,7 @@ describe('Task Entity', () => {
 
     def _check_l3_operation_relationship(self) -> bool:
         """L3能力と操作の親子関係をチェック"""
-        for cap in self.capability_hierarchy.get("L3", []):
-            if not cap.operations:
-                return False
-        return True
+        return all(cap.operations for cap in self.capability_hierarchy.get("L3", []))
 
     def _check_what_how_structure(self) -> bool:
         """WHAT-HOW構造の一貫性をチェック"""
@@ -522,14 +519,11 @@ describe('Task Entity', () => {
 
     def _check_value_traceability(self) -> bool:
         """価値の追跡可能性をチェック"""
-        for cap in self.capabilities.values():
-            if not cap.metrics:
-                return False
-        return True
+        return all(cap.metrics for cap in self.capabilities.values())
 
     def _parse_context_file(self, file_path: Path):
         """境界コンテキストファイルのパース"""
-        content = file_path.read_text(encoding="utf-8")
+        _content = file_path.read_text(encoding="utf-8")
         # 実装省略
         pass
 

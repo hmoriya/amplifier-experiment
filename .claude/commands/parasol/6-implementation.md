@@ -22,7 +22,182 @@ Phase 5で設計したサービス/BCの実装を行います：
 - テストコードの生成
 - ドキュメント生成
 
+## 🤖 Amplifierサブエージェント連携
 
+Phase 6では以下のサブエージェントとDDDワークフローを活用して、高品質な実装を行います。
+
+### 使用するサブエージェント
+
+| サブエージェント | 用途 | 起動タイミング |
+|-----------------|------|---------------|
+| **modular-builder** | モジュール単位でのコード生成 | コード骨格生成時 |
+| **test-coverage** | テストカバレッジ分析、テストケース提案 | テストコード生成時 |
+| **bug-hunter** | 実装中のバグ検出・修正 | エラー発生時 |
+| **zen-architect** (REVIEW) | コード品質レビュー | 実装完了時 |
+
+### DDD ワークフロー連携
+
+Phase 5で準備した設計を基に、DDDワークフローで実装を進めます：
+
+```
+📋 DDDワークフロー実装手順
+
+1. Phase 5 で作成した計画を確認
+   → /ddd:status (現在の進捗確認)
+
+2. コード実装
+   → /ddd:4-code "BC: {bc-name} の実装"
+
+3. 実装完了・クリーンアップ
+   → /ddd:5-finish
+
+ポイント:
+- /ddd:4-code で domain-language.md に基づくコード生成
+- modular-builder と組み合わせてモジュール単位で実装
+- /ddd:5-finish でクリーンアップと最終確認
+```
+
+### modular-builder の活用
+
+「bricks & studs」哲学に基づき、再生成可能なモジュールを構築：
+
+```
+Task tool を使用して modular-builder を起動：
+
+プロンプト:
+「以下の仕様に基づいて、モジュールを実装してください。
+
+仕様ドキュメント:
+- domain-language.md: {パス}
+- api-specification.md: {パス}
+- database-design.md: {パス}
+
+実装対象:
+1. Aggregate: {aggregate-name}
+2. Repository: {repository-name}
+3. Use Case: {use-case-name}
+
+技術スタック:
+- 言語: {language}
+- フレームワーク: {framework}
+
+実装原則:
+- 各モジュールは自己完結（bricks）
+- 公開インターフェースは明確（studs）
+- 再生成可能な構造」
+```
+
+### test-coverage の活用
+
+テスト戦略の策定とカバレッジ分析：
+
+```
+Task tool を使用して test-coverage を起動：
+
+プロンプト:
+「以下の実装に対して、テスト戦略を提案してください。
+
+実装コード: {code/ ディレクトリ}
+ドメイン言語: {domain-language.md}
+
+分析対象:
+1. Unit Test カバレッジ分析
+2. Integration Test 必要箇所の特定
+3. Edge Case の洗い出し
+4. Mock/Stub 戦略
+
+目標:
+- Unit Test カバレッジ: 80%以上
+- Critical Path: 100%カバー
+- 過剰テストの回避」
+```
+
+### bug-hunter の活用
+
+実装中のエラーを体系的に解決：
+
+```
+Task tool を使用して bug-hunter を起動：
+
+プロンプト:
+「以下のエラーを調査・修正してください。
+
+エラー内容: {エラーメッセージ}
+発生箇所: {ファイル:行番号}
+関連コード: {関連するコードスニペット}
+
+調査項目:
+1. 根本原因の特定
+2. 修正案の提示
+3. 再発防止策
+
+注意: 最小限の変更で修正（過度な抽象化を避ける）」
+```
+
+### 実装品質チェック
+
+実装完了時に zen-architect でレビュー：
+
+```
+Task tool を使用して zen-architect (REVIEW) を起動：
+
+プロンプト:
+「以下の実装をレビューしてください。
+
+実装コード: {code/ ディレクトリ}
+設計仕様: {Phase 5 の成果物}
+
+レビュー観点:
+1. 設計との整合性
+2. SOLID原則の遵守
+3. DDDパターンの適用
+4. コードの簡潔性（ruthless simplicity）
+
+フィードバック形式:
+- Critical: 必ず修正が必要
+- Suggestion: 改善推奨
+- Note: 参考情報」
+```
+
+### 実装ストーリー出力
+
+Phase 6では以下の実装判断理由を自動出力します：
+
+| 実装判断 | 出力される理由 |
+|----------|---------------|
+| 技術選択 | なぜこのフレームワーク/ライブラリを選んだか |
+| パターン適用 | なぜこのデザインパターンを使ったか |
+| テスト戦略 | なぜこのテスト構成にしたか |
+| エラーハンドリング | どのエラーケースを重視したか |
+
+**出力先**: `outputs/6-implementation/services/{service}/{bc}/implementation-story.md`
+
+### ナレッジ蓄積
+
+実装パターンと学習をナレッジベースに蓄積：
+
+```yaml
+# outputs/6-implementation/implementation-learnings.json
+{
+  "project": "{project-name}",
+  "bc": "{bc-name}",
+  "learnings": [
+    {
+      "category": "performance",
+      "issue": "N+1クエリ問題",
+      "solution": "Eager loadingの適用",
+      "context": "ProductRepository.findByCategory()"
+    },
+    {
+      "category": "testing",
+      "issue": "外部API依存のテスト",
+      "solution": "Contract TestとMockの組み合わせ",
+      "context": "PaymentService統合テスト"
+    }
+  ],
+  "created_at": "timestamp"
+}
+```
 
 ## 🔧 プロジェクト検出
 

@@ -85,6 +85,88 @@ cd ~/somewhere-else
 
 詳細は `.claude/commands/parasol/_project-detection.md` を参照。
 
+## 🤖 Amplifierサブエージェント連携
+
+Phase 1では以下のサブエージェントを活用して、コンテキスト分析を深化させます。
+
+### 使用するサブエージェント
+
+| サブエージェント | 用途 | 起動タイミング |
+|-----------------|------|---------------|
+| **concept-extractor** | 業界知識・概念の抽出 | 組織分析・市場評価時 |
+| **content-researcher** | コンテンツファイルからの知見収集 | 既存資料がある場合 |
+| **zen-architect** (ANALYZE) | 戦略的コンテキスト分析 | 組織・市場の構造分析 |
+
+### concept-extractor の活用
+
+組織情報や市場情報から、構造化された知識を抽出します：
+
+```
+Task tool を使用して concept-extractor を起動：
+
+プロンプト:
+「以下の組織・市場情報から、主要な概念と関係性を抽出してください。
+
+入力:
+- 企業名: {company_name}
+- 業種: {industry}
+- 市場環境: {market_context}
+
+抽出対象:
+1. 主要概念（ビジネスエンティティ、能力、プロセス）
+2. 概念間の関係（is-a, has-a, depends-on）
+3. 業界固有のドメイン用語
+4. 競合との差別化ポイント
+
+出力形式: SPO三つ組（Subject-Predicate-Object）のリスト」
+```
+
+### content-researcher の活用（既存資料がある場合）
+
+プロジェクトに既存の資料（IR資料、事業計画など）がある場合：
+
+```
+Task tool を使用して content-researcher を起動：
+
+プロンプト:
+「以下のコンテンツファイルから、Phase 1コンテキスト分析に必要な
+情報を抽出・整理してください。
+
+対象ファイル: [ファイルパスリスト]
+
+抽出項目:
+1. 組織構造と主要事業
+2. 市場ポジションと競合
+3. 戦略的優先事項
+4. 制約条件と課題
+
+industry-segment-profile.md のセグメントパターン判定に
+必要な情報を特に重点的に抽出してください。」
+```
+
+### ナレッジ蓄積（knowledge_synthesis連携）
+
+抽出した概念をナレッジベースに蓄積し、将来のプロジェクトで再利用：
+
+```python
+# 概念の蓄積（将来の参照用）
+outputs/1-context/extracted-concepts.json
+{
+  "project": "{project-name}",
+  "industry": "{industry}",
+  "concepts": [
+    {"subject": "アサヒ", "predicate": "has-capability", "object": "発酵技術"},
+    {"subject": "発酵技術", "predicate": "enables", "object": "製品差別化"}
+  ],
+  "domain_terms": ["醸造", "発酵", "プレミアムビール"],
+  "extracted_at": "timestamp"
+}
+```
+
+**参照**: 同業種の過去プロジェクトから類似概念を検索可能
+
+---
+
 ## 成果物
 
 以下のドキュメントを `outputs/1-context/` に作成します：
@@ -94,6 +176,7 @@ cd ~/somewhere-else
 3. **market-assessment.md** - 市場評価
 4. **constraints.md** - 制約事項
 5. **stakeholder-map.md** - ステークホルダーマップ
+6. **extracted-concepts.json** - 抽出された概念（サブエージェント出力） ← **New**
 
 ## 実行手順
 

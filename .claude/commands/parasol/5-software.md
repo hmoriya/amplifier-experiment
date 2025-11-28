@@ -22,7 +22,148 @@ Phase 4で定義したサービス/BCに対して、実装に必要な詳細設�
 - データベース設計
 - ビジネスオペレーション（Use Cases + UI定義）
 
+## 🤖 Amplifierサブエージェント連携
 
+Phase 5では以下のサブエージェントとDDDワークフローを活用して、詳細設計を深化させます。
+
+### 使用するサブエージェント
+
+| サブエージェント | 用途 | 起動タイミング |
+|-----------------|------|---------------|
+| **api-contract-designer** | API仕様設計、エンドポイント設計 | API仕様作成時 |
+| **contract-spec-author** | ドメイン言語の正式仕様化 | domain-language.md 作成時 |
+| **zen-architect** (ARCHITECT) | ドメインモデリング判断 | Aggregate/Entity設計時 |
+| **database-architect** | データベーススキーマ最適化 | database-design.md 作成時 |
+
+### DDD ワークフロー連携
+
+複雑なドメインモデリングでは、Amplifier DDDワークフローと連携します：
+
+```
+📋 DDDワークフロー連携手順
+
+1. DDDコンテキストをロード（セッション開始時）
+   → /ddd:prime
+
+2. ドメイン言語設計の計画
+   → /ddd:1-plan "BC: {bc-name} のドメインモデル詳細設計"
+
+3. ドメイン言語ドキュメント生成
+   → /ddd:2-docs
+
+4. 実装コード計画（次Phase用の準備）
+   → /ddd:3-code-plan
+
+ポイント:
+- /ddd:prime で Phase 4 の成果物を参照可能に
+- /ddd:1-plan で Aggregate 設計の計画を立てる
+- /ddd:2-docs で domain-language.md を生成
+```
+
+### api-contract-designer の活用
+
+API仕様設計時に、整合性の取れたAPI設計を支援：
+
+```
+Task tool を使用して api-contract-designer を起動：
+
+プロンプト:
+「以下のBounded Context に対して、RESTful API仕様を設計してください。
+
+BC名: {bc-name}
+ドメイン言語: {domain-language.md の内容}
+
+設計要件:
+1. CRUD操作の基本エンドポイント
+2. 検索・フィルタリングエンドポイント
+3. バッチ操作（必要に応じて）
+4. エラーレスポンスの標準化
+
+出力形式: OpenAPI 3.0 YAML」
+```
+
+### contract-spec-author の活用
+
+ドメイン言語を正式な仕様ドキュメントとして整備：
+
+```
+Task tool を使用して contract-spec-author を起動：
+
+プロンプト:
+「以下のドメインモデルを正式なContract仕様として整備してください。
+
+入力: {domain-language.md の内容}
+
+整備対象:
+1. Aggregateの不変条件（Invariants）の形式化
+2. Value Objectのバリデーションルール
+3. Domain Eventのペイロード仕様
+4. Repository契約の明確化
+
+出力形式: Parasol Contract Specification」
+```
+
+### database-architect の活用
+
+Phase 4で設計したデータモデルをデータベース設計に変換：
+
+```
+Task tool を使用して database-architect を起動：
+
+プロンプト:
+「以下のドメインモデルに対して、データベース設計を行ってください。
+
+ドメイン言語: {domain-language.md の内容}
+データベース: PostgreSQL 15+
+
+設計対象:
+1. テーブル構造（正規化レベル: 3NF基準）
+2. インデックス戦略（検索パターン考慮）
+3. 外部キー制約
+4. 集約境界に基づくトランザクション境界
+
+パフォーマンス考慮:
+- 主要クエリパターン: {想定されるクエリ}
+- 予想データ量: {概算}」
+```
+
+### 設計ストーリー出力
+
+Phase 5では以下の設計判断理由を自動出力します：
+
+| 設計判断 | 出力される理由 |
+|----------|---------------|
+| Aggregate境界 | なぜこのエンティティをAggregateRootとしたか |
+| Value Object選択 | なぜこの概念をValue Objectとしたか |
+| API設計 | エンドポイント構造の設計根拠 |
+| インデックス | パフォーマンス考慮の背景 |
+
+**出力先**: `outputs/5-software/services/{service}/{bc}/design-story.md`
+
+### ナレッジ蓄積
+
+設計パターンをナレッジベースに蓄積：
+
+```yaml
+# outputs/5-software/design-patterns.json
+{
+  "project": "{project-name}",
+  "bc": "{bc-name}",
+  "patterns_used": [
+    {
+      "pattern": "Repository Pattern",
+      "applied_to": "ProductRepository",
+      "reason": "永続化の抽象化と集約境界の維持"
+    },
+    {
+      "pattern": "Domain Event",
+      "applied_to": "ProductCreated",
+      "reason": "他BCへの通知とAudit Trail"
+    }
+  ],
+  "created_at": "timestamp"
+}
+```
 
 ## 🔧 プロジェクト検出
 

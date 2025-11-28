@@ -7,6 +7,7 @@ Compares different architecture implementations across multiple worktrees
 import argparse
 import json
 import subprocess
+from contextlib import suppress
 from dataclasses import dataclass
 from dataclasses import field
 from datetime import datetime
@@ -127,7 +128,7 @@ class ArchitectureComparator:
                 try:
                     with open(py_file) as f:
                         total_lines += len(f.readlines())
-                except:
+                except Exception:
                     pass
         return total_lines
 
@@ -138,7 +139,7 @@ class ArchitectureComparator:
     def _run_tests(self, path: Path) -> float:
         """Run tests and get coverage"""
         try:
-            result = subprocess.run(
+            subprocess.run(
                 ["python", "-m", "pytest", "--cov", "--cov-report=json"],
                 cwd=path,
                 capture_output=True,
@@ -151,7 +152,7 @@ class ArchitectureComparator:
                 with open(coverage_file) as f:
                     coverage_data = json.load(f)
                     return coverage_data.get("totals", {}).get("percent_covered", 0)
-        except:
+        except Exception:
             return 0.0
         return 0.0
 
@@ -161,11 +162,9 @@ class ArchitectureComparator:
 
         start_time = time.time()
 
-        try:
-            # Simulate build process
+        # Simulate build process
+        with suppress(Exception):
             subprocess.run(["python", "-m", "compileall", "."], cwd=path, capture_output=True, timeout=30)
-        except:
-            pass
 
         return time.time() - start_time
 
@@ -263,7 +262,7 @@ class ArchitectureComparator:
         report.append("| Architecture | Complexity | Scalability | Maintainability | Testability | Performance |")
         report.append("|--------------|------------|-------------|-----------------|-------------|-------------|")
 
-        for name, data in results.items():
+        for _name, data in results.items():
             metrics = data["metrics"]
             report.append(
                 f"| {data['description']} | "
@@ -276,7 +275,7 @@ class ArchitectureComparator:
 
         # Detailed metrics
         report.append("\n## Detailed Metrics\n")
-        for name, data in results.items():
+        for _name, data in results.items():
             report.append(f"### {data['description']}\n")
             metrics = data["metrics"]
 

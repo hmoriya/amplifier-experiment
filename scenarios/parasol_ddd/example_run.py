@@ -243,12 +243,12 @@ def demonstrate_pattern_learning():
     for project_name, value_def in projects:
         print(f"\n📁 Running {project_name}...")
 
-        context = engine.initialize_project(
+        _context = engine.initialize_project(
             project_name=project_name, project_path=f"./generated/{project_name}", value_definition=value_def
         )
 
         # Execute with pattern tracking
-        result = engine.execute(phases=["Value Analysis", "Capability Design"])
+        _result = engine.execute(phases=["Value Analysis", "Capability Design"])
 
         # Record success
         engine.pattern_library.update_pattern_usage("CAP-001", success=True)
