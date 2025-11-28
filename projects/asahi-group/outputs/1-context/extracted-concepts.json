@@ -1,0 +1,130 @@
+{
+  "project": "asahi-group",
+  "industry": "製造業・消費財（酒類・飲料・食品）",
+  "extracted_at": "2025-11-27",
+  "source": "concept-extractor subagent",
+  "concepts": [
+    {
+      "subject": "アサヒグループHD",
+      "predicate": "controls",
+      "object": "アサヒグループジャパン"
+    },
+    {
+      "subject": "アサヒグループジャパン",
+      "predicate": "oversees",
+      "object": "アサヒビール"
+    },
+    {
+      "subject": "アサヒグループジャパン",
+      "predicate": "oversees",
+      "object": "アサヒ飲料"
+    },
+    {
+      "subject": "アサヒグループジャパン",
+      "predicate": "oversees",
+      "object": "アサヒグループ食品"
+    },
+    {
+      "subject": "アサヒグループHD",
+      "predicate": "controls",
+      "object": "Asahi Europe and International"
+    },
+    {
+      "subject": "AEI",
+      "predicate": "acquired",
+      "object": "Pilsner Urquell"
+    },
+    {
+      "subject": "AEI",
+      "predicate": "acquired",
+      "object": "Peroni"
+    },
+    {
+      "subject": "アサヒビール",
+      "predicate": "produces",
+      "object": "スーパードライ"
+    },
+    {
+      "subject": "アサヒビール",
+      "predicate": "produces",
+      "object": "アサヒ生ビール"
+    },
+    {
+      "subject": "アサヒ飲料",
+      "predicate": "produces",
+      "object": "三ツ矢サイダー"
+    },
+    {
+      "subject": "アサヒ飲料",
+      "predicate": "produces",
+      "object": "カルピス"
+    },
+    {
+      "subject": "アサヒグループ",
+      "predicate": "possesses",
+      "object": "発酵技術"
+    },
+    {
+      "subject": "発酵技術",
+      "predicate": "enables",
+      "object": "ビール醸造"
+    },
+    {
+      "subject": "発酵技術",
+      "predicate": "enables",
+      "object": "酵母エキス製造"
+    },
+    {
+      "subject": "酵母研究",
+      "predicate": "generates",
+      "object": "β-グルカン活用技術"
+    },
+    {
+      "subject": "コアテクノロジー研究所",
+      "predicate": "integrates",
+      "object": "多事業研究者"
+    },
+    {
+      "subject": "Asahi Super Dry",
+      "predicate": "targets",
+      "object": "グローバル市場"
+    },
+    {
+      "subject": "Peroni Nastro Azzurro",
+      "predicate": "represents",
+      "object": "イタリアンプレミアム"
+    },
+    {
+      "subject": "Pilsner Urquell",
+      "predicate": "represents",
+      "object": "チェコ伝統"
+    }
+  ],
+  "domain_terms": [
+    "醸造",
+    "発酵",
+    "酵母",
+    "プレミアムビール",
+    "スーパードライ",
+    "辛口",
+    "麦芽",
+    "ホップ",
+    "乳酸菌",
+    "酵母エキス",
+    "β-グルカン",
+    "RHQ",
+    "グローバルブランド",
+    "業務用",
+    "家庭用",
+    "ノンアルコール",
+    "スマートドリンキング"
+  ],
+  "segment_pattern": "多面ステークホルダー型",
+  "segment_reason": "BtoC（消費者）、BtoB（業務用・小売）、BtoBtoC（素材供給）の複合構造",
+  "key_differentiators": [
+    "1889年からの発酵技術蓄積",
+    "5つのグローバルプレミアムブランド",
+    "酵母研究50年超の知見",
+    "垂直統合（原料から最終製品まで）"
+  ]
+}

@@ -1,0 +1,77 @@
+project:
+  name: asahi-group
+  description: "アサヒグループホールディングス - DX戦略プロジェクト"
+  created: 2025-11-27
+  updated: 2025-11-27
+  company_url: https://www.asahigroup-holdings.com/
+
+phases:
+  phase0:
+    status: completed
+    completed: 2025-11-27
+  phase1:
+    status: completed
+    completed: 2025-11-27
+    outputs:
+      - organization-analysis.md
+      - industry-segment-profile.md
+      - market-assessment.md
+      - constraints.md
+      - stakeholder-map.md
+      - extracted-concepts.json
+  phase2:
+    status: completed
+    completed: 2025-11-27
+    outputs:
+      - value-definition.md
+      - value-streams-mapping.md
+      - value-insights.json
+  phase3:
+    status: completed
+    completed: 2025-11-27
+    outputs:
+      - cl1-domain-classification.md
+      - cl2-subdomain-design.md
+      - cl3-bounded-contexts.md
+  phase4:
+    status: completed
+    completed: 2025-11-27
+    outputs:
+      - architecture-design.md
+  phase5:
+    status: completed
+    completed: 2025-11-28
+    outputs:
+      # VS1: 研究開発 (Research & Development)
+      - VS1_研究開発/BC1_FermentationPlatform/domain-language.md
+      - VS1_研究開発/BC1_FermentationPlatform/api-specification.md
+      - VS1_研究開発/BC1_FermentationPlatform/database-design.md
+      - VS1_研究開発/BC4_ResearchInnovation/domain-language.md
+      - VS1_研究開発/BC4_ResearchInnovation/api-specification.md
+      - VS1_研究開発/BC4_ResearchInnovation/database-design.md
+      - VS1_研究開発/BC6_FunctionalResearch/domain-language.md
+      - VS1_研究開発/BC6_FunctionalResearch/api-specification.md
+      - VS1_研究開発/BC6_FunctionalResearch/database-design.md
+      # VS2: 製品開発 (Product Development)
+      - VS2_製品開発/BC2_ProductRecipe/domain-language.md
+      - VS2_製品開発/BC2_ProductRecipe/api-specification.md
+      - VS2_製品開発/BC2_ProductRecipe/database-design.md
+      - VS2_製品開発/BC5_ProductInnovation/domain-language.md
+      - VS2_製品開発/BC5_ProductInnovation/api-specification.md
+      - VS2_製品開発/BC5_ProductInnovation/database-design.md
+      - VS2_製品開発/BC7_FunctionalProducts/domain-language.md
+      - VS2_製品開発/BC7_FunctionalProducts/api-specification.md
+      - VS2_製品開発/BC7_FunctionalProducts/database-design.md
+      # VS3: ブランド (Brand)
+      - VS3_ブランド/BC3_BrandPortfolio/domain-language.md
+      - VS3_ブランド/BC3_BrandPortfolio/api-specification.md
+      - VS3_ブランド/BC3_BrandPortfolio/database-design.md
+  phase6:
+    status: pending
+  phase7:
+    status: pending
+
+settings:
+  output_dir: ./outputs
+  auto_backup: true
+  subagent_integration: true
