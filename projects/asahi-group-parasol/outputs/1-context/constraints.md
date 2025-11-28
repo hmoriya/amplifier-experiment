@@ -319,6 +319,6 @@
 
 ---
 
-**評価者**: Parasol V4 Lite Framework
+**評価者**: Parasol V5 Framework
 **評価日**: 2024年11月20日
 **次回レビュー**: プロジェクト開始後3ヶ月毎

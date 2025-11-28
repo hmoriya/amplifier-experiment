@@ -161,5 +161,5 @@ outputs/2-value/
 
 ---
 
-**作成者:** Claude (Parasol V4 Lite)
+**作成者:** Claude (Parasol V5)
 **最終更新:** 2025-11-27

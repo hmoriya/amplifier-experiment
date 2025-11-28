@@ -1,12 +1,12 @@
-# Parasol V4 Lite Framework
+# Parasol V5 Framework
 
 ## 概要
 
-Parasol V4 Liteは、Amplifier DDDフレームワークの構造を参考にした、軽量版のParasol開発フレームワークです。数字付きコマンド体系により、実行順序が明確で、段階的な開発プロセスを提供します。
+Parasol V5は、Amplifier DDDフレームワークの構造を参考にした、軽量版のParasol開発フレームワークです。数字付きコマンド体系により、実行順序が明確で、段階的な開発プロセスを提供します。
 
 ## コマンド体系
 
-Parasol V4 LiteはAmplifier DDDと同様の`/parasol:*`コマンド形式を採用：
+Parasol V5はAmplifier DDDと同様の`/parasol:*`コマンド形式を採用：
 
 ```bash
 # 基本コマンド
@@ -26,7 +26,7 @@ Parasol V4 LiteはAmplifier DDDと同様の`/parasol:*`コマンド形式を採�
 ## ディレクトリ構造
 
 ```
-parasol-v4-lite/
+parasol-v5/
 ├── README.md                    # このファイル
 ├── QUICK-START.md              # クイックスタートガイド
 │
@@ -166,4 +166,4 @@ ls outputs/1-context/
 
 ---
 
-*Parasol V4 Lite - Amplifier DDD構造を採用した軽量版Parasolフレームワーク*
+*Parasol V5 - Amplifier DDD構造を採用した軽量版Parasolフレームワーク*

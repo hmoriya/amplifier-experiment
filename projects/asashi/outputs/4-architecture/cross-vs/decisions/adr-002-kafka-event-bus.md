@@ -88,5 +88,5 @@
 
 ---
 
-**作成者:** Claude (Parasol V4 Lite)
+**作成者:** Claude (Parasol V5)
 **作成日:** 2025-11-27

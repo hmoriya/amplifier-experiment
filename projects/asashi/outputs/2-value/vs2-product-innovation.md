@@ -238,5 +238,5 @@ CL2候補サブドメイン（既存の3-capabilities成果物と整合）:
 
 ---
 
-**作成者:** Claude (Parasol V4 Lite)
+**作成者:** Claude (Parasol V5)
 **最終更新:** 2025-11-27

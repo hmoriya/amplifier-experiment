@@ -2,7 +2,7 @@
 
 ## 概要
 
-アークウェイ株式会社のビジネスドメインとケイパビリティを、Parasol V4 Liteフレームワークを使用してDDD（ドメイン駆動設計）の観点から分析するプロジェクトです。
+アークウェイ株式会社のビジネスドメインとケイパビリティを、Parasol V5フレームワークを使用してDDD（ドメイン駆動設計）の観点から分析するプロジェクトです。
 
 ## 対象企業
 
@@ -101,5 +101,5 @@ make parasol/3-capabilities
 
 ## 関連ドキュメント
 
-- [Parasol V4 Lite Framework](../../parasol-v4-lite/)
+- [Parasol V5 Framework](../../parasol-v5/)
 - [DDD戦略的設計ガイド](../../docs/ddd-strategic-design.md)

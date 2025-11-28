@@ -1,6 +1,6 @@
-# Parasol V4 Lite クイックスタートガイド
+# Parasol V5 クイックスタートガイド
 
-## 🚀 5分で始めるParasol V4 Lite
+## 🚀 5分で始めるParasol V5
 
 Amplifier DDDスタイルの数字付きコマンド体系で、段階的な開発を実現します。
 
@@ -54,7 +54,7 @@ VS1: 認知形成 → VS2: 理解促進 → VS3: 初期実践 → VS4: 展開拡
 # 全フェーズを連続実行するスクリプト例
 #!/bin/bash
 
-echo "🚀 Parasol V4 Lite - ECサイト構築開始"
+echo "🚀 Parasol V5 - ECサイト構築開始"
 
 # フェーズ1-3: ビジネス設計
 /parasol:1-context --project="EC-Site" --industry="Retail"
@@ -75,7 +75,7 @@ echo "✅ 全フェーズ完了！"
 ## 📁 ディレクトリ構造
 
 ```
-parasol-v4-lite/
+parasol-v5/
 ├── commands/           # 実行可能コマンド
 │   ├── 0-help.md      # ヘルプ
 │   ├── status.md      # ステータス
@@ -175,7 +175,7 @@ rm -rf outputs/3-business/  # 成果物削除
 ### Q: コマンドが認識されない
 ```bash
 # Amplifierにコマンドを登録
-cd parasol-v4-lite
+cd parasol-v5
 ln -s commands/*.md ~/.claude/commands/parasol/
 ```
 
@@ -220,7 +220,7 @@ cat outputs/2-value/value-declaration.md
 ## 🚦 今すぐ始める
 
 ```bash
-# Parasol V4 Liteを開始
+# Parasol V5を開始
 /parasol:0-help
 
 # 最初のフェーズを実行
@@ -229,7 +229,7 @@ cat outputs/2-value/value-declaration.md
 
 ---
 
-*Parasol V4 Lite - Amplifier DDDスタイルで実現する段階的開発フレームワーク*
+*Parasol V5 - Amplifier DDDスタイルで実現する段階的開発フレームワーク*
 
 **サポート**:
 - Issue: GitHub Issues

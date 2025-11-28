@@ -4,7 +4,7 @@
 
 **作成日**: 2024年11月20日
 **対象組織**: アサヒグループホールディングス株式会社
-**フレームワーク**: Parasol V4 Lite - Value Streams (VS0-VS7)
+**フレームワーク**: Parasol V5 - Value Streams (VS0-VS7)
 
 ## Value Stream概要
 
@@ -666,6 +666,6 @@ VS7: 価値の振り返りと進化
 
 ---
 
-**作成者**: Parasol V4 Lite Framework
+**作成者**: Parasol V5 Framework
 **作成日**: 2024年11月20日
 **次回更新**: プロジェクト進行に応じて随時

@@ -82,6 +82,6 @@ settings:
   version_control: git
   
 metadata:
-  framework: parasol-v4-lite
+  framework: parasol-v5
   analysis_type: DDD-based strategic design
   target_industry: IT Services

@@ -1,8 +1,8 @@
-# Parasol V4 Lite Framework - Complete Design
+# Parasol V5 Framework - Complete Design
 
 ## Executive Summary
 
-Parasol V4 Lite is a systematic framework for decomposing business value into software architecture through a staged, interactive process. It maps the journey from enterprise value streams to Domain-Driven Design implementation.
+Parasol V5 is a systematic framework for decomposing business value into software architecture through a staged, interactive process. It maps the journey from enterprise value streams to Domain-Driven Design implementation.
 
 **Core Insight:**
 ```
@@ -1081,7 +1081,7 @@ Commands:
 ```
 → /parasol:0-help
 
-Parasol V4 Lite - Quick Guide
+Parasol V5 - Quick Guide
 
 Workflow:
   1. /parasol:1-context       - Establish project context
@@ -1195,7 +1195,7 @@ Recommendations:
 ## Directory Structure (Complete)
 
 ```
-parasol-v4-lite/
+parasol-v5/
 ├── README.md                    # Overview and quick start
 ├── FRAMEWORK-DESIGN.md          # This document
 ├── QUICK-START.md               # Step-by-step beginner guide
@@ -1337,7 +1337,7 @@ outputs/                         # Generated artifacts
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ Parasol V4 Lite - Command Quick Reference                  │
+│ Parasol V5 - Command Quick Reference                  │
 ├─────────────────────────────────────────────────────────────┤
 │ Phase 1: Context                                            │
 │   /parasol:1-context                                        │
@@ -1415,7 +1415,7 @@ outputs/                         # Generated artifacts
 
 ## Success Criteria
 
-A well-designed Parasol V4 Lite implementation should achieve:
+A well-designed Parasol V5 implementation should achieve:
 
 ### User Experience
 - [ ] New users can start within 5 minutes
@@ -1477,7 +1477,7 @@ A well-designed Parasol V4 Lite implementation should achieve:
 
 ## Conclusion
 
-Parasol V4 Lite provides a systematic, staged approach to translating business value into software architecture. By mapping enterprise value streams through capability hierarchies into Domain-Driven Design, it creates clear traceability from "why we build" to "how we implement."
+Parasol V5 provides a systematic, staged approach to translating business value into software architecture. By mapping enterprise value streams through capability hierarchies into Domain-Driven Design, it creates clear traceability from "why we build" to "how we implement."
 
 The framework balances structure (templates, phases) with flexibility (parameters, iteration), automation (consistency) with guidance (strategic decisions), and completeness (all phases) with practicality (staged execution).
 

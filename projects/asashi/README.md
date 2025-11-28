@@ -1,6 +1,6 @@
 # Asashi
 
-Parasol V4 Lite プロジェクト
+Parasol V5 プロジェクト
 
 作成日: 2025-11-24
 

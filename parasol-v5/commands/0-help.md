@@ -1,10 +1,10 @@
-# /parasol:0-help - Parasol V4 Lite ヘルプガイド
+# /parasol:0-help - Parasol V5 ヘルプガイド
 
 ## コマンド: `/parasol:0-help`
 
-Parasol V4 Liteフレームワークの使い方とコマンド一覧を表示します。
+Parasol V5フレームワークの使い方とコマンド一覧を表示します。
 
-## Parasol V4 Liteとは
+## Parasol V5とは
 
 Amplifier DDDフレームワークの構造を採用した、軽量版のParasol開発フレームワークです。
 企業の価値創造プロセスを体系的に設計・実装するための段階的アプローチを提供します。
