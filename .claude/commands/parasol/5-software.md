@@ -17,7 +17,7 @@ description: Software design (project:parasol)
 
 Phase 4で定義したサービス/BCに対して、実装に必要な詳細設計を行います：
 
-- ドメイン言語定義（Parasol Domain Language）
+- パラソルドメイン言語定義（Parasol Domain Language）
 - API仕様（OpenAPI）
 - データベース設計
 - ビジネスオペレーション（Use Cases + UI定義）
@@ -301,9 +301,9 @@ Phase 4で定義されたサービス:
 > 
 ```
 
-### ステップ1: ドメイン言語定義
+### ステップ1: パラソルドメイン言語定義
 
-Parasol Domain Languageで、BC内のドメインモデルを定義します。
+パラソルドメイン言語（Parasol Domain Language）で、BC内のドメインモデルを定義します。
 
 **成果物**: `domain-language.md`
 
