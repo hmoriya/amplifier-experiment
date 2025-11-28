@@ -337,36 +337,134 @@ cd ~/somewhere-else
 
 ## 重要な概念
 
-**ケイパビリティ分解 = サブドメイン分析・分解**
+### ケイパビリティ階層の定義
+
+**CL1/CL2/CL3/BC の役割分担**
 
 ```
-Value Stream (WHAT: 価値創造の流れ)
-↓ ZIGZAG
-CL1: Strategic (WHY: なぜ重要か、どこに投資するか)
-→ Domain Classification (Core/Supporting/Generic)
-↓ ZIGZAG
-CL2: Tactical (WHAT: どんな業務オペレーションを行うか)
-→ ビジネスオペレーション群の定義
-→ Microservice Candidates
-↓ ZIGZAG
-CL3: Operational (HOW: 業務をどう実行・実装するか)
-→ 業務ルール + 技術設計
-→ Bounded Context Definition
-↓
-WHAT (システムレベルで何が必要か)
-→ Aggregates, Entities, Value Objects (L4)
+Value Stream (価値創造の流れ)
+     │
+     ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ CL1: Strategic（戦略的）                                          │
+│ ─────────────────────────────────────────────────────────────── │
+│ 【WHY】なぜ投資するか                                             │
+│ • Domain Classification: Core / Supporting / Generic            │
+│ • 投資配分の決定根拠                                              │
+│ • 競争優位性の源泉特定                                            │
+└─────────────────────────────────────────────────────────────────┘
+     │
+     ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ CL2: Tactical（戦術的）                                           │
+│ ─────────────────────────────────────────────────────────────── │
+│ 【GROUP】ビジネスオペレーション群                                   │
+│ • 大きなケーパビリティを分割する際に必要                            │
+│ • サービス境界（≈マイクロサービス候補）の定義                        │
+│ • チーム境界・データ所有権の明確化                                  │
+│ • 例: fermentation-research, premium-beer-development           │
+│                                                                 │
+│ 【注意】小さなケーパビリティの場合、CL2をスキップしてCL3へ進むことも可 │
+└─────────────────────────────────────────────────────────────────┘
+     │
+     ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ CL3: Operational（運用的）                                        │
+│ ─────────────────────────────────────────────────────────────── │
+│ 【WHAT】具体的なビジネスオペレーション                              │
+│ • 各サービス境界内で実行する業務活動の一覧                          │
+│ • オペレーション定義: 説明 / トリガー / 成果物                      │
+│ • 管理するデータ（情報資産）の特定                                  │
+│ • 他サービスとの連携関係                                          │
+│                                                                 │
+│ 例: 酵母株探索・収集、酵母株育種・改良、発酵条件最適化              │
+└─────────────────────────────────────────────────────────────────┘
+     │
+     ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ BC: Bounded Context（実装設計）                                   │
+│ ─────────────────────────────────────────────────────────────── │
+│ 【HOW】業務をどう実装するか                                        │
+│ • CL3のビジネスオペレーションを実装するための技術設計               │
+│ • Aggregates / Entities / Value Objects                        │
+│ • Domain Events（ドメインイベント）                               │
+│ • API契約 / Context Map                                         │
+│ • ユビキタス言語の定義                                            │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### CL2とCL3の違い（重要）
+
+| 観点 | CL2（ビジネスオペレーション群） | CL3（ビジネスオペレーション） |
+|------|-------------------------------|------------------------------|
+| **粒度** | サービス境界（複数オペレーションの集合） | 個別の業務活動 |
+| **目的** | どこで分割するか（境界設計） | 何をするか（業務定義） |
+| **出力** | サブドメイン一覧、関係図 | オペレーション詳細（トリガー/成果物） |
+| **スキップ** | 小さなケーパビリティなら省略可 | 必須（BCの入力となる） |
+
+### CL3とBCの違い（重要）
+
+| 観点 | CL3（ビジネスオペレーション） | BC（Bounded Context） |
+|------|------------------------------|----------------------|
+| **視点** | ビジネス視点（業務担当者向け） | 技術視点（開発者向け） |
+| **内容** | What: 何をするか | How: どう実装するか |
+| **言語** | 業務用語 | 技術用語 + ユビキタス言語 |
+| **出力** | オペレーション一覧 | 集約、イベント、API契約 |
+
+### 実例：fermentation-research
+
+```
+【CL2】ビジネスオペレーション群
+├── fermentation-research（発酵研究）← サービス境界
+├── ingredient-research（素材研究）
+└── ...
+
+【CL3】ビジネスオペレーション（fermentation-research内）
+├── 酵母株探索・収集
+│   └── トリガー: 研究計画 → 成果物: 酵母サンプル
+├── 酵母株育種・改良
+│   └── トリガー: 製品要件 → 成果物: 改良酵母株
+├── 発酵条件最適化
+│   └── トリガー: 品質要件 → 成果物: 最適条件データ
+└── ...
+
+【BC】Bounded Context（技術設計）
+├── Aggregate: YeastStrain（酵母株）
+│   └── Entity: StrainVariant
+│   └── ValueObject: GeneticProfile, FermentationProfile
+├── Domain Event: YeastStrainRegistered, BreedingCompleted
+├── API: POST /yeast-strains, GET /fermentation-conditions
+└── ...
 ```
 
 ## 成果物構造
 
 ```
 outputs/3-capabilities/
-├── {vs-number}-{vs-slug}/            # VSディレクトリ（Phase 2から導出）
-│   ├── cl1-domain-classification.md  # CL1: 活動領域の分類
-│   ├── cl2-subdomain-design.md       # CL2: サブドメイン設計
-│   └── cl3-bounded-contexts/         # CL3: BC定義
-│       └── {subdomain}-bc.md
+├── {vs-number}-{vs-slug}/                    # VSディレクトリ（Phase 2から導出）
+│   ├── cl1-domain-classification.md          # CL1: ドメイン分類（Core/Supporting/Generic）
+│   ├── cl2-subdomain-design.md               # CL2: ビジネスオペレーション群（サービス境界）
+│   ├── cl3-business-operations/              # CL3: ビジネスオペレーション（What）
+│   │   └── {subdomain}-operations.md         #      各サービス境界の業務活動一覧
+│   └── bounded-contexts/                     # BC: 実装設計（How）
+│       └── {subdomain}-bc.md                 #      集約・イベント・API契約
 └── ...
+```
+
+### CL3とBCの分離について
+
+**従来**: `cl3-bounded-contexts/` にCL3とBCが混在
+**V5**: CL3（ビジネスオペレーション）とBC（実装設計）を明確に分離
+
+```
+# 従来の問題
+cl3-bounded-contexts/{subdomain}-bc.md
+  → What（業務定義）とHow（技術設計）が1ファイルに混在
+  → ビジネス担当者に見せにくい
+
+# V5の改善
+cl3-business-operations/{subdomain}-operations.md  ← ビジネス担当者向け
+bounded-contexts/{subdomain}-bc.md                 ← 開発者向け
 ```
 
 ### VSディレクトリ命名規則

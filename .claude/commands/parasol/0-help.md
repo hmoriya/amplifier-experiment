@@ -154,10 +154,10 @@ VS番号形式：`VS0`, `VS1`, `VS2`, ... `VS7`
 **Value Stream (VS)**: 企業の価値創造の流れ（VS0-VS7）
 
 **Capability Hierarchy**:
-- CL1: 戦略的（ドメイン分類：Core/Supporting/Generic）
-- CL2: 戦術的（サブドメイン≈マイクロサービス候補）
-- CL3: 運用的（Bounded Context）
-- L4: システム/コンポーネント
+- CL1: 戦略的 - ドメイン分類（Core/Supporting/Generic）【WHY投資するか】
+- CL2: 戦術的 - ビジネスオペレーション群（サービス境界）【GROUP分割】
+- CL3: 運用的 - ビジネスオペレーション（業務活動）【WHAT何をするか】
+- BC: 実装 - Bounded Context（技術設計）【HOWどう実装するか】
 
 **ZIGZAG パターン**: WHAT→HOW→WHAT の分解アプローチ
 
@@ -171,13 +171,13 @@ Value Stream (VS0-VS7)
 Phase 2: VS詳細化 (vs{N}-detail.md)
     ↓
 CL1: Domain Type Classification (Core/Supporting/Generic)
-    ↓
-CL2: VS単位でSubdomain設計 ≈ Microservice Candidates
-    ↓
-CL3: Bounded Context = Team Boundaries
-    ↓
-Business Operations = Use Cases + UI
-    ↓
+    ↓ 【WHY】なぜ投資するか
+CL2: ビジネスオペレーション群 ≈ Microservice Candidates
+    ↓ 【GROUP】サービス境界の定義
+CL3: ビジネスオペレーション = 業務活動の詳細定義
+    ↓ 【WHAT】何をするか（トリガー/成果物）
+BC: Bounded Context = 技術設計（集約/イベント/API）
+    ↓ 【HOW】どう実装するか
 L4: Aggregates, Entities, Value Objects
 ```
 
@@ -193,9 +193,10 @@ L4: Aggregates, Entities, Value Objects
 
 **Phase 2**: vs{N}-detail.md（各VSの詳細定義）
 **Phase 3**:
-  - CL1: strategic-classification.md（ドメイン分類）
-  - CL2: vs{N}-subdomains.md（VS単位のサブドメイン設計）
-  - CL3: {subdomain-name}-bc.md（Bounded Context定義）
+  - CL1: cl1-domain-classification.md（ドメイン分類）
+  - CL2: cl2-subdomain-design.md（ビジネスオペレーション群）
+  - CL3: cl3-business-operations/{subdomain}-operations.md（ビジネスオペレーション）
+  - BC: bounded-contexts/{subdomain}-bc.md（実装設計）
 **Phase 4**: service-boundary-template.md, context-map-template.md, adr-template.md
 **Phase 5**: domain-language-template.md, api-specification-template.md, database-design-template.md, use-case-template.md, page-definition-template.md
 
