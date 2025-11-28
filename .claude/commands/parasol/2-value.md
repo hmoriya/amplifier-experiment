@@ -133,7 +133,9 @@ VL1 → VL2 → VL3
 | 両面市場型 | オプション | **統合型VS**（2面価値定義） |
 | 多面ステークホルダー型 | **必須**（セグメント別VS） | **統合型VS**（N面価値定義） |
 
-**参照**: `parasol/patterns/value/industry-value-stream-patterns.md`
+**参照**: 
+- 業種別パターン: `_patterns/industry-value-stream-patterns.md`
+- 地銀詳細: `_patterns/regional-bank-value-streams.md`
 
 ## 🔧 プロジェクト検出
 

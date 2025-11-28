@@ -20,6 +20,9 @@ Value StreamsからDDD/マイクロサービスへの段階的な分解を行い
 # CL3: Bounded Context定義（運用的、サブドメインごと）
 /parasol:3-capabilities cl3                      # インタラクティブ選択
 /parasol:3-capabilities cl3 product-catalog      # 直接指定
+
+# CL3 + パラソルドメイン言語生成（V5新機能）
+/parasol:3-capabilities cl3 --with-domain-language
 ```
 
 ## 🤖 サブエージェント活用について
@@ -956,6 +959,22 @@ outputs/3-capabilities/{vs-dir}/cl3-bounded-contexts/{subdomain-name}-bc.md
 - ユビキタス言語は明確に定義
 - 集約境界を明確に
 - 外部との依存は Context Map で表現
+
+## --with-domain-language オプション指定時の追加タスク
+
+パラソルドメイン言語定義を別ファイルで作成してください。
+ファイル名: {subdomain-name}-domain-language.md
+
+以下の6セクションを含めること：
+
+1. **Aggregates（集約）** - YAMLフォーマットで定義
+2. **Value Objects（値オブジェクト）** - 型定義と検証ルール
+3. **Domain Events（ドメインイベント）** - イベントとペイロード
+4. **Domain Services（ドメインサービス）** - 複雑なビジネスロジック
+5. **Repositories（リポジトリ）** - データアクセスインターフェース
+6. **ユビキタス言語辞書** - 日英対訳と定義
+
+詳細は .claude/commands/parasol/_parasol-domain-language-guide.md を参照。
 """
 ```
 
@@ -982,7 +1001,25 @@ Task tool を使用して api-contract-designer を起動：
 
 **ステップ5**: zen-architect（+ api-contract-designer）の出力を確認し、{subdomain-name}-bc.md を生成
 
-**ステップ6**: 結果レポート
+**ステップ6**: パラソルドメイン言語生成（--with-domain-language オプション時）
+
+`--with-domain-language` オプションが指定された場合、以下を追加実行：
+
+```
+🤖 パラソルドメイン言語を生成中...
+
+生成内容:
+1. Aggregates（集約）
+2. Value Objects（値オブジェクト）  
+3. Domain Events（ドメインイベント）
+4. Domain Services（ドメインサービス）
+5. Repositories（リポジトリ）
+6. ユビキタス言語辞書
+
+成果物: outputs/3-capabilities/{vs-dir}/cl3-bounded-contexts/{subdomain-name}-domain-language.md
+```
+
+**ステップ7**: 結果レポート
 ```
 ✅ CL3: Bounded Context Definition ({subdomain-name}) 完了
 
@@ -991,11 +1028,14 @@ Task tool を使用して api-contract-designer を起動：
 - ドメインイベント: X個
 - 関連BC: X個
 
-成果物: outputs/3-capabilities/{vs-dir}/cl3-bounded-contexts/{subdomain-name}-bc.md
+成果物: 
+- outputs/3-capabilities/{vs-dir}/cl3-bounded-contexts/{subdomain-name}-bc.md
+- outputs/3-capabilities/{vs-dir}/cl3-bounded-contexts/{subdomain-name}-domain-language.md (--with-domain-language 指定時)
 
 次のステップ:
 1. 他のサブドメインのBC定義を完了
-2. 全BC完了後 → `/parasol:4-architecture` でContext Map統合
+2. パラソルドメイン言語からコード生成 → `/parasol:domain-language generate`
+3. 全BC完了後 → `/parasol:4-architecture` でContext Map統合
 ```
 
 ### テンプレート: {subdomain-name}-bc.md
