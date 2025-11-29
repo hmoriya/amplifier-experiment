@@ -154,56 +154,113 @@ VS番号形式：`VS0`, `VS1`, `VS2`, ... `VS7`
 
 主要概念の詳細説明：
 
-**Value Stream (VS)**: 企業の価値創造の流れ（VS0-VS7）
+**価値駆動ZIGZAGプロセス（3層モデル）**:
 
-**Capability Hierarchy（ビジネスフレンドリーな4階層）**:
+価値からソフトウェア実装まで、3層のネストしたWHAT→HOWパターンで体系的に分解：
 
 ```
-WHAT       →      HOW        →      WHAT       →      HOW
-何の領域?        どう組織?         何をする?         どう実装?
-    │               │                │                │
-   CL1            CL2              CL3              BC
- 活動領域     ケイパビリティ     業務OP          実装設計
- ─────────   ────────────     ─────────       ─────────
-  経営層        事業部長        業務担当         開発者
+┌─────────────────────────────────────────────────────────────┐
+│ Level 1: ビジネス層                                         │
+│   WHAT: 価値        →    HOW: Value Stream                  │
+│   Phase 2 前半           Phase 2 後半                       │
+└─────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────┐
+│ Level 2: サービス層                                         │
+│   WHAT: Capability  →    HOW: Service設計                   │
+│   Phase 3                Phase 4                            │
+└─────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────┐
+│ Level 3: 実装層                                             │
+│   WHAT: Software設計 →   HOW: 実装                          │
+│   Phase 5                Phase 6                            │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-- **CL1 活動領域 (Activity Area)**: 【WHAT領域】経営層向け、投資判断単位（Core/Supporting/Generic）
-- **CL2 ケイパビリティ (Capability)**: 【HOW構造】事業部長向け、チーム境界・サービス境界（≈マイクロサービス候補）
-- **CL3 業務オペレーション (Business Operation)**: 【WHAT詳細】業務担当者向け、トリガー→活動→成果物
-- **BC 実装設計 (Bounded Context)**: 【HOW実装】開発者向け、集約/イベント/API契約
+**各レベルの役割**:
 
-**ZIGZAG パターン**: WHAT → HOW → WHAT → HOW の交互分解アプローチ
+| Level | WHAT | HOW | Phase |
+|-------|------|-----|-------|
+| **L1: ビジネス層** | 価値（何を実現？） | Value Stream（どう流れる？） | 2 |
+| **L2: サービス層** | Capability（何が必要？） | Service設計（どう分割？） | 3-4 |
+| **L3: 実装層** | Software設計（何を作る？） | 実装（どう作る？） | 5-6 |
+
+**Value Stage Swimlane パターン**:
+
+Value StreamのStageをスイムレーンとしてCapabilityを分解し、唯一無二のサービス境界を導出：
+
+```
+Value Stream: 調達 → 製造 → 販売
+
+┌──────────┐  ┌──────────┐  ┌──────────┐
+│ Stage:   │  │ Stage:   │  │ Stage:   │  ← スイムレーン
+│ 調達     │  │ 製造     │  │ 販売     │
+├──────────┤  ├──────────┤  ├──────────┤
+│原料調達  │  │製品開発  │  │受注管理  │  ← Capability
+│品質検査  │  │生産管理  │  │出荷管理  │    （サービス候補）
+│在庫管理  │  │品質保証  │  │顧客管理  │
+└──────────┘  └──────────┘  └──────────┘
+```
+
+**重要原則**: Phase 4でサービス枠を確定（以降の変更は高コスト）
+
+詳細: `.claude/commands/parasol/_zigzag-process.md` を参照
 
 ### トピック: mapping
 
 DDD/マイクロサービスへの完全なマッピング：
 
 ```
-Value Stream (VS0-VS7)
-    ↓
-Phase 2: VS詳細化 (vs{N}-detail.md)
-    ↓
-CL1: 活動領域 (Activity Area) ≈ Domain Classification
-    ↓ 【WHAT領域】経営層の投資判断単位
-CL2: ケイパビリティ (Capability) ≈ Subdomain / Microservice Candidates
-    ↓ 【HOW構造】チーム境界・サービス境界の定義
-CL3: 業務オペレーション (Business Operation) ≈ Use Case
-    ↓ 【WHAT詳細】具体的な業務活動（トリガー→活動→成果物）
-BC: 実装設計 (Bounded Context)
-    ↓ 【HOW実装】技術設計（集約/イベント/API契約）
-L4: Aggregates, Entities, Value Objects
+価値駆動ZIGZAGプロセス → DDD/マイクロサービス
+
+┌─────────────────────────────────────────────────────────────┐
+│ Level 1: ビジネス層                                         │
+│                                                             │
+│   価値定義          →      Value Stream / Stage             │
+│   (WHAT)                   (HOW)                            │
+│      ↓                          ↓                           │
+│   ビジネス目標            ≈ Domain（ドメイン）              │
+└─────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────┐
+│ Level 2: サービス層                                         │
+│                                                             │
+│   Capability        →      Service設計                      │
+│   (WHAT)                   (HOW)                            │
+│      ↓                          ↓                           │
+│   ≈ Subdomain              ≈ Bounded Context               │
+│   （マイクロサービス候補）  （サービス境界確定）             │
+└─────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────┐
+│ Level 3: 実装層                                             │
+│                                                             │
+│   Software設計      →      実装                             │
+│   (WHAT)                   (HOW)                            │
+│      ↓                          ↓                           │
+│   ≈ Domain Model           ≈ Code                          │
+│   Aggregates/Entities      Implementation                   │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 **DDD対応表（技術者参照用）**:
-| Parasol用語 | DDD用語 | 備考 |
-|-------------|---------|------|
-| 活動領域 (CL1) | Domain + Strategic Classification | 投資判断を含む拡張 |
-| ケイパビリティ (CL2) | Subdomain | チーム境界の明示を追加 |
-| 業務オペレーション (CL3) | Use Case / Business Process | トリガー/成果物を構造化 |
-| 実装設計 (BC) | Bounded Context | 同一概念 |
 
-重要な対応関係とコンテキストマップパターンを説明。
+| Parasol概念 | Phase | DDD用語 | 備考 |
+|-------------|-------|---------|------|
+| Value Stage | 2 | Domain | 戦略的分類を含む |
+| Capability | 3 | Subdomain | サービス候補、チーム境界 |
+| Service境界 | 4 | Bounded Context | ここで確定 |
+| ハイレベルUC | 3-4 | Use Case | Capability内の業務 |
+| Domain Model | 5 | Aggregates, Entities | 実装設計 |
+
+**Context Mapパターン**:
+- Partnership（対等連携）
+- Customer-Supplier（上流下流）
+- Conformist（準拠）
+- Anti-Corruption Layer（腐敗防止層）
+- Open Host Service（公開サービス）
+- Published Language（公開言語）
 
 ### トピック: templates
 

@@ -1,10 +1,23 @@
 ---
-description: Capability decomposition (CL1/CL2/CL3) (project:parasol)
+description: Capability decomposition - L2 WHAT in ZIGZAG process (project:parasol)
 ---
 
 # Phase 3: Capabilities - ケイパビリティ分解
 
-Value Streamsからビジネスオペレーション、実装設計への段階的な分解を行います。
+## ZIGZAGプロセスにおける位置づけ
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ Level 2: サービス層                                         │
+│                                                             │
+│   ★ WHAT: Capability  →    HOW: Service設計                │
+│     Phase 3 ← 今ここ       Phase 4                         │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Phase 3の役割**: Value Stage（Phase 2で定義）をスイムレーンとして、各Stageに必要なCapability（サービス候補）を特定します。
+
+**重要原則**: Phase 4でサービス枠を確定するため、ここでは「何が必要か」（WHAT）に集中します。
 
 ## 使用方法
 
