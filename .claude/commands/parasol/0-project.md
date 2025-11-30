@@ -296,7 +296,7 @@ cd projects/sony-iot-platform
 進行中: CL2 🔄 (core domain 完了、supporting 進行中)
 未着手: CL3 ⏸️
 
-⏸️ Phase 4: Architecture
+⏸️ Phase 4: Application Design
 状況: 未着手（Phase 3完了待ち）
 
 ⏸️ Phase 5: Software Design

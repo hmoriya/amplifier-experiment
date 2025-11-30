@@ -1,16 +1,16 @@
 ---
-description: Software design (project:parasol)
+description: Software design - Parasol design (project:parasol)
 ---
 
-# Phase 5: Software Design - ソフトウェア設計
+# Phase 5: Software Design - ソフトウェア設計（パラソル設計）
 
 各サービス/Bounded Contextの詳細設計を行います。
 
 ## 使用方法
 
 ```bash
-/parasol:5-software                          # インタラクティブ選択
-/parasol:5-software ProductCatalog Core      # サービスとBCを直接指定
+/parasol:5-software-design                          # インタラクティブ選択
+/parasol:5-software-design ProductCatalog Core      # サービスとBCを直接指定
 ```
 
 ## 目的
@@ -1070,7 +1070,7 @@ Response: 画像URL
 
 🎯 次のアクション:
 1. 他のサービス/BCの設計を続ける
-`/parasol:5-software Order Management`
+`/parasol:5-software-design Order Management`
 
 2. 全サービス完了後、Phase 6へ
 `/parasol:6-implementation`
@@ -1083,7 +1083,7 @@ Response: 画像URL
 ❌ Phase 4が完了していません
 
 Phase 4でサービス境界を定義してください:
-→ `/parasol:4-architecture`
+→ `/parasol:4-application-design`
 ```
 
 **無効なサービス/BC指定:**

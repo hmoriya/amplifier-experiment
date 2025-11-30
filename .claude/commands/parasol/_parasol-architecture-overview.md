@@ -76,8 +76,8 @@ VS2: 商品企画・開発
 ### 3. 下位層：ソフトウェア中心（Software-Centric）
 
 **Phase 4-7: Implementation**
-- Phase 4: Architecture（技術アーキテクチャ）
-- Phase 5: Software（パラソルドメイン言語による実装）
+- Phase 4: Application Design（マイクロサービス分割）
+- Phase 5: Software Design（パラソル設計）
 - Phase 6: Execution（実行環境）
 - Phase 7: Platform（プラットフォーム）
 

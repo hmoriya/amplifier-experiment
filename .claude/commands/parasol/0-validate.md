@@ -219,7 +219,7 @@ Phase 7 の詳細検証：
 ## エラー (要対応)
 
 ❌ Phase 3 - CL3: BC未定義
-影響: Phase 4 アーキテクチャ設計が不完全
+影響: Phase 4 アプリケーションデザインが不完全
 対応: `/parasol:3-capabilities cl3 {subdomain-name}` で定義
 
 ❌ Phase 2 - VS4: 販売活動の定義不完全

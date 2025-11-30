@@ -1,8 +1,8 @@
 ---
-description: Application architecture design (project:parasol)
+description: Application design - microservice decomposition (project:parasol)
 ---
 
-# Phase 4: Architecture - アーキテクチャ設計
+# Phase 4: Application Design - アプリケーションデザイン（マイクロサービス分割）
 
 Phase 3で定義したBounded Contextsを統合し、システム全体のアーキテクチャを設計します。
 
@@ -13,9 +13,9 @@ Phase 3で定義したBounded Contextsを統合し、システム全体のアー
 - 統合パターンの定義
 - アーキテクチャ決定の文書化（ADR）
 
-## 🎯 V5特有機能: アーキテクチャ設計ストーリー出力
+## 🎯 V5特有機能: アプリケーション設計ストーリー出力
 
-**重要**: Parasol V5では、アーキテクチャ設計の各段階で**設計ストーリー（なぜそう設計したか）**を出力します。
+**重要**: Parasol V5では、アプリケーション設計の各段階で**設計ストーリー（なぜそう設計したか）**を出力します。
 
 ### 設計ストーリーの目的
 
@@ -781,7 +781,7 @@ Value Streams: {VS数}
 → `/parasol:0-status`
 
 🎯 次のステップ: Phase 5 Software Design
-→ `/parasol:5-software`
+→ `/parasol:5-software-design`
 
 Phase 5では各サービス/BCの詳細設計を行います：
 - ドメインモデル（Parasol Domain Language）

@@ -118,7 +118,7 @@ Parasol V5の特徴的な機能として、**設計ストーリー（なぜそ�
 - 3d. BC: `/parasol:3-capabilities bc [capability]` - 実装設計（技術者向け）
   - 例: `/parasol:3-capabilities bc fermentation-research`
 
-**Phase 4-7**: Architecture, Software, Implementation, Platform
+**Phase 4-7**: Application Design, Software Design, Implementation, Platform
 
 ### トピック: commands
 
@@ -142,8 +142,8 @@ Parasol V5の特徴的な機能として、**設計ストーリー（なぜそ�
 - `/parasol:3-capabilities cl2 [VS番号]` - ケイパビリティ設計（CL2）
 - `/parasol:3-capabilities cl3 [capability]` - 業務オペレーション定義（CL3）
 - `/parasol:3-capabilities bc [capability]` - 実装設計（BC）
-- `/parasol:4-architecture`
-- `/parasol:5-software [service] [bc]`
+- `/parasol:4-application-design`
+- `/parasol:5-software-design [service] [bc]`
 - `/parasol:6-implementation [service] [bc]`
 - `/parasol:7-platform`
 

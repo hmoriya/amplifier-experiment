@@ -590,7 +590,7 @@ API仕様書、開発ガイド
 ❌ Phase 5が完了していません
 
 Phase 5でソフトウェア設計を完了してください:
-→ `/parasol:5-software`
+→ `/parasol:5-software-design`
 ```
 
 ## 参考資料

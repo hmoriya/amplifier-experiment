@@ -62,7 +62,7 @@ description: Capability decomposition - L2 WHAT in ZIGZAG process (project:paras
 
 ### サブエージェント活用の利点
 
-✅ **専門的な分析**: 戦略分析やアーキテクチャ設計の専門知識を活用
+✅ **専門的な分析**: 戦略分析やアプリケーション設計の専門知識を活用
 ✅ **一貫性**: 確立されたパターンとベストプラクティスを適用
 ✅ **効率性**: 複雑なタスクを効率的に実行
 ✅ **品質保証**: 設計品質のレビューと検証
@@ -1345,7 +1345,8 @@ outputs/3-capabilities/{vs-dir}/bounded-contexts/{capability-name}-bc.md
 
 次のステップ:
 1. 他のケイパビリティのBC定義を完了
-2. 全BC完了後 → `/parasol:4-architecture` でContext Map統合
+2. パラソルドメイン言語からコード生成 → `/parasol:domain-language generate`
+3. 全BC完了後 → `/parasol:4-application-design` でContext Map統合
 ```
 
 ### テンプレート: {capability-name}-bc.md
@@ -1733,9 +1734,9 @@ GET /api/v1/inventory/stock/{sku}
 
 ### 全BC定義完了後
 
-2. **Phase 4: Architecture - Context Map統合**
+2. **Phase 4: Application Design - Context Map統合**
 ```bash
-/parasol:4-architecture
+/parasol:4-application-design
 ```
 
 Phase 4では：
@@ -1916,7 +1917,7 @@ Generic Domains: VS0
 次のアクション:
 1. CL2の継続: `/parasol:3-capabilities cl2 VS3` (Core優先)
 2. BC定義: `/parasol:3-capabilities cl3 vs2-quality-assurance`
-3. 全BC完了後: `/parasol:4-architecture`
+3. 全BC完了後: `/parasol:4-application-design`
 
 推奨順序:
 優先: VS2, VS3, VS4 (Core Domain)
@@ -1944,8 +1945,8 @@ Phase 3 完了後、検証を実行：
 Phase 3 (全CL完了) 後:
 
 ```bash
-# Phase 4: Architecture へ進む
-/parasol:4-architecture
+# Phase 4: Application Design へ進む
+/parasol:4-application-design
 ```
 
 Phase 4では:
@@ -1957,7 +1958,7 @@ Phase 4では:
 ## 関連コマンド
 
 - `/parasol:2-value` - Phase 2: Value Definition（前提条件）
-- `/parasol:4-architecture` - Phase 4: Architecture（次のステップ）
+- `/parasol:4-application-design` - Phase 4: Application Design（次のステップ）
 - `/parasol:status phase3` - Phase 3 の詳細進捗確認
 - `/parasol:validate phase3` - Phase 3 の検証
 - `/parasol:0-help concepts` - 主要概念の詳細説明

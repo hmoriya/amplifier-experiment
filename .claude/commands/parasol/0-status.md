@@ -103,7 +103,7 @@ Phase 3: Capabilities 🔄 進行中
   ✅ 3b. Subdomain Design (CL2) - 3/3 ドメイン完了
   ⏸️ 3c. Bounded Context (CL3) - 2/8 サブドメイン完了
 
-Phase 4: Architecture ⏸️ 未着手
+Phase 4: Application Design ⏸️ 未着手
 Phase 5: Software Design ⏸️ 未着手
 Phase 6: Implementation ⏸️ 未着手
 Phase 7: Platform ⏸️ 未着手
@@ -116,8 +116,8 @@ Phase 7: Platform ⏸️ 未着手
 1. Phase 3c の残り6サブドメインのBC定義
    `/parasol:3-capabilities cl3 {subdomain-name}`
 
-2. Phase 4 アーキテクチャ設計開始
-   `/parasol:4-architecture`
+2. Phase 4 アプリケーションデザイン開始
+   `/parasol:4-application-design`
 
 💡 ヒント:
 - 詳細確認: `/parasol:status phase3`
@@ -131,7 +131,7 @@ Phase 7: Platform ⏸️ 未着手
    - 3a: domain-classification/strategic-classification.md
    - 3b: subdomain-design/{domain}-subdomains.md
    - 3c: bounded-context-design/{subdomain}-bc.md
-4. Phase 4: Architecture (outputs/4-architecture/)
+4. Phase 4: Application Design (outputs/4-architecture/)
 5. Phase 5: Software (outputs/5-software/services/)
 6. Phase 6: Implementation (outputs/6-implementation/)
 7. Phase 7: Platform (outputs/7-platform/)
@@ -217,7 +217,7 @@ Phase 3の段階的進捗を表示：
 
 次のアクション:
 1. 残りBCの定義: `/parasol:3-capabilities cl3 {subdomain-name}`
-2. 全BC完了後: `/parasol:4-architecture`
+2. 全BC完了後: `/parasol:4-application-design`
 
 推奨順序:
   優先: inventory-management, payment-processing (Core周辺)
@@ -286,11 +286,11 @@ outputs/5-software/services/
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ステータス: ⏸️ 未着手
-前提条件: Phase 4 Architecture が完了している必要があります
+前提条件: Phase 4 Application Design が完了している必要があります
 
 次のステップ:
-1. Phase 4を完了: `/parasol:4-architecture`
-2. サービス設計開始: `/parasol:5-software {service} {bc}`
+1. Phase 4を完了: `/parasol:4-application-design`
+2. サービス設計開始: `/parasol:5-software-design {service} {bc}`
 ```
 
 ## エラーケース

@@ -224,7 +224,7 @@ CREATE TABLE yeast_strains (
 ## 関連コマンド
 
 - `/parasol:3-capabilities` - CL3定義の作成
-- `/parasol:5-software` - ソフトウェア設計
+- `/parasol:5-software-design` - ソフトウェア設計（パラソル設計）
 - `/parasol:validate` - プロジェクト全体の検証
 
 ## トラブルシューティング

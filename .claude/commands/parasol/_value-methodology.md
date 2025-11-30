@@ -419,7 +419,7 @@ PM2: プロジェクトマイルストーン2（6ヶ月）
 |---------|-----------|------------------------|
 | Phase 2 | `/parasol:2-value` | Phase 1（価値宣言・分解） + Phase 2（バックキャスティング） |
 | Phase 3 | `/parasol:3-capabilities` | CL1→CL2→CL3分解、コアサブドメイン特定 |
-| Phase 4 | `/parasol:4-architecture` | Phase 3（バリューステージ設計） |
+| Phase 4 | `/parasol:4-application-design` | Phase 3（バリューステージ設計） |
 | 実行計画 | （プロジェクト管理） | Phase 4（プロジェクトマイルストーン） |
 
 ### 実行チェックリスト
@@ -467,7 +467,7 @@ PM2: プロジェクトマイルストーン2（6ヶ月）
 - [バージョンガイド](../../../parasol/VERSION-GUIDE.md) - V4/V5の違い
 - [Phase 2コマンド](./2-value.md) - 価値定義の実行
 - [Phase 3コマンド](./3-capabilities.md) - ケーパビリティ分解
-- [Phase 4コマンド](./4-architecture.md) - アーキテクチャ設計
+- [Phase 4コマンド](./4-application-design.md) - アプリケーションデザイン
 - [ケーパビリティ命名ガイド](./_capability-naming-guide.md) - 命名規則
 
 ---
