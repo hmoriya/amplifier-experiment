@@ -45,6 +45,7 @@ logs
 
 # Working folders
 ai_working/tmp
+.worktrees/
 .tmp
 
 # Ignore Windows Alternate Data Streams (ADS) files that may appear in WSL

@@ -1,0 +1,31 @@
+project:
+  name: suntory
+  display_name: サントリーホールディングス株式会社
+  url: https://www.suntory.co.jp/
+  created: 2025-12-01
+  updated: 2025-12-01
+
+phases:
+  phase0:
+    status: completed
+    completed: 2025-12-01
+  phase1:
+    status: completed
+    completed: 2025-12-01
+  phase2:
+    status: in_progress
+  phase3:
+    status: pending
+  phase4:
+    status: pending
+  phase5:
+    status: pending
+  phase6:
+    status: pending
+  phase7:
+    status: pending
+
+settings:
+  output_dir: ./outputs
+  auto_backup: true
+  language: ja
