@@ -1,0 +1,35 @@
+project:
+  name: asahi-gf
+  company: アサヒグループ食品株式会社
+  url: https://www.asahi-gf.co.jp/
+  created: 2025-12-03
+  updated: 2025-12-03
+
+phases:
+  phase0:
+    status: completed
+    started: 2025-12-03
+    completed: 2025-12-03
+  phase1:
+    status: completed
+    completed: 2025-12-03
+    note: "組織分析、市場評価、ステークホルダーマップ、制約条件を作成"
+  phase2:
+    status: completed
+    completed: 2025-12-03
+    note: "価値定義、バリューストリーム、エンタープライズアクティビティを作成"
+  phase3:
+    status: pending
+  phase4:
+    status: pending
+  phase5:
+    status: pending
+  phase6:
+    status: pending
+  phase7:
+    status: pending
+
+settings:
+  output_dir: ./outputs
+  auto_backup: true
+  language: ja
