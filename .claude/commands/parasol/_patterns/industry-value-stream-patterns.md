@@ -4,6 +4,34 @@
 
 Parasol V5では、業種の特性に応じて3つの基本パターンと、それぞれの業種特有の展開パターンを定義しています。
 
+## 関連リソース
+
+### 4軸アプローチ
+
+多角化企業向けに、4つの軸からバリューストリームを設計できます：
+
+| 軸 | 説明 | 詳細 |
+|----|------|------|
+| **価値軸** | 企業理念を核に統合 | [→ value-axis.md](./_axes/value-axis.md) |
+| **事業部軸** | 事業部ごとに独立設計 | [→ business-unit-axis.md](./_axes/business-unit-axis.md) |
+| **フュージョン型** | 共通層+事業固有層 | [→ fusion-axis.md](./_axes/fusion-axis.md) |
+| **ケーパビリティ型** | 機能別に再編 | [→ capability-axis.md](./_axes/capability-axis.md) |
+
+### 業界別テンプレート
+
+| 業界 | テンプレート |
+|------|-------------|
+| 飲料・食品 | [→ industries/beverage-food/](./industries/beverage-food/) |
+| 地方銀行 | [→ regional-bank-value-streams.md](./regional-bank-value-streams.md) |
+| 人材派遣 | [→ staffing-agency-value-streams.md](./staffing-agency-value-streams.md) |
+
+### ナレッジベース
+
+過去のプロジェクトから得た知見を蓄積しています：
+[→ _knowledge/](./_knowledge/)
+
+---
+
 ## 基本パターン分類
 
 | パターン | 説明 | 適用条件 | 業種例 |
