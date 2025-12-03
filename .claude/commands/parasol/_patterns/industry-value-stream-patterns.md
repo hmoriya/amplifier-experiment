@@ -17,13 +17,13 @@ Parasol V5では、業種の特性に応じて3つの基本パターンと、そ
 | **フュージョン型** | 共通層+事業固有層 | [→ fusion-axis.md](./_axes/fusion-axis.md) |
 | **ケーパビリティ型** | 機能別に再編 | [→ capability-axis.md](./_axes/capability-axis.md) |
 
-### 業界別テンプレート
+### 業界別テンプレート（4軸対応）
 
-| 業界 | テンプレート |
-|------|-------------|
-| 飲料・食品 | [→ industries/beverage-food/](./industries/beverage-food/) |
-| 地方銀行 | [→ regional-bank-value-streams.md](./regional-bank-value-streams.md) |
-| 人材派遣 | [→ staffing-agency-value-streams.md](./staffing-agency-value-streams.md) |
+| 業界 | 4軸テンプレート | レガシー |
+|------|----------------|---------|
+| 飲料・食品 | [→ industries/beverage-food/](./industries/beverage-food/) | - |
+| 地方銀行 | [→ industries/regional-bank/](./industries/regional-bank/) | [→ レガシー](./regional-bank-value-streams.md) |
+| 人材派遣 | [→ industries/staffing-agency/](./industries/staffing-agency/) | [→ レガシー](./staffing-agency-value-streams.md) |
 
 ### ナレッジベース
 
