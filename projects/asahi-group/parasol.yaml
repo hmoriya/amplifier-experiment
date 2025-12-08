@@ -1,77 +1,39 @@
-project:
-  name: asahi-group
-  description: "アサヒグループホールディングス - DX戦略プロジェクト"
-  created: 2025-11-27
-  updated: 2025-11-27
-  company_url: https://www.asahigroup-holdings.com/
-
-phases:
-  phase0:
-    status: completed
-    completed: 2025-11-27
-  phase1:
-    status: completed
-    completed: 2025-11-27
-    outputs:
-      - organization-analysis.md
-      - industry-segment-profile.md
-      - market-assessment.md
-      - constraints.md
-      - stakeholder-map.md
-      - extracted-concepts.json
-  phase2:
-    status: completed
-    completed: 2025-11-27
-    outputs:
-      - value-definition.md
-      - value-streams-mapping.md
-      - value-insights.json
-  phase3:
-    status: completed
-    completed: 2025-11-27
-    outputs:
-      - cl1-domain-classification.md
-      - cl2-subdomain-design.md
-      - cl3-bounded-contexts.md
-  phase4:
-    status: completed
-    completed: 2025-11-27
-    outputs:
-      - architecture-design.md
-  phase5:
-    status: completed
-    completed: 2025-11-28
-    outputs:
-      # VS1: 研究開発 (Research & Development)
-      - VS1_研究開発/BC1_FermentationPlatform/domain-language.md
-      - VS1_研究開発/BC1_FermentationPlatform/api-specification.md
-      - VS1_研究開発/BC1_FermentationPlatform/database-design.md
-      - VS1_研究開発/BC4_ResearchInnovation/domain-language.md
-      - VS1_研究開発/BC4_ResearchInnovation/api-specification.md
-      - VS1_研究開発/BC4_ResearchInnovation/database-design.md
-      - VS1_研究開発/BC6_FunctionalResearch/domain-language.md
-      - VS1_研究開発/BC6_FunctionalResearch/api-specification.md
-      - VS1_研究開発/BC6_FunctionalResearch/database-design.md
-      # VS2: 製品開発 (Product Development)
-      - VS2_製品開発/BC2_ProductRecipe/domain-language.md
-      - VS2_製品開発/BC2_ProductRecipe/api-specification.md
-      - VS2_製品開発/BC2_ProductRecipe/database-design.md
-      - VS2_製品開発/BC5_ProductInnovation/domain-language.md
-      - VS2_製品開発/BC5_ProductInnovation/api-specification.md
-      - VS2_製品開発/BC5_ProductInnovation/database-design.md
-      - VS2_製品開発/BC7_FunctionalProducts/domain-language.md
-      - VS2_製品開発/BC7_FunctionalProducts/api-specification.md
-      - VS2_製品開発/BC7_FunctionalProducts/database-design.md
-      # VS3: ブランド (Brand)
-      - VS3_ブランド/BC3_BrandPortfolio/domain-language.md
-      - VS3_ブランド/BC3_BrandPortfolio/api-specification.md
-      - VS3_ブランド/BC3_BrandPortfolio/database-design.md
-  phase6:
-    status: pending
-  phase7:
-    status: pending
-
-settings:
-  output_dir: ./outputs
-  auto_backup: true
-  subagent_integration: true
+[38;2;141;161;185m───────┬────────────────────────────────────────────────────────────────────────[0m
+       [38;2;141;161;185m│ [0m[1mSTDIN[0m
+[38;2;141;161;185m───────┼────────────────────────────────────────────────────────────────────────[0m
+[38;2;141;161;185m   1[0m   [38;2;141;161;185m│[0m [38;2;227;234;242mproject:[0m
+[38;2;141;161;185m   2[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m  name: asahi-group[0m
+[38;2;141;161;185m   3[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m  company: アサヒグループホールディングス[0m
+[38;2;141;161;185m   4[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m  url: https://www.asahigroup-holdings.com/[0m
+[38;2;141;161;185m   5[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m  created: 2025-12-03[0m
+[38;2;141;161;185m   6[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m  updated: 2025-12-03[0m
+[38;2;141;161;185m   7[0m   [38;2;141;161;185m│[0m 
+[38;2;141;161;185m   8[0m   [38;2;141;161;185m│[0m [38;2;227;234;242mphases:[0m
+[38;2;141;161;185m   9[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m  phase0:[0m
+[38;2;141;161;185m  10[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m    status: completed[0m
+[38;2;141;161;185m  11[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m    started: 2025-12-03[0m
+[38;2;141;161;185m  12[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m    completed: 2025-12-03[0m
+[38;2;141;161;185m  13[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m  phase1:[0m
+[38;2;141;161;185m  14[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m    status: completed[0m
+[38;2;141;161;185m  15[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m    completed: 2025-12-03[0m
+[38;2;141;161;185m  16[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m    note: "自動生成（要レビュー）"[0m
+[38;2;141;161;185m  17[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m  phase2:[0m
+[38;2;141;161;185m  18[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m    status: completed[0m
+[38;2;141;161;185m  19[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m    completed: 2025-12-03[0m
+[38;2;141;161;185m  20[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m    note: "初期案（要詳細化）"[0m
+[38;2;141;161;185m  21[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m  phase3:[0m
+[38;2;141;161;185m  22[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m    status: pending[0m
+[38;2;141;161;185m  23[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m  phase4:[0m
+[38;2;141;161;185m  24[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m    status: pending[0m
+[38;2;141;161;185m  25[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m  phase5:[0m
+[38;2;141;161;185m  26[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m    status: pending[0m
+[38;2;141;161;185m  27[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m  phase6:[0m
+[38;2;141;161;185m  28[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m    status: pending[0m
+[38;2;141;161;185m  29[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m  phase7:[0m
+[38;2;141;161;185m  30[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m    status: pending[0m
+[38;2;141;161;185m  31[0m   [38;2;141;161;185m│[0m 
+[38;2;141;161;185m  32[0m   [38;2;141;161;185m│[0m [38;2;227;234;242msettings:[0m
+[38;2;141;161;185m  33[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m  output_dir: ./outputs[0m
+[38;2;141;161;185m  34[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m  auto_backup: true[0m
+[38;2;141;161;185m  35[0m   [38;2;141;161;185m│[0m [38;2;227;234;242m  language: ja[0m
+[38;2;141;161;185m───────┴────────────────────────────────────────────────────────────────────────[0m
