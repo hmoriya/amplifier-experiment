@@ -397,4 +397,9 @@ Task tool を使用して {subagent-name} を起動：
 
 ---
 
-📖 **詳細ガイド**: `parasol-v5/FRAMEWORK-DESIGN.md`を参照
+📖 **詳細ガイド**:
+- `_parasol-overview.md` - **全体構成図・Value Stream例示・UC階層**
+- `_zigzag-process.md` - ZIGZAGプロセス詳細
+- `_value-methodology.md` - 価値方法論
+- `_parasol-architecture-overview.md` - 3層アーキテクチャ
+- `parasol-v5/FRAMEWORK-DESIGN.md` - フレームワーク設計書
