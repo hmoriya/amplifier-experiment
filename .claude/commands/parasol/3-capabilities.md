@@ -448,6 +448,39 @@ WHAT       →      HOW        →      WHAT       →      HOW
 | **言語** | 業務用語 | 技術用語 + ユビキタス言語 |
 | **内容** | 業務フロー、業務ルール | 集約、イベント、API契約 |
 
+### アジャイル開発との対応
+
+| パラソル概念 | アジャイル対応 | 期間 |
+|-------------|---------------|------|
+| **CL3: ビジネスオペレーション** | Epic / Feature | 複数スプリント |
+| **Actor UseCase** | User Story ★ | 1スプリント内 |
+| **View** | Task | 数時間〜数日 |
+
+**重要**: ビジネスオペレーション（CL3）は複数アクターが協調する業務活動であり、ユースケースではありません。Actor UseCaseが単一ユーザの完結操作として、アジャイルのUser Storyに対応します。
+
+詳細: `_software-design-reference/business-operations.md` の「アジャイル開発との対応関係」セクション
+
+### Bounded Context（BC）と CL3 の関係
+
+**BCは「活動境界」、CL3は「活動」**
+
+```
+BC = 活動境界（関心事が一貫する範囲）
+│
+│  包含関係（1 BC : N CL3）
+▼
+CL3 = 活動（境界内で行われる業務操作）
+```
+
+| 概念 | 定義 | 比喩 | Phase |
+|------|------|------|-------|
+| **BC** | 活動の境界（同じ言葉が同じ意味を持つ範囲） | 部屋の壁 | Phase 4 |
+| **CL3** | 境界内で行われる業務活動 | 部屋の中での作業 | Phase 3 |
+
+**言語境界は結果であり原因ではない**: 活動が違うから関心事が違い、だから同じ言葉でも意味が異なる。
+
+詳細: `_parasol-overview.md` の「6.2 Bounded Context と CL3 の関係」セクション
+
 ### 実例：fermentation-research
 
 ```
@@ -483,29 +516,43 @@ WHAT       →      HOW        →      WHAT       →      HOW
 outputs/3-capabilities/
 ├── {vs-number}-{vs-slug}/                    # VSディレクトリ（Phase 2から導出）
 │   ├── cl1-domain-classification.md          # CL1: ドメイン分類（Core/Supporting/Generic）
-│   ├── cl2-subdomain-design.md               # CL2: ビジネスオペレーション群（サービス境界）
-│   ├── cl3-business-operations/              # CL3: ビジネスオペレーション（What）
-│   │   └── {subdomain}-operations.md         #      各サービス境界の業務活動一覧
-│   └── bounded-contexts/                     # BC: 実装設計（How）
-│       └── {subdomain}-bc.md                 #      集約・イベント・API契約
+│   ├── cl2-subdomain-design.md               # CL2: ケイパビリティ設計（サービス境界候補）
+│   └── cl3-business-operations/              # CL3: ビジネスオペレーション（What）
+│       └── {capability}-operations.md        #      各ケイパビリティの業務活動一覧
 └── ...
 ```
 
+**重要**: Phase 3 はビジネス観点（What）の定義のみ。BCの確定とソフトウェア設計は以下のPhaseで行います：
+
+- **Phase 4**: capability-bc-mapping.md でCL2→BC対応を確定、context-map.md でBC間関係を定義
+- **Phase 5**: BC単位で domain-language.md（パラソルドメイン言語）、API仕様、テスト定義を作成
+
 ### CL3とBCの分離について
 
-**従来**: `cl3-bounded-contexts/` にCL3とBCが混在
-**V5**: CL3（ビジネスオペレーション）とBC（実装設計）を明確に分離
+**V5.1の設計思想**: ビジネス定義（What）と技術設計（How）を Phase で明確に分離
 
 ```
-# 従来の問題
-cl3-bounded-contexts/{subdomain}-bc.md
-  → What（業務定義）とHow（技術設計）が1ファイルに混在
-  → ビジネス担当者に見せにくい
+# Phase 3: ビジネス観点（担当者：事業部長・PO・業務担当者）
+outputs/3-capabilities/{vs}/
+├── cl1-domain-classification.md      # Core/Supporting/Generic 分類
+├── cl2-subdomain-design.md           # ケイパビリティ（サービス境界候補）
+└── cl3-business-operations/          # 具体的業務活動
+    └── {capability}-operations.md
 
-# V5の改善
-cl3-business-operations/{subdomain}-operations.md  ← ビジネス担当者向け
-bounded-contexts/{subdomain}-bc.md                 ← 開発者向け
+# Phase 4: アーキテクチャ観点（担当者：アーキテクト）
+outputs/4-architecture/
+├── capability-bc-mapping.md          # CL2 → BC 対応表
+├── context-map.md                    # BC間関係（U/D, ACL等）
+└── services/{service}/bounded-contexts.md
+
+# Phase 5: ソフトウェア設計（担当者：設計者・開発者）
+outputs/5-software/{service}/{bc-name}/
+├── domain-language.md                # パラソルドメイン言語（SSOT）
+├── api-specification.md
+└── tests/                            # テスト定義
 ```
+
+参照: [capability-bc-test-structure.md](./_software-design-reference/capability-bc-test-structure.md)
 
 ### VSディレクトリ命名規則
 

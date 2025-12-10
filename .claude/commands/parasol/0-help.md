@@ -326,6 +326,10 @@ DDD/マイクロサービスへの完全なマッピング：
 **Phase 4**: service-boundary-template.md, context-map-template.md, adr-template.md
 **Phase 5**: domain-language-template.md, api-specification-template.md, database-design-template.md, use-case-template.md, page-definition-template.md
 
+**V5解析エンジン対応テンプレート** (Mermaid非依存):
+  - `_software-design-reference/_templates/structured-md-format.md` - 構造化MD形式（パラソルドメイン言語）
+  - `_software-design-reference/_templates/test-definition-format.md` - テスト定義形式（5層テストピラミッド）
+
 各フェーズのコマンドが自動的に適切なテンプレートを使用します。
 
 ### トピック: subagents
@@ -403,3 +407,7 @@ Task tool を使用して {subagent-name} を起動：
 - `_value-methodology.md` - 価値方法論
 - `_parasol-architecture-overview.md` - 3層アーキテクチャ
 - `parasol-v5/FRAMEWORK-DESIGN.md` - フレームワーク設計書
+
+📐 **V5.1 階層構造ガイド**:
+- `_software-design-reference/capability-bc-test-structure.md` - **Capability・BC・テスト構造の整合性定義**
+- `_software-design-reference/business-operations.md` - ビジネスオペレーション・ユースケース階層
