@@ -16,14 +16,17 @@ description: Value definition and enterprise activities (project:parasol)
 /parasol:2-value VS0          # VS0を直接指定
 /parasol:2-value VS2          # VS2を直接指定
 /parasol:2-value all          # 全VS概要を生成
-/parasol:2-value exploration  # 3軸探索モード（価値軸/事業部軸/ハイブリッド軸）
+/parasol:2-value exploration  # 5軸探索モード（価値軸/事業部軸/フュージョン型/ケーパビリティ統合型/プラットフォーム軸）
+/parasol:2-value es-ps        # ES/PS VStr（従業員・パートナー向け）設計
 ```
 
 ## 目的
 
+- **Phase 1からの入力を活用する** - コングロマリットスコア・アクターインベントリを基に軸パターンを自動推奨
 - **業種・セグメントを特定する** - 適切なVSパターンの選択
 - **Value Proposition（価値提案）を明確化する** - 誰に、何の価値を、どのように提供するか
 - **バリューステージ (VS0-VS7) を定義する** - 顧客の状態遷移として価値創造の全体像を定義
+- **多段VStr（ES/PS）の必要性を判定する** - 従業員・パートナー向けVStrの設計判断
 - **Phase 3 Capabilitiesへの入力を準備する** - 必要なCapabilitiesの特定
 
 ## 📚 価値方法論リファレンス
@@ -316,16 +319,16 @@ outputs/2-value/
 
 ---
 
-## 🔀 4軸探索モード（exploration）
+## 🔀 5軸探索モード（exploration）
 
 複数の分解軸を並行探索し、最適なバリューストリーム構造を発見するモードです。
 
 ### 使用方法
 
 ```bash
-/parasol:2-value exploration              # worktree作成 + 4軸探索開始
+/parasol:2-value exploration              # worktree作成 + 5軸探索開始
 /parasol:2-value exploration --no-worktree # worktreeなし（フォルダ構造のみ）
-/parasol:2-value exploration status        # 4軸の進捗確認
+/parasol:2-value exploration status        # 5軸の進捗確認
 /parasol:2-value exploration merge         # 結果を本体にマージ
 ```
 
@@ -339,6 +342,7 @@ git worktree add .worktrees/{project}-value -b {project}-value
 git worktree add .worktrees/{project}-business -b {project}-business
 git worktree add .worktrees/{project}-fusion -b {project}-fusion
 git worktree add .worktrees/{project}-capability -b {project}-capability
+git worktree add .worktrees/{project}-platform -b {project}-platform
 ```
 
 **作成されるworktree構造**:
@@ -350,14 +354,16 @@ git worktree add .worktrees/{project}-capability -b {project}-capability
 │   └── projects/{project}/outputs/2-value/exploration/business/
 ├── {project}-fusion/       # 軸3: フュージョン型
 │   └── projects/{project}/outputs/2-value/exploration/fusion/
-└── {project}-capability/   # 軸4: ケーパビリティ統合型
-    └── projects/{project}/outputs/2-value/exploration/capability/
+├── {project}-capability/   # 軸4: ケーパビリティ統合型
+│   └── projects/{project}/outputs/2-value/exploration/capability/
+└── {project}-platform/     # 軸5: プラットフォーム軸
+    └── projects/{project}/outputs/2-value/exploration/platform/
 ```
 
 ### 実行後の案内
 
 ```
-✅ 4軸探索用worktreeを作成しました
+✅ 5軸探索用worktreeを作成しました
 
 📂 Worktree一覧:
 ┌────────────────────────────────────────────────────────────────┐
@@ -367,6 +373,7 @@ git worktree add .worktrees/{project}-capability -b {project}-capability
 │ 2. 事業部軸         │ .worktrees/{project}-business │ {project}-business │
 │ 3. フュージョン型   │ .worktrees/{project}-fusion │ {project}-fusion │
 │ 4. ケーパビリティ統合型 │ .worktrees/{project}-capability │ {project}-capability │
+│ 5. プラットフォーム軸 │ .worktrees/{project}-platform │ {project}-platform │
 └────────────────────────────────────────────────────────────────┘
 
 🚀 次のステップ:
@@ -376,6 +383,7 @@ git worktree add .worktrees/{project}-capability -b {project}-capability
   cd .worktrees/{project}-business && claude
   cd .worktrees/{project}-fusion && claude
   cd .worktrees/{project}-capability && claude
+  cd .worktrees/{project}-platform && claude
 
 または、順次作業:
   /parasol:2-value VS0  # 各worktree内で実行
@@ -387,7 +395,7 @@ git worktree add .worktrees/{project}-capability -b {project}-capability
   /parasol:2-value exploration merge
 ```
 
-### 4つの探索軸
+### 5つの探索軸
 
 | # | 軸 | VStr数 | 特徴 | 適用シナリオ |
 |---|-----|--------|------|-------------|
@@ -395,28 +403,29 @@ git worktree add .worktrees/{project}-capability -b {project}-capability
 | 2 | **事業部軸** | N本 | 独立・最適化 | 事業間の独立性が高い場合、コングロマリット |
 | 3 | **フュージョン型** | 1+N本 | 共通基盤＋事業固有 | **顧客体験が事業横断で連続する場合のみ** |
 | 4 | **ケーパビリティ統合型** | CL1判定後 | 効率化重視 | 無駄なシステム排除が必要な場合 |
+| 5 | **プラットフォーム軸** | 2本(DS+SS) | 両面市場 | マーケットプレイス・エコシステム型事業 |
 
-### 4軸の比較
+### 5軸の比較
 
 ```
-┌────────────────────────────────────────────────────────────────────────────┐
-│                         Phase 2: 4軸探索                                   │
-├───────────────┬───────────────┬───────────────┬────────────────────────────┤
-│   価値軸       │   事業部軸    │ フュージョン型 │ ケーパビリティ統合型       │
-├───────────────┼───────────────┼───────────────┼────────────────────────────┤
-│ VStr: 1本     │ VStr: N本     │ VStr: 1+N本   │ VStr: CL1判定後に決定      │
-│               │               │               │                            │
-│ 全社統合      │ 事業独立      │ 統合VStr      │ CL1ドメインごとに          │
-│               │               │   ↓ 価値提供  │ A: 統合                    │
-│               │               │ 事業VStr      │ B: 個別                    │
-│               │               │               │ C: ハイブリッド            │
-├───────────────┼───────────────┼───────────────┼────────────────────────────┤
-│ 目的:         │ 目的:         │ 目的:         │ 目的:                      │
-│ ブランド統一  │ 事業最適化    │ 顧客体験連続  │ 無駄排除・効率化           │
-├───────────────┼───────────────┼───────────────┼────────────────────────────┤
-│ Phase 2で     │ Phase 2で     │ Phase 2で     │ Phase 3（CL1）で           │
-│ 設計完了      │ 設計完了      │ 設計完了      │ 判定・設計                 │
-└───────────────┴───────────────┴───────────────┴────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                   Phase 2: 5軸探索                                                │
+├───────────────┬───────────────┬───────────────┬────────────────────────────┬────────────────────┤
+│   価値軸       │   事業部軸    │ フュージョン型 │ ケーパビリティ統合型       │ プラットフォーム軸  │
+├───────────────┼───────────────┼───────────────┼────────────────────────────┼────────────────────┤
+│ VStr: 1本     │ VStr: N本     │ VStr: 1+N本   │ VStr: CL1判定後に決定      │ VStr: 2本(DS+SS)   │
+│               │               │               │                            │                    │
+│ 全社統合      │ 事業独立      │ 統合VStr      │ CL1ドメインごとに          │ 需要者VStr (DS)    │
+│               │               │   ↓ 価値提供  │ A: 統合                    │   ↕ マッチング     │
+│               │               │ 事業VStr      │ B: 個別                    │ 供給者VStr (SS)    │
+│               │               │               │ C: ハイブリッド            │                    │
+├───────────────┼───────────────┼───────────────┼────────────────────────────┼────────────────────┤
+│ 目的:         │ 目的:         │ 目的:         │ 目的:                      │ 目的:              │
+│ ブランド統一  │ 事業最適化    │ 顧客体験連続  │ 無駄排除・効率化           │ 両面市場最適化     │
+├───────────────┼───────────────┼───────────────┼────────────────────────────┼────────────────────┤
+│ Phase 2で     │ Phase 2で     │ Phase 2で     │ Phase 3（CL1）で           │ Phase 2で          │
+│ 設計完了      │ 設計完了      │ 設計完了      │ 判定・設計                 │ 設計完了           │
+└───────────────┴───────────────┴───────────────┴────────────────────────────┴────────────────────┘
 ```
 
 ### 探索プロセス
@@ -427,11 +436,12 @@ Step 1: 各軸でVStr設計を並行実施
     ├── 価値軸: 1本の統合VStr設計
     ├── 事業部軸: 事業別VStr設計
     ├── フュージョン型: 統合VStr + 事業VStr連携設計
-    └── ケーパビリティ統合型: 検討項目のみ定義（Phase 3で判定）
+    ├── ケーパビリティ統合型: 検討項目のみ定義（Phase 3で判定）
+    └── プラットフォーム軸: DS + SS の2本VStr設計
     │
 Step 2: 比較評価
     │
-    └── シナジー、事業特性反映、管理複雑性、効率化を評価
+    └── シナジー、事業特性反映、管理複雑性、効率化、ネットワーク効果を評価
     │
 Step 3: 最適軸の選択または組み合わせ
 ```
@@ -447,9 +457,12 @@ outputs/2-value/
 │   │   └── value-streams.md
 │   ├── fusion/             # フュージョン型の探索結果
 │   │   └── value-streams.md
-│   └── capability/         # ケーパビリティ統合型の検討項目
-│       └── evaluation-criteria.md
-├── comparison-matrix.md    # 4軸比較マトリクス
+│   ├── capability/         # ケーパビリティ統合型の検討項目
+│   │   └── evaluation-criteria.md
+│   └── platform/           # プラットフォーム軸の探索結果
+│       ├── demand-side-vstr.md    # 需要者向けVStr (DS0-DS7)
+│       └── supply-side-vstr.md    # 供給者向けVStr (SS0-SS7)
+├── comparison-matrix.md    # 5軸比較マトリクス
 └── selected-approach.md    # 選択したアプローチと理由
 ```
 
@@ -582,6 +595,159 @@ Task tool を使用して zen-architect (ANALYZE mode) を起動：
 
 ---
 
+### 軸5: プラットフォーム軸
+
+**目的**: 需要者と供給者の両面市場を最適化するマーケットプレイス・エコシステム型ビジネス向け
+
+**構造**:
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│  【需要者向け VStr】(Demand Side) - DS0〜DS7                          │
+│  価値の受け手: 購入者/利用者（買い手）                                │
+│  ニーズ潜在 → 認知 → 探索 → 選択 → 取引 → 利用 → 継続 → 推奨         │
+└──────────────────────────────────────────────────────────────────────┘
+                        ↕ マッチング
+┌──────────────────────────────────────────────────────────────────────┐
+│  【プラットフォーム基盤】Core Platform                                │
+│  マッチング │ 決済 │ 信頼構築 │ サポート │ データ                     │
+└──────────────────────────────────────────────────────────────────────┘
+                        ↕ マッチング
+┌──────────────────────────────────────────────────────────────────────┐
+│  【供給者向け VStr】(Supply Side) - SS0〜SS7                          │
+│  価値の受け手: 出品者/提供者（売り手）                                │
+│  参入検討 → 認知 → 登録 → 出品 → 取引 → 収益 → 拡大 → パートナー化    │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+**適用条件**:
+- [ ] 需要者と供給者をマッチングするプラットフォーム事業
+- [ ] ネットワーク効果（片側または双方向）が事業価値の源泉
+- [ ] 取引手数料/サブスクリプションが主要収益モデル
+
+**業界別適用例**:
+| 業界 | 需要者 | 供給者 | 例 |
+|------|--------|--------|-----|
+| ECマーケットプレイス | 購入者 | 出品者 | メルカリ、Amazon Marketplace |
+| シェアリングエコノミー | 利用者 | ホスト/ドライバー | Airbnb、Uber |
+| 人材マッチング | 企業（採用側） | 求職者 | Wantedly、LinkedIn |
+
+→ 詳細: `_patterns/_axes/platform-axis.md` 参照
+
+---
+
+## 👥 ES/PS VStr設計（多段VStr）
+
+従業員（ES）・パートナー（PS）向けValue Streamの設計モードです。
+
+### 使用方法
+
+```bash
+/parasol:2-value es-ps              # ES/PS VStr設計開始
+/parasol:2-value es-ps es           # 従業員VStr（ES）のみ
+/parasol:2-value es-ps ps           # パートナーVStr（PS）のみ
+```
+
+### ES/PS VStr追加の判断基準
+
+Phase 1の `actor-inventory.md` から以下を判定：
+
+| 条件 | ES VStr | PS VStr |
+|------|---------|---------|
+| 人材獲得・育成が経営課題 | ✅ 推奨 | - |
+| 従業員エンゲージメントが戦略目標 | ✅ 推奨 | - |
+| パートナーエコシステムが競争優位 | - | ✅ 推奨 |
+| サプライヤー関係が戦略的 | - | ✅ 検討 |
+| 組織成熟度が高い（顧客VStr確立済み） | ✅ 前提 | ✅ 前提 |
+
+### 従業員VStr（ES: Employee Stage）テンプレート
+
+```markdown
+# 従業員向け Value Stream (ES0-ES7)
+
+## ES VStr概要
+
+| Stage | 状態 | 定義 |
+|-------|------|------|
+| ES0 | 就職潜在 | 「まだ転職を考えていないが、潜在的に機会を求めている」 |
+| ES1 | 認知到達 | 「この組織の存在を知る」 |
+| ES2 | 選考意向 | 「この組織で働きたいと思う」 |
+| ES3 | 入社決定 | 「この組織に入ることを決める」 |
+| ES4 | 活躍開始 | 「この組織で価値を発揮し始める」 |
+| ES5 | 成長実感 | 「この組織で成長を実感している」 |
+| ES6 | 定着継続 | 「この組織で継続的にキャリアを築いている」 |
+| ES7 | 組織共創 | 「この組織の価値を他者に推奨し、組織文化を共に創っている」 |
+
+## 顧客VStrとの関係
+
+従業員VStrは顧客VStrの**イネーブラー（実現者）**として設計：
+
+```
+顧客VStr（VS0-VS7） ← 人材能力を供給 ← 従業員VStr（ES0-ES7）
+```
+
+## KPI例
+
+| Stage | 指標例 |
+|-------|--------|
+| ES0-ES2 | 応募数、採用ファネル転換率 |
+| ES3-ES4 | オンボーディング完了率、早期離職率 |
+| ES5-ES6 | eNPS、エンゲージメントスコア、定着率 |
+| ES7 | リファラル採用率、社内メンター数 |
+```
+
+### パートナーVStr（PS: Partner Stage）テンプレート
+
+```markdown
+# パートナー向け Value Stream (PS0-PS7)
+
+## PS VStr概要
+
+| Stage | 状態 | 定義 |
+|-------|------|------|
+| PS0 | 協業潜在 | 「まだ協業を考えていないが、潜在的に機会がある」 |
+| PS1 | 認知到達 | 「この組織との協業可能性を知る」 |
+| PS2 | 提携意向 | 「この組織と協業したいと思う」 |
+| PS3 | 契約決定 | 「この組織との協業を決める」 |
+| PS4 | 協業開始 | 「この組織と協業を開始する」 |
+| PS5 | 価値実感 | 「この協業から価値を実感している」 |
+| PS6 | 拡大継続 | 「この協業を継続・拡大している」 |
+| PS7 | 戦略共創 | 「この組織と戦略的パートナーとして共に成長している」 |
+
+## 顧客VStrとの関係
+
+パートナーVStrは顧客VStrの**能力補完**として設計：
+
+```
+顧客VStr（VS0-VS7） ← 能力補完・協業 ← パートナーVStr（PS0-PS7）
+```
+
+## KPI例
+
+| Stage | 指標例 |
+|-------|--------|
+| PS0-PS2 | パートナー候補数、商談数 |
+| PS3-PS4 | 契約締結数、協業開始までのリードタイム |
+| PS5-PS6 | パートナー満足度、取引継続率、取引拡大率 |
+| PS7 | 戦略パートナー数、共同開発件数 |
+```
+
+### 出力構造
+
+```
+outputs/2-value/
+├── es-vstr/                    # 従業員向けVStr
+│   ├── es-overview.md          # ES VStr概要
+│   └── es-stages.md            # ES0-ES7詳細
+├── ps-vstr/                    # パートナー向けVStr
+│   ├── ps-overview.md          # PS VStr概要
+│   └── ps-stages.md            # PS0-PS7詳細
+└── multi-tier-integration.md   # 顧客VStr × ES/PS VStr統合図
+```
+
+→ 詳細: `_patterns/_axes/multi-tier-vstr-axis.md` 参照
+
+---
+
 ## ⚠️ 重要: 業種によるVSパターンの違い
 
 業種によってステークホルダー構造が異なり、VSの設計パターンが変わります。
@@ -699,13 +865,90 @@ outputs/2-value/
 
 ## 実行手順
 
-### Step 0: 業種・セグメント設定の確認
+### Step 0: Phase 1入力の自動ロードと軸パターン推奨
 
 ```bash
 /parasol:2-value industry
 ```
 
-**Phase 1で作成済みの場合**: `outputs/1-context/industry-segment-profile.md` を読み込み、VSパターンを自動設定。
+**Phase 1成果物からの自動入力:**
+
+Phase 2開始時、以下のPhase 1成果物を自動で読み込み、軸パターンを推奨します：
+
+```
+自動読み込み対象:
+├── outputs/1-context/industry-segment-profile.md  # 業種・セグメント
+├── outputs/1-context/business-unit-profiles.md    # 事業部プロファイル
+├── outputs/1-context/actor-inventory.md           # アクターインベントリ
+└── outputs/1-context/stakeholder-map.md           # ステークホルダーマップ
+```
+
+#### コングロマリットスコアに基づく軸パターン自動推奨
+
+Phase 1で算出された**コングロマリット判定スコア**（15点満点）に基づき、軸パターンを自動推奨：
+
+| スコア | 推奨パターン | 理由 |
+|--------|-------------|------|
+| **0-4点** | 価値軸（統合型） | 単一事業・統合ブランド向け |
+| **5-8点** | フュージョン型 | 共通基盤＋事業固有の組み合わせ |
+| **9-12点** | 事業部軸 | 事業間独立性が高い |
+| **13-15点** | 事業部軸（厳格） | コングロマリット構造 |
+
+#### プラットフォーム型判定
+
+`business-unit-profiles.md` に以下の特徴がある場合、**プラットフォーム軸**を追加推奨：
+
+- [ ] 需要者と供給者の両面市場構造がある
+- [ ] ネットワーク効果が収益モデルの核心
+- [ ] 取引手数料/マッチング手数料が主要収益源
+
+→ 該当する場合: `_patterns/_axes/platform-axis.md` を参照
+
+#### ES/PS VStr必要性判定
+
+`actor-inventory.md` から以下を自動判定：
+
+| アクター種別 | 経営課題度 | ES/PS VStr推奨 |
+|-------------|-----------|---------------|
+| 従業員 | 「人材獲得・育成が経営課題」 | → ES VStr設計を推奨 |
+| パートナー | 「エコシステム拡大が戦略」 | → PS VStr設計を推奨 |
+
+→ 推奨される場合: `/parasol:2-value es-ps` で設計
+
+#### 推奨結果の表示例
+
+```
+📥 Phase 1入力を読み込みました
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 コングロマリット判定スコア: 11/15点
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 推奨軸パターン: 事業部軸
+   理由: 事業間の独立性が高く、顧客セグメントが明確に分離
+
+📋 事業部構成:
+   ├── 酒類事業 (VStr-1)
+   ├── 飲料事業 (VStr-2)
+   └── 健康食品事業 (VStr-3)
+
+⚠️ 追加検討:
+   ├── フュージョン型: 共通R&D基盤がある場合
+   └── プラットフォーム軸: EC事業が両面市場構造の場合
+
+👥 多段VStr判定:
+   ├── ES VStr: 推奨（人材育成が経営課題として特定）
+   └── PS VStr: 検討（サプライヤーとの関係が戦略的）
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+次のステップを選択:
+1. 推奨パターン（事業部軸）で進める
+2. 5軸探索モードで比較検討
+3. 業種・セグメント設定を変更
+```
+
+**Phase 1で作成済みの場合**: 上記の自動読み込み・推奨を実行。
 
 **未作成の場合**: インタラクティブに業種・セグメントを特定し、`outputs/2-value/industry-profile.md` として保存。
 
