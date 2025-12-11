@@ -112,6 +112,52 @@ Task tool を使用して test-coverage を起動：
 - 過剰テストの回避」
 ```
 
+### テスト自動生成（パラソルドメイン言語連携）
+
+パラソルドメイン言語からテストスケルトンを自動生成：
+
+```
+テスト生成フロー:
+
+1. ドメインモデルテスト（Unit）
+   入力: @parasol:value_objects, @parasol:aggregates
+   出力: tests/unit/domain/*.py
+
+   生成内容:
+   - Value Object: 境界値テスト、等価性テスト
+   - Aggregate: 不変条件テスト、振る舞いテスト
+   - Domain Service: ロジックテスト
+
+2. APIテスト（Contract）
+   入力: api-specification.md
+   出力: tests/contract/api/*.py
+
+   生成内容:
+   - エンドポイント契約テスト
+   - リクエスト/レスポンス検証
+   - 認証・認可テスト
+
+3. Actor UseCaseテスト（Integration）
+   入力: @parasol:actor_usecase_flow
+   出力: tests/integration/actor-usecases/*.py
+
+   生成内容:
+   - 基本フローテスト
+   - 代替フローテスト
+   - 例外フローテスト
+
+4. UIテスト（Component）
+   入力: views/*.md, robustness.md
+   出力: tests/component/views/*.spec.ts
+
+   生成内容:
+   - 表示テスト
+   - 操作テスト
+   - BCE連携テスト
+```
+
+**テスト定義形式**: `.claude/commands/parasol/_software-design-reference/_templates/test-definition-format.md`
+
 ### bug-hunter の活用
 
 実装中のエラーを体系的に解決：

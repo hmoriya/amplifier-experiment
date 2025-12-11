@@ -67,13 +67,19 @@ Phase 1: Context（ステークホルダー、制約）
 Phase 2: Value Streams（価値の流れ）
     ↓
 Phase 3: Capabilities（ケーパビリティ）
-    ├── CL1: ドメイン分類
-    ├── CL2: サブドメイン設計
-    └── CL3: Bounded Context定義
-         ├── ビジネス定義（.md）
-         └── パラソルドメイン言語定義（-domain-language.md）★
+    ├── CL1: ドメイン分類（Activity Area）
+    ├── CL2: サブドメイン設計（Capability）
+    └── CL3: 業務オペレーション定義（Business Operation）
     ↓
-Phase 4-7: 実装（自動生成）
+Phase 4: Application Design（アプリケーション設計）
+    ├── capability-bc-mapping.md（CL2-BC対応表）
+    ├── context-map.md（BC間関係）
+    └── Bounded Context確定
+    ↓
+Phase 5: Software Design（ソフトウェア設計）★
+    └── BC単位でパラソルドメイン言語定義（domain-language.md）
+    ↓
+Phase 6-7: 実装・プラットフォーム
 ```
 
 ### 役割分担
@@ -261,17 +267,38 @@ CREATE TABLE yeast_strains (
 
 ```
 projects/{project-name}/outputs/
-├── 3-capabilities/
-│   └── {vs-name}/
-│       └── cl3-bounded-contexts/
-│           ├── {bc-name}.md                    # ビジネス定義
-│           └── {bc-name}-domain-language.md    # パラソルドメイン言語
-└── 4-architecture/
-    └── generated/                              # AI自動生成
-        ├── ui/
-        ├── api/
-        └── db/
+│
+├── 3-capabilities/                             # Phase 3: ビジネス観点
+│   └── {vs-slug}/
+│       ├── cl1-domain-classification.md        # CL1: Core/Supporting/Generic分類
+│       ├── cl2-subdomain-design.md             # CL2: サービス境界候補
+│       └── cl3-business-operations/            # CL3: 業務オペレーション
+│           └── {capability}-operations.md
+│
+├── 4-architecture/                             # Phase 4: 技術設計
+│   ├── capability-bc-mapping.md                # ★ CL2-BC対応表（必須）
+│   ├── context-map.md                          # BC間関係
+│   └── services/
+│       └── {service}/
+│           └── bounded-contexts.md             # サービス内BC一覧
+│
+└── 5-software/                                 # Phase 5: ソフトウェア設計
+    └── {service}/
+        └── {bc-name}/                          # ★ BCが設計単位
+            ├── domain-language.md              # パラソルドメイン言語（SSOT）
+            ├── api-specification.md            # API仕様
+            ├── database-design.md              # DB設計（生成物）
+            ├── operations/                     # オペレーション群
+            │   └── {operation}/actor-usecases/
+            └── tests/                          # テスト定義
+                ├── unit-spec.yaml
+                ├── api-spec.yaml
+                ├── ui-spec.yaml
+                └── integration-spec.yaml
 ```
+
+**重要**: パラソルドメイン言語は **Phase 5** の `domain-language.md` に配置します。
+Phase 3 はビジネス観点の定義であり、技術実装の詳細は Phase 5 で定義します。
 
 ## 実装例：酵母株管理
 
@@ -352,5 +379,11 @@ CREATE DOMAIN strain_code AS VARCHAR(20)
 ---
 
 **作成日**: 2025-11-28
-**バージョン**: V5対応版（V4コンセプト統合）
-**ステータス**: ドラフト
+**更新日**: 2025-12-10
+**バージョン**: V5.3（Actor UseCase / View 用語統一）
+**ステータス**: 確定
+
+## 関連ドキュメント
+
+- [capability-bc-test-structure.md](./_software-design-reference/capability-bc-test-structure.md) - 階層構造の詳細定義
+- [structured-md-format.md](./_software-design-reference/_templates/structured-md-format.md) - パラソルドメイン言語形式

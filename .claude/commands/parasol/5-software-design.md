@@ -20,7 +20,7 @@ Phase 4で定義したサービス/BCに対して、実装に必要な詳細設�
 - パラソルドメイン言語定義（Parasol Domain Language）
 - API仕様（OpenAPI）
 - データベース設計
-- ビジネスオペレーション（Use Cases + UI定義）
+- ビジネスオペレーション（Actor UseCases + View定義）
 
 ## 🤖 Amplifierサブエージェント連携
 
@@ -221,46 +221,81 @@ cd ~/somewhere-else
 ## 成果物構造
 
 ```
-outputs/5-software/services/
-└── ServiceName/              # CL2 Subdomain/Microservice
-└── BCName/               # CL3 Bounded Context
-├── domain-language.md
-├── api-specification.md
-├── database-design.md
-└── business-operations/
-└── operation-name/
-├── use-case.md
-└── page-definition.md
+outputs/5-software/
+└── {service-name}/                       # サービス（デプロイ単位）
+    └── {bc-name}/                        # ★ BCが設計単位（kebab-case）
+        │
+        ├── domain-language.md            # パラソルドメイン言語（SSOT）
+        ├── api-specification.md          # API仕様
+        ├── database-design.md            # DB設計（生成物）
+        │
+        ├── operations/                   # オペレーション群
+        │   └── {operation-name}/
+        │       ├── operation.md          # オペレーション定義
+        │       └── actor-usecases/       # Actor UseCase群
+        │           └── {auc-name}/       # Actor UseCase
+        │               ├── actor-usecase.md
+        │               ├── robustness.md
+        │               └── views/        # View群
+        │                   └── {view}.md
+        │
+        └── tests/                        # ★ テスト定義（設計側）
+            │
+            ├── _bc-release-criteria.yaml    # BCリリース基準
+            ├── shared/                      # BC共通（ドメインモデル）
+            │   └── unit-spec.yaml           # ← domain-language.mdから生成
+            │
+            └── {operation-name}/            # ★ オペレーション単位（イテレーション）
+                ├── _done-criteria.yaml      # オペレーション完了基準（DoD）
+                ├── api-spec.yaml            # ← operation.mdから生成
+                ├── ui-spec.yaml             # ← views/*.mdから生成
+                └── integration-spec.yaml    # ← actor-usecases/*.mdから生成
 ```
+
+**重要**:
+- BC名は `{bc-name}` 形式（kebab-case）。`{capability-name}-bc` 形式は使用しない。
+- **イテレーション単位**: オペレーション毎に設計→実装→テストを回す
+- **リリース単位**: BC全体（全オペレーション完了時）
 
 例：
 
 ```
-outputs/5-software/services/
-├── ProductCatalog/
-│   └── Core/
+outputs/5-software/
+├── product-service/                      # サービス名（kebab-case）
+│   └── product-catalog/                  # BC名（kebab-case）
 │       ├── domain-language.md
 │       ├── api-specification.md
 │       ├── database-design.md
-│       └── business-operations/
-│           ├── create-product/
-│           │   ├── use-case.md
-│           │   └── page-definition.md
-│           ├── search-products/
-│           │   ├── use-case.md
-│           │   └── page-definition.md
-│           └── manage-categories/
-│               ├── use-case.md
-│               └── page-definition.md
-├── Order/
-│   └── Management/
-│       ├── domain-language.md
-│       ├── api-specification.md
-│       ├── database-design.md
-│       └── business-operations/
-│           └── ...
+│       ├── operations/
+│       │   ├── create-product/           # イテレーション1
+│       │   │   ├── operation.md
+│       │   │   └── actor-usecases/
+│       │   │       └── auc-create-product/
+│       │   │           ├── actor-usecase.md
+│       │   │           ├── robustness.md
+│       │   │           └── views/
+│       │   │               └── create-product-form.md
+│       │   └── search-products/          # イテレーション2
+│       │       └── ...
+│       └── tests/
+│           ├── _bc-release-criteria.yaml # BCリリース判定
+│           ├── shared/                   # BC共通
+│           │   └── unit-spec.yaml
+│           ├── create-product/           # イテレーション1のテスト
+│           │   ├── _done-criteria.yaml
+│           │   ├── api-spec.yaml
+│           │   ├── ui-spec.yaml
+│           │   └── integration-spec.yaml
+│           └── search-products/          # イテレーション2のテスト
+│               └── ...
+│
+├── order-service/
+│   └── order-management/
+│       └── ...
 └── ...
 ```
+
+参照: [capability-bc-test-structure.md](./_software-design-reference/capability-bc-test-structure.md)
 
 ## 実行手順
 
@@ -833,17 +868,17 @@ $$ LANGUAGE plpgsql;
 
 ### ステップ4: ビジネスオペレーション
 
-各ビジネスオペレーションに対してUse CaseとUI定義を作成します。
+各ビジネスオペレーションに対してActor UseCaseとView定義を作成します。
 
-**成果物**: `business-operations/{operation-name}/use-case.md`, `page-definition.md`
+**成果物**: `operations/{operation-name}/actor-usecases/{auc-name}/actor-usecase.md`, `views/{view}.md`
 
-#### use-case.md の例
+#### actor-usecase.md の例
 
 ```yaml
-# Use Case: 製品作成
+# Actor UseCase: 製品作成
 
 ## 概要
-新しい製品をカタログに追加する
+新しい製品をカタログに追加する（単一ユーザの完結操作）
 
 ## アクター
 - Primary: 製品管理者
@@ -897,13 +932,13 @@ $$ LANGUAGE plpgsql;
 - セキュリティ: 製品管理者権限必須
 ```
 
-#### page-definition.md の例
+#### view.md の例
 
 ```yaml
-# Page: 製品作成画面
+# View: 製品作成画面
 
-## 画面ID
-create-product-page
+## View ID
+create-product-view
 
 ## URL
 /products/new
@@ -1036,7 +1071,7 @@ Response: 画像URL
 - ✅ domain-language.md
 - ✅ api-specification.md
 - ✅ database-design.md
-- ✅ business-operations/ (最低3オペレーション)
+- ✅ operations/ (最低3オペレーション、各Actor UseCase + View定義)
 
 ## 完了メッセージ
 
@@ -1060,10 +1095,10 @@ Response: 画像URL
 │   Indexes: 11
 │   Views: 1
 │   
-└── business-operations/
-├── create-product/ (Use Case + Page)
-├── search-products/ (Use Case + Page)
-└── manage-categories/ (Use Case + Page)
+└── operations/
+├── create-product/ (Actor UseCase + View)
+├── search-products/ (Actor UseCase + View)
+└── manage-categories/ (Actor UseCase + View)
 
 📊 ステータス確認:
 → `/parasol:status services`
@@ -1104,9 +1139,22 @@ Phase 4で定義されたサービス/BC:
 
 - **フレームワーク設計**: `parasol-v5/FRAMEWORK-DESIGN.md`
 - **consultingTool参照**: `/Users/hmoriya/Develop/github/github.com/hmoriya/consultingTool`
-- **テンプレート**: `parasol-v5/templates/phase5/`
-- `domain-language-template.md`
-- `api-specification-template.md`
-- `database-design-template.md`
-- `use-case-template.md`
-- `page-definition-template.md`
+
+### テンプレート（Mermaid非依存・解析エンジン対応）
+
+- **構造化MD形式仕様**: `.claude/commands/parasol/_software-design-reference/_templates/structured-md-format.md`
+  - パラソルドメイン言語の`@parasol:`マーカー形式
+  - YAML in Markdownによる解析可能な定義
+  - ドメインモデル・ER図・状態遷移図の自動生成
+
+- **テスト定義形式仕様**: `.claude/commands/parasol/_software-design-reference/_templates/test-definition-format.md`
+  - 5層テストピラミッド対応
+  - パラソルドメイン言語からのテスト自動生成
+  - 品質ゲート基準
+
+### パラソルドメイン言語ガイド
+
+- **パラソルドメイン言語ガイド**: `.claude/commands/parasol/_parasol-domain-language-guide.md`
+  - Single Source of Truthの原則
+  - 6セクション構成（Aggregates/ValueObjects/Events/Services/Repositories/Dictionary）
+  - AI駆動開発との連携

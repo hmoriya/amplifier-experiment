@@ -272,41 +272,50 @@ cd ~/somewhere-else
 
 ```
 outputs/4-architecture/
+├── capability-bc-mapping.md              # ★ CL2-BC対応表（必須）
+├── context-map.md                        # BC間関係（Context Map）
 ├── architecture-overview.md              # Phase 4全体概要
 │
-├── {vs-name}/                            # Value Stream毎のディレクトリ
-│   ├── overview.md                       # VS概要・サービス一覧
-│   ├── context-map.md                    # VS内Context Map
-│   └── services/                         # サービス毎のディレクトリ
-│       └── {service-name}/
-│           ├── service-definition.md     # サービス定義（API, イベント, データ等）
-│           └── bounded-contexts/         # このサービスに含まれるBC
-│               └── {bc-name}-bc.md → ../../../../../3-capabilities/.../  # シンボリックリンク
+├── services/                             # サービス毎のディレクトリ
+│   └── {service-name}/
+│       └── bounded-contexts.md           # サービス内BC一覧
 │
-└── cross-vs/                             # VS横断共通設計
-    ├── integration-patterns.md           # 統合パターン定義
-    └── decisions/                        # Architecture Decision Records
-        └── adr-*.md
+└── decisions/                            # Architecture Decision Records
+    └── adr-*.md
 ```
 
-### シンボリックリンクによるBC参照
+### capability-bc-mapping.md（必須）
 
-各サービスディレクトリ内の `bounded-contexts/` には、Phase 3で定義したBCファイルへの
-**シンボリックリンク**を配置します。
+**V5.1の重要な追加要件**: Phase 4 では CL2（Capability）から BC（Bounded Context）への
+対応関係を明示的に定義します。
 
-**メリット:**
-- BC定義はPhase 3に単一ソースとして維持
-- サービスディレクトリから含まれるBCが一目でわかる
-- BC定義を更新すれば自動的に反映
+```markdown
+# Capability-BC Mapping
+
+## 対応パターン
+
+| CL2 Capability | BC名 | 対応パターン | 理由 |
+|----------------|------|-------------|------|
+| fermentation-research | fermentation-bc | 1:1 | 単一責務で完結 |
+| quality-control, quality-assurance | quality-bc | N:1統合 | 関連性が高い |
+| large-capability | cap-a-bc, cap-b-bc | 1:N分割 | 複雑性が高い |
+
+## 対応パターンの選択基準
+
+- **1:1対応**: 小規模・単純なケース
+- **N:1統合**: 関連性の高いCapability群を1BCに統合
+- **1:N分割**: 複雑・大規模なCapabilityを複数BCに分割
+```
+
+参照: [capability-bc-test-structure.md](./_software-design-reference/capability-bc-test-structure.md)
 
 ### 成果物一覧
 
-1. **architecture-overview.md** - Phase 4全体の概要とナビゲーション
-2. **{vs-name}/overview.md** - VS毎のアーキテクチャ概要
-3. **{vs-name}/context-map.md** - VS内サービス間関係（Context Map）
-4. **{vs-name}/services/{service}/service-definition.md** - サービス定義
-5. **cross-vs/integration-patterns.md** - VS横断の統合パターン
-6. **cross-vs/decisions/adr-*.md** - Architecture Decision Records
+1. **capability-bc-mapping.md** - ★ CL2-BC対応表（必須・Phase 5への橋渡し）
+2. **context-map.md** - BC間関係（U/D, ACL, Partnership等）
+3. **architecture-overview.md** - Phase 4全体の概要とナビゲーション
+4. **services/{service}/bounded-contexts.md** - サービス内BC一覧
+5. **decisions/adr-*.md** - Architecture Decision Records
 
 ## 実行手順
 
