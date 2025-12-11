@@ -256,7 +256,7 @@ CL2/CL3実行時、AIは以下を自動実行：
 ```
 .claude/commands/parasol/_capability-knowledge/
 ├── README.md                    # 概要
-├── registry.yaml                # ケーパビリティ登録簿（一意性管理）
+├── registry.yaml                # ケーパビリティ登録簿（一意性保証）
 ├── patterns/                    # パターン集
 │   ├── decomposition-patterns.md # 分解パターン
 │   └── naming-patterns.md       # 命名パターン（→ _capability-naming-guide.md）
@@ -678,12 +678,12 @@ outputs/3-capabilities/{vs-dir}/cl1-domain-classification.md
 ## ドメイン分類サマリー
 
 ### Core Domains（競争優位の源泉）
-1. **product-catalog**: 製品情報管理の中核
-2. **order-management**: 注文処理の中核
+1. **product-catalog**: 製品情報キュレーションの中核
+2. **order-orchestration**: 注文処理の中核
 3. **customer-insights**: 顧客理解と体験最適化
 
 ### Supporting Domains（ビジネス支援）
-1. **inventory-management**: 在庫管理
+1. **inventory-optimization**: 在庫最適化
 2. **payment-processing**: 決済処理
 3. **customer-service**: カスタマーサービス
 4. **analytics**: 分析とレポーティング
@@ -696,7 +696,7 @@ outputs/3-capabilities/{vs-dir}/cl1-domain-classification.md
 
 ### Core Domain: product-catalog
 
-**説明**: 製品情報の管理、カタログ構成、価格設定の中核機能
+**説明**: 製品情報のキュレーション、カタログ構成、価格設定の中核機能
 
 **関連Value Stream**:
 - VS2: 製品開発
@@ -714,9 +714,9 @@ outputs/3-capabilities/{vs-dir}/cl1-domain-classification.md
 
 ---
 
-### Core Domain: order-management
+### Core Domain: order-orchestration
 
-**説明**: 注文受付から出荷までのオーダーライフサイクル管理
+**説明**: 注文受付から出荷までのオーダーライフサイクルオーケストレーション
 
 **関連Value Stream**:
 - VS4: 販売・流通
@@ -728,15 +728,15 @@ outputs/3-capabilities/{vs-dir}/cl1-domain-classification.md
 - カスタマイズ必要性: ★★★★☆ (4/5)
 
 **分類理由**:
-独自の注文処理フロー、複数チャネル統合、リアルタイム在庫引当などが競争優位を生む。複雑な状態管理とイベント駆動アーキテクチャが必要。
+独自の注文処理フロー、複数チャネル統合、リアルタイム在庫引当などが競争優位を生む。複雑な状態遷移とイベント駆動アーキテクチャが必要。
 
 **推奨アプローチ**: フルカスタム開発、イベントソーシング検討
 
 ---
 
-### Supporting Domain: inventory-management
+### Supporting Domain: inventory-optimization
 
-**説明**: 在庫レベル管理、入出庫処理、在庫最適化
+**説明**: 在庫レベル最適化、入出庫処理、需要予測連携
 
 **関連Value Stream**:
 - VS2: 製品開発（在庫計画）
@@ -1096,8 +1096,8 @@ Parasol V5 - Phase 3c: Business Operations Definition (CL3)
 - 業務ルール用語
 - 状態遷移用語
 
-### 5. 管理データ
-このケイパビリティが管理するデータ：
+### 5. 取扱データ
+このケイパビリティが扱うデータ：
 - マスタデータ
 - トランザクションデータ
 - 参照データ
@@ -1113,7 +1113,7 @@ outputs/3-capabilities/{vs-dir}/cl3-business-operations/{capability-name}-operat
 3. 各オペレーションの詳細
 4. 業務フロー図
 5. 業務用語集
-6. 管理データ一覧
+6. 取扱データ一覧
 7. 次のステップ（BC: 実装設計）
 
 ## 制約
@@ -1133,7 +1133,7 @@ outputs/3-capabilities/{vs-dir}/cl3-business-operations/{capability-name}-operat
 定義内容:
 - 業務オペレーション: X個
 - 業務用語: X個
-- 管理データ: X種類
+- 取扱データ: X種類
 
 成果物:
 outputs/3-capabilities/{vs-dir}/cl3-business-operations/{capability-name}-operations.md
@@ -1244,7 +1244,7 @@ outputs/3-capabilities/{vs-dir}/cl3-business-operations/{capability-name}-operat
 | 発酵力 | 酵母が糖を分解してアルコールを生成する能力 |
 | 香味成分 | 発酵過程で生成される風味に影響する化合物 |
 
-## 6. 管理データ
+## 6. 取扱データ
 
 ### マスタデータ
 - 酵母株マスタ（株ID、親株情報、特性）
@@ -1408,13 +1408,13 @@ outputs/3-capabilities/{vs-dir}/bounded-contexts/{capability-name}-bc.md
 ## 1. Bounded Context 概要
 
 ### 目的
-製品マスタデータの管理とカタログ構造の維持
+製品マスタデータのキュレーションとカタログ構造の維持
 
 ### 責務
 - 製品情報の登録・更新・削除
-- カテゴリ階層の管理
-- 製品属性の定義と管理
-- 製品メディア（画像・動画）の管理
+- カテゴリ階層の設計・維持
+- 製品属性の定義・更新
+- 製品メディア（画像・動画）のキュレーション
 - 多言語対応
 
 ### チーム境界
@@ -1434,7 +1434,7 @@ Core Domain（競争優位の源泉）
 ### 主要概念
 
 **Product（製品）**
-販売可能な商品アイテム。SKU単位で管理され、カテゴリに属する。
+販売可能な商品アイテム。SKU単位で識別され、カテゴリに属する。
 
 **Category（カテゴリ）**
 製品を分類する階層構造。最大5階層まで。例: Electronics > Computers > Laptops > Gaming Laptops
@@ -1443,7 +1443,7 @@ Core Domain（競争優位の源泉）
 製品の特性を表す名前-値ペア。カテゴリごとに定義可能（例: Laptop カテゴリなら "CPU", "RAM", "Storage"）
 
 **SKU (Stock Keeping Unit)**
-在庫管理の最小単位。製品バリエーション（色・サイズ等）ごとに一意。
+在庫識別の最小単位。製品バリエーション（色・サイズ等）ごとに一意。
 
 **ProductMedia（製品メディア）**
 製品に紐づく画像・動画・3Dモデル等のメディアファイル。
@@ -1908,7 +1908,7 @@ Value Streamsを先に定義してください:
 ⚠️ api-contract-designer からのフィードバック:
 
 "Bounded Context定義の集約設計が不明確です。
-特に Product 集約のライフサイクル管理が未定義です。
+特に Product 集約のライフサイクル遷移が未定義です。
 
 推奨アクション:
 1. zen-architectに Product のライフサイクル（Draft→Review→Published→Discontinued）を明確化するよう指示
