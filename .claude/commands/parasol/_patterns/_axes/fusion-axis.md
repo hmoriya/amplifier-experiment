@@ -218,6 +218,7 @@ Phase 4: 連携層の強化
 
 ## 参照
 
+- `_value-contribution-governance.md` - 軸パターン別価値貢献度ガバナンス
 - `multi-tier-vstr-axis.md` - 多段VStrパターン
 - `value-axis.md` - 価値軸パターン
 - `capability-axis.md` - ケイパビリティ統合型パターン

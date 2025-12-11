@@ -143,6 +143,7 @@ VS7: 業務改善・オペレーショナルエクセレンス
 
 ## 参照
 
+- `_value-contribution-governance.md` - 軸パターン別価値貢献度ガバナンス
 - `multi-tier-vstr-axis.md` - 多段VStrパターン
 - `fusion-axis.md` - フュージョン型パターン
 - `capability-axis.md` - ケイパビリティ統合型パターン
