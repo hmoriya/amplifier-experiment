@@ -6,6 +6,27 @@ This project uses a shared context file (`AGENTS.md`) for common project guideli
 
 This file is reserved for Claude Code-specific instructions.
 
+## CRITICAL: Git Commit Procedure
+
+**ALWAYS use the `/commit` command** when committing changes. This prevents ANSI escape sequences from corrupting commit messages.
+
+**Why**: The system has `cat` aliased to `bat --color always`, which injects ANSI color codes into file operations. The `/commit` command uses `printf` and `/bin/cat` to bypass this.
+
+**Never do this**:
+```bash
+git commit -m "message"           # May include ANSI codes
+git commit << 'EOF'               # HEREDOC goes through bat
+...
+EOF
+```
+
+**Always do this**:
+```
+/commit
+```
+
+See `.claude/commands/commit.md` for full details.
+
 # import the following files (using the `@` syntax):
 
 - @AGENTS.md
