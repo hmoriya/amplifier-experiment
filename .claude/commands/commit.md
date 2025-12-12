@@ -53,18 +53,29 @@ Or with options:
    git log --format="%s" -3      # Plain format, no decoration
    ```
 
-2. **Write commit message to a temp file first**, then commit with `-F`:
+2. **Write commit message to a temp file using `printf`** (NEVER use `cat` or HEREDOC):
    ```bash
-   # Write message to temp file (avoids HEREDOC issues)
-   echo "commit message here" > /tmp/commit_msg.txt
+   # Use printf to write message (bypasses cat/bat alias)
+   printf '%s\n' \
+     'feat(scope): subject line' \
+     '' \
+     '## Summary' \
+     '- Point 1' \
+     '' \
+     '🤖 Generated with [Amplifier](https://github.com/microsoft/amplifier)' \
+     '' \
+     'Co-Authored-By: Amplifier <...>' \
+     > /tmp/commit_msg.txt
+
+   # Commit with -F flag
    git commit -F /tmp/commit_msg.txt
    rm /tmp/commit_msg.txt
    ```
 
 3. **Verify after commit** (before any push):
    ```bash
-   # Check for control characters
-   git log -1 --format="%B" | cat -v | grep -E '\^\[' && echo "ERROR: ANSI detected!" || echo "OK: Clean message"
+   # Check for control characters (use /bin/cat to bypass bat alias)
+   git log -1 --format="%B" | /bin/cat -v | grep -E '\^\[' && echo "ERROR: ANSI detected!" || echo "OK: Clean message"
    ```
 
 4. **If ANSI detected**: Immediately fix with `git commit --amend -F /tmp/fixed_msg.txt`
