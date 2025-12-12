@@ -236,6 +236,7 @@ Phase 3: + パートナーVStr（2-3ヶ月）
 
 ## 参照
 
+- `_value-contribution-governance.md` - 軸パターン別価値貢献度ガバナンス
 - `value-axis.md` - 単一VStr（価値軸）パターン
 - `_value-methodology.md` - 価値方法論
 - `_parasol-overview.md` - 全体構成図

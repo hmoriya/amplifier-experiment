@@ -33,6 +33,32 @@ When creating git commit messages, always insert the following at the end of you
 Co-Authored-By: Amplifier <240397093+microsoft-amplifier@users.noreply.github.com>
 ```
 
+### CRITICAL: Prevent ANSI Escape Sequences in Commit Messages
+
+**Problem**: Tools like `bat`, `delta`, or colored git output can inject ANSI escape sequences (e.g., `\x1b[38;2;...`) into commit messages, causing them to appear garbled on GitHub.
+
+**Prevention Rules**:
+
+1. **Always use `--no-color` flag** when running git commands for reference:
+   ```bash
+   git log --oneline --no-color -3
+   git diff --no-color
+   ```
+
+2. **Use plain format for commit message style reference**:
+   ```bash
+   git log --format="%s" -3  # Subject only, no decoration
+   ```
+
+3. **Never pipe colored output into commit messages** - If using HEREDOC, ensure the content is plain text only
+
+4. **Verify commit message before pushing**:
+   ```bash
+   git log -1 --format="%B" | cat -v  # Shows control characters if present
+   ```
+
+**If ANSI sequences are detected**: Do NOT push. Use `git commit --amend` to fix the message first.
+
 ---
 
 ## Important: Consult DISCOVERIES.md

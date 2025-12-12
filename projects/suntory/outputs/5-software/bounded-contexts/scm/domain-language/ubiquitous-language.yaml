@@ -1,0 +1,1618 @@
+# Suntory SCM Domain - Ubiquitous Language Definition
+# サントリーグループSCMドメイン ユビキタス言語定義
+
+domain: SCM
+version: "1.0"
+last_updated: "2025-12-12"
+organization:
+  name: サントリーグループ
+  revenue: 3.08兆円
+  subsidiaries: 265社
+  characteristics:
+    - 自販機66万台（飲料事業）
+    - 酒類の長期熟成（ウイスキー10年〜）
+    - 天然水の森水源地管理
+    - 温度帯管理（常温/冷蔵/冷凍）
+    - 酒税法対応
+
+# ============================================================
+# Shared Kernel: BC間共通用語
+# ============================================================
+shared_kernel:
+  terms:
+    - term_ja: 品目
+      term_en: Item
+      definition: 調達・製造・販売の対象となる物品の総称。原材料、半製品、完成品を含む
+      examples:
+        - 原材料品目（モルト、ホップ）
+        - 包材品目（PETボトル、アルミ缶）
+        - 完成品品目（ザ・プレミアム・モルツ350ml缶）
+      related_terms: [SKU, 製品マスタ]
+
+    - term_ja: SKU
+      term_en: StockKeepingUnit
+      definition: 在庫管理の最小単位。同一品目でも容量・包装形態が異なれば別SKU
+      examples:
+        - 天然水550mlペット
+        - 天然水2Lペット
+        - プレモル350ml缶6P
+      related_terms: [品目, JAN]
+
+    - term_ja: 拠点
+      term_en: Location
+      definition: 在庫を保有・移動させる場所。工場、倉庫、配送センターを含む
+      examples:
+        - 武蔵野ブルワリー
+        - 榛名工場
+        - 東京配送センター
+      related_terms: [倉庫, 工場]
+
+    - term_ja: リードタイム
+      term_en: LeadTime
+      definition: 発注から納品までに要する期間。調達LT、製造LT、配送LTがある
+      examples:
+        - 輸入モルト調達LT: 90日
+        - 充填製造LT: 3日
+        - 幹線配送LT: 2日
+      related_terms: [納期, 発注点]
+
+    - term_ja: ロット
+      term_en: Lot
+      definition: 同一条件で製造・調達された品目の集合。トレーサビリティの単位
+      examples:
+        - 製造ロット（日付＋ライン＋連番）
+        - 調達ロット（入荷日＋仕入先＋PO番号）
+      related_terms: [トレーサビリティ, 賞味期限]
+
+    - term_ja: 温度帯
+      term_en: TemperatureZone
+      definition: 品質保持に必要な保管・輸送温度区分
+      examples:
+        - 常温（15-25℃）
+        - 冷蔵（2-8℃）
+        - 冷凍（-18℃以下）
+      related_terms: [コールドチェーン, 品質管理]
+
+    - term_ja: 酒税区分
+      term_en: LiquorTaxCategory
+      definition: 酒税法に基づく酒類の分類。税率計算と蔵出し管理に必須
+      examples:
+        - ビール（麦芽比率50%以上）
+        - 発泡酒（麦芽比率50%未満）
+        - ウイスキー（単式蒸留）
+      related_terms: [蔵出し, 酒税申告]
+
+    - term_ja: 蔵出し
+      term_en: TaxableRemoval
+      definition: 酒類を製造場（蔵）から搬出すること。酒税課税の起点
+      examples:
+        - ビール蔵出し数量
+        - 月次蔵出し実績
+      related_terms: [酒税区分, 製成数量]
+
+  entities:
+    - name: Item
+      description: 品目マスタ。全BCで参照される品目情報
+      attributes:
+        - name: item_id
+          type: UUID
+          description: 品目ID
+        - name: item_code
+          type: String
+          description: 品目コード（社内統一コード）
+        - name: item_name_ja
+          type: String
+          description: 品目名（日本語）
+        - name: item_name_en
+          type: String
+          description: 品目名（英語）
+        - name: item_type
+          type: Enum
+          description: 品目種別（RAW_MATERIAL/PACKAGING/WIP/FINISHED_GOODS）
+        - name: business_unit
+          type: Enum
+          description: 事業部（BEVERAGE/SPIRITS/BEER/WINE/HEALTH）
+        - name: temperature_zone
+          type: Enum
+          description: 温度帯（AMBIENT/CHILLED/FROZEN）
+        - name: liquor_tax_category
+          type: Enum
+          description: 酒税区分（該当する場合）
+        - name: shelf_life_days
+          type: Integer
+          description: 賞味期限（日数）
+
+    - name: Location
+      description: 拠点マスタ。工場・倉庫・配送センターの情報
+      attributes:
+        - name: location_id
+          type: UUID
+          description: 拠点ID
+        - name: location_code
+          type: String
+          description: 拠点コード
+        - name: location_name
+          type: String
+          description: 拠点名
+        - name: location_type
+          type: Enum
+          description: 拠点種別（FACTORY/WAREHOUSE/DC/VENDOR）
+        - name: address
+          type: String
+          description: 住所
+        - name: geo_location
+          type: GeoJSON
+          description: 緯度経度
+        - name: temperature_capabilities
+          type: Array[Enum]
+          description: 対応可能温度帯
+        - name: business_units
+          type: Array[Enum]
+          description: 取扱事業部
+
+  value_objects:
+    - name: Quantity
+      description: 数量を表す値オブジェクト。単位と値のペア
+      attributes:
+        - name: value
+          type: Decimal
+          description: 数値
+        - name: unit
+          type: Enum
+          description: 単位（PIECE/CASE/PALLET/KG/L/KL）
+
+    - name: Money
+      description: 金額を表す値オブジェクト
+      attributes:
+        - name: amount
+          type: Decimal
+          description: 金額
+        - name: currency
+          type: String
+          description: 通貨コード（ISO 4217）
+
+    - name: DateRange
+      description: 期間を表す値オブジェクト
+      attributes:
+        - name: start_date
+          type: Date
+          description: 開始日
+        - name: end_date
+          type: Date
+          description: 終了日
+
+# ============================================================
+# BC-SCM-001: Strategic Procurement（戦略調達）
+# ============================================================
+bounded_contexts:
+  - id: BC-SCM-001
+    name: Strategic Procurement
+    name_ja: 戦略調達
+    description: サプライヤ戦略、カテゴリ管理、長期契約交渉を担当
+
+    ubiquitous_language:
+      terms:
+        - term_ja: サプライヤ
+          term_en: Supplier
+          definition: 原材料・包材・サービスを供給する取引先企業
+          examples:
+            - モルトサプライヤ（国内/輸入）
+            - PETプリフォームサプライヤ
+            - 物流サービスサプライヤ
+          related_terms: [取引先, ベンダー]
+
+        - term_ja: カテゴリ
+          term_en: Category
+          definition: 類似品目をグループ化した調達管理単位
+          examples:
+            - 穀物カテゴリ（モルト、ホップ、米）
+            - 包材カテゴリ（PET、缶、ラベル）
+            - MROカテゴリ（設備保守部品）
+          related_terms: [品目群, 調達分類]
+
+        - term_ja: スペンド分析
+          term_en: SpendAnalysis
+          definition: 調達支出を分析し、コスト削減・最適化機会を特定する活動
+          examples:
+            - カテゴリ別スペンド
+            - サプライヤ別スペンド
+            - 年間支出トレンド
+          related_terms: [コスト分析, ABC分析]
+
+        - term_ja: サプライヤ評価
+          term_en: SupplierEvaluation
+          definition: サプライヤの品質・納期・コスト・ESGを評価するプロセス
+          examples:
+            - QCD評価（四半期）
+            - ESGスコアカード（年次）
+            - 監査結果
+          related_terms: [サプライヤ格付け, ベンダー評価]
+
+        - term_ja: 戦略契約
+          term_en: StrategicContract
+          definition: 中長期の価格・数量を固定する基本契約。年次見直し
+          examples:
+            - モルト年間契約
+            - 輸送基本契約
+            - 共同開発契約
+          related_terms: [基本契約, フレームワーク契約]
+
+        - term_ja: ソーシング
+          term_en: Sourcing
+          definition: 最適なサプライヤを選定するプロセス
+          examples:
+            - 競争入札
+            - RFP/RFQ
+            - リバースオークション
+          related_terms: [入札, 選定]
+
+        - term_ja: サプライヤリスク
+          term_en: SupplierRisk
+          definition: サプライヤに起因する供給途絶・品質問題のリスク
+          examples:
+            - 財務リスク（倒産）
+            - 地政学リスク（輸入制限）
+            - 品質リスク（不良発生）
+            - BCP観点での単一ソースリスク
+          related_terms: [リスク評価, デュアルソース]
+
+        - term_ja: 水源地管理
+          term_en: WaterSourceManagement
+          definition: 天然水の森等、水源地の保全・調達に関する戦略的管理
+          examples:
+            - 白州水源
+            - 阿蘇水源
+            - 奥大山水源
+          related_terms: [水資源, 涵養]
+
+      entities:
+        - name: Supplier
+          description: サプライヤ情報を管理するエンティティ
+          attributes:
+            - name: supplier_id
+              type: UUID
+              description: サプライヤID
+            - name: supplier_code
+              type: String
+              description: サプライヤコード
+            - name: company_name
+              type: String
+              description: 会社名
+            - name: country
+              type: String
+              description: 国コード（ISO 3166-1）
+            - name: categories
+              type: Array[String]
+              description: 取扱カテゴリ
+            - name: tier
+              type: Enum
+              description: ティア（STRATEGIC/PREFERRED/APPROVED/RESTRICTED）
+            - name: status
+              type: Enum
+              description: ステータス（ACTIVE/INACTIVE/BLOCKED）
+            - name: esg_score
+              type: Decimal
+              description: ESGスコア（0-100）
+            - name: contract_info
+              type: JSON
+              description: 契約情報
+
+        - name: Category
+          description: 調達カテゴリを管理するエンティティ
+          attributes:
+            - name: category_id
+              type: UUID
+              description: カテゴリID
+            - name: category_code
+              type: String
+              description: カテゴリコード
+            - name: category_name
+              type: String
+              description: カテゴリ名
+            - name: parent_category_id
+              type: UUID
+              description: 親カテゴリID
+            - name: strategy_type
+              type: Enum
+              description: 戦略タイプ（LEVERAGE/STRATEGIC/BOTTLENECK/ROUTINE）
+            - name: annual_spend
+              type: Money
+              description: 年間支出額
+            - name: supplier_count
+              type: Integer
+              description: サプライヤ数
+
+        - name: StrategicContract
+          description: 戦略契約を管理するエンティティ
+          attributes:
+            - name: contract_id
+              type: UUID
+              description: 契約ID
+            - name: contract_number
+              type: String
+              description: 契約番号
+            - name: supplier_id
+              type: UUID
+              description: サプライヤID（FK）
+            - name: category_id
+              type: UUID
+              description: カテゴリID（FK）
+            - name: contract_type
+              type: Enum
+              description: 契約種別（FRAMEWORK/VOLUME/PRICING）
+            - name: effective_from
+              type: Date
+              description: 有効開始日
+            - name: effective_to
+              type: Date
+              description: 有効終了日
+            - name: terms
+              type: JSON
+              description: 契約条件（価格、数量、品質基準等）
+            - name: status
+              type: Enum
+              description: ステータス（DRAFT/ACTIVE/EXPIRED/TERMINATED）
+
+      value_objects:
+        - name: SupplierScore
+          description: サプライヤ評価スコア
+          attributes:
+            - name: quality_score
+              type: Decimal
+              description: 品質スコア（0-100）
+            - name: delivery_score
+              type: Decimal
+              description: 納期スコア（0-100）
+            - name: cost_score
+              type: Decimal
+              description: コストスコア（0-100）
+            - name: esg_score
+              type: Decimal
+              description: ESGスコア（0-100）
+            - name: overall_score
+              type: Decimal
+              description: 総合スコア（0-100）
+            - name: evaluation_date
+              type: Date
+              description: 評価日
+
+      aggregates:
+        - name: SupplierAggregate
+          root: Supplier
+          entities:
+            - SupplierContact
+            - SupplierCertification
+            - SupplierEvaluationHistory
+          description: サプライヤとその関連情報を一貫して管理
+
+# ============================================================
+# BC-SCM-002: Demand Planning（需給計画）
+# ============================================================
+  - id: BC-SCM-002
+    name: Demand Planning
+    name_ja: 需給計画
+    description: 需要予測、供給計画、S&OP（Sales & Operations Planning）を担当
+
+    ubiquitous_language:
+      terms:
+        - term_ja: 需要予測
+          term_en: DemandForecast
+          definition: 将来の販売数量を統計的手法・AI等で予測すること
+          examples:
+            - 週次需要予測
+            - 季節需要予測（夏季ビール需要）
+            - 新商品需要予測
+          related_terms: [販売計画, 予測精度]
+
+        - term_ja: 供給計画
+          term_en: SupplyPlan
+          definition: 需要予測に基づき、生産・調達の計画を策定すること
+          examples:
+            - 月次供給計画
+            - 週次製造計画
+            - 原材料所要計画
+          related_terms: [生産計画, MRP]
+
+        - term_ja: S&OP
+          term_en: SalesAndOperationsPlanning
+          definition: 販売計画と供給計画を整合させる経営プロセス
+          examples:
+            - 月次S&OP会議
+            - ローリング18ヶ月計画
+            - 需給ギャップ解消
+          related_terms: [IBP, 需給調整]
+
+        - term_ja: 需給バランス
+          term_en: SupplyDemandBalance
+          definition: 供給能力と需要の均衡状態
+          examples:
+            - 需給ギャップ（供給不足/過剰）
+            - 在庫過剰アラート
+            - 欠品リスク
+          related_terms: [需給調整, バッファ在庫]
+
+        - term_ja: 計画バケット
+          term_en: PlanningBucket
+          definition: 計画の時間単位（日次/週次/月次）
+          examples:
+            - 週次バケット（製造計画）
+            - 月次バケット（S&OP）
+            - 日次バケット（配送計画）
+          related_terms: [計画期間, タイムフェンス]
+
+        - term_ja: 予測精度
+          term_en: ForecastAccuracy
+          definition: 需要予測の正確さを測る指標（MAPE等）
+          examples:
+            - MAPE 15%以下
+            - バイアス（過大/過小予測傾向）
+            - SKU別精度
+          related_terms: [予測誤差, 精度改善]
+
+        - term_ja: 季節変動
+          term_en: Seasonality
+          definition: 季節に応じた需要の変動パターン
+          examples:
+            - 夏季ビール需要増（7-8月）
+            - 年末年始ウイスキー需要
+            - 花見シーズン缶チューハイ
+          related_terms: [需要パターン, 季節指数]
+
+        - term_ja: 熟成在庫計画
+          term_en: AgingInventoryPlan
+          definition: ウイスキー等の長期熟成品の在庫計画（10-20年先）
+          examples:
+            - 10年熟成原酒計画
+            - 樽在庫ポートフォリオ
+            - ヴィンテージ計画
+          related_terms: [長期計画, 樽管理]
+
+      entities:
+        - name: DemandForecast
+          description: 需要予測データを管理するエンティティ
+          attributes:
+            - name: forecast_id
+              type: UUID
+              description: 予測ID
+            - name: item_id
+              type: UUID
+              description: 品目ID（FK）
+            - name: location_id
+              type: UUID
+              description: 拠点ID（FK）
+            - name: forecast_date
+              type: Date
+              description: 予測対象日
+            - name: bucket_type
+              type: Enum
+              description: バケット種別（DAILY/WEEKLY/MONTHLY）
+            - name: forecast_quantity
+              type: Quantity
+              description: 予測数量
+            - name: forecast_type
+              type: Enum
+              description: 予測種別（STATISTICAL/JUDGMENTAL/COMBINED）
+            - name: confidence_level
+              type: Decimal
+              description: 信頼度（0-1）
+            - name: version
+              type: Integer
+              description: 予測バージョン
+            - name: created_at
+              type: DateTime
+              description: 作成日時
+
+        - name: SupplyPlan
+          description: 供給計画を管理するエンティティ
+          attributes:
+            - name: plan_id
+              type: UUID
+              description: 計画ID
+            - name: item_id
+              type: UUID
+              description: 品目ID（FK）
+            - name: location_id
+              type: UUID
+              description: 拠点ID（FK）
+            - name: plan_date
+              type: Date
+              description: 計画対象日
+            - name: bucket_type
+              type: Enum
+              description: バケット種別
+            - name: planned_production
+              type: Quantity
+              description: 計画生産量
+            - name: planned_receipt
+              type: Quantity
+              description: 計画入荷量
+            - name: planned_ending_inventory
+              type: Quantity
+              description: 計画期末在庫
+            - name: status
+              type: Enum
+              description: ステータス（DRAFT/CONFIRMED/FROZEN）
+
+        - name: SOPCycle
+          description: S&OPサイクルを管理するエンティティ
+          attributes:
+            - name: cycle_id
+              type: UUID
+              description: サイクルID
+            - name: cycle_month
+              type: String
+              description: 対象月（YYYY-MM）
+            - name: demand_review_date
+              type: Date
+              description: 需要レビュー日
+            - name: supply_review_date
+              type: Date
+              description: 供給レビュー日
+            - name: pre_sop_date
+              type: Date
+              description: Pre-S&OP日
+            - name: executive_sop_date
+              type: Date
+              description: Executive S&OP日
+            - name: status
+              type: Enum
+              description: ステータス（IN_PROGRESS/COMPLETED）
+            - name: decisions
+              type: JSON
+              description: 意思決定事項
+
+      value_objects:
+        - name: ForecastMetrics
+          description: 予測精度指標
+          attributes:
+            - name: mape
+              type: Decimal
+              description: MAPE（Mean Absolute Percentage Error）
+            - name: bias
+              type: Decimal
+              description: バイアス（予測偏り）
+            - name: forecast_value_add
+              type: Decimal
+              description: FVA（予測付加価値）
+            - name: measurement_period
+              type: DateRange
+              description: 測定期間
+
+      aggregates:
+        - name: DemandPlanAggregate
+          root: DemandForecast
+          entities:
+            - ForecastAdjustment
+            - ForecastComment
+          description: 需要予測とその調整情報を一貫して管理
+
+# ============================================================
+# BC-SCM-003: Purchase Execution（購買実行）
+# ============================================================
+  - id: BC-SCM-003
+    name: Purchase Execution
+    name_ja: 購買実行
+    description: 発注処理、入荷検収、請求処理を担当
+
+    ubiquitous_language:
+      terms:
+        - term_ja: 購買依頼
+          term_en: PurchaseRequisition
+          definition: 品目の購入を依頼する社内ドキュメント
+          examples:
+            - 原材料購買依頼
+            - MRO購買依頼
+            - サービス購買依頼
+          related_terms: [依頼書, PR]
+
+        - term_ja: 発注書
+          term_en: PurchaseOrder
+          definition: サプライヤへの正式な注文書
+          examples:
+            - スポット発注
+            - 分納発注
+            - 包括発注からの分割
+          related_terms: [注文書, PO]
+
+        - term_ja: 入荷
+          term_en: GoodsReceipt
+          definition: 発注品目が拠点に到着すること
+          examples:
+            - 工場入荷
+            - 倉庫入荷
+            - 直送入荷
+          related_terms: [検収, GR]
+
+        - term_ja: 検収
+          term_en: GoodsInspection
+          definition: 入荷品の数量・品質を確認するプロセス
+          examples:
+            - 数量検収
+            - 品質検収
+            - 外観検査
+          related_terms: [受入検査, 合格判定]
+
+        - term_ja: 三点照合
+          term_en: ThreeWayMatching
+          definition: 発注書・入荷・請求書の3文書を照合するプロセス
+          examples:
+            - PO-GR-Invoice照合
+            - 金額差異チェック
+            - 数量差異チェック
+          related_terms: [照合, マッチング]
+
+        - term_ja: 酒税管理
+          term_en: LiquorTaxManagement
+          definition: 酒税法に基づく原材料・製品の受払管理
+          examples:
+            - 原料受入時の酒税申告
+            - 蔵出し時の酒税計算
+            - 月次酒税申告
+          related_terms: [酒税申告, 蔵出し]
+
+        - term_ja: 輸入通関
+          term_en: ImportCustomsClearance
+          definition: 輸入品目の通関手続き
+          examples:
+            - モルト輸入通関
+            - ワイン輸入通関
+            - 関税計算
+          related_terms: [通関, 関税]
+
+      entities:
+        - name: PurchaseRequisition
+          description: 購買依頼を管理するエンティティ
+          attributes:
+            - name: pr_id
+              type: UUID
+              description: 購買依頼ID
+            - name: pr_number
+              type: String
+              description: 購買依頼番号
+            - name: requester_id
+              type: UUID
+              description: 依頼者ID
+            - name: department_id
+              type: UUID
+              description: 部門ID
+            - name: item_id
+              type: UUID
+              description: 品目ID（FK）
+            - name: quantity
+              type: Quantity
+              description: 依頼数量
+            - name: required_date
+              type: Date
+              description: 希望納期
+            - name: delivery_location_id
+              type: UUID
+              description: 納入先拠点ID（FK）
+            - name: budget_code
+              type: String
+              description: 予算コード
+            - name: status
+              type: Enum
+              description: ステータス（DRAFT/PENDING/APPROVED/REJECTED/CONVERTED）
+            - name: approval_info
+              type: JSON
+              description: 承認情報
+
+        - name: PurchaseOrder
+          description: 発注書を管理するエンティティ
+          attributes:
+            - name: po_id
+              type: UUID
+              description: 発注ID
+            - name: po_number
+              type: String
+              description: 発注番号
+            - name: supplier_id
+              type: UUID
+              description: サプライヤID（FK）
+            - name: contract_id
+              type: UUID
+              description: 契約ID（FK、該当する場合）
+            - name: order_date
+              type: Date
+              description: 発注日
+            - name: delivery_date
+              type: Date
+              description: 納期
+            - name: delivery_location_id
+              type: UUID
+              description: 納入先拠点ID（FK）
+            - name: lines
+              type: Array[POLine]
+              description: 発注明細
+            - name: total_amount
+              type: Money
+              description: 合計金額
+            - name: currency
+              type: String
+              description: 通貨
+            - name: incoterms
+              type: String
+              description: インコタームズ
+            - name: status
+              type: Enum
+              description: ステータス（DRAFT/SENT/ACKNOWLEDGED/PARTIAL/COMPLETE/CANCELLED）
+
+        - name: GoodsReceipt
+          description: 入荷情報を管理するエンティティ
+          attributes:
+            - name: gr_id
+              type: UUID
+              description: 入荷ID
+            - name: gr_number
+              type: String
+              description: 入荷番号
+            - name: po_id
+              type: UUID
+              description: 発注ID（FK）
+            - name: receipt_date
+              type: DateTime
+              description: 入荷日時
+            - name: location_id
+              type: UUID
+              description: 入荷拠点ID（FK）
+            - name: lines
+              type: Array[GRLine]
+              description: 入荷明細
+            - name: inspection_status
+              type: Enum
+              description: 検収ステータス（PENDING/PASSED/FAILED/PARTIAL）
+            - name: lot_numbers
+              type: Array[String]
+              description: ロット番号
+            - name: temperature_log
+              type: JSON
+              description: 温度記録（温度管理品の場合）
+
+      value_objects:
+        - name: POLine
+          description: 発注明細行
+          attributes:
+            - name: line_number
+              type: Integer
+              description: 明細番号
+            - name: item_id
+              type: UUID
+              description: 品目ID
+            - name: quantity
+              type: Quantity
+              description: 発注数量
+            - name: unit_price
+              type: Money
+              description: 単価
+            - name: amount
+              type: Money
+              description: 金額
+
+        - name: GRLine
+          description: 入荷明細行
+          attributes:
+            - name: line_number
+              type: Integer
+              description: 明細番号
+            - name: po_line_number
+              type: Integer
+              description: 対応PO明細番号
+            - name: item_id
+              type: UUID
+              description: 品目ID
+            - name: received_quantity
+              type: Quantity
+              description: 入荷数量
+            - name: accepted_quantity
+              type: Quantity
+              description: 検収合格数量
+            - name: rejected_quantity
+              type: Quantity
+              description: 検収不合格数量
+
+      aggregates:
+        - name: PurchaseOrderAggregate
+          root: PurchaseOrder
+          entities:
+            - POLine
+            - POStatusHistory
+          description: 発注書とその明細・履歴を一貫して管理
+
+# ============================================================
+# BC-SCM-004: Logistics Operations（物流オペレーション）
+# ============================================================
+  - id: BC-SCM-004
+    name: Logistics Operations
+    name_ja: 物流オペレーション
+    description: 配送計画、輸送管理、倉庫作業を担当
+
+    ubiquitous_language:
+      terms:
+        - term_ja: 出荷指示
+          term_en: ShipmentOrder
+          definition: 倉庫から出荷を指示するドキュメント
+          examples:
+            - 販売出荷指示
+            - 工場間移動出荷
+            - 返品出荷
+          related_terms: [出荷, SO]
+
+        - term_ja: 配送計画
+          term_en: DeliveryPlan
+          definition: 配送先・ルート・車両を計画すること
+          examples:
+            - ルート配送計画
+            - 幹線輸送計画
+            - 自販機補充計画
+          related_terms: [配車計画, ルーティング]
+
+        - term_ja: 自販機オペレーション
+          term_en: VendingMachineOperation
+          definition: 66万台の自販機への補充・メンテナンス業務
+          examples:
+            - 補充ルート最適化
+            - 欠品予測
+            - 売れ筋分析
+          related_terms: [自販機, VM]
+
+        - term_ja: コールドチェーン
+          term_en: ColdChain
+          definition: 低温品の一貫した温度管理輸送体制
+          examples:
+            - チルド配送
+            - 冷凍輸送
+            - 温度逸脱管理
+          related_terms: [温度管理, 保冷]
+
+        - term_ja: 輸送モード
+          term_en: TransportMode
+          definition: 輸送手段の種類
+          examples:
+            - トラック（幹線/ルート）
+            - 鉄道（JRコンテナ）
+            - 船舶（フェリー）
+          related_terms: [モーダルシフト, 輸送手段]
+
+        - term_ja: 積載効率
+          term_en: LoadingEfficiency
+          definition: 車両・コンテナの容積利用率
+          examples:
+            - パレット積載率
+            - 混載効率
+            - ケース積載数
+          related_terms: [積載率, 容積効率]
+
+        - term_ja: 共同配送
+          term_en: JointDelivery
+          definition: 複数荷主での配送共同化
+          examples:
+            - 競合他社との共配
+            - エリア共配
+            - 帰り便活用
+          related_terms: [共配, ミルクラン]
+
+        - term_ja: 倉庫作業
+          term_en: WarehouseOperation
+          definition: 入庫・保管・ピッキング・出庫の一連の作業
+          examples:
+            - 入庫検品
+            - ロケーション管理
+            - ピッキング
+            - 出荷検品
+          related_terms: [WMS, 倉庫管理]
+
+      entities:
+        - name: ShipmentOrder
+          description: 出荷指示を管理するエンティティ
+          attributes:
+            - name: so_id
+              type: UUID
+              description: 出荷指示ID
+            - name: so_number
+              type: String
+              description: 出荷指示番号
+            - name: order_type
+              type: Enum
+              description: 指示種別（SALES/TRANSFER/RETURN）
+            - name: source_location_id
+              type: UUID
+              description: 出荷元拠点ID（FK）
+            - name: destination_location_id
+              type: UUID
+              description: 届け先拠点ID（FK）
+            - name: requested_delivery_date
+              type: Date
+              description: 希望納品日
+            - name: lines
+              type: Array[SOLine]
+              description: 出荷明細
+            - name: priority
+              type: Enum
+              description: 優先度（NORMAL/HIGH/URGENT）
+            - name: temperature_requirement
+              type: Enum
+              description: 温度要件
+            - name: status
+              type: Enum
+              description: ステータス（PENDING/ALLOCATED/PICKED/SHIPPED/DELIVERED）
+
+        - name: DeliveryPlan
+          description: 配送計画を管理するエンティティ
+          attributes:
+            - name: plan_id
+              type: UUID
+              description: 計画ID
+            - name: plan_date
+              type: Date
+              description: 配送日
+            - name: depot_id
+              type: UUID
+              description: 出発拠点ID（FK）
+            - name: routes
+              type: Array[Route]
+              description: ルート情報
+            - name: total_shipments
+              type: Integer
+              description: 総出荷件数
+            - name: total_volume
+              type: Decimal
+              description: 総容積
+            - name: total_weight
+              type: Decimal
+              description: 総重量
+            - name: status
+              type: Enum
+              description: ステータス（DRAFT/CONFIRMED/IN_PROGRESS/COMPLETED）
+
+        - name: VendingMachineRoute
+          description: 自販機補充ルートを管理するエンティティ
+          attributes:
+            - name: route_id
+              type: UUID
+              description: ルートID
+            - name: route_code
+              type: String
+              description: ルートコード
+            - name: depot_id
+              type: UUID
+              description: 担当拠点ID（FK）
+            - name: driver_id
+              type: UUID
+              description: 担当ドライバーID
+            - name: machines
+              type: Array[VMStop]
+              description: 訪問自販機リスト
+            - name: estimated_duration
+              type: Integer
+              description: 予定所要時間（分）
+            - name: frequency
+              type: Enum
+              description: 訪問頻度（DAILY/WEEKLY/BIWEEKLY）
+            - name: status
+              type: Enum
+              description: ステータス
+
+      value_objects:
+        - name: Route
+          description: 配送ルート情報
+          attributes:
+            - name: route_number
+              type: Integer
+              description: ルート番号
+            - name: vehicle_id
+              type: UUID
+              description: 車両ID
+            - name: driver_id
+              type: UUID
+              description: ドライバーID
+            - name: stops
+              type: Array[DeliveryStop]
+              description: 配送先リスト
+            - name: estimated_distance
+              type: Decimal
+              description: 予定走行距離（km）
+            - name: estimated_duration
+              type: Integer
+              description: 予定所要時間（分）
+
+        - name: DeliveryStop
+          description: 配送停車地点
+          attributes:
+            - name: sequence
+              type: Integer
+              description: 順序
+            - name: location_id
+              type: UUID
+              description: 配送先ID
+            - name: shipment_ids
+              type: Array[UUID]
+              description: 出荷指示IDリスト
+            - name: estimated_arrival
+              type: DateTime
+              description: 予定到着時刻
+            - name: time_window
+              type: TimeWindow
+              description: 配送可能時間帯
+
+      aggregates:
+        - name: DeliveryPlanAggregate
+          root: DeliveryPlan
+          entities:
+            - Route
+            - DeliveryStop
+          description: 配送計画とルート・停車地点を一貫して管理
+
+# ============================================================
+# BC-SCM-005: Inventory Control（在庫管理）
+# ============================================================
+  - id: BC-SCM-005
+    name: Inventory Control
+    name_ja: 在庫管理
+    description: 在庫数量管理、棚卸、在庫評価を担当
+
+    ubiquitous_language:
+      terms:
+        - term_ja: 在庫残高
+          term_en: InventoryBalance
+          definition: 特定時点での品目別・拠点別の在庫数量
+          examples:
+            - 理論在庫
+            - 実地在庫
+            - 引当可能在庫
+          related_terms: [在庫数, ストック]
+
+        - term_ja: 入出庫
+          term_en: InventoryTransaction
+          definition: 在庫の増減を伴う取引
+          examples:
+            - 製造入庫
+            - 購買入庫
+            - 出荷出庫
+            - 廃棄出庫
+          related_terms: [入庫, 出庫, 在庫移動]
+
+        - term_ja: 引当
+          term_en: Allocation
+          definition: 在庫を特定の需要に紐づけて確保すること
+          examples:
+            - 出荷引当
+            - 製造引当
+            - 予約引当
+          related_terms: [リザーブ, 確保]
+
+        - term_ja: ロット管理
+          term_en: LotManagement
+          definition: ロット単位での在庫追跡・管理
+          examples:
+            - FIFO（先入先出）
+            - FEFO（先期限先出）
+            - ロット指定出庫
+          related_terms: [トレーサビリティ, バッチ管理]
+
+        - term_ja: 棚卸
+          term_en: PhysicalInventory
+          definition: 実地で在庫数量を確認する作業
+          examples:
+            - 年次棚卸
+            - 循環棚卸
+            - スポット棚卸
+          related_terms: [実地棚卸, 在庫差異]
+
+        - term_ja: 在庫評価
+          term_en: InventoryValuation
+          definition: 在庫の金額価値を算定すること
+          examples:
+            - 移動平均法
+            - 総平均法
+            - 標準原価法
+          related_terms: [棚卸資産評価, 原価計算]
+
+        - term_ja: 賞味期限管理
+          term_en: ShelfLifeManagement
+          definition: 賞味期限に基づく在庫管理
+          examples:
+            - 期限切れアラート
+            - 出荷可能期限（1/3ルール）
+            - 廃棄判定
+          related_terms: [FEFO, 期限管理]
+
+        - term_ja: 熟成管理
+          term_en: AgingManagement
+          definition: ウイスキー等の長期熟成品の在庫管理
+          examples:
+            - 樽在庫管理
+            - 熟成年数トラッキング
+            - エンジェルズシェア計算
+          related_terms: [樽管理, 原酒在庫]
+
+        - term_ja: 酒税在庫
+          term_en: LiquorTaxInventory
+          definition: 酒税法に基づく酒類の受払管理
+          examples:
+            - 製成数量
+            - 蔵出し数量
+            - 期末在庫数量
+          related_terms: [酒税申告, 蔵帳簿]
+
+      entities:
+        - name: InventoryBalance
+          description: 在庫残高を管理するエンティティ
+          attributes:
+            - name: balance_id
+              type: UUID
+              description: 残高ID
+            - name: item_id
+              type: UUID
+              description: 品目ID（FK）
+            - name: location_id
+              type: UUID
+              description: 拠点ID（FK）
+            - name: lot_number
+              type: String
+              description: ロット番号
+            - name: on_hand_quantity
+              type: Quantity
+              description: 手持在庫数量
+            - name: allocated_quantity
+              type: Quantity
+              description: 引当数量
+            - name: available_quantity
+              type: Quantity
+              description: 引当可能数量
+            - name: in_transit_quantity
+              type: Quantity
+              description: 輸送中数量
+            - name: expiry_date
+              type: Date
+              description: 賞味期限
+            - name: status
+              type: Enum
+              description: ステータス（AVAILABLE/HOLD/BLOCKED/EXPIRED）
+            - name: updated_at
+              type: DateTime
+              description: 最終更新日時
+
+        - name: InventoryTransaction
+          description: 在庫トランザクションを管理するエンティティ
+          attributes:
+            - name: transaction_id
+              type: UUID
+              description: トランザクションID
+            - name: transaction_type
+              type: Enum
+              description: 取引種別（RECEIPT/ISSUE/ADJUSTMENT/TRANSFER）
+            - name: item_id
+              type: UUID
+              description: 品目ID（FK）
+            - name: location_id
+              type: UUID
+              description: 拠点ID（FK）
+            - name: lot_number
+              type: String
+              description: ロット番号
+            - name: quantity
+              type: Quantity
+              description: 数量（+/-）
+            - name: reference_type
+              type: String
+              description: 参照元種別（PO/SO/MO等）
+            - name: reference_id
+              type: UUID
+              description: 参照元ID
+            - name: reason_code
+              type: String
+              description: 理由コード
+            - name: transaction_date
+              type: DateTime
+              description: 取引日時
+            - name: posted_by
+              type: UUID
+              description: 記帳者ID
+
+        - name: PhysicalInventory
+          description: 棚卸を管理するエンティティ
+          attributes:
+            - name: inventory_id
+              type: UUID
+              description: 棚卸ID
+            - name: inventory_type
+              type: Enum
+              description: 棚卸種別（ANNUAL/CYCLE/SPOT）
+            - name: location_id
+              type: UUID
+              description: 対象拠点ID（FK）
+            - name: count_date
+              type: Date
+              description: 棚卸日
+            - name: items
+              type: Array[InventoryCount]
+              description: 棚卸明細
+            - name: status
+              type: Enum
+              description: ステータス（PLANNED/IN_PROGRESS/COUNTED/ADJUSTED/COMPLETED）
+            - name: variance_amount
+              type: Money
+              description: 差異金額
+            - name: approved_by
+              type: UUID
+              description: 承認者ID
+
+      value_objects:
+        - name: InventoryCount
+          description: 棚卸カウント結果
+          attributes:
+            - name: item_id
+              type: UUID
+              description: 品目ID
+            - name: lot_number
+              type: String
+              description: ロット番号
+            - name: book_quantity
+              type: Quantity
+              description: 帳簿数量
+            - name: count_quantity
+              type: Quantity
+              description: 実数量
+            - name: variance_quantity
+              type: Quantity
+              description: 差異数量
+            - name: variance_reason
+              type: String
+              description: 差異理由
+
+        - name: LotInfo
+          description: ロット情報
+          attributes:
+            - name: lot_number
+              type: String
+              description: ロット番号
+            - name: production_date
+              type: Date
+              description: 製造日
+            - name: expiry_date
+              type: Date
+              description: 賞味期限
+            - name: supplier_lot
+              type: String
+              description: サプライヤロット番号
+            - name: quality_status
+              type: Enum
+              description: 品質ステータス
+
+      aggregates:
+        - name: InventoryAggregate
+          root: InventoryBalance
+          entities:
+            - InventoryTransaction
+            - InventoryHold
+          description: 在庫残高と取引履歴を一貫して管理
+
+# ============================================================
+# BC-SCM-006: SCM Analytics（SCM分析）
+# ============================================================
+  - id: BC-SCM-006
+    name: SCM Analytics
+    name_ja: SCM分析
+    description: SCMのKPI管理、パフォーマンス分析、レポーティングを担当
+
+    ubiquitous_language:
+      terms:
+        - term_ja: KPI
+          term_en: KeyPerformanceIndicator
+          definition: SCMパフォーマンスを測定する重要指標
+          examples:
+            - OTIF（On-Time In-Full）
+            - 在庫回転率
+            - 調達コスト削減率
+          related_terms: [指標, メトリクス]
+
+        - term_ja: OTIF
+          term_en: OnTimeInFull
+          definition: 納期通り・数量通りに納品できた割合
+          examples:
+            - 顧客向けOTIF
+            - サプライヤOTIF
+            - 拠点別OTIF
+          related_terms: [納期遵守率, 充足率]
+
+        - term_ja: 在庫回転率
+          term_en: InventoryTurnover
+          definition: 年間で在庫が何回転したかを示す指標
+          examples:
+            - 完成品回転率
+            - 原材料回転率
+            - カテゴリ別回転率
+          related_terms: [在庫日数, DOH]
+
+        - term_ja: 在庫日数
+          term_en: DaysOfInventory
+          definition: 現在庫で何日分の需要をカバーできるか
+          examples:
+            - DOH（Days On Hand）
+            - カバレッジ
+            - 週間在庫
+          related_terms: [在庫回転率, 安全在庫]
+
+        - term_ja: サプライチェーンコスト
+          term_en: SupplyChainCost
+          definition: SCM全体のコスト（調達・物流・在庫）
+          examples:
+            - 売上比SCMコスト
+            - 拠点別物流コスト
+            - カテゴリ別調達コスト
+          related_terms: [総コスト, TCO]
+
+        - term_ja: キャッシュ・コンバージョン・サイクル
+          term_en: CashConversionCycle
+          definition: 原材料支払から売上回収までの日数
+          examples:
+            - CCC短縮
+            - 運転資金最適化
+          related_terms: [CCC, 運転資本]
+
+        - term_ja: サプライチェーンレジリエンス
+          term_en: SupplyChainResilience
+          definition: サプライチェーンの回復力・柔軟性
+          examples:
+            - BCP対応力
+            - 代替調達能力
+            - 需要変動対応力
+          related_terms: [レジリエンス, BCP]
+
+        - term_ja: サステナビリティ指標
+          term_en: SustainabilityMetrics
+          definition: SCMの環境・社会への影響指標
+          examples:
+            - CO2排出量（Scope1/2/3）
+            - 水使用量
+            - リサイクル率
+          related_terms: [ESG, カーボンフットプリント]
+
+      entities:
+        - name: KPIDefinition
+          description: KPI定義を管理するエンティティ
+          attributes:
+            - name: kpi_id
+              type: UUID
+              description: KPI ID
+            - name: kpi_code
+              type: String
+              description: KPIコード
+            - name: kpi_name
+              type: String
+              description: KPI名
+            - name: description
+              type: String
+              description: 説明
+            - name: formula
+              type: String
+              description: 計算式
+            - name: unit
+              type: String
+              description: 単位
+            - name: target_value
+              type: Decimal
+              description: 目標値
+            - name: threshold_warning
+              type: Decimal
+              description: 警告しきい値
+            - name: threshold_critical
+              type: Decimal
+              description: 危険しきい値
+            - name: frequency
+              type: Enum
+              description: 測定頻度（DAILY/WEEKLY/MONTHLY）
+            - name: owner_department
+              type: String
+              description: 担当部門
+
+        - name: KPIResult
+          description: KPI実績を管理するエンティティ
+          attributes:
+            - name: result_id
+              type: UUID
+              description: 実績ID
+            - name: kpi_id
+              type: UUID
+              description: KPI ID（FK）
+            - name: measurement_date
+              type: Date
+              description: 測定日
+            - name: period_type
+              type: Enum
+              description: 期間種別（DAILY/WEEKLY/MONTHLY/QUARTERLY/YEARLY）
+            - name: actual_value
+              type: Decimal
+              description: 実績値
+            - name: target_value
+              type: Decimal
+              description: 目標値
+            - name: variance
+              type: Decimal
+              description: 差異
+            - name: variance_pct
+              type: Decimal
+              description: 差異率（%）
+            - name: status
+              type: Enum
+              description: ステータス（ON_TARGET/WARNING/CRITICAL）
+            - name: dimension_values
+              type: JSON
+              description: 分析軸の値（事業部、拠点等）
+
+        - name: AnalyticsReport
+          description: 分析レポートを管理するエンティティ
+          attributes:
+            - name: report_id
+              type: UUID
+              description: レポートID
+            - name: report_name
+              type: String
+              description: レポート名
+            - name: report_type
+              type: Enum
+              description: レポート種別（DASHBOARD/ADHOC/SCHEDULED）
+            - name: data_source
+              type: Array[String]
+              description: データソース
+            - name: filters
+              type: JSON
+              description: フィルター条件
+            - name: dimensions
+              type: Array[String]
+              description: 分析軸
+            - name: measures
+              type: Array[String]
+              description: メジャー
+            - name: schedule
+              type: JSON
+              description: スケジュール（定期レポートの場合）
+            - name: recipients
+              type: Array[UUID]
+              description: 配信先
+
+      value_objects:
+        - name: KPITrend
+          description: KPIトレンド情報
+          attributes:
+            - name: period_count
+              type: Integer
+              description: 期間数
+            - name: values
+              type: Array[Decimal]
+              description: 値の配列
+            - name: trend_direction
+              type: Enum
+              description: トレンド方向（UP/DOWN/FLAT）
+            - name: growth_rate
+              type: Decimal
+              description: 成長率
+
+      aggregates:
+        - name: KPIDashboardAggregate
+          root: KPIDefinition
+          entities:
+            - KPIResult
+            - KPIAlert
+          description: KPI定義と実績・アラートを一貫して管理
+
+# ============================================================
+# BC間インテグレーションポイント
+# ============================================================
+integration_points:
+  - source_bc: BC-SCM-001
+    target_bc: BC-SCM-003
+    integration_type: Event
+    description: 戦略契約締結時に購買実行へ契約情報を連携
+    events:
+      - StrategicContractActivated
+      - SupplierTierChanged
+
+  - source_bc: BC-SCM-002
+    target_bc: BC-SCM-003
+    integration_type: API
+    description: 供給計画に基づく自動発注トリガー
+    apis:
+      - CreatePurchaseRequisition
+
+  - source_bc: BC-SCM-003
+    target_bc: BC-SCM-005
+    integration_type: Event
+    description: 入荷完了時に在庫更新
+    events:
+      - GoodsReceiptCompleted
+
+  - source_bc: BC-SCM-005
+    target_bc: BC-SCM-004
+    integration_type: API
+    description: 在庫引当・出荷指示
+    apis:
+      - AllocateInventory
+      - CreateShipmentOrder
+
+  - source_bc: BC-SCM-004
+    target_bc: BC-SCM-005
+    integration_type: Event
+    description: 出荷完了時に在庫減算
+    events:
+      - ShipmentCompleted
+
+  - source_bc: ALL
+    target_bc: BC-SCM-006
+    integration_type: Event
+    description: 各BCからの実績データ収集
+    events:
+      - TransactionCompleted
+      - StatusChanged
+
+# ============================================================
+# サントリー固有の業界用語・規制対応
+# ============================================================
+suntory_specific:
+  liquor_tax:
+    description: 酒税法対応の用語・プロセス
+    terms:
+      - term_ja: 製成
+        term_en: Production
+        definition: 酒類を製造すること（酒税法上の定義）
+
+      - term_ja: 蔵出し
+        term_en: TaxableRemoval
+        definition: 酒類を製造場から移出すること。酒税課税の起点
+
+      - term_ja: 戻入れ
+        term_en: Return
+        definition: 一度蔵出しした酒類を製造場に戻すこと
+
+      - term_ja: 酒税申告
+        term_en: LiquorTaxDeclaration
+        definition: 月次の酒税申告・納付
+
+  aging_management:
+    description: 長期熟成品（ウイスキー等）固有の管理
+    terms:
+      - term_ja: 樽
+        term_en: Barrel
+        definition: ウイスキー熟成に使用する木製容器
+
+      - term_ja: 原酒
+        term_en: NewMake
+        definition: 蒸留直後の未熟成酒
+
+      - term_ja: エンジェルズシェア
+        term_en: AngelsShare
+        definition: 熟成中に蒸発で失われる量（年間2-3%）
+
+      - term_ja: ヴィンテージ
+        term_en: Vintage
+        definition: 蒸留年を表す（ウイスキーの場合）
+
+  vending_machine:
+    description: 自販機オペレーション固有の用語
+    terms:
+      - term_ja: 自販機
+        term_en: VendingMachine
+        definition: 飲料自動販売機（サントリー66万台保有）
+
+      - term_ja: オペレーション
+        term_en: VMOperation
+        definition: 自販機への商品補充・メンテナンス業務
+
+      - term_ja: 欠品
+        term_en: Stockout
+        definition: 自販機内の商品が売り切れている状態
+
+      - term_ja: 補充効率
+        term_en: ReplenishmentEfficiency
+        definition: 1台あたりの補充所要時間・コスト
+
+# ============================================================
+# メタデータ
+# ============================================================
+metadata:
+  created_by: Claude AI
+  created_at: "2025-12-12"
+  version_history:
+    - version: "1.0"
+      date: "2025-12-12"
+      changes: 初版作成

@@ -29,15 +29,56 @@ Or with options:
    - Run lint/format checks if available
    - Run build verification if build script exists
    - Update documentation if generation script exists
-2. Checks which files are staged with `git status`
+2. Checks which files are staged with `git status --porcelain`
 3. If 0 files are staged, automatically adds all modified and new files with `git add`
-4. Performs a `git diff` to understand what changes are being committed
+4. Performs a `git diff --no-color` to understand what changes are being committed
 5. Ensures there are is no sensitive data (like passwords, API keys, personal info, secrets, etc.) in the staged changes, if so, aborts the commit and informs the user
 6. Analyzes the diff to determine if multiple distinct logical changes are present
 7. If multiple distinct changes are detected, suggests breaking the commit into multiple smaller commits
 8. For each commit (or the single commit if not split), creates a commit message using conventional commit format (ensuring there is no sensitive data within the message) and considering the available conversation history for additional context as appropriate, don't perform the commit yet, just generate the message and show it to the user for review
 9. Presents the generated commit message(s) to the user for review and editing
 10. Upon user confirmation, executes the `git commit` command with the finalized message(s)
+11. **After commit, verify no ANSI escape sequences** using `git log -1 --format="%B" | cat -v`
+
+## CRITICAL: Prevent ANSI Escape Sequences
+
+**Problem**: Tools like `bat`, `delta`, or colored git output can inject ANSI escape sequences into commit messages, causing them to appear garbled on GitHub.
+
+**MANDATORY Rules**:
+
+1. **Always use `--no-color` flag** for ALL git commands:
+   ```bash
+   git status --porcelain        # Use porcelain format (no color)
+   git diff --no-color --staged  # Explicit no-color
+   git log --format="%s" -3      # Plain format, no decoration
+   ```
+
+2. **Write commit message to a temp file using `printf`** (NEVER use `cat` or HEREDOC):
+   ```bash
+   # Use printf to write message (bypasses cat/bat alias)
+   printf '%s\n' \
+     'feat(scope): subject line' \
+     '' \
+     '## Summary' \
+     '- Point 1' \
+     '' \
+     '🤖 Generated with [Amplifier](https://github.com/microsoft/amplifier)' \
+     '' \
+     'Co-Authored-By: Amplifier <...>' \
+     > /tmp/commit_msg.txt
+
+   # Commit with -F flag
+   git commit -F /tmp/commit_msg.txt
+   rm /tmp/commit_msg.txt
+   ```
+
+3. **Verify after commit** (before any push):
+   ```bash
+   # Check for control characters (use /bin/cat to bypass bat alias)
+   git log -1 --format="%B" | /bin/cat -v | grep -E '\^\[' && echo "ERROR: ANSI detected!" || echo "OK: Clean message"
+   ```
+
+4. **If ANSI detected**: Immediately fix with `git commit --amend -F /tmp/fixed_msg.txt`
 
 ## Best Practices for Commits
 
@@ -46,7 +87,7 @@ Or with options:
   - IMPORTANT: Do not actually fix issues yourself, just inform the user of what needs to be done and give them choice to do so or to proceed with commit anyway
 - **Atomic commits**: Each commit should contain related changes that serve a single purpose
 - **Split large changes**: If changes touch multiple concerns, split them into separate commits
-- **Conventional commit format**: Use the format `<type>: <description>` where type is one of:
+- **Conventional commit format**: Use the format `<type>(<scope>): <description>` where type is one of:
   - `feat`: A new feature
   - `fix`: A bug fix
   - `docs`: Documentation changes
@@ -58,6 +99,25 @@ Or with options:
 - **Present tense, imperative mood**: Write commit messages as commands (e.g., "add feature" not "added feature")
 - **Leverage context**: Use conversation history to inform commit messages when relevant, especially where the content of the conversation could be useful for understanding the intent of the changes when reviewing the full commit history later, especially when reviewed by other AI tools that are attempting to understand the context behind the changes to understand rationale, decision making, intent, problem being solved, etc.
 - **Concise first line**: Keep the first line under 72 characters
+- **Use English for title line**: The first line (subject) should be in English for consistency
+- **Body can be bilingual**: Detailed explanation in the body can include Japanese if helpful
+
+## Commit Message Template
+
+```
+<type>(<scope>): <English subject line under 72 chars>
+
+## Summary (Japanese OK)
+- Point 1
+- Point 2
+
+## Details (if needed)
+Detailed explanation here.
+
+🤖 Generated with [Amplifier](https://github.com/microsoft/amplifier)
+
+Co-Authored-By: Amplifier <240397093+microsoft-amplifier@users.noreply.github.com>
+```
 
 ## Additional Guidance
 
