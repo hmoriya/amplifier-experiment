@@ -1,0 +1,134 @@
+# 価値トレース記録テンプレート
+
+**記録ID**: trace-{phase}-{timestamp}
+**記録日時**: {datetime}
+**記録者**: {recorder_name}
+**プロジェクト**: {project_name}
+**フェーズ**: {phase_number}
+
+---
+
+## 設計判断情報
+
+### 判断内容
+**判断の概要**: {decision_description}
+**判断者**: {decision_maker}
+**判断背景**: {decision_context}
+**判断理由**: {decision_rationale}
+
+### 価値関連情報
+**VL1（最上位価値）**: {vl1_value}
+**VL2（価値グループ）**: {vl2_value}  
+**VL3（詳細価値）**: {vl3_value}
+**対応マイルストーン**: {corresponding_milestone}
+**対応バリューステージ**: {corresponding_value_stage}
+
+## 根拠データ
+
+### 根拠1
+- **種別**: {evidence_type_1}
+- **情報源**: {evidence_source_1}
+- **データ内容**: {evidence_data_1}
+- **信頼性スコア**: {reliability_score_1} / 5.0
+- **取得日**: {evidence_date_1}
+
+### 根拠2
+- **種別**: {evidence_type_2}
+- **情報源**: {evidence_source_2}
+- **データ内容**: {evidence_data_2}
+- **信頼性スコア**: {reliability_score_2} / 5.0
+- **取得日**: {evidence_date_2}
+
+### 根拠3
+- **種別**: {evidence_type_3}
+- **情報源**: {evidence_source_3}
+- **データ内容**: {evidence_data_3}
+- **信頼性スコア**: {reliability_score_3} / 5.0
+- **取得日**: {evidence_date_3}
+
+## 影響度評価
+
+**ビジネス価値への影響**: {business_value_impact} / 5.0
+**技術的複雑度**: {technical_complexity} / 5.0
+**リスクレベル**: {risk_level} / 5.0
+**ROI推定値**: {roi_estimate}%
+
+## 代替案検討
+
+### 検討した代替案
+1. **代替案1**: {alternative_1}
+   - **メリット**: {alternative_1_pros}
+   - **デメリット**: {alternative_1_cons}
+   - **実現可能性**: {alternative_1_feasibility}
+
+2. **代替案2**: {alternative_2}
+   - **メリット**: {alternative_2_pros}
+   - **デメリット**: {alternative_2_cons}
+   - **実現可能性**: {alternative_2_feasibility}
+
+3. **代替案3**: {alternative_3}
+   - **メリット**: {alternative_3_pros}
+   - **デメリット**: {alternative_3_cons}
+   - **実現可能性**: {alternative_3_feasibility}
+
+### 選択理由
+**最終選択**: {final_choice}
+**選択根拠**: {selection_rationale}
+**リスク軽減策**: {risk_mitigation}
+
+## 測定計画
+
+### 成功指標（KPI）
+**主要KPI**: {primary_kpi}
+**測定方法**: {measurement_method}
+**測定頻度**: {measurement_frequency}
+**ベースライン**: {baseline_value}
+**目標値**: {target_value}
+**達成期限**: {achievement_deadline}
+
+### 副次指標
+1. **指標名**: {secondary_kpi_1}
+   - **測定方法**: {secondary_method_1}
+   - **目標値**: {secondary_target_1}
+
+2. **指標名**: {secondary_kpi_2}
+   - **測定方法**: {secondary_method_2}
+   - **目標値**: {secondary_target_2}
+
+## 構造的必然性自己評価
+
+### 基準1：価値起源の明確性
+**自己評価スコア**: {value_origin_self_score} / 5.0
+**評価理由**: {value_origin_reasoning}
+
+### 基準2：因果関係の証明
+**自己評価スコア**: {causal_proof_self_score} / 5.0
+**評価理由**: {causal_proof_reasoning}
+
+### 基準3：代替案の検討
+**自己評価スコア**: {alternatives_self_score} / 5.0
+**評価理由**: {alternatives_reasoning}
+
+### 基準4：測定可能性
+**自己評価スコア**: {measurability_self_score} / 5.0
+**評価理由**: {measurability_reasoning}
+
+**総合自己評価**: {total_self_score} / 5.0
+
+## 承認・確認
+
+**価値アーキテクト確認**: {value_architect_approval}
+**プロジェクトマネージャー確認**: {pm_approval}
+**ステークホルダー合意**: {stakeholder_agreement}
+
+## システム記録
+
+**トレース記録完了**: {trace_completion_timestamp}
+**必然性判定結果**: {necessity_judgment_result}
+**品質ゲート通過**: {quality_gate_status}
+**次アクション**: {next_actions}
+
+---
+
+**記録完了日時**: {completion_timestamp}
+**システムバージョン**: {system_version}

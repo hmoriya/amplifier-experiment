@@ -1,0 +1,356 @@
+# Parasol Value Tracer - 価値トレース記録システム
+# 設計判断のリアルタイム記録とトレーサビリティチェーン構築
+
+name: "Parasol Value Tracer"
+version: "1.0.0"
+description: "設計判断を観測可能な価値にトレースする記録システム"
+
+# ===== 設定 =====
+configuration:
+  trace_storage:
+    base_path: "projects/{project_name}/value-traces/"
+    format: "json"
+    retention_days: 1825  # 5年間
+    backup_enabled: true
+    
+  real_time_recording:
+    enabled: true
+    buffer_size: 100
+    flush_interval_seconds: 30
+    
+  value_chain_validation:
+    strict_mode: true
+    require_vl3_link: true
+    require_evidence: true
+
+# ===== データモデル =====
+data_models:
+  value_trace:
+    schema:
+      id:
+        type: "string"
+        format: "trace-{phase}-{timestamp}"
+        required: true
+        
+      metadata:
+        phase: 
+          type: "string"
+          enum: ["Phase 0", "Phase 1", "Phase 2", "Phase 3", "Phase 4", "Phase 5", "Phase 6", "Phase 7"]
+        timestamp:
+          type: "datetime"
+          format: "ISO 8601"
+        recorder:
+          type: "string"
+          description: "記録者（system/human）"
+        project_id:
+          type: "string"
+          
+      decision:
+        description:
+          type: "string"
+          max_length: 500
+          required: true
+        maker:
+          type: "string"
+          required: true
+        context:
+          type: "string"
+          max_length: 1000
+        rationale:
+          type: "string"
+          max_length: 2000
+          
+      value_link:
+        vl1:
+          type: "string"
+          description: "最上位価値"
+          required: true
+        vl2:
+          type: "string" 
+          description: "価値グループ"
+          required: true
+        vl3:
+          type: "string"
+          description: "詳細価値"
+          required: true
+        ms:
+          type: "string"
+          description: "対応マイルストーン"
+          pattern: "MS[1-5]"
+        vs:
+          type: "string"
+          description: "対応バリューステージ"
+          pattern: "VS[0-7]"
+          
+      evidence:
+        type: "array"
+        items:
+          type:
+            type: "string"
+            enum: ["market_analysis", "competitive_analysis", "user_research", 
+                   "technical_analysis", "financial_analysis", "risk_analysis"]
+          source:
+            type: "string"
+            required: true
+          data:
+            type: "string"
+            required: true
+          reliability_score:
+            type: "number"
+            minimum: 1.0
+            maximum: 5.0
+          date:
+            type: "date"
+            
+      impact_assessment:
+        business_value:
+          type: "number"
+          description: "ビジネス価値への影響度（1-5）"
+        technical_complexity:
+          type: "number"
+          description: "技術複雑度（1-5）"
+        risk_level:
+          type: "number"
+          description: "リスクレベル（1-5）"
+        roi_estimate:
+          type: "number"
+          description: "ROI推定値（%）"
+
+# ===== トレーシング機能 =====
+tracing_functions:
+  record_decision:
+    description: "設計判断をリアルタイムで記録"
+    inputs:
+      - phase: "string"
+      - decision_context: "object"
+      - value_context: "object"
+      - evidence_data: "array"
+    process:
+      - validate_inputs
+      - extract_value_chain
+      - verify_evidence_quality
+      - create_trace_record
+      - store_with_backup
+    outputs:
+      - trace_id: "string"
+      - validation_status: "string"
+      
+  build_traceability_chain:
+    description: "価値から実装までのトレーサビリティチェーン構築"
+    inputs:
+      - project_id: "string"
+      - target_element: "string"
+    process:
+      - collect_related_traces
+      - build_dependency_graph
+      - verify_chain_completeness
+      - identify_missing_links
+    outputs:
+      - chain_graph: "object"
+      - completeness_score: "number"
+      - missing_links: "array"
+      
+  search_traces:
+    description: "価値トレースの検索・分析"
+    inputs:
+      - search_criteria: "object"
+      - date_range: "object"
+    filters:
+      - by_phase
+      - by_value_level
+      - by_evidence_type
+      - by_decision_maker
+    outputs:
+      - matching_traces: "array"
+      - aggregated_metrics: "object"
+
+# ===== 価値チェーン検証 =====
+value_chain_validation:
+  vl3_linkage_check:
+    description: "VL3価値との直接リンク確認"
+    rules:
+      - 全ての決定にVL3価値の明示が必要
+      - VL3→VL2→VL1のチェーン整合性確認
+      - 価値階層の論理的一貫性検証
+      
+  evidence_quality_check:
+    description: "根拠データの品質確認"
+    criteria:
+      reliability_threshold: 3.0
+      recency_requirement: 365  # 日数
+      source_diversity: 2       # 最低ソース数
+      data_completeness: 0.8    # 80%以上
+      
+  causality_verification:
+    description: "因果関係の妥当性確認"
+    methods:
+      - logical_consistency_check
+      - precedent_analysis
+      - expert_validation_simulation
+      - quantitative_correlation_check
+
+# ===== アラート・通知 =====
+alerting:
+  missing_evidence_alert:
+    trigger: "evidence配列が空または不完全"
+    severity: "HIGH"
+    action: "記録ブロック"
+    
+  weak_value_link_alert:
+    trigger: "VL3リンクが不明確"
+    severity: "MEDIUM" 
+    action: "警告表示"
+    
+  chain_break_alert:
+    trigger: "トレーサビリティチェーンの断絶検出"
+    severity: "CRITICAL"
+    action: "即座にアラート"
+    
+  quality_degradation_alert:
+    trigger: "根拠品質の低下傾向"
+    severity: "MEDIUM"
+    action: "改善提案"
+
+# ===== レポート生成 =====
+reporting:
+  trace_summary:
+    frequency: "daily"
+    contents:
+      - 新規トレース数
+      - 価値リンク完全性
+      - 根拠品質スコア
+      - チェーン断絶箇所
+      
+  value_realization_tracking:
+    frequency: "weekly"
+    contents:
+      - VL1-VL3別の進捗
+      - MS別の実現度
+      - ROI実績 vs 予測
+      - ボトルネック分析
+      
+  quality_metrics:
+    frequency: "monthly"
+    contents:
+      - トレーシング品質トレンド
+      - 根拠データ信頼性
+      - 想像の設計検出数
+      - システム改善提案
+
+# ===== パフォーマンス設定 =====
+performance:
+  real_time_requirements:
+    record_latency_max: "2s"
+    search_response_max: "1s"
+    chain_build_max: "10s"
+    
+  storage_optimization:
+    compression_enabled: true
+    indexing_fields: ["phase", "vl3", "timestamp", "decision_maker"]
+    archive_policy: "after_project_completion"
+    
+  caching:
+    frequent_queries_cache: true
+    cache_ttl_seconds: 3600
+    max_cache_size_mb: 100
+
+# ===== 統合設定 =====
+integrations:
+  phase_hooks:
+    pre_execution: "trace_initialization"
+    during_execution: "real_time_recording"
+    post_execution: "chain_validation"
+    
+  external_systems:
+    project_management: "parasol_project_system"
+    evidence_sources: ["market_db", "research_db", "competitor_db"]
+    notification_system: "parasol_alerting"
+    
+  api_endpoints:
+    record: "POST /api/v1/traces"
+    search: "GET /api/v1/traces/search"
+    chain: "GET /api/v1/traces/{id}/chain"
+    validate: "POST /api/v1/traces/validate"
+
+# ===== セキュリティ =====
+security:
+  access_control:
+    read_permissions: ["value_architect", "project_member", "stakeholder"]
+    write_permissions: ["value_architect", "project_member"]
+    admin_permissions: ["value_architect"]
+    
+  data_protection:
+    encryption_at_rest: true
+    encryption_in_transit: true
+    audit_logging: true
+    change_tracking: true
+    
+  integrity_verification:
+    checksum_validation: true
+    tamper_detection: true
+    backup_verification: true
+
+# ===== エラーハンドリング =====
+error_handling:
+  validation_errors:
+    missing_vl3_link:
+      message: "VL3価値との関連が明確ではありません"
+      suggestion: "価値階層を確認し、明確なVL3価値を指定してください"
+      
+    insufficient_evidence:
+      message: "根拠データが不十分です"
+      suggestion: "信頼性スコア3.0以上のデータを2つ以上提供してください"
+      
+    weak_causality:
+      message: "因果関係が不明確です"
+      suggestion: "論理的な因果関係を明示してください"
+      
+  system_errors:
+    storage_failure:
+      action: "バックアップストレージに記録"
+      notification: "管理者にアラート"
+      
+    validation_timeout:
+      action: "警告付きで記録続行"
+      follow_up: "後で手動検証"
+
+# ===== 設定例 =====
+usage_examples:
+  basic_recording:
+    command: "record_decision"
+    input:
+      phase: "Phase 2"
+      decision:
+        description: "発酵技術研究ケイパビリティの追加"
+        maker: "価値アーキテクト"
+        context: "VL3価値「味の革新」実現のため"
+      value_link:
+        vl1: "期待を超えるおいしさ"
+        vl2: "製品イノベーション価値"
+        vl3: "発酵技術による味の革新"
+        ms: "MS2"
+      evidence:
+        - type: "market_analysis"
+          source: "業界レポート2024"
+          data: "発酵技術市場の成長率15%"
+          reliability_score: 4.2
+          
+  chain_analysis:
+    command: "build_traceability_chain"
+    input:
+      project_id: "asashi-fermentation"
+      target_element: "fermentation-research-capability"
+    expected_output:
+      chain_graph: "VL3 → ケイパビリティ → サブドメイン → 実装"
+      completeness_score: 0.95
+      
+  quality_search:
+    command: "search_traces" 
+    input:
+      search_criteria:
+        phase: "Phase 2"
+        evidence_type: "market_analysis"
+        reliability_min: 4.0
+      date_range:
+        from: "2025-12-01"
+        to: "2025-12-31"

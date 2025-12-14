@@ -20,11 +20,11 @@ parasol/phases/
 
 ## 実行方法
 
-### 1. Amplifier Designer による価値定義（Phase 1）
+### 1. ビジネス価値分析（Phase 1）
 
 ```bash
-# Phase 1は既にDesignerで実施済み
-/designer value "アサヒグループのビジョンを洗練"
+# Phase 1: Business Nine Dimensions + Five Pillarsによる価値分析
+/parasol value-analysis "組織の中核価値とビジョンの構造化"
 ```
 
 ### 2. Phase 2以降の実行
@@ -65,9 +65,9 @@ Phase 6（検証と最適化）
 - 制約条件の明確化
 
 ### Phase 1: 価値定義 ✅
-- **Amplifier Designer**を使用
-- Nine Dimensions + Five Pillarsフレームワーク
-- ビジョンの洗練と具体化
+- **Business Nine Dimensions**フレームワークを使用
+- Nine Dimensions + Five Pillarsによる価値構造化
+- ビジネス価値の明確化と具体化
 
 ### Phase 2: 能力設計
 - L1戦略的能力（Strategic Capabilities）

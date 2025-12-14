@@ -1,0 +1,482 @@
+# Parasol Gate Validator - ゲート検証ロジック
+# 価値保証ゲートシステムの具体的検証アルゴリズムと判定ルール
+
+name: "Parasol Gate Validator"
+version: "1.0.0"
+description: "価値保証ゲートの自動検証・判定エンジン"
+
+# ===== 検証設定 =====
+validation_config:
+  execution_mode:
+    parallel_validation: true      # 並列検証実行
+    early_termination: true        # 早期終了（FAIL判定時）
+    timeout_seconds: 60           # 検証タイムアウト
+    retry_on_failure: 2           # 失敗時再試行回数
+    
+  quality_thresholds:
+    critical_threshold: 0.95       # クリティカル基準
+    warning_threshold: 0.80        # 警告基準
+    minimum_threshold: 0.70        # 最低基準
+    
+  validation_depth:
+    comprehensive_mode: true       # 包括的検証
+    sampling_mode: false          # サンプリング検証
+    focus_areas: ["value_consistency", "traceability", "quality"]
+
+# ===== 検証アルゴリズム =====
+validation_algorithms:
+  value_consistency_validator:
+    name: "価値一貫性検証"
+    algorithm: "semantic_similarity_analysis"
+    implementation:
+      semantic_analysis:
+        - vectorize_value_statements
+        - calculate_similarity_matrix
+        - identify_inconsistencies
+        - measure_coherence_score
+        
+      logical_consistency:
+        - check_vl_hierarchy_logic
+        - validate_causality_chains
+        - verify_milestone_progression
+        - assess_goal_alignment
+        
+      quantitative_measures:
+        consistency_score: |
+          weighted_average([
+            semantic_similarity * 0.4,
+            logical_coherence * 0.3,
+            goal_alignment * 0.3
+          ])
+        threshold: 0.90
+        
+  traceability_completeness_validator:
+    name: "トレーサビリティ完全性検証"
+    algorithm: "graph_completeness_analysis"
+    implementation:
+      graph_construction:
+        - build_traceability_graph
+        - identify_nodes_and_edges
+        - detect_missing_links
+        - calculate_connectivity
+        
+      completeness_analysis:
+        - forward_traceability: "vl1_to_implementation"
+        - backward_traceability: "implementation_to_vl1"
+        - cross_references: "lateral_connections"
+        - gap_identification: "missing_link_detection"
+        
+      quantitative_measures:
+        completeness_score: |
+          (connected_paths / total_expected_paths) * 
+          (1 - missing_links_penalty)
+        threshold: 0.85
+        
+  evidence_quality_validator:
+    name: "根拠品質検証"
+    algorithm: "multi_dimensional_quality_assessment"
+    implementation:
+      quality_dimensions:
+        reliability:
+          - source_credibility_check
+          - data_accuracy_verification
+          - methodology_soundness
+          
+        freshness:
+          - data_recency_check
+          - relevance_verification
+          - context_appropriateness
+          
+        completeness:
+          - required_evidence_coverage
+          - supporting_data_sufficiency
+          - alternative_perspective_inclusion
+          
+      quantitative_measures:
+        quality_score: |
+          weighted_average([
+            reliability_score * 0.4,
+            freshness_score * 0.3,
+            completeness_score * 0.3
+          ])
+        threshold: 3.5  # 5点満点
+        
+  structural_necessity_validator:
+    name: "構造的必然性検証"
+    algorithm: "four_criteria_assessment"
+    implementation:
+      criteria_evaluation:
+        value_origin_clarity:
+          - vl3_link_verification
+          - hierarchy_consistency_check
+          - origin_traceability
+          
+        causal_relationship:
+          - causality_evidence_check
+          - logical_connection_verification
+          - quantitative_relationship_analysis
+          
+        alternative_analysis:
+          - alternative_options_coverage
+          - comparison_methodology_check
+          - selection_rationale_verification
+          
+        measurability:
+          - kpi_definition_completeness
+          - measurement_method_validity
+          - baseline_and_target_setting
+          
+      quantitative_measures:
+        necessity_score: |
+          weighted_average([
+            value_origin * 0.30,
+            causal_proof * 0.30,
+            alternatives * 0.20,
+            measurability * 0.20
+          ])
+        threshold: 3.5  # 5点満点
+
+# ===== ゲート別検証ルール =====
+gate_validation_rules:
+  phase_entry_gate:
+    validation_sequence:
+      1. prerequisite_completion_check
+      2. value_inheritance_verification
+      3. resource_readiness_assessment
+      4. stakeholder_alignment_confirmation
+      
+    pass_criteria:
+      - all_prerequisites_completed: true
+      - value_chain_integrity: "> 0.90"
+      - resource_availability: "> 0.95"
+      - stakeholder_agreement: "> 0.85"
+      
+    validation_methods:
+      prerequisite_check:
+        algorithm: "status_verification"
+        data_sources: ["phase_completion_log", "artifact_registry"]
+        
+      value_inheritance:
+        algorithm: "chain_continuity_analysis"
+        data_sources: ["value_traces", "dependency_graph"]
+        
+      resource_assessment:
+        algorithm: "availability_calculation"
+        data_sources: ["resource_registry", "capacity_planning"]
+        
+      stakeholder_alignment:
+        algorithm: "agreement_score_calculation"  
+        data_sources: ["stakeholder_feedback", "approval_records"]
+        
+  phase_exit_gate:
+    validation_sequence:
+      1. deliverable_quality_assessment
+      2. value_realization_measurement
+      3. traceability_chain_verification
+      4. next_phase_readiness_check
+      
+    pass_criteria:
+      - deliverable_quality_score: "> 0.85"
+      - value_realization_rate: "> 0.80"
+      - traceability_completeness: "> 0.90"
+      - next_phase_readiness: "> 0.85"
+      
+    validation_methods:
+      deliverable_assessment:
+        algorithm: "multi_criteria_quality_check"
+        criteria: ["completeness", "accuracy", "consistency", "usability"]
+        
+      value_measurement:
+        algorithm: "roi_realization_calculation"
+        metrics: ["business_value", "cost_efficiency", "time_saving"]
+        
+      traceability_verification:
+        algorithm: "end_to_end_chain_validation"
+        scope: "current_phase_outputs"
+        
+      readiness_check:
+        algorithm: "prerequisite_satisfaction_analysis"
+        target: "next_phase_requirements"
+        
+  milestone_gate:
+    validation_sequence:
+      1. milestone_achievement_verification
+      2. cumulative_value_assessment
+      3. strategic_alignment_check
+      4. sustainability_evaluation
+      
+    pass_criteria:
+      - milestone_achievement: "100%"
+      - cumulative_value_score: "> 0.85"
+      - strategic_alignment: "> 0.90"
+      - sustainability_index: "> 0.80"
+      
+    validation_methods:
+      achievement_verification:
+        algorithm: "objective_achievement_scoring"
+        evidence_types: ["quantitative_metrics", "qualitative_assessments"]
+        
+      value_assessment:
+        algorithm: "cumulative_value_calculation"
+        scope: "project_inception_to_current"
+        
+      alignment_check:
+        algorithm: "strategic_goal_correlation"
+        reference: "organizational_strategic_objectives"
+        
+      sustainability_evaluation:
+        algorithm: "long_term_viability_assessment"
+        factors: ["maintainability", "scalability", "adaptability"]
+
+# ===== 想像の設計検出ルール =====
+imagination_detection_rules:
+  pattern_detection:
+    linguistic_patterns:
+      assumptions:
+        keywords: ["と思われる", "のはず", "一般的に", "と考えられる"]
+        context_analysis: "assumption_confidence_check"
+        severity: "HIGH"
+        
+      trend_following:
+        keywords: ["最新だから", "他社も", "業界標準", "ベストプラクティス"]
+        context_analysis: "trend_justification_check"
+        severity: "MEDIUM"
+        
+      authority_based:
+        keywords: ["エキスパートが", "コンサルが", "有名企業", "権威が"]
+        context_analysis: "authority_relevance_check"
+        severity: "MEDIUM"
+        
+      preference_based:
+        keywords: ["使いやすい", "きれい", "好み", "感覚的に"]
+        context_analysis: "objective_criteria_check"
+        severity: "HIGH"
+        
+    logical_patterns:
+      circular_reasoning:
+        detection: "premise_conclusion_analysis"
+        algorithm: "logical_fallacy_detection"
+        severity: "HIGH"
+        
+      false_dichotomy:
+        detection: "alternative_option_analysis"
+        algorithm: "option_space_completeness_check"
+        severity: "MEDIUM"
+        
+      correlation_causation:
+        detection: "causality_evidence_analysis"
+        algorithm: "causal_relationship_verification"
+        severity: "HIGH"
+        
+  evidence_gaps:
+    insufficient_data:
+      detection: "evidence_coverage_analysis"
+      threshold: "minimum_evidence_requirements"
+      severity: "HIGH"
+      
+    outdated_information:
+      detection: "data_freshness_check"
+      threshold: "maximum_age_limits"
+      severity: "MEDIUM"
+      
+    biased_sources:
+      detection: "source_diversity_analysis"
+      threshold: "minimum_source_variety"
+      severity: "MEDIUM"
+
+# ===== 品質評価メトリクス =====
+quality_metrics:
+  quantitative_metrics:
+    completeness_score:
+      calculation: "completed_items / total_required_items"
+      weight: 0.25
+      
+    accuracy_score:
+      calculation: "accurate_items / total_validated_items"
+      weight: 0.25
+      
+    consistency_score:
+      calculation: "consistent_relationships / total_relationships"
+      weight: 0.25
+      
+    timeliness_score:
+      calculation: "on_time_deliveries / total_deliveries"
+      weight: 0.25
+      
+  qualitative_metrics:
+    coherence_assessment:
+      method: "semantic_analysis"
+      evaluators: ["automated", "human_reviewer"]
+      
+    innovation_level:
+      method: "novelty_detection"
+      benchmarks: ["industry_standards", "historical_projects"]
+      
+    stakeholder_satisfaction:
+      method: "structured_feedback"
+      sampling: "representative_stakeholder_groups"
+      
+  composite_scoring:
+    overall_quality_score:
+      formula: |
+        (quantitative_metrics_average * 0.60) +
+        (qualitative_metrics_average * 0.40)
+      scale: "0.0 to 1.0"
+      
+    grade_classification:
+      excellent: "> 0.90"
+      good: "0.80 - 0.90"
+      acceptable: "0.70 - 0.80"
+      needs_improvement: "0.60 - 0.70"
+      unacceptable: "< 0.60"
+
+# ===== 検証結果処理 =====
+result_processing:
+  decision_logic:
+    pass_conditions:
+      - all_critical_checks: "PASS"
+      - overall_score: "> threshold"
+      - no_blocking_issues: true
+      
+    warning_conditions:
+      - some_warnings_present: true
+      - score_in_warning_range: true
+      - minor_issues_detected: true
+      
+    fail_conditions:
+      - critical_check_failure: true
+      - score_below_minimum: true
+      - blocking_issues_present: true
+      
+  action_determination:
+    pass_actions:
+      - update_status: "GATE_PASSED"
+      - unlock_progression: true
+      - record_success: true
+      - notify_stakeholders: "success_notification"
+      
+    warning_actions:
+      - update_status: "GATE_WARNING"
+      - require_mitigation: true
+      - schedule_review: "within_48h"
+      - monitor_closely: true
+      
+    fail_actions:
+      - update_status: "GATE_FAILED"
+      - block_progression: true
+      - require_remediation: true
+      - escalate_issue: "immediate"
+      
+  recommendation_generation:
+    improvement_suggestions:
+      - identify_weak_areas
+      - propose_specific_actions
+      - estimate_effort_required
+      - set_timeline_expectations
+      
+    risk_mitigation:
+      - identify_potential_risks
+      - propose_mitigation_strategies
+      - assign_risk_owners
+      - set_monitoring_requirements
+
+# ===== パフォーマンス最適化 =====
+performance_optimization:
+  parallel_execution:
+    validation_parallelization:
+      - independent_checks: "parallel"
+      - dependent_checks: "sequential"
+      - resource_pooling: true
+      
+    load_balancing:
+      - distribute_validation_load
+      - optimize_resource_utilization
+      - minimize_execution_time
+      
+  caching_strategy:
+    validation_result_cache:
+      - cache_frequent_validations
+      - invalidate_on_change
+      - optimize_cache_hit_ratio
+      
+    reference_data_cache:
+      - cache_master_data
+      - cache_configuration_data
+      - cache_historical_patterns
+      
+  algorithm_optimization:
+    complexity_reduction:
+      - optimize_graph_algorithms
+      - use_efficient_data_structures
+      - implement_approximation_algorithms
+      
+    early_termination:
+      - fail_fast_on_critical_errors
+      - skip_redundant_checks
+      - optimize_check_ordering
+
+# ===== 監視・診断 =====
+monitoring_diagnostics:
+  validation_performance:
+    metrics:
+      - validation_execution_time
+      - validation_accuracy
+      - false_positive_rate
+      - false_negative_rate
+      
+    alerts:
+      - performance_degradation
+      - accuracy_decline
+      - system_overload
+      - validation_failures
+      
+  system_health:
+    resource_monitoring:
+      - cpu_utilization
+      - memory_consumption
+      - cache_hit_ratio
+      - network_latency
+      
+    capacity_planning:
+      - validation_load_projection
+      - resource_scaling_requirements
+      - performance_optimization_opportunities
+
+# ===== 使用例 =====
+usage_examples:
+  ms2_strategic_gate_validation:
+    input_data:
+      milestone: "MS2"
+      achievement_claims: ["capability_decomposition_complete", "value_stream_designed"]
+      evidence_package: "comprehensive_documentation"
+      
+    validation_process:
+      1. achievement_verification
+      2. quality_assessment
+      3. value_consistency_check
+      4. traceability_validation
+      
+    expected_output:
+      status: "PASS"
+      overall_score: 0.87
+      detailed_scores:
+        achievement: 0.95
+        quality: 0.85
+        consistency: 0.90
+        traceability: 0.80
+      recommendations: ["improve_traceability_documentation"]
+      
+  imagination_detection_example:
+    input: "UIフレームワークを変更します。モダンな見た目にしたいからです。"
+    
+    detection_process:
+      1. linguistic_pattern_analysis
+      2. evidence_gap_detection
+      3. logical_structure_assessment
+      
+    detection_result:
+      imagination_detected: true
+      patterns_found: ["preference_based_decision"]
+      severity: "HIGH"
+      blocking_recommendation: true
+      improvement_suggestions: ["define_objective_ux_criteria", "conduct_user_research"]

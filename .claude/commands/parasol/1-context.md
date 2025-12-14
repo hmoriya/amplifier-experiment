@@ -2,17 +2,24 @@
 description: Project context setup (project:parasol)
 ---
 
-# Phase 1: Context - プロジェクト文脈確立
+# Phase 1: Context & Value Foundation - プロジェクト文脈・価値基盤確立
 
-プロジェクトの基本的な文脈を確立します。このフェーズは1回のみ実行し、プロジェクト全体の基盤となります。
+プロジェクトの基本的な文脈を確立し、V4価値分解フレームワークによる価値基盤を構築します。このフェーズは1回のみ実行し、プロジェクト全体の基盤となります。
 
 ## 目的
 
+**Phase 1.1: Context（文脈確立）**
 - 組織の現状を理解する
 - **業種・セグメント構造を特定する** ← Phase 2の前提条件
 - 市場環境を評価する
 - 制約事項を明確にする
 - ステークホルダーを特定する
+
+**Phase 1.2: Value Foundation（価値基盤確立）** ← **V4統合**
+- 九次元価値分析による体系的価値抽出
+- 価値ヒエラルキー（VL1→VL2→VL3）の構築
+- 価値マイルストーン（MS1）の設定
+- Amplifier Nine Dimensionsとの連携設定
 
 ## 🎯 設計哲学の適用
 
@@ -813,6 +820,142 @@ actor-inventory.md で識別されたアクターの関係性と影響度を可�
 - パートナーとの境界（Context Map設計に影響）
 - 外部システム連携ポイント
 - 規制対応が必要な領域
+```
+
+---
+
+## Phase 1.2: V4価値基盤構築（Value Foundation）
+
+Phase 1.1のコンテキスト分析完了後、**V4価値分解フレームワーク**により価値基盤を構築します。
+
+### 九次元価値分析（Business Nine Dimensions Value Analysis）
+
+```bash
+# zen-architectサブエージェントを使用した価値分析
+Task tool を使用して zen-architect を起動:
+
+"Phase 1.1で特定した{企業名}の文脈から、
+ビジネス九次元価値分析を実施してください。
+
+対象組織: {企業名}
+業種: {industry-segment-profile.mdから}
+主要事業: {business-unit-profiles.mdから}
+
+ビジネス九次元での分析:
+1. Impact: 事業インパクトの深度と範囲
+2. Velocity: 価値実現の速度とリズム
+3. Messaging: ステークホルダーへの価値伝達
+4. Reach: 価値創造の影響範囲
+5. Sentiment: 感情的・文化的価値要素
+6. Metrics: 価値測定システムとKPI
+7. Balance: 投資対効果の最適配分
+8. Depth: 変革の持続性と深度
+9. Foundation: 価値基盤システム
+
+各次元で具体的な価値要素を抽出し、
+VL1→VL2→VL3の価値ヒエラルキーを構築してください。"
+```
+
+### 価値ヒエラルキー構築（VL1→VL2→VL3）
+
+**VL1 (Vision Level)**: 組織の最上位価値・ビジョン
+```yaml
+VL1_Vision_Values:
+  enterprise_vision: "{organization-analysis.mdのビジョン}"
+  core_values: [価値1, 価値2, 価値3]
+  strategic_intent: "3-5年後の理想状態"
+```
+
+**VL2 (Strategic Level)**: VL1を実現するための戦略的価値要素  
+```yaml
+VL2_Strategic_Elements:
+  value_proposition_1:
+    name: "顧客価値創造"
+    contributes_to: "VL1.core_values[0]"
+    measurement: "顧客満足度、NPS"
+  
+  value_proposition_2:
+    name: "社会価値実現"
+    contributes_to: "VL1.core_values[1]"
+    measurement: "ESG指標、社会インパクト"
+```
+
+**VL3 (Tactical Level)**: VL2を可能にする戦術的価値活動
+```yaml
+VL3_Tactical_Activities:
+  activity_1:
+    name: "製品イノベーション"
+    enables: "VL2.value_proposition_1"
+    metrics: "新製品売上比率、開発サイクル"
+    
+  activity_2:
+    name: "オペレーション最適化"
+    enables: "VL2.value_proposition_2"
+    metrics: "効率性指標、品質指標"
+```
+
+### 価値マイルストーン（MS1）設定
+
+```yaml
+MS1_Value_Discovery_Milestone:
+  target_completion: "Phase 1完了から2週間"
+  success_criteria:
+    stakeholder_alignment: "95%以上の価値合意"
+    value_hierarchy_clarity: "VL1-VL3の明確な定義完了"
+    measurement_readiness: "各レベルの測定指標確定"
+  
+  deliverables:
+    - value-hierarchy.md
+    - value-measurement-framework.md  
+    - ms1-completion-report.md
+```
+
+### Amplifier Nine Dimensions連携設定
+
+Amplifierの九軸との統合により、設計から実装まで一貫した価値ベース開発を実現：
+
+```yaml
+Integration_Mapping:
+  parasol_nine_dimensions → amplifier_nine_axes:
+    Style → Design_Aesthetics
+    Motion → Temporal_Dynamics  
+    Voice → Communication_Language
+    Space → Information_Architecture
+    Color → Visual_Identity
+    Typography → Content_Structure
+    Proportion → Resource_Allocation
+    Texture → Experience_Quality
+    Body → System_Architecture
+```
+
+### 価値基盤成果物
+
+Phase 1.2で以下を作成：
+
+| ファイル | 目的 | Phase 2への影響 |
+|---------|------|----------------|
+| **value-hierarchy.md** | VL1→VL2→VL3価値分解 | 戦略ケイパビリティ設計 |
+| **value-measurement-framework.md** | MS1-MS5測定システム | 価値トレーサビリティ基盤 |
+| **nine-dimensions-analysis.md** | 九次元価値分析結果 | Amplifier連携基盤 |
+| **ms1-completion-report.md** | MS1達成状況 | Phase 2開始条件 |
+
+### 価値トレーサビリティ設定
+
+想像の設計を完全に防ぐため、価値トレーサビリティシステムを設定：
+
+```yaml
+Value_Traceability_Framework:
+  source_of_truth: "value-hierarchy.md (VL1-VL3)"
+  
+  validation_rules:
+    - "Phase 2のすべてのVSはVL2/VL3に対応必須"
+    - "Phase 3のすべてのCLはVSを通じてVL要素に追跡可能"
+    - "技術決定にはVL要素への貢献度を明示"
+  
+  anti_imagination_controls:
+    - "客観的価値測定指標の必須設定" 
+    - "ステークホルダー価値合意の文書化"
+    - "価値仮定の定期的検証メカニズム"
 ```
 
 ## 完了条件

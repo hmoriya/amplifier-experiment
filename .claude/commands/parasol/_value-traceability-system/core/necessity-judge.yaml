@@ -1,0 +1,478 @@
+# Parasol Necessity Judge - 構造的必然性判定エンジン
+# 4つの判定基準による設計判断の妥当性自動評価
+
+name: "Parasol Necessity Judge"
+version: "1.0.0"
+description: "構造的必然性を判定し、想像の設計を技術的に防止するエンジン"
+
+# ===== 設定 =====
+configuration:
+  judgment_engine:
+    strict_mode: true
+    pass_threshold: 3.5      # 5点満点での合格ライン
+    warning_threshold: 3.0   # 警告ライン
+    fail_threshold: 2.5      # 不合格ライン
+    
+  evaluation_weights:
+    value_origin_clarity: 0.30    # 価値起源の明確性
+    causal_relationship: 0.30     # 因果関係の証明
+    alternative_analysis: 0.20    # 代替案の検討
+    measurability: 0.20           # 測定可能性
+    
+  auto_blocking:
+    enabled: true
+    fail_threshold: 2.5
+    override_permission: ["value_architect"]
+
+# ===== 判定基準 =====
+judgment_criteria:
+  criterion_1_value_origin:
+    name: "価値起源の明確性"
+    weight: 0.30
+    description: "この判断は、明確に定義された価値（VL3）から直接導出されているか？"
+    
+    evaluation_rules:
+      score_5_excellent:
+        conditions:
+          - VL3価値が明確に特定されている
+          - VL3→VL2→VL1のチェーンが完全
+          - 価値階層の論理的整合性が完璧
+        examples:
+          - "VL3「発酵技術による味の革新」から、発酵研究ケイパビリティを導出"
+          
+      score_4_good:
+        conditions:
+          - VL3価値が特定されている
+          - 上位価値との関係が明確
+          - 論理的整合性あり
+        examples:
+          - "VL3価値は明確だが、VL2との関係に軽微な曖昧さ"
+          
+      score_3_acceptable:
+        conditions:
+          - VL3価値が大まかに特定
+          - 価値関係が推測可能
+          - 基本的な論理性あり
+        examples:
+          - "価値との関係は理解できるが、具体性に欠ける"
+          
+      score_2_poor:
+        conditions:
+          - 価値言及はあるが曖昧
+          - 関係性が不明確
+          - 論理的飛躍あり
+        examples:
+          - "「品質向上のため」程度の抽象的理由"
+          
+      score_1_fail:
+        conditions:
+          - 価値への言及なし
+          - 技術的理由のみ
+          - 想像ベースの判断
+        examples:
+          - "使いやすそうだから"
+          - "最新技術だから"
+          - "業界標準だから"
+          
+    ng_patterns:
+      - "〜と思われる"
+      - "〜のはず"
+      - "一般的に〜"
+      - "エキスパートによると"
+      - "ベストプラクティスでは"
+      
+  criterion_2_causal_proof:
+    name: "因果関係の証明"
+    weight: 0.30
+    description: "この判断と価値実現の因果関係が証明されているか？"
+    
+    evaluation_rules:
+      score_5_excellent:
+        conditions:
+          - 定量的な因果関係証明あり
+          - 複数の独立したデータソース
+          - 統計的有意性確認
+        requirements:
+          - 測定可能なKPI設定
+          - ベースラインとターゲット明示
+          - 相関係数または類似指標
+          
+      score_4_good:
+        conditions:
+          - 因果関係が論理的に説明可能
+          - データによる裏付けあり
+          - 測定方法が明確
+        requirements:
+          - 論理モデルの提示
+          - 定性的・定量的根拠
+          - 効果測定計画
+          
+      score_3_acceptable:
+        conditions:
+          - 基本的な論理関係あり
+          - 一定の根拠データ
+          - 理論的説明可能
+        requirements:
+          - 仮説モデル
+          - 部分的データ
+          - 理論的フレームワーク
+          
+      score_2_poor:
+        conditions:
+          - 因果関係が推測レベル
+          - 限定的根拠
+          - 論理的説明に穴
+        warning_signs:
+          - "効果があるはず"
+          - "他社で成功している"
+          - "理論的には可能"
+          
+      score_1_fail:
+        conditions:
+          - 因果関係不明
+          - 根拠データなし
+          - 想像ベースの主張
+        fail_patterns:
+          - "きっと良くなる"
+          - "感覚的にわかる"
+          - "経験上効果的"
+          
+  criterion_3_alternatives:
+    name: "代替案の検討"
+    weight: 0.20
+    description: "複数の選択肢を比較検討し、最適解を選んだか？"
+    
+    evaluation_rules:
+      score_5_excellent:
+        conditions:
+          - 5つ以上の代替案検討
+          - 系統的比較分析
+          - 意思決定マトリクス使用
+        deliverables:
+          - 代替案比較表
+          - 評価基準マトリクス
+          - リスク・ベネフィット分析
+          
+      score_4_good:
+        conditions:
+          - 3-4つの代替案検討
+          - 構造化された比較
+          - 明確な選択理由
+        deliverables:
+          - 代替案リスト
+          - 比較項目明示
+          - 選択根拠説明
+          
+      score_3_acceptable:
+        conditions:
+          - 2-3つの選択肢比較
+          - 基本的な評価
+          - 選択理由あり
+        deliverables:
+          - 主要代替案
+          - 簡易比較
+          - 選択理由
+          
+      score_2_poor:
+        conditions:
+          - 限定的選択肢検討
+          - 表面的比較
+          - 選択理由が弱い
+        warning_signs:
+          - "他に良い方法がない"
+          - "時間がないので"
+          - "とりあえずこれで"
+          
+      score_1_fail:
+        conditions:
+          - 代替案検討なし
+          - 思いつき選択
+          - 理由説明なし
+        fail_patterns:
+          - "これしか思いつかない"
+          - "いつもの方法"
+          - "直感的に正しい"
+          
+  criterion_4_measurability:
+    name: "測定可能性"
+    weight: 0.20
+    description: "この判断の効果を客観的に測定できるか？"
+    
+    evaluation_rules:
+      score_5_excellent:
+        conditions:
+          - 具体的KPI設定済み
+          - 測定方法確立
+          - ベースライン取得済み
+        requirements:
+          - SMART目標設定
+          - 測定ツール準備
+          - 測定頻度計画
+          
+      score_4_good:
+        conditions:
+          - KPI候補特定済み
+          - 測定手法明確
+          - 測定計画あり
+        requirements:
+          - 測定指標候補
+          - 測定方法案
+          - 実行計画
+          
+      score_3_acceptable:
+        conditions:
+          - 測定の方向性明確
+          - 指標案あり
+          - 測定可能性確認
+        requirements:
+          - 測定方向設定
+          - 指標の検討
+          - 実現可能性確認
+          
+      score_2_poor:
+        conditions:
+          - 測定意図はあるが曖昧
+          - 指標が抽象的
+          - 測定方法不明
+        warning_signs:
+          - "効果は測れるはず"
+          - "なんとなくわかる"
+          - "定性的に確認"
+          
+      score_1_fail:
+        conditions:
+          - 測定計画なし
+          - 効果検証不可能
+          - 主観的判断のみ
+        fail_patterns:
+          - "感覚的にわかる"
+          - "測定は不要"
+          - "雰囲気で判断"
+
+# ===== 判定プロセス =====
+judgment_process:
+  phase_1_input_validation:
+    description: "入力データの基本検証"
+    checks:
+      - 必須フィールド存在確認
+      - データ型整合性チェック
+      - 参照整合性確認
+    error_handling:
+      missing_data: "不足データ指摘と入力要求"
+      invalid_format: "フォーマット修正要求"
+      
+  phase_2_criteria_evaluation:
+    description: "4基準による詳細評価"
+    sequence:
+      1. value_origin_analysis
+      2. causal_relationship_analysis  
+      3. alternative_analysis
+      4. measurability_analysis
+    parallel_execution: false  # 順次実行で依存関係考慮
+    
+  phase_3_scoring:
+    description: "重み付けスコア計算"
+    algorithm:
+      total_score: |
+        (value_origin_score × 0.30) +
+        (causal_proof_score × 0.30) +
+        (alternatives_score × 0.20) +
+        (measurability_score × 0.20)
+    rounding: 2  # 小数点以下2桁
+    
+  phase_4_judgment:
+    description: "最終判定とアクション決定"
+    thresholds:
+      pass: ">= 3.5"
+      warning: "3.0 - 3.4"
+      fail: "< 3.0"
+    actions:
+      pass: "承認"
+      warning: "警告と改善提案"
+      fail: "ブロックまたはエスカレーション"
+
+# ===== 想像の設計検出 =====
+imagination_detection:
+  pattern_database:
+    assumption_patterns:
+      - "〜と思われる"
+      - "〜のはず"
+      - "一般的に〜"
+      - "〜と考えられる"
+      
+    trend_following_patterns:
+      - "最新だから"
+      - "他社もやっている"
+      - "業界標準"
+      - "ベストプラクティス"
+      
+    authority_patterns:
+      - "エキスパートが言った"
+      - "コンサルが推奨"
+      - "有名企業の事例"
+      - "権威ある機関の推奨"
+      
+    preference_patterns:
+      - "使いやすい"
+      - "きれい"
+      - "かっこいい"
+      - "好み"
+      
+    lazy_thinking_patterns:
+      - "これしか思いつかない"
+      - "いつもの方法"
+      - "とりあえず"
+      - "時間がないので"
+      
+  detection_algorithm:
+    text_analysis:
+      - キーワードマッチング
+      - 文脈分析
+      - 感情分析
+      - パターン認識
+      
+    logic_analysis:
+      - 論理構造分析
+      - 根拠充足度チェック
+      - 因果関係妥当性
+      - 一貫性検証
+      
+    evidence_analysis:
+      - データ品質評価
+      - ソース信頼性
+      - 新鮮度チェック
+      - 完全性確認
+
+# ===== 出力フォーマット =====
+output_formats:
+  judgment_result:
+    schema:
+      judgment_id: "string"
+      timestamp: "datetime"
+      input_summary: "object"
+      
+      scores:
+        value_origin: "number"
+        causal_proof: "number"
+        alternatives: "number"
+        measurability: "number"
+        total_score: "number"
+        
+      judgment:
+        status: "PASS|WARN|FAIL"
+        level: "EXCELLENT|GOOD|ACCEPTABLE|POOR|CRITICAL"
+        confidence: "number"  # 判定信頼度
+        
+      details:
+        criterion_analyses: "array"
+        imagination_flags: "array"
+        evidence_quality: "object"
+        recommendations: "array"
+        
+      actions:
+        immediate: "string"  # 即座のアクション
+        follow_up: "array"  # フォローアップ
+        escalation: "string" # エスカレーション
+        
+  improvement_suggestions:
+    schema:
+      weak_areas: "array"
+      specific_improvements: "array"
+      resource_recommendations: "array"
+      timeline_suggestions: "object"
+
+# ===== API仕様 =====
+api_endpoints:
+  evaluate_decision:
+    endpoint: "POST /api/v1/judge/evaluate"
+    description: "設計判断の構造的必然性を評価"
+    input:
+      decision_context: "object"
+      value_context: "object" 
+      evidence_data: "array"
+    output:
+      judgment_result: "object"
+      
+  batch_evaluate:
+    endpoint: "POST /api/v1/judge/batch"
+    description: "複数の判断を一括評価"
+    input:
+      decisions: "array"
+    output:
+      results: "array"
+      summary: "object"
+      
+  get_judgment_history:
+    endpoint: "GET /api/v1/judge/history/{project_id}"
+    description: "プロジェクトの判定履歴取得"
+    output:
+      history: "array"
+      trends: "object"
+
+# ===== 学習・改善 =====
+continuous_learning:
+  feedback_collection:
+    user_feedback: true
+    outcome_tracking: true
+    accuracy_monitoring: true
+    
+  model_improvement:
+    pattern_refinement: "monthly"
+    threshold_adjustment: "quarterly"
+    weight_optimization: "bi_annually"
+    
+  benchmark_tracking:
+    accuracy_target: 0.85
+    false_positive_max: 0.10
+    false_negative_max: 0.05
+
+# ===== 運用監視 =====
+monitoring:
+  performance_metrics:
+    evaluation_latency: "< 2s"
+    throughput: "> 100 evaluations/minute"
+    accuracy: "> 85%"
+    
+  quality_metrics:
+    consistency_score: "> 90%"
+    confidence_level: "> 80%"
+    user_satisfaction: "> 4.0/5.0"
+    
+  system_health:
+    uptime: "> 99.9%"
+    error_rate: "< 1%"
+    resource_usage: "< 80%"
+
+# ===== 使用例 =====
+usage_examples:
+  basic_evaluation:
+    input:
+      decision:
+        description: "マイクロサービス化の実施"
+        context: "システム保守性向上のため"
+        maker: "技術リード"
+      value_context:
+        vl3: "技術的負債削減による開発効率向上"
+        evidence: ["技術負債測定結果", "開発チーム生産性データ"]
+      alternatives:
+        - "モノリス改善"
+        - "部分的リファクタリング"
+        - "完全マイクロサービス化"
+    expected_output:
+      total_score: 4.2
+      status: "PASS"
+      recommendations: ["測定指標の詳細化", "移行計画の具体化"]
+      
+  warning_case:
+    input:
+      decision:
+        description: "UIフレームワークの変更"
+        context: "モダンな見た目にするため"
+      value_context:
+        vl3: "ユーザー体験向上"
+        evidence: ["UIが古い", "モダンフレームワークの存在"]
+    expected_output:
+      total_score: 2.8
+      status: "WARN"
+      imagination_flags: ["preference_based_decision"]
+      recommendations: ["具体的なUX改善指標の設定", "代替案比較の実施"]

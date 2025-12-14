@@ -1,0 +1,448 @@
+# Parasol Phase Hooks - Phase統合フック定義
+# 各Phaseコマンドとの統合ポイントと自動実行ロジック
+
+name: "Parasol Phase Hooks"
+version: "1.0.0"
+description: "価値トレーサビリティシステムとPhaseコマンドの統合フック"
+
+# ===== 統合設定 =====
+integration_config:
+  hook_execution:
+    mode: "automatic"           # 自動実行モード
+    failure_handling: "block"   # 失敗時はPhase実行をブロック
+    timeout_seconds: 30         # フックタイムアウト
+    retry_count: 2              # 失敗時再試行回数
+    
+  phase_detection:
+    method: "command_interception"  # コマンド実行の傍受
+    scope: "all_parasol_commands"   # 全Parasolコマンドを対象
+    exclude_patterns: ["help", "status", "validate"]  # 除外パターン
+    
+  data_flow:
+    input_capture: true         # 入力パラメータの自動キャプチャ
+    output_capture: true        # 出力結果の自動キャプチャ
+    context_enrichment: true    # コンテキスト情報の自動付加
+
+# ===== フック種別定義 =====
+hook_types:
+  pre_execution_hook:
+    name: "Phase実行前フック"
+    timing: "before_phase_command_execution"
+    purpose: "前提条件確認と準備処理"
+    mandatory: true
+    
+  execution_hook:
+    name: "Phase実行中フック"
+    timing: "during_phase_command_execution"
+    purpose: "リアルタイム監視と記録"
+    mandatory: true
+    
+  post_execution_hook:
+    name: "Phase実行後フック"
+    timing: "after_phase_command_execution"
+    purpose: "結果検証と次段階準備"
+    mandatory: true
+    
+  error_hook:
+    name: "エラー時フック"
+    timing: "on_phase_command_error"
+    purpose: "エラー情報記録と復旧支援"
+    mandatory: true
+
+# ===== Phase別フック定義 =====
+phase_hooks:
+  phase_0_init:
+    command: "/parasol:0-init"
+    hooks:
+      pre_execution:
+        actions:
+          - validate_url_accessibility
+          - check_system_prerequisites
+          - initialize_project_workspace
+          - setup_value_trace_foundation
+        gates:
+          - system_readiness_gate
+          
+      execution:
+        monitoring:
+          - company_analysis_quality
+          - value_hypothesis_formation
+          - initial_context_capture
+        recording:
+          - project_initialization_trace
+          - foundational_assumptions
+          
+      post_execution:
+        validation:
+          - project_structure_completeness
+          - initial_value_hypothesis_quality
+          - stakeholder_identification_completeness
+        next_phase_prep:
+          - context_analysis_readiness
+          
+  phase_1_context:
+    command: "/parasol:1-context"
+    hooks:
+      pre_execution:
+        actions:
+          - verify_phase_0_completion
+          - check_project_accessibility
+          - validate_stakeholder_availability
+        gates:
+          - phase_0_completion_gate
+          - context_analysis_readiness_gate
+          
+      execution:
+        monitoring:
+          - stakeholder_analysis_depth
+          - constraint_identification_quality
+          - context_comprehensiveness
+        recording:
+          - stakeholder_analysis_trace
+          - constraint_identification_trace
+          - context_modeling_decisions
+          
+      post_execution:
+        validation:
+          - stakeholder_coverage_completeness
+          - constraint_analysis_quality
+          - context_model_consistency
+        next_phase_prep:
+          - value_analysis_foundation
+          
+  phase_2_value:
+    command: "/parasol:2-value"
+    hooks:
+      pre_execution:
+        actions:
+          - verify_context_completeness
+          - check_value_methodology_readiness
+          - validate_stakeholder_alignment
+        gates:
+          - context_completion_gate
+          - value_analysis_readiness_gate
+          
+      execution:
+        monitoring:
+          - value_decomposition_logic
+          - backcast_reasoning_quality
+          - milestone_setting_realism
+        recording:
+          - value_hierarchy_trace
+          - backcast_decision_trace
+          - milestone_definition_trace
+          
+      post_execution:
+        validation:
+          - value_hierarchy_consistency
+          - backcast_logic_soundness
+          - milestone_achievability
+        next_phase_prep:
+          - capability_analysis_foundation
+        gates:
+          - ms1_foundation_gate  # 重要マイルストーン
+          
+  phase_3_capabilities:
+    command: "/parasol:3-capabilities"
+    hooks:
+      pre_execution:
+        actions:
+          - verify_value_definition_completeness
+          - check_capability_analysis_readiness
+          - validate_domain_decomposition_prerequisites
+        gates:
+          - value_definition_completion_gate
+          - capability_analysis_readiness_gate
+          
+      execution:
+        monitoring:
+          - domain_classification_logic
+          - capability_decomposition_quality
+          - bounded_context_definition_coherence
+        recording:
+          - cl1_classification_trace
+          - cl2_decomposition_trace
+          - cl3_context_definition_trace
+          
+      post_execution:
+        validation:
+          - capability_domain_completeness
+          - decomposition_logic_consistency
+          - bounded_context_coherence
+        next_phase_prep:
+          - application_design_foundation
+        gates:
+          - ms2_strategic_gate  # 重要マイルストーン
+          
+  phase_4_application:
+    command: "/parasol:4-application-design"
+    hooks:
+      pre_execution:
+        actions:
+          - verify_capability_completeness
+          - check_design_methodology_readiness
+          - validate_application_architecture_prerequisites
+        gates:
+          - capability_completion_gate
+          
+      execution:
+        monitoring:
+          - application_architecture_quality
+          - service_boundary_definition
+          - integration_design_coherence
+        recording:
+          - application_architecture_trace
+          - service_design_decisions
+          - integration_strategy_trace
+          
+      post_execution:
+        validation:
+          - architecture_consistency
+          - service_boundary_clarity
+          - integration_feasibility
+        next_phase_prep:
+          - software_design_foundation
+          
+  phase_5_software:
+    command: "/parasol:5-software-design"
+    hooks:
+      pre_execution:
+        actions:
+          - verify_application_design_completeness
+          - check_technical_architecture_readiness
+          - validate_implementation_prerequisites
+        gates:
+          - application_design_completion_gate
+          
+      execution:
+        monitoring:
+          - technical_architecture_quality
+          - implementation_design_feasibility
+          - technology_choice_reasoning
+        recording:
+          - technical_architecture_trace
+          - implementation_decisions
+          - technology_selection_trace
+          
+      post_execution:
+        validation:
+          - technical_architecture_completeness
+          - implementation_plan_viability
+          - technology_stack_coherence
+        next_phase_prep:
+          - implementation_readiness
+        gates:
+          - ms3_tactical_gate  # 重要マイルストーン
+          
+  phase_6_implementation:
+    command: "/parasol:6-implementation"
+    hooks:
+      pre_execution:
+        actions:
+          - verify_software_design_completeness
+          - check_implementation_environment
+          - validate_team_readiness
+        gates:
+          - software_design_completion_gate
+          
+      execution:
+        monitoring:
+          - implementation_progress
+          - code_quality_metrics
+          - integration_success_rate
+        recording:
+          - implementation_progress_trace
+          - quality_metrics_trace
+          - integration_decisions
+          
+      post_execution:
+        validation:
+          - implementation_completeness
+          - quality_standards_compliance
+          - integration_success
+        next_phase_prep:
+          - platform_deployment_readiness
+          
+  phase_7_platform:
+    command: "/parasol:7-platform"
+    hooks:
+      pre_execution:
+        actions:
+          - verify_implementation_completeness
+          - check_platform_environment
+          - validate_deployment_readiness
+        gates:
+          - implementation_completion_gate
+          
+      execution:
+        monitoring:
+          - deployment_progress
+          - platform_stability
+          - performance_metrics
+        recording:
+          - deployment_trace
+          - platform_configuration_trace
+          - performance_baseline
+          
+      post_execution:
+        validation:
+          - deployment_success
+          - platform_operational_status
+          - performance_acceptance
+        completion:
+          - project_completion_gate
+        gates:
+          - ms4_operational_gate    # 重要マイルストーン
+          - ms5_realization_gate    # 最終マイルストーン
+
+# ===== フック実行メカニズム =====
+execution_mechanics:
+  hook_interception:
+    method: "command_wrapper"
+    implementation: "parasol_command_interceptor"
+    priority: "highest"        # 最優先で実行
+    
+  context_capture:
+    automatic_detection:
+      - command_parameters
+      - environment_variables
+      - current_project_state
+      - user_context
+      
+    enrichment_data:
+      - timestamp
+      - executor_identity
+      - system_state
+      - project_metadata
+      
+  data_flow_control:
+    input_validation:
+      - parameter_completeness
+      - data_type_consistency
+      - business_rule_compliance
+      
+    output_validation:
+      - result_completeness
+      - quality_standard_compliance
+      - next_phase_readiness
+
+# ===== 動的フック管理 =====
+dynamic_hooks:
+  conditional_execution:
+    enable_conditions:
+      - value_traceability_enabled: true
+      - project_type: "value_driven"
+      - quality_level: "enterprise"
+      
+    skip_conditions:
+      - development_mode: true
+      - emergency_execution: true
+      - system_maintenance: true
+      
+  custom_hooks:
+    extensibility: true
+    registration_api: "register_custom_hook"
+    validation: "automatic"
+    priority_management: "configurable"
+
+# ===== エラーハンドリング =====
+error_handling:
+  hook_failure_scenarios:
+    pre_execution_failure:
+      action: "block_phase_execution"
+      message: "前提条件を満たしていません"
+      recovery: "issue_resolution_required"
+      
+    execution_failure:
+      action: "continue_with_warning"
+      message: "監視機能に問題があります"
+      recovery: "background_recovery_attempt"
+      
+    post_execution_failure:
+      action: "conditional_proceed"
+      message: "検証に問題があります"
+      recovery: "manual_validation_required"
+      
+  system_failure_scenarios:
+    trace_system_unavailable:
+      action: "log_locally_and_continue"
+      recovery: "sync_when_available"
+      
+    gate_system_unavailable:
+      action: "proceed_with_manual_approval"
+      recovery: "validate_retroactively"
+      
+    network_connectivity_loss:
+      action: "offline_mode"
+      recovery: "sync_when_connected"
+
+# ===== パフォーマンス最適化 =====
+performance_optimization:
+  parallel_execution:
+    hook_parallelization: true
+    max_concurrent_hooks: 5
+    dependency_management: "automatic"
+    
+  caching_strategy:
+    validation_result_cache: true
+    cache_duration: "1_hour"
+    cache_invalidation: "on_state_change"
+    
+  resource_management:
+    memory_limit: "256MB"
+    cpu_limit: "50%"
+    timeout_handling: "graceful_degradation"
+
+# ===== 監視・ログ =====
+monitoring:
+  hook_execution_metrics:
+    - execution_time_per_hook
+    - success_rate_per_phase
+    - error_frequency_by_type
+    - resource_consumption
+    
+  performance_tracking:
+    - phase_command_overhead
+    - user_experience_impact
+    - system_resource_usage
+    
+  quality_metrics:
+    - trace_data_completeness
+    - validation_accuracy
+    - gate_effectiveness
+
+# ===== 設定例 =====
+configuration_examples:
+  development_mode:
+    hook_execution: "minimal"
+    gates: "warning_only"
+    recording: "simplified"
+    
+  production_mode:
+    hook_execution: "full"
+    gates: "strict_enforcement"
+    recording: "comprehensive"
+    
+  audit_mode:
+    hook_execution: "full"
+    gates: "strict_enforcement"
+    recording: "comprehensive"
+    audit_level: "detailed"
+
+# ===== API仕様 =====
+api_interface:
+  hook_registration:
+    endpoint: "POST /api/v1/hooks/register"
+    description: "カスタムフックの登録"
+    
+  hook_execution:
+    endpoint: "POST /api/v1/hooks/execute"
+    description: "フックの手動実行"
+    
+  hook_status:
+    endpoint: "GET /api/v1/hooks/status"
+    description: "フック実行状況の確認"
+    
+  hook_configuration:
+    endpoint: "PUT /api/v1/hooks/config"
+    description: "フック設定の更新"

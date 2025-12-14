@@ -1,0 +1,242 @@
+# 構造的必然性チェックテンプレート
+
+**評価ID**: necessity-{evaluation_id}
+**評価日時**: {evaluation_timestamp}
+**評価対象**: {evaluation_target}
+**プロジェクト**: {project_name}
+**フェーズ**: {phase_name}
+
+---
+
+## 評価概要
+
+**判断内容**: {decision_description}
+**判断者**: {decision_maker}
+**評価者**: {evaluator_name}
+**評価方法**: {evaluation_method}
+
+---
+
+## 基準1：価値起源の明確性 (Weight: 30%)
+
+### 評価項目チェック
+- [ ] VL3価値が具体的に特定されている
+- [ ] VL3→VL2→VL1のチェーンが追跡可能
+- [ ] 価値階層の論理的整合性が確認されている
+- [ ] 判断と価値の直接的関連が説明されている
+
+### 詳細評価
+
+**VL3価値の特定**: {vl3_identification}
+- 明確性: {vl3_clarity_score} / 5.0
+- 具体性: {vl3_specificity_score} / 5.0
+
+**価値チェーンの完全性**: {value_chain_completeness}
+- VL3→VL2関係: {vl3_to_vl2_relationship}
+- VL2→VL1関係: {vl2_to_vl1_relationship}
+- 論理的一貫性: {logical_consistency_score} / 5.0
+
+**想像パターン検出**: {imagination_patterns_detected}
+- 検出パターン: {detected_patterns}
+- パターン重要度: {pattern_severity}
+
+### スコア算出
+**基準1スコア**: {criterion_1_score} / 5.0
+**評価根拠**: {criterion_1_rationale}
+
+---
+
+## 基準2：因果関係の証明 (Weight: 30%)
+
+### 評価項目チェック
+- [ ] 定量的な因果関係の証明がある
+- [ ] 複数の独立したデータソースによる裏付け
+- [ ] 測定可能なKPIが設定されている
+- [ ] ベースラインとターゲットが明示されている
+
+### 根拠品質評価
+
+#### 根拠1: {evidence_1_title}
+- **種別**: {evidence_1_type}
+- **信頼性**: {evidence_1_reliability} / 5.0
+- **新鮮度**: {evidence_1_freshness} / 5.0
+- **完全性**: {evidence_1_completeness} / 5.0
+- **関連性**: {evidence_1_relevance} / 5.0
+
+#### 根拠2: {evidence_2_title}
+- **種別**: {evidence_2_type}
+- **信頼性**: {evidence_2_reliability} / 5.0
+- **新鮮度**: {evidence_2_freshness} / 5.0
+- **完全性**: {evidence_2_completeness} / 5.0
+- **関連性**: {evidence_2_relevance} / 5.0
+
+#### 根拠3: {evidence_3_title}
+- **種別**: {evidence_3_type}
+- **信頼性**: {evidence_3_reliability} / 5.0
+- **新鮮度**: {evidence_3_freshness} / 5.0
+- **完全性**: {evidence_3_completeness} / 5.0
+- **関連性**: {evidence_3_relevance} / 5.0
+
+### 因果関係分析
+**論理的関連性**: {logical_connection_strength} / 5.0
+**統計的有意性**: {statistical_significance}
+**効果サイズ**: {effect_size}
+**交絡要因制御**: {confounding_control_quality}
+
+### スコア算出
+**基準2スコア**: {criterion_2_score} / 5.0
+**評価根拠**: {criterion_2_rationale}
+
+---
+
+## 基準3：代替案の検討 (Weight: 20%)
+
+### 評価項目チェック
+- [ ] 3つ以上の代替案が特定されている
+- [ ] 系統的な比較分析が実施されている
+- [ ] 評価基準マトリクスが使用されている
+- [ ] 選択理由が明確に説明されている
+
+### 代替案分析
+
+**特定された代替案数**: {alternatives_count}
+**比較分析の深度**: {analysis_depth_score} / 5.0
+**評価基準の明確性**: {criteria_clarity_score} / 5.0
+
+#### 代替案1: {alternative_1_name}
+- **実現可能性**: {alt1_feasibility} / 5.0
+- **ビジネス価値**: {alt1_business_value} / 5.0
+- **技術的適合性**: {alt1_technical_fit} / 5.0
+- **リスク評価**: {alt1_risk_level} / 5.0
+
+#### 代替案2: {alternative_2_name}
+- **実現可能性**: {alt2_feasibility} / 5.0
+- **ビジネス価値**: {alt2_business_value} / 5.0
+- **技術的適合性**: {alt2_technical_fit} / 5.0
+- **リスク評価**: {alt2_risk_level} / 5.0
+
+#### 代替案3: {alternative_3_name}
+- **実現可能性**: {alt3_feasibility} / 5.0
+- **ビジネス価値**: {alt3_business_value} / 5.0
+- **技術的適合性**: {alt3_technical_fit} / 5.0
+- **リスク評価**: {alt3_risk_level} / 5.0
+
+### 選択プロセス評価
+**意思決定マトリクス使用**: {decision_matrix_used}
+**トレードオフ分析**: {tradeoff_analysis_quality} / 5.0
+**選択理由の明確性**: {selection_rationale_clarity} / 5.0
+
+### スコア算出
+**基準3スコア**: {criterion_3_score} / 5.0
+**評価根拠**: {criterion_3_rationale}
+
+---
+
+## 基準4：測定可能性 (Weight: 20%)
+
+### 評価項目チェック
+- [ ] SMART目標が設定されている
+- [ ] 具体的KPIが定義されている
+- [ ] 測定方法が確立されている
+- [ ] ベースラインデータが取得されている
+
+### SMART目標評価
+
+**Specific（具体的）**: {smart_specific_score} / 5.0
+- 目標の明確性: {goal_clarity}
+- 曖昧さの排除: {ambiguity_elimination}
+
+**Measurable（測定可能）**: {smart_measurable_score} / 5.0
+- 定量指標設定: {quantitative_metrics}
+- 測定方法確立: {measurement_methods}
+
+**Achievable（達成可能）**: {smart_achievable_score} / 5.0
+- 現実性評価: {realism_assessment}
+- リソース適合性: {resource_alignment}
+
+**Relevant（関連性）**: {smart_relevant_score} / 5.0
+- 価値関連性: {value_relevance}
+- ビジネス重要度: {business_importance}
+
+**Time-bound（期限）**: {smart_timebound_score} / 5.0
+- 明確な期限設定: {clear_deadlines}
+- マイルストーン計画: {milestone_planning}
+
+### KPI設定評価
+
+#### 主要KPI: {primary_kpi_name}
+- **測定可能性**: {primary_kpi_measurability} / 5.0
+- **データ取得容易性**: {primary_kpi_data_accessibility} / 5.0
+- **ベースライン存在**: {primary_kpi_baseline_exists}
+- **目標値適切性**: {primary_kpi_target_appropriateness} / 5.0
+
+#### 副次KPI: {secondary_kpi_name}
+- **測定可能性**: {secondary_kpi_measurability} / 5.0
+- **データ取得容易性**: {secondary_kpi_data_accessibility} / 5.0
+- **ベースライン存在**: {secondary_kpi_baseline_exists}
+- **目標値適切性**: {secondary_kpi_target_appropriateness} / 5.0
+
+### スコア算出
+**基準4スコア**: {criterion_4_score} / 5.0
+**評価根拠**: {criterion_4_rationale}
+
+---
+
+## 総合評価
+
+### スコア計算
+```
+総合スコア = (基準1スコア × 0.30) + 
+           (基準2スコア × 0.30) + 
+           (基準3スコア × 0.20) + 
+           (基準4スコア × 0.20)
+
+         = ({criterion_1_score} × 0.30) + 
+           ({criterion_2_score} × 0.30) + 
+           ({criterion_3_score} × 0.20) + 
+           ({criterion_4_score} × 0.20)
+           
+         = {total_score} / 5.0
+```
+
+### 最終判定
+
+**判定結果**: {final_judgment}
+- ✅ **PASS** (≥ 3.5): 承認
+- ⚠️ **WARNING** (3.0-3.4): 条件付き承認
+- ❌ **FAIL** (< 3.0): 修正要求
+
+**信頼度**: {judgment_confidence} / 5.0
+
+### 改善提案
+
+#### 最優先改善項目
+1. **{improvement_1_area}**
+   - 現状スコア: {improvement_1_current_score}
+   - 改善アクション: {improvement_1_actions}
+   - 期待効果: {improvement_1_expected_impact}
+
+2. **{improvement_2_area}**
+   - 現状スコア: {improvement_2_current_score}
+   - 改善アクション: {improvement_2_actions}
+   - 期待効果: {improvement_2_expected_impact}
+
+#### 推奨リソース
+- **学習リソース**: {learning_resources}
+- **ツール推奨**: {recommended_tools}
+- **専門家相談**: {expert_consultation_needed}
+
+### 次のアクション
+
+**即座のアクション**: {immediate_actions}
+**フォローアップ**: {followup_actions}
+**再評価スケジュール**: {reevaluation_schedule}
+
+---
+
+## システム情報
+
+**評価アルゴリズムバージョン**: {algorithm_version}
+**評価完了時刻**: {evaluation_completion_time}
+**評価者署名**: {evaluator_signature}
+**システム承認**: {system_approval_status}

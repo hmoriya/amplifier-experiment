@@ -33,7 +33,7 @@ Amplifier DDDワークフローと統合し、各フェーズを厳密に実行�
 Phase 0: プロジェクトコンテキスト
     ↓  組織分析、市場環境評価、制約条件の明確化
 Phase 1: 価値定義
-    ↓  Nine Dimensions + Five Pillarsフレームワーク
+    ↓  Business Nine Dimensions + Five Pillarsフレームワーク
 Phase 2: 能力設計
     ↓  L1戦略的能力 → L2戦術的能力 → L3運用的能力
 Phase 3: ドメインモデリング
