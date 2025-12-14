@@ -420,4 +420,3 @@ Capability変更 → L2-L3に影響（中）
 
 - `/parasol:0-help concepts` - 主要概念の説明
 - `/parasol:0-help workflow` - 実行ワークフロー
-- `parasol-v5/FRAMEWORK-DESIGN.md` - 詳細設計ドキュメント

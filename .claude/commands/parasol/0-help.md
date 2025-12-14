@@ -61,7 +61,6 @@ Parasol V5 フレームワークの包括的なガイドとヘルプを提供し
 3. `/parasol:3-capabilities cl1` でドメイン分類
 4. `/parasol:status` で進捗確認
 
-📖 詳細ガイド: parasol-v5/FRAMEWORK-DESIGN.md
 ```
 
 ### トピック: overview
@@ -406,7 +405,6 @@ Task tool を使用して {subagent-name} を起動：
 - `_zigzag-process.md` - ZIGZAGプロセス詳細
 - `_value-methodology.md` - 価値方法論
 - `_parasol-architecture-overview.md` - 3層アーキテクチャ
-- `parasol-v5/FRAMEWORK-DESIGN.md` - フレームワーク設計書
 
 📐 **V5.1 階層構造ガイド**:
 - `_software-design-reference/capability-bc-test-structure.md` - **Capability・BC・テスト構造の整合性定義**

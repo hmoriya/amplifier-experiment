@@ -63,7 +63,7 @@ Phase 2（Value Definition）で適切なVSパターンを選択するため、�
 
 ### コングロマリット判定スコアリング
 
-> ⚠️ **重要**: コングロマリット（多角化企業）の場合、Phase 2で**事業部軸パターン**を優先する必要があります。
+> ⚠️ **重要**: コングロマリット（多角化企業）の場合、Phase 2で**business-unit-axis**を優先的に選択する必要があります。
 
 **スコアリング方式で判定**（各項目0-3点）:
 
@@ -77,18 +77,18 @@ Phase 2（Value Definition）で適切なVSパターンを選択するため、�
 
 **判定基準**（合計 /15点）:
 
-| スコア | 判定 | 推奨パターン |
+| スコア | 判定 | 推奨軸（3軸選択） |
 |--------|------|-------------|
-| 0-5点 | 単一事業体 | 価値軸パターン |
-| 6-9点 | 関連多角化 | フュージョン型（条件付き） |
-| 10-15点 | **コングロマリット** | **事業部軸パターン** |
+| 0-5点 | 単一事業体 | 1. value-axis<br>2. capability-axis<br>3. platform-axis |
+| 6-9点 | 関連多角化 | 1. fusion-axis<br>2. platform-axis<br>3. capability-axis |
+| 10-15点 | **コングロマリット** | 1. **business-unit-axis**<br>2. multi-tier-vstr-axis<br>3. capability-axis |
 
 ```
 ⚠️ コングロマリット検出時の注意
 
 シナジー ≠ VStr原則:
 - 事業間シナジーはVStr統合の理由にならない
-- 各事業は独立したVStrを持つ（事業部軸）
+- 各事業は独立したVStrを持つ（business-unit-axis）
 - シナジーはSupporting/Generic Layerで実現
 
 詳細: _patterns/_axes/business-unit-axis.md（コングロマリット設計原則）
@@ -244,8 +244,8 @@ outputs/1-context/extracted-concepts.json
 
 | # | ファイル | 目的 | Phase 2への影響 |
 |---|---------|------|----------------|
-| 1 | **organization-analysis.md** | 組織分析・コングロマリット判定 | 軸パターン選択 |
-| 2 | **business-unit-profiles.md** | 事業部ごとの詳細プロファイル | 事業部軸設計 |
+| 1 | **organization-analysis.md** | 組織分析・コングロマリット判定 | 探索軸選択 |
+| 2 | **business-unit-profiles.md** | 事業部ごとの詳細プロファイル | 軸選択の参考 |
 | 3 | **industry-segment-profile.md** | 業種・セグメント構造 | VSパターン選択 |
 | 4 | **actor-inventory.md** | アクター（顧客/従業員/パートナー）網羅 | 多段VStr判定 |
 | 5 | **market-assessment.md** | 市場評価・競合分析 | 差別化設計 |
@@ -453,7 +453,10 @@ outputs/1-context/extracted-concepts.json
 
 **判定**: [単一事業体 / 関連多角化 / コングロマリット]
 
-**推奨軸パターン**: [価値軸 / フュージョン型 / 事業部軸]
+**推奨軸（3軸選択）**: 
+1. [第1軸]
+2. [第2軸]
+3. [第3軸]
 ```
 
 ---
@@ -989,7 +992,7 @@ Value_Traceability_Framework:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 スコア: [X]/15点
 判定: [単一事業体 / 関連多角化 / コングロマリット]
-推奨軸パターン: [価値軸 / フュージョン型 / 事業部軸]
+推奨軸（3軸）: [第1軸 / 第2軸 / 第3軸]
 
 📊 セグメント分析結果:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1004,7 +1007,7 @@ Value_Traceability_Framework:
 パートナーアクター: [X]件（PS候補: [Y]件）
 多段VStr推奨: [適用 / 見送り]
 
-→ Phase 2で適用されるVSパターンと軸パターンが決定されました
+→ Phase 2で適用されるVSパターンと探索軸（3軸）が決定されました
 
 📊 ステータス確認:
 → `/parasol:0-status`
@@ -1069,5 +1072,4 @@ Phase 1 は反復不要です。内容を更新する場合は、
 
 ## 参考資料
 
-- **フレームワーク設計**: `parasol-v5/FRAMEWORK-DESIGN.md`
 - **テンプレート**: `parasol-v5/templates/phase1/`

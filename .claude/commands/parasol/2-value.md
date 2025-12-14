@@ -1839,6 +1839,3 @@ Phase 1を先に実行してください:
 
 - **価値方法論リファレンス**: [_value-methodology.md](./_value-methodology.md) - バックキャスティング・価値分解の詳細
 - **バージョンガイド**: [VERSION-GUIDE.md](../../../parasol/VERSION-GUIDE.md) - V4/V5の違い
-- **フレームワーク設計**: `parasol-v5/FRAMEWORK-DESIGN.md`
-- **テンプレート**: `parasol-v5/templates/phase2/`
-  - `vs-template.md` (VS共通テンプレート)

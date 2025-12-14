@@ -1079,7 +1079,6 @@ Phase 4完了前に確認すべき項目：
 
 ## 参考資料
 
-- **フレームワーク設計**: `parasol-v5/FRAMEWORK-DESIGN.md`
 - **テンプレート**: `parasol-v5/templates/phase4/`
 - `service-boundary-template.md`
 - `context-map-template.md`

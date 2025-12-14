@@ -1161,7 +1161,6 @@ Phase 4で定義されたサービス/BC:
 
 ## 参考資料
 
-- **フレームワーク設計**: `parasol-v5/FRAMEWORK-DESIGN.md`
 - **consultingTool参照**: `/Users/hmoriya/Develop/github/github.com/hmoriya/consultingTool`
 
 ### テンプレート（Mermaid非依存・解析エンジン対応）

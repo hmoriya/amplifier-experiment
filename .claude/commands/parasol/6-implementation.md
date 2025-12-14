@@ -643,5 +643,4 @@ Phase 5でソフトウェア設計を完了してください:
 
 ## 参考資料
 
-- **フレームワーク設計**: `parasol-v5/FRAMEWORK-DESIGN.md`
 - **Phase 5設計**: `outputs/5-software/services/`
