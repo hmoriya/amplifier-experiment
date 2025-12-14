@@ -19,7 +19,7 @@ description: Value definition and enterprise activities (project:parasol)
 /parasol:2-value VS0          # VS0を直接指定
 /parasol:2-value VS2          # VS2を直接指定
 /parasol:2-value all          # 全VS概要を生成
-/parasol:2-value exploration  # 5軸探索モード（価値軸/事業部軸/フュージョン型/ケーパビリティ統合型/プラットフォーム軸）
+/parasol:2-value exploration  # 6軸探索モード（capability/business-unit/value/platform/fusion/multi-tier-vstr）
 /parasol:2-value es-ps        # ES/PS VStr（従業員・パートナー向け）設計
 
 # Phase 2.2: Strategic Capabilities（V4統合）
@@ -369,31 +369,32 @@ outputs/2-value/
 
 ---
 
-## 🔀 5軸探索モード（exploration）
+## 🔀 6軸探索モード（exploration）
 
-複数の分解軸を並行探索し、最適なバリューストリーム構造を発見するモードです。
+業界特性に応じて6つの軸から最適な3軸を選択し、並行探索して比較・選択するモードです。
 
 ### 使用方法
 
 ```bash
-/parasol:2-value exploration              # worktree作成 + 5軸探索開始
-/parasol:2-value exploration --no-worktree # worktreeなし（フォルダ構造のみ）
-/parasol:2-value exploration status        # 5軸の進捗確認
-/parasol:2-value exploration merge         # 結果を本体にマージ
+/parasol:2-value exploration init         # 業界判定 + 推奨軸提示
+/parasol:2-value exploration select-axes  # 探索する3軸を選択
+/parasol:2-value exploration run [axis]   # 選択した軸で探索実行
+/parasol:2-value exploration compare      # 選択した軸の比較表生成
+/parasol:2-value exploration select [axis] # 最終選択してmainにマージ
+/parasol:2-value exploration cleanup      # worktree削除
+/parasol:2-value exploration status       # 探索状況確認
 ```
 
-### worktree自動作成
+### 業界別推奨軸
 
-`exploration` 実行時、以下のGitコマンドを内部で実行してworktreeを作成します：
+`exploration init` 実行時、業界に基づく推奨軸を提示します：
 
-```bash
-# Claudeが内部で実行するコマンド
-git worktree add .worktrees/{project}-value -b {project}-value
-git worktree add .worktrees/{project}-business -b {project}-business
-git worktree add .worktrees/{project}-fusion -b {project}-fusion
-git worktree add .worktrees/{project}-capability -b {project}-capability
-git worktree add .worktrees/{project}-platform -b {project}-platform
-```
+| 業界 | 推奨軸（優先順） |
+|------|------------------|
+| 飲料・食品 | 1. platform-axis, 2. fusion-axis, 3. multi-tier-vstr-axis |
+| 地域銀行 | 1. value-axis, 2. platform-axis, 3. capability-axis |
+| 人材派遣 | 1. capability-axis, 2. platform-axis, 3. business-unit-axis |
+| 製造業 | 1. multi-tier-vstr-axis, 2. platform-axis, 3. capability-axis |
 
 **作成されるworktree構造**:
 ```
@@ -413,18 +414,20 @@ git worktree add .worktrees/{project}-platform -b {project}-platform
 ### 実行後の案内
 
 ```
-✅ 5軸探索用worktreeを作成しました
+✅ 探索環境を初期化しています
 
-📂 Worktree一覧:
-┌────────────────────────────────────────────────────────────────┐
-│ 軸                  │ パス                        │ ブランチ    │
-├────────────────────────────────────────────────────────────────┤
-│ 1. 価値軸           │ .worktrees/{project}-value  │ {project}-value │
-│ 2. 事業部軸         │ .worktrees/{project}-business │ {project}-business │
-│ 3. フュージョン型   │ .worktrees/{project}-fusion │ {project}-fusion │
-│ 4. ケーパビリティ統合型 │ .worktrees/{project}-capability │ {project}-capability │
-│ 5. プラットフォーム軸 │ .worktrees/{project}-platform │ {project}-platform │
-└────────────────────────────────────────────────────────────────┘
+📊 業界別推奨軸:
+1. platform-axis ★★★★★ 
+   理由: 水資源・発酵技術の共通基盤 + 製品別展開
+   
+2. fusion-axis ★★★★☆
+   理由: グローバル×ローカル、伝統×革新の融合
+   
+3. multi-tier-vstr-axis ★★★☆☆
+   理由: 原料→製造→流通の多段階価値創造
+
+次のステップ:
+→ /parasol:2-value exploration select-axes  # 探索する3軸を選択
 
 🚀 次のステップ:
 
@@ -445,23 +448,24 @@ git worktree add .worktrees/{project}-platform -b {project}-platform
   /parasol:2-value exploration merge
 ```
 
-### 5つの探索軸
+### 6つの利用可能な軸
 
-| # | 軸 | VStr数 | 特徴 | 適用シナリオ |
-|---|-----|--------|------|-------------|
-| 1 | **価値軸** | 1本 | 統合・一貫 | 強力なブランド統一が必要な場合 |
-| 2 | **事業部軸** | N本 | 独立・最適化 | 事業間の独立性が高い場合、コングロマリット |
-| 3 | **フュージョン型** | 1+N本 | 共通基盤＋事業固有 | **顧客体験が事業横断で連続する場合のみ** |
-| 4 | **ケーパビリティ統合型** | CL1判定後 | 効率化重視 | 無駄なシステム排除が必要な場合 |
-| 5 | **プラットフォーム軸** | 2本(DS+SS) | 両面市場 | マーケットプレイス・エコシステム型事業 |
+| # | 軸 | 特徴 | 適用シナリオ |
+|---|-----|------|-------------|
+| 1 | **capability-axis** | ビジネス能力中心の分解 | 機能横断的な価値創出を重視する企業 |
+| 2 | **business-unit-axis** | 組織構造に基づく分解 | 事業部制が明確で独立性の高い企業 |
+| 3 | **value-axis** | 純粋な価値種別での分解 | 統一的な価値体系を持つ企業 |
+| 4 | **platform-axis** | 共通基盤 + 事業別サービス | プラットフォームビジネス、共通技術基盤を持つ企業 |
+| 5 | **fusion-axis** | 複数視点の戦略的統合 | 複雑な価値創造構造を持つ企業 |
+| 6 | **multi-tier-vstr-axis** | 階層的なValue Stream | サプライチェーンが長い、多段階の価値創造企業 |
 
-### 5軸の比較
+### 探索プロセス
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                                   Phase 2: 5軸探索                                                │
+│                                Phase 2: 動的軸選択探索                                            │
 ├───────────────┬───────────────┬───────────────┬────────────────────────────┬────────────────────┤
-│   価値軸       │   事業部軸    │ フュージョン型 │ ケーパビリティ統合型       │ プラットフォーム軸  │
+│ Step 1: init  │ Step 2: select │ Step 3: run   │ Step 4: compare           │ Step 5: select    │
 ├───────────────┼───────────────┼───────────────┼────────────────────────────┼────────────────────┤
 │ VStr: 1本     │ VStr: N本     │ VStr: 1+N本   │ VStr: CL1判定後に決定      │ VStr: 2本(DS+SS)   │
 │               │               │               │                            │                    │
@@ -512,19 +516,19 @@ outputs/2-value/
 │   └── platform/           # プラットフォーム軸の探索結果
 │       ├── demand-side-vstr.md    # 需要者向けVStr (DS0-DS7)
 │       └── supply-side-vstr.md    # 供給者向けVStr (SS0-SS7)
-├── comparison-matrix.md    # 5軸比較マトリクス
+├── comparison-matrix.md    # 選択した3軸の比較マトリクス
 └── selected-approach.md    # 選択したアプローチと理由
 ```
 
 ---
 
-### 軸1-2: 価値軸・事業部軸
+### 旧探索モードとの互換性
 
 Phase 2で設計完了。詳細は本ドキュメントの他セクションを参照。
 
 ---
 
-### 軸3: フュージョン型
+### fusion-axis（融合軸）
 
 **目的**: 顧客体験が事業を跨いで連続する場合の統合設計
 
@@ -561,7 +565,7 @@ VStr    VStr    VStr
 
 ---
 
-### 軸4: ケーパビリティ統合型
+### capability-axis（ケイパビリティ軸）
 
 **目的**: ケーパビリティ分析に基づく無駄排除・効率化
 
@@ -645,7 +649,7 @@ Task tool を使用して zen-architect (ANALYZE mode) を起動：
 
 ---
 
-### 軸5: プラットフォーム軸
+### platform-axis（プラットフォーム軸）
 
 **目的**: 需要者と供給者の両面市場を最適化するマーケットプレイス・エコシステム型ビジネス向け
 
@@ -1092,12 +1096,12 @@ Phase 2開始時、以下のPhase 1成果物を自動で読み込み、軸パタ
 
 Phase 1で算出された**コングロマリット判定スコア**（15点満点）に基づき、軸パターンを自動推奨：
 
-| スコア | 推奨パターン | 理由 |
+| スコア | 優先推奨軸 | 理由 |
 |--------|-------------|------|
-| **0-4点** | 価値軸（統合型） | 単一事業・統合ブランド向け |
-| **5-8点** | フュージョン型 | 共通基盤＋事業固有の組み合わせ |
-| **9-12点** | 事業部軸 | 事業間独立性が高い |
-| **13-15点** | 事業部軸（厳格） | コングロマリット構造 |
+| **0-4点** | 1. value-axis<br>2. capability-axis<br>3. platform-axis | 単一事業・統合ブランド向け |
+| **5-8点** | 1. fusion-axis<br>2. platform-axis<br>3. capability-axis | 共通基盤＋事業固有の組み合わせ |
+| **9-12点** | 1. business-unit-axis<br>2. multi-tier-vstr-axis<br>3. capability-axis | 事業間独立性が高い |
+| **13-15点** | 1. business-unit-axis<br>2. capability-axis<br>3. value-axis | コングロマリット構造 |
 
 #### プラットフォーム型判定
 
@@ -1129,8 +1133,13 @@ Phase 1で算出された**コングロマリット判定スコア**（15点満�
 📊 コングロマリット判定スコア: 11/15点
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-🎯 推奨軸パターン: 事業部軸
-   理由: 事業間の独立性が高く、顧客セグメントが明確に分離
+🎯 推奨軸（3軸選択）:
+   1. business-unit-axis ★★★★★ 
+      理由: 事業間の独立性が高く、顧客セグメントが明確に分離
+   2. multi-tier-vstr-axis ★★★★☆
+      理由: 原材料→製造→流通のバリューチェーンが存在
+   3. capability-axis ★★★☆☆
+      理由: R&Dやサプライチェーンの共通機能を持つ
 
 📋 事業部構成:
    ├── 酒類事業 (VStr-1)
@@ -1147,10 +1156,13 @@ Phase 1で算出された**コングロマリット判定スコア**（15点満�
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-次のステップを選択:
-1. 推奨パターン（事業部軸）で進める
-2. 5軸探索モードで比較検討
+次のステップ:
+1. 推奨軸（3軸）を選択して進める
+   → /parasol:2-value exploration select-axes
+2. カスタム選択で他の軸を含める
+   → /parasol:2-value exploration select-axes
 3. 業種・セグメント設定を変更
+   → /parasol:2-value industry
 ```
 
 **Phase 1で作成済みの場合**: 上記の自動読み込み・推奨を実行。
