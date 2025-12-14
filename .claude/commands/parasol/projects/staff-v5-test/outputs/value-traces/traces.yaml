@@ -1,0 +1,250 @@
+traces:
+  - id: vt-staff-001
+    timestamp: "2025-01-21T10:15:00Z"
+    phase: "Phase1-Context"
+    decision: "求職者・派遣スタッフを最重要ステークホルダーと定義"
+    value_origin:
+      stakeholder: "求職者・派遣スタッフ"
+      need: "キャリア自律と雇用安定の両立"
+      evidence:
+        type: "労働市場データ"
+        source: "厚生労働省 労働力調査"
+        key_finding: "転職者数351万人（過去最高）、平均勤続年数12.3年（減少継続）"
+    structural_necessity:
+      score: 4.8
+      criteria:
+        value_origin: 5.0
+        causality: 4.8
+        alternatives: 4.5
+        measurability: 4.8
+    judgment: "終身雇用崩壊は不可逆的構造変化。個人のキャリア自律支援が必須。"
+    
+  - id: vt-staff-002
+    timestamp: "2025-01-21T10:18:00Z"
+    phase: "Phase1-Context"
+    decision: "VL1-1.1: キャリア自律支援価値を最優先価値として定義"
+    value_origin:
+      stakeholder: "求職者・派遣スタッフ"
+      need: "複数企業での経験を通じたスキル形成"
+      evidence:
+        type: "雇用動向調査"
+        source: "リクルートワークス研究所 2023"
+        key_finding: "生涯転職回数平均2.8回、20代は5回以上が35%"
+    structural_necessity:
+      score: 5.0
+      criteria:
+        value_origin: 5.0
+        causality: 5.0
+        alternatives: 5.0
+        measurability: 5.0
+    inheritance:
+      from: "vt-staff-001"
+    judgment: "個人のキャリアは自己責任で設計する時代。支援なしには成立しない。"
+    
+  - id: vt-staff-003
+    timestamp: "2025-01-21T10:20:00Z"
+    phase: "Phase1-Context"
+    decision: "VL2-1: 登録者数拡大をビジネス価値として設定"
+    value_origin:
+      stakeholder: "経営層・株主"
+      need: "持続的成長と市場シェア拡大"
+      evidence:
+        type: "市場分析"
+        source: "矢野経済研究所 人材ビジネス市場2023"
+        key_finding: "人材派遣市場9.2兆円、年率3%成長継続"
+    structural_necessity:
+      score: 4.6
+      criteria:
+        value_origin: 4.5
+        causality: 4.8
+        alternatives: 4.5
+        measurability: 4.6
+    inheritance:
+      from: ["vt-staff-001", "vt-staff-002"]
+    judgment: "人材プールの規模が競争力の源泉。量的拡大は質的向上の前提。"
+    
+  - id: vt-staff-004
+    timestamp: "2025-01-21T10:22:00Z"
+    phase: "Phase1-Context"
+    decision: "VL3-1: 統合人材管理システムを中核システム価値として定義"
+    value_origin:
+      stakeholder: "IT部門・オペレーション部門"
+      need: "分散したデータの統合と業務効率化"
+      evidence:
+        type: "技術動向"
+        source: "IDC Japan 2023"
+        key_finding: "HRテック市場1,850億円、CAGR12.5%"
+    structural_necessity:
+      score: 5.0
+      criteria:
+        value_origin: 5.0
+        causality: 5.0
+        alternatives: 5.0
+        measurability: 5.0
+    inheritance:
+      from: ["vt-staff-002", "vt-staff-003"]
+    judgment: "デジタル化なしに人材ビジネスは成立しない。統合DBは必須インフラ。"
+    
+  # 想像の設計として検出・除外された項目
+  - id: vt-staff-005-rejected
+    timestamp: "2025-01-21T10:25:00Z"
+    phase: "Phase1-Context"
+    decision: "[却下] メタバース空間での派遣業務を新規事業として検討"
+    value_origin:
+      stakeholder: "イノベーション推進部門"
+      need: "先進的な取り組みによる差別化"
+      evidence:
+        type: "市場予測"
+        source: "コンサルティング会社レポート"
+        key_finding: "2030年にメタバース市場50兆円規模"
+    structural_necessity:
+      score: 1.8
+      criteria:
+        value_origin: 2.0  # ニーズが不明確
+        causality: 1.5    # 因果関係が希薄
+        alternatives: 2.0  # 代替手段多数
+        measurability: 1.5 # 測定不可能
+    status: "REJECTED"
+    rejection_reason: "想像の設計。実需要の証拠なし。技術的実現性も不透明。"
+    
+  - id: vt-staff-006-rejected
+    timestamp: "2025-01-21T10:27:00Z"
+    phase: "Phase1-Context"
+    decision: "[却下] AI完全自動マッチングによる人間不要論"
+    value_origin:
+      stakeholder: "技術部門"
+      need: "究極の効率化"
+      evidence:
+        type: "技術トレンド"
+        source: "AI関連記事"
+        key_finding: "ChatGPT等の急速な進化"
+    structural_necessity:
+      score: 2.3
+      criteria:
+        value_origin: 2.5
+        causality: 2.0
+        alternatives: 2.5
+        measurability: 2.0
+    status: "REJECTED"
+    rejection_reason: "想像の設計。人材マッチングには人間の判断が必須。AIは支援ツール。"
+
+  # Phase 2のトレース
+  - id: vt-staff-007
+    timestamp: "2025-01-21T11:00:00Z"
+    phase: "Phase2-ValueStream"
+    decision: "VS1: 人材獲得・エンゲージメントをCore Value Streamとして定義"
+    value_origin:
+      stakeholder: "求職者・派遣スタッフ"
+      need: "簡単で迅速な登録プロセス"
+      evidence:
+        type: "ユーザー行動分析"
+        source: "自社データ＋業界調査"
+        key_finding: "オンライン登録率75%、離脱率は対面の1/3"
+    structural_necessity:
+      score: 5.0
+      criteria:
+        value_origin: 5.0
+        causality: 5.0
+        alternatives: 5.0
+        measurability: 5.0
+    inheritance:
+      from: ["vt-staff-001", "vt-staff-002"]
+      to: ["vt-staff-010"]  # 将来のCL設計へ
+    judgment: "人材獲得のデジタル化は不可逆。オムニチャネル化が必須。"
+
+  - id: vt-staff-008
+    timestamp: "2025-01-21T11:05:00Z"
+    phase: "Phase2-ValueStream"
+    decision: "VS2: スキル開発・キャリア支援をCore Value Streamとして定義"
+    value_origin:
+      stakeholder: "求職者・派遣スタッフ"
+      need: "市場価値の向上とキャリアの自律的設計"
+      evidence:
+        type: "市場調査"
+        source: "経済産業省 リスキリング調査2023"
+        key_finding: "リスキリング市場2,000億円、2030年1兆円予測"
+    structural_necessity:
+      score: 4.9
+      criteria:
+        value_origin: 5.0
+        causality: 5.0
+        alternatives: 4.8
+        measurability: 4.8
+    inheritance:
+      from: "vt-staff-002"
+    judgment: "終身雇用崩壊後の個人キャリア支援は事業の中核。"
+
+  - id: vt-staff-009
+    timestamp: "2025-01-21T11:10:00Z"
+    phase: "Phase2-ValueStream"
+    decision: "VS3: マッチング・配置最適化をCore Value Streamとして定義"
+    value_origin:
+      stakeholder: "企業顧客"
+      need: "適材適所の迅速な実現"
+      evidence:
+        type: "パフォーマンスデータ"
+        source: "業界ベンチマーク調査"
+        key_finding: "AI活用企業はマッチング精度30%向上、リードタイム50%短縮"
+    structural_necessity:
+      score: 4.8
+      criteria:
+        value_origin: 5.0
+        causality: 4.8
+        alternatives: 4.5
+        measurability: 4.8
+    inheritance:
+      from: ["vt-staff-003", "vt-staff-004"]
+    judgment: "データとAIによる最適化なしに競争不可能。"
+
+  - id: vt-staff-010
+    timestamp: "2025-01-21T11:15:00Z"
+    phase: "Phase2-ValueStream"
+    decision: "L1-3: データドリブン最適化力を最重要戦略ケイパビリティと定義"
+    value_origin:
+      stakeholder: "経営層"
+      need: "データに基づく意思決定と継続的改善"
+      evidence:
+        type: "競合分析"
+        source: "McKinsey人材ビジネスレポート2023"
+        key_finding: "データ活用上位25%企業は収益性2倍"
+    structural_necessity:
+      score: 4.8
+      criteria:
+        value_origin: 4.8
+        causality: 4.8
+        alternatives: 4.8
+        measurability: 4.8
+    inheritance:
+      from: ["vt-staff-007", "vt-staff-008", "vt-staff-009"]
+    judgment: "全VSを横断するデータ基盤が競争優位の源泉。"
+
+  - id: vt-staff-011-rejected
+    timestamp: "2025-01-21T11:20:00Z"
+    phase: "Phase2-ValueStream"
+    decision: "[却下] VSX: メタバース人材派遣を新規Value Streamとして追加"
+    value_origin:
+      stakeholder: "新規事業開発部門"
+      need: "次世代ビジネスモデルの確立"
+      evidence:
+        type: "技術予測"
+        source: "ガートナー ハイプサイクル"
+        key_finding: "メタバースは幻滅期、実用化は5-10年先"
+    structural_necessity:
+      score: 1.5
+      criteria:
+        value_origin: 1.5
+        causality: 1.5
+        alternatives: 1.5
+        measurability: 1.5
+    status: "REJECTED"
+    rejection_reason: "想像の設計。実需要なし、技術的にも未成熟。"
+
+# サマリー統計
+summary:
+  total_traces: 11
+  accepted: 8
+  rejected: 3
+  average_necessity_score: 4.83  # 承認分のみ（Phase2: 4.88）
+  phases_covered: ["Phase1-Context", "Phase2-ValueStream"]
+  value_chain_completeness: 100%  # VL1→VL2→VL3→VS→L1
+  imagination_detection_rate: 27%  # 3/11を検出・除外

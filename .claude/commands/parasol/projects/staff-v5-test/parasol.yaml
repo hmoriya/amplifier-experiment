@@ -1,0 +1,41 @@
+project:
+  name: staff-v5-test
+  company: "株式会社スタッフサービス・ホールディングス"
+  url: "https://www.staffservice-holdings.jp"
+  created: "2025-01-21T10:00:00Z"
+  updated: "2025-01-21T10:00:00Z"
+
+phases:
+  phase0:
+    status: in_progress
+    started: "2025-01-21T10:00:00Z"
+  phase1:
+    status: pending
+  phase2:
+    status: pending
+  phase3:
+    status: in_progress
+    started: "2025-01-21T11:00:00Z"
+    milestones:
+      MS3: "2025-01-21T11:30:00Z"  # CL1/CL2/CL3完了 - 能力分解完了
+  phase4:
+    status: pending
+  phase5:
+    status: pending
+  phase6:
+    status: pending
+  phase7:
+    status: pending
+
+settings:
+  industry: hr
+  focus: digital-transformation
+  output_dir: ./outputs
+  auto_backup: true
+  
+# Parasol V5 特有の設定
+v5_features:
+  structural_necessity_threshold: 3.0
+  imagination_detection: enabled
+  value_traceability: enabled
+  milestone_tracking: enabled

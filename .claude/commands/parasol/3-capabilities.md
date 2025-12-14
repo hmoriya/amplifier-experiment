@@ -126,9 +126,9 @@ Phase 3では、Parasolの「**保守性と変更容易性**」を重視して�
 - ドメイン内のサブドメイン候補を抽出
 - マイクロサービス境界を設計
 
-**CL3: Bounded Context定義**
-- `zen-architect` (ARCHITECT mode) - BC責務と境界
-- `api-contract-designer` - API契約設計（必要に応じて）
+**CL3: ビジネスオペレーション定義**
+- `zen-architect` (ARCHITECT mode) - 業務活動の詳細化
+- ビジネスオペレーション（業務活動）の洗い出し
 
 ### サブエージェント活用の利点
 

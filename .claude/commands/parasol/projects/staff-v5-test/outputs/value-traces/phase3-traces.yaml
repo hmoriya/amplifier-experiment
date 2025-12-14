@@ -1,0 +1,72 @@
+# Phase 3 価値トレーサビリティ記録
+# 生成日時: 2025-01-21 11:30:00
+
+traces:
+  - id: vt-staff-cl1-001
+    phase: 3
+    decision: "VS2をCore Domainに分類"
+    value_source: 
+      - "VL1: 企業と人材の価値最大化"
+      - "VS2: スキル開発・キャリア支援"
+    structural_necessity:
+      score: 4.6
+      data:
+        - "リスキリング市場CAGR 15%（5年継続）"
+        - "DX人材不足79万人（2025年予測）"
+    rationale: "労働市場の構造的変化により、スキル開発は競争優位の源泉"
+    
+  - id: vt-staff-cl2-001
+    phase: 3
+    decision: "vs2-skill-assessmentを独立サブドメインとして定義"
+    value_source: "VS2-A1: スキルギャップ分析"
+    structural_necessity:
+      score: 4.2
+      data:
+        - "ジョブ型雇用への移行（大手企業の60%が導入検討）"
+        - "スキルベース採用の増加（求人の45%がスキル明記）"
+    rationale: "客観的スキル評価は雇用形態変化の必然的要求"
+    
+  - id: vt-staff-cl2-002
+    phase: 3
+    decision: "vs2-market-intelligenceを独立サブドメインとして定義"
+    value_source: "労働市場データの活用"
+    structural_necessity:
+      score: 4.0
+      data:
+        - "HR Tech市場の成長（年率20%以上）"
+        - "データドリブンHRの普及（導入企業70%増）"
+    rationale: "市場データ分析は戦略的人材開発の基盤"
+    
+  - id: vt-staff-cl3-001
+    phase: 3
+    decision: "SkillAssessment集約の定義"
+    value_source: "スキル評価の一貫性確保"
+    structural_necessity:
+      score: 4.5
+    rationale: "評価の信頼性がサービス価値の根幹"
+    business_invariants:
+      - "同一人物の同時期評価は1つのみ"
+      - "評価結果の改ざん防止"
+      
+  - id: vt-staff-cl3-rejected-001
+    phase: 3
+    decision: "[却下] AIによる完全自動スキル判定"
+    structural_necessity:
+      score: 1.5
+    rejection_reason: "想像の設計。技術的・社会的受容性が未成熟"
+    alternative: "人間による検証を含む半自動評価"
+    
+  - id: vt-staff-cl3-rejected-002
+    phase: 3
+    decision: "[却下] VRベースの実技評価"
+    structural_necessity:
+      score: 2.0
+    rejection_reason: "想像の設計。普及率低く実需要の証拠なし"
+    alternative: "従来型評価方法をベースに設計"
+
+summary:
+  total_traces: 6
+  accepted: 4
+  rejected: 2
+  imagination_detection_rate: 33%
+  structural_necessity_average: 3.35

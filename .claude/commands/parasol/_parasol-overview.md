@@ -1308,12 +1308,12 @@ BCは分解の「段階」ではなく、Actor UC/Viewを技術的にグルー�
 |-------|------|--------|----------|
 | **Phase 2** | 価値・時間 | VStr, VS定義 | 顧客状態遷移、Swimlane |
 | **Phase 3** | ビジネス分解 | CL1/CL2/CL3, Actor UC, View | チーム境界、業務活動 |
-| **Phase 4** | 技術境界 | Context Map, BC-Service Mapping | BC境界、サービス分割 |
+| **Phase 4** | アプリケーションアーキテクチャ | Context Map, BC-Service Mapping | BC定義、サービス境界 |
 | **Phase 5** | 実装設計 | DB設計, API設計 | スキーマ、インターフェース |
 
 **重要原則**:
 - **VS Swimlane必須**: 時間軸による分割でデータ重複を防止
-- **CL2 = BC = チーム境界**: Conway's Law準拠
+- **CL2 ≈ BC ≈ チーム境界**: 同じ粒度レベル、異なる視点（ビジネス vs 技術）
 - **論理→物理の順序**: Context Map（論理）→ サービスマッピング（物理）
 - **後方参照のみ**: VS間は過去→現在の参照、逆流なし
 
