@@ -67,6 +67,51 @@ claude_code_capabilities:
 
 共創的開発では、それぞれの強みを活かします。
 
+```mermaid
+graph LR
+    subgraph "人間の責任領域"
+        H1[ビジネス価値定義]
+        H2[創造的発想]
+        H3[倫理的判断]
+        H4[最終意思決定]
+    end
+    
+    subgraph "協働領域"
+        C1[設計検討]
+        C2[問題解決]
+        C3[品質向上]
+    end
+    
+    subgraph "AIの責任領域"
+        A1[データ分析]
+        A2[コード生成]
+        A3[パターン認識]
+        A4[知識提供]
+    end
+    
+    H1 --> C1
+    H2 --> C1
+    C1 --> A1
+    C1 --> A2
+    
+    A3 --> C2
+    A4 --> C2
+    C2 --> H3
+    C2 --> H4
+    
+    style H1 fill:#f99,stroke:#333,stroke-width:2px
+    style H2 fill:#f99,stroke:#333,stroke-width:2px
+    style H3 fill:#f99,stroke:#333,stroke-width:2px
+    style H4 fill:#f99,stroke:#333,stroke-width:2px
+    style C1 fill:#ff9,stroke:#333,stroke-width:2px
+    style C2 fill:#ff9,stroke:#333,stroke-width:2px
+    style C3 fill:#ff9,stroke:#333,stroke-width:2px
+    style A1 fill:#9f9,stroke:#333,stroke-width:2px
+    style A2 fill:#9f9,stroke:#333,stroke-width:2px
+    style A3 fill:#9f9,stroke:#333,stroke-width:2px
+    style A4 fill:#9f9,stroke:#333,stroke-width:2px
+```
+
 ```yaml
 role_distribution:
   human_responsibilities:

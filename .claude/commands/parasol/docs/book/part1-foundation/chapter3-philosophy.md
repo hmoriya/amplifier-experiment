@@ -109,16 +109,21 @@ value_stream:
 
 V5の価値トレーサビリティは、この「価値の変質」を防ぎます：
 
-```
-VS（価値ストリーム）: 購買判断支援
-    ↓
-CL（ケイパビリティ）: 商品評価情報管理
-    ↓
-BC（Bounded Context）: レビュー管理コンテキスト
-    ↓
-Service: レビューサービス
-    ↓
-API: POST /reviews, GET /products/{id}/reviews
+```mermaid
+graph TD
+    VS[価値ストリーム<br/>購買判断支援] 
+    VS --> CL[ケイパビリティ<br/>商品評価情報管理]
+    CL --> BC[Bounded Context<br/>レビュー管理コンテキスト]
+    BC --> SV[Service<br/>レビューサービス]
+    SV --> API[API<br/>POST /reviews<br/>GET /products/id/reviews]
+    
+    VS -.->|価値の純度を保つ| API
+    
+    style VS fill:#f99,stroke:#333,stroke-width:4px
+    style CL fill:#9f9,stroke:#333,stroke-width:2px
+    style BC fill:#99f,stroke:#333,stroke-width:2px
+    style SV fill:#ff9,stroke:#333,stroke-width:2px
+    style API fill:#f9f,stroke:#333,stroke-width:2px
 ```
 
 各レベルで「なぜこれが必要か」を明確にし、最初の価値（購買判断支援）から逸脱していないかを常にチェックします。

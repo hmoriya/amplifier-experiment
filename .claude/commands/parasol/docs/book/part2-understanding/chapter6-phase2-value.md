@@ -229,27 +229,27 @@ value_metrics:
 ```yaml
 six_axis_system:
   capability_axis:  # ケイパビリティ軸
-    focus: "何ができるようになるか"
+    focus: "このビジネスは、どんな能力を持つべきか？"
     example: "24時間注文受付能力"
     
-  business_unit_axis:  # 事業部軸
-    focus: "誰のためか"
+  business_unit_axis:  # ビジネスユニット軸
+    focus: "組織のどの部門が、何に責任を持つか？"
     example: "法人営業部の効率化"
     
   value_axis:  # 価値軸
-    focus: "どんな成果か"
+    focus: "どのような価値を、誰に、どう届けるか？"
     example: "受注処理時間75%削減"
     
   platform_axis:  # プラットフォーム軸
-    focus: "共通基盤は何か"
+    focus: "どのような共通基盤が、複数の価値創造を支えるか？"
     example: "統合顧客データベース"
     
-  fusion_axis:  # 融合軸
-    focus: "組み合わせ効果"
+  fusion_axis:  # フュージョン軸
+    focus: "異なる要素を組み合わせることで、どんな新しい価値が生まれるか？"
     example: "在庫×物流の最適化"
     
-  multi_tier_vstr_axis:  # 多層VST-R軸
-    focus: "階層的な価値"
+  multi_tier_vstr_axis:  # 多層価値ストリーム軸
+    focus: "価値はどのように階層的に流れ、積み上がるか？"
     example: "現場→部門→全社への波及"
 ```
 
@@ -536,29 +536,30 @@ total_value_loss:
 my_industry: "_______________"
 
 evaluation:
+  # Phase 2では、価値発見に最適な3軸を選択します
   capability_axis:
     relevance: "高/中/低"
-    reason: ""
+    reason: "価値実現に必要な能力を特定できるか？"
     
   business_unit_axis:
     relevance: "高/中/低"
-    reason: ""
+    reason: "部門別の価値分析が重要か？"
     
   value_axis:
     relevance: "高/中/低"
-    reason: ""
+    reason: "価値の種類と受益者の明確化が中心か？"
     
   platform_axis:
     relevance: "高/中/低"
-    reason: ""
+    reason: "共通基盤が価値創造の鍵か？"
     
   fusion_axis:
     relevance: "高/中/低"
-    reason: ""
+    reason: "異種の組み合わせが価値を生むか？"
     
   multi_tier_vstr_axis:
     relevance: "高/中/低"
-    reason: ""
+    reason: "階層構造が価値の流れを左右するか？"
 
 selected_three_axes:
   1: ""

@@ -145,16 +145,25 @@ capability_dependencies:
         - demand_prediction: "在庫効率が上がる"
         - packaging_automation: "コストが下がる"
         
-  dependency_map:
-    # 視覚的な依存関係
-    #
-    #  [需要予測] → [在庫管理] → [注文処理]
-    #                    ↓           ↓
-    #              [在庫補充]    [ピッキング]
-    #                              ↓
-    #                         [ルート最適化]
-    #                              ↓
-    #                          [配送実行]
+```
+
+### ケイパビリティ依存関係の可視化
+
+```mermaid
+graph TD
+    DP[需要予測] --> IM[在庫管理]
+    IM --> OP[注文処理]
+    IM --> IR[在庫補充]
+    OP --> PK[ピッキング]
+    PK --> RO[ルート最適化]
+    RO --> DE[配送実行]
+    
+    style DP fill:#f9f,stroke:#333,stroke-width:2px
+    style IM fill:#bbf,stroke:#333,stroke-width:4px
+    style OP fill:#bbf,stroke:#333,stroke-width:4px
+    style PK fill:#bfb,stroke:#333,stroke-width:2px
+    style RO fill:#bfb,stroke:#333,stroke-width:2px
+    style DE fill:#fbf,stroke:#333,stroke-width:2px
 ```
 
 ### ステップ3：ケイパビリティの成熟度評価
@@ -202,6 +211,31 @@ capability_maturity_assessment:
 ### コア・競争・基礎の3分類
 
 すべてのケイパビリティが同じ重要度ではありません。
+
+```mermaid
+graph TD
+    subgraph "ケイパビリティ分類"
+        C[コアケイパビリティ<br/>競争優位の源泉]
+        CP[競争的ケイパビリティ<br/>業界標準レベル]
+        F[基礎的ケイパビリティ<br/>ビジネスの前提条件]
+    end
+    
+    C --> C1[1時間配送]
+    C --> C2[AI味覚マッチング]
+    C --> C3[産地直送ネットワーク]
+    
+    CP --> CP1[クレジット決済]
+    CP --> CP2[商品検索]
+    CP --> CP3[顧客サポート]
+    
+    F --> F1[経理処理]
+    F --> F2[給与計算]
+    F --> F3[オフィスIT]
+    
+    style C fill:#f99,stroke:#333,stroke-width:4px
+    style CP fill:#99f,stroke:#333,stroke-width:2px
+    style F fill:#9f9,stroke:#333,stroke-width:1px
+```
 
 ```yaml
 capability_classification:

@@ -156,6 +156,34 @@ phase4_7_checklist:
 
 ## A.2 6軸システム早見表
 
+### 6軸システムの視覚的理解
+
+```mermaid
+graph LR
+    subgraph "6軸システム"
+        CA[capability-axis<br/>ケイパビリティ軸]
+        BA[business-unit-axis<br/>ビジネスユニット軸]
+        VA[value-axis<br/>価値軸]
+        PA[platform-axis<br/>プラットフォーム軸]
+        FA[fusion-axis<br/>フュージョン軸]
+        MA[multi-tier-vstr-axis<br/>多層価値ストリーム軸]
+    end
+    
+    CA --> CA1["技術的能力の<br/>競争優位性"]
+    BA --> BA1["部門間連携と<br/>組織価値"]
+    VA --> VA1["顧客価値の<br/>明確化"]
+    PA --> PA1["共通基盤の<br/>構築"]
+    FA --> FA1["異領域統合の<br/>革新"]
+    MA --> MA1["階層的価値の<br/>流れ"]
+    
+    style CA fill:#f9f,stroke:#333,stroke-width:2px
+    style BA fill:#9ff,stroke:#333,stroke-width:2px
+    style VA fill:#ff9,stroke:#333,stroke-width:2px
+    style PA fill:#9f9,stroke:#333,stroke-width:2px
+    style FA fill:#f99,stroke:#333,stroke-width:2px
+    style MA fill:#99f,stroke:#333,stroke-width:2px
+```
+
 ### 軸の選択ガイド
 
 ```yaml
