@@ -18,7 +18,7 @@ description: Project context setup (project:parasol)
 **Phase 1.2: Value Foundation（価値基盤確立）** ← **V4統合**
 - 九次元価値分析による体系的価値抽出
 - 価値ヒエラルキー（VL1→VL2→VL3）の構築
-- 価値マイルストーン（MS1）の設定
+- 価値マイルストーン（VMS1）の設定
 - Amplifier Nine Dimensionsとの連携設定
 
 ## 🎯 設計哲学の適用
@@ -897,20 +897,32 @@ VL3_Tactical_Activities:
     metrics: "効率性指標、品質指標"
 ```
 
-### 価値マイルストーン（MS1）設定
+### 価値マイルストーン（VMS）定義の準備
+
+**重要**: VMSは「プロセス完了」ではなく「**顧客が得ている価値状態**」を定義します。
+
+Phase 1では、VMS1-VMS5の達成条件を**バックキャスト**で定義します：
 
 ```yaml
-MS1_Value_Discovery_Milestone:
-  target_completion: "Phase 1完了から2週間"
-  success_criteria:
-    stakeholder_alignment: "95%以上の価値合意"
-    value_hierarchy_clarity: "VL1-VL3の明確な定義完了"
-    measurement_readiness: "各レベルの測定指標確定"
-  
+VMS_Definition_Preparation:
+  # VMS1: 顧客が最初の価値を体験できる状態（3ヶ月後目標）
+  VMS1_First_Value_Experience:
+    customer_state: "顧客が最初の価値を実際に体験できる"
+    success_criteria:
+      - "VL3レベルの具体的価値が1つ以上実現"
+      - "顧客が価値を認識できる接点が存在"
+      - "測定可能な価値指標で改善を確認"
+
+  # Phase 1での準備作業
+  phase1_preparation:
+    value_decomposition: "VL1→VL2→VL3の完全な価値分解"
+    vms_backcast: "VMS5→VMS1へのバックキャスト定義"
+    measurement_framework: "各VMSの測定基準確立"
+
   deliverables:
-    - value-hierarchy.md
-    - value-measurement-framework.md  
-    - ms1-completion-report.md
+    - value-hierarchy.md        # VL分解結果
+    - vms-definitions.md        # VMS1-VMS5の顧客価値状態定義
+    - value-measurement-framework.md
 ```
 
 ### Amplifier Nine Dimensions連携設定
@@ -938,9 +950,9 @@ Phase 1.2で以下を作成：
 | ファイル | 目的 | Phase 2への影響 |
 |---------|------|----------------|
 | **value-hierarchy.md** | VL1→VL2→VL3価値分解 | 戦略ケイパビリティ設計 |
-| **value-measurement-framework.md** | MS1-MS5測定システム | 価値トレーサビリティ基盤 |
+| **value-measurement-framework.md** | VMS1-VMS5測定システム | 価値トレーサビリティ基盤 |
 | **nine-dimensions-analysis.md** | 九次元価値分析結果 | Amplifier連携基盤 |
-| **ms1-completion-report.md** | MS1達成状況 | Phase 2開始条件 |
+| **vms1-completion-report.md** | VMS1達成状況 | Phase 2開始条件 |
 
 ### 価値トレーサビリティ設定
 

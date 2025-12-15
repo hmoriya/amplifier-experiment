@@ -2,7 +2,7 @@
 
 ## 概要
 
-マイルストーン間で価値が正しく継承され、変質・劣化・逸脱していないかを検証します。MS1で定義された価値が、MS5の実装まで一貫して保たれることを保証する、Parasol V5の中核機能です。
+マイルストーン間で価値が正しく継承され、変質・劣化・逸脱していないかを検証します。VMS1で定義された価値が、VMS5の実装まで一貫して保たれることを保証する、Parasol V5の中核機能です。
 
 ## 価値継承の原則
 
@@ -11,18 +11,37 @@
 - **価値は増幅される** - 各段階で価値が具体化・強化される
 - **価値の劣化を防ぐ** - 技術的制約による価値の妥協を検出・防止
 
-### 価値の具体化階層
+### 価値マイルストーン（VMS）の正しい定義
+
+**重要**: VMSは「プロセス完了」ではなく「**顧客が得ている価値状態**」を定義します。
+
 ```
-MS1: 抽象的価値（ビジネス価値）
- ↓ 継承と具体化
-MS2: 機能的価値（ケイパビリティ）
- ↓ 継承と具体化
-MS3: 構造的価値（ドメインモデル）
- ↓ 継承と具体化
-MS4: 技術的価値（API・データ設計）
- ↓ 継承と具体化
-MS5: 実現価値（実装コード）
+VMS1: 顧客が最初の価値を体験できる状態（3ヶ月後）
+ ↓ 価値の累積
+VMS2: 顧客が価値を認識し選択できる状態（6ヶ月後）
+ ↓ 価値の累積
+VMS3: 顧客が主要価値を日常的に体験できる状態（9ヶ月後）
+ ↓ 価値の累積
+VMS4: 顧客が全面的に価値を実感している状態（12ヶ月後）
+ ↓ 価値の累積
+VMS5: 顧客が期待を超える価値を日常的に享受している状態（18ヶ月後）
 ```
+
+### 価値継承の階層（VL→VS→実装）
+
+価値の具体化は**MSではなくVL（価値レベル）と開発フェーズ**で管理します：
+
+```
+VL1: 戦略的価値（なぜ）
+ ↓ 継承と具体化
+VL2: 機能的価値（何を）
+ ↓ 継承と具体化
+VL3: 体験的価値（どう感じる）
+ ↓ 実装フェーズを通じて具体化
+VS設計 → ドメインモデル → API設計 → 実装コード
+```
+
+この継承チェックは、VLで定義された価値が各実装フェーズで劣化していないことを検証します。
 
 ## コマンド構文
 
@@ -41,7 +60,7 @@ amplifier parasol:value-inheritance check [--from <ms>] [--to <ms>] [--deep]
 ```
 
 **オプション:**
-- `--from <ms>`: チェック開始マイルストーン（デフォルト: MS1）
+- `--from <ms>`: チェック開始マイルストーン（デフォルト: VMS1）
 - `--to <ms>`: チェック終了マイルストーン（デフォルト: 現在）
 - `--deep`: 深層分析モード
 - `--value <id>`: 特定の価値のみチェック
@@ -51,8 +70,8 @@ amplifier parasol:value-inheritance check [--from <ms>] [--to <ms>] [--deep]
 # 全体の価値継承チェック
 amplifier parasol:value-inheritance check
 
-# MS1からMS3までの継承チェック
-amplifier parasol:value-inheritance check --from MS1 --to MS3
+# VMS1からVMS3までの継承チェック
+amplifier parasol:value-inheritance check --from VMS1 --to VMS3
 
 # 特定価値の詳細追跡
 amplifier parasol:value-inheritance check --value VAL-001 --deep
@@ -64,17 +83,17 @@ amplifier parasol:value-inheritance check --value VAL-001 --deep
 
 価値: "顧客の購買体験を向上させる" (VAL-001)
 
-MS1 → MS2: ✓ 完全継承
+VMS1 → VMS2: ✓ 完全継承
   └─ ケイパビリティに適切に分解
      - quick-checkout (高優先度)
      - personalized-recommendations (中優先度)
      - unified-cart (高優先度)
 
-MS2 → MS3: ⚠ 部分的継承
+VMS2 → VMS3: ⚠ 部分的継承
   └─ quick-checkoutがドメインモデルで複雑化
      警告: 3ステップが5ステップに増加
 
-MS3 → MS4: ✗ 継承失敗
+VMS3 → VMS4: ✗ 継承失敗
   └─ personalized-recommendationsが未実装
      エラー: APIエンドポイントが定義されていない
 
@@ -98,23 +117,23 @@ amplifier parasol:value-inheritance visualize [--output <file>] [--format <forma
 **可視化例（Mermaid形式）:**
 ```mermaid
 graph TD
-    V1[顧客満足度向上<br/>MS1: ビジネス価値]
-    
-    V1 --> C1[迅速な購入<br/>MS2: ケイパビリティ]
-    V1 --> C2[パーソナライズ<br/>MS2: ケイパビリティ]
-    
-    C1 --> D1[注文集約<br/>MS3: ドメイン]
-    C1 --> D2[決済処理<br/>MS3: ドメイン]
-    
-    C2 --> D3[推薦エンジン<br/>MS3: ドメイン]
-    
-    D1 --> A1[POST /orders<br/>MS4: API]
-    D2 --> A2[POST /payments<br/>MS4: API]
-    D3 --> A3[GET /recommendations<br/>MS4: API]
-    
-    A1 --> I1[OrderService.create<br/>MS5: 実装]
-    A2 --> I2[PaymentGateway.process<br/>MS5: 実装]
-    A3 --> I3[RecommendationEngine.get<br/>MS5: 実装]
+    V1[顧客満足度向上<br/>VMS1: ビジネス価値]
+
+    V1 --> C1[迅速な購入<br/>VMS2: ケイパビリティ]
+    V1 --> C2[パーソナライズ<br/>VMS2: ケイパビリティ]
+
+    C1 --> D1[注文集約<br/>VMS3: ドメイン]
+    C1 --> D2[決済処理<br/>VMS3: ドメイン]
+
+    C2 --> D3[推薦エンジン<br/>VMS3: ドメイン]
+
+    D1 --> A1[POST /orders<br/>VMS4: API]
+    D2 --> A2[POST /payments<br/>VMS4: API]
+    D3 --> A3[GET /recommendations<br/>VMS4: API]
+
+    A1 --> I1[OrderService.create<br/>VMS5: 実装]
+    A2 --> I2[PaymentGateway.process<br/>VMS5: 実装]
+    A3 --> I3[RecommendationEngine.get<br/>VMS5: 実装]
     
     style V1 fill:#f9f,stroke:#333,stroke-width:4px
     style C1 fill:#bbf,stroke:#333,stroke-width:2px
@@ -139,35 +158,35 @@ amplifier parasol:value-inheritance trace --value <value-id> [--reverse]
 ```
 価値トレース: VAL-001 "顧客の購買体験を向上させる"
 
-[MS1] ビジネス価値
+[VMS1] ビジネス価値
 ├─ 定義: 購入プロセスの時間を50%削減
 ├─ KPI: 平均購入完了時間（現在: 5分 → 目標: 2.5分）
 └─ ステークホルダー: エンドユーザー、マーケティング部門
 
     ↓ 分解
 
-[MS2] ケイパビリティ: quick-checkout
+[VMS2] ケイパビリティ: quick-checkout
 ├─ 機能: ワンクリック購入、保存された支払い方法
 ├─ 優先度: HIGH
 └─ 想定効果: 購入時間を2分短縮
 
     ↓ モデリング
-    
-[MS3] ドメインモデル: CheckoutAggregate
+
+[VMS3] ドメインモデル: CheckoutAggregate
 ├─ エンティティ: Order, Payment, ShippingInfo
 ├─ ビジネスルール: 在庫確認、価格計算、割引適用
 └─ 設計決定: CQRSパターン採用（読み取り性能向上のため）
 
     ↓ 技術設計
-    
-[MS4] API設計: /api/v1/checkout/quick
+
+[VMS4] API設計: /api/v1/checkout/quick
 ├─ メソッド: POST
 ├─ レスポンスタイム目標: <500ms
 └─ 設計決定: GraphQLではなくREST（シンプルさ優先）
 
     ↓ 実装
-    
-[MS5] 実装: QuickCheckoutService
+
+[VMS5] 実装: QuickCheckoutService
 ├─ 技術: Node.js + Redis（キャッシュ）
 ├─ パフォーマンス: 平均300ms（目標達成 ✓）
 └─ 価値実現: 購入時間 2.3分（目標達成 ✓）
@@ -234,8 +253,8 @@ amplifier parasol:value-inheritance metrics [--format <format>] [--export <file>
 └─ 実現度: 76% (KPI達成率)
 
 問題のある価値:
-1. VAL-003: MS3で30%の機能が欠落
-2. VAL-007: MS4で技術的制約により劣化
+1. VAL-003: VMS3で30%の機能が欠落
+2. VAL-007: VMS4で技術的制約により劣化
 
 トレンド: ↗ 改善中（先週比 +5.2%）
 ```
@@ -272,17 +291,17 @@ custom_rules:
   - id: performance-inheritance
     description: "パフォーマンス目標が継承される"
     check:
-      MS1_target: "response_time < 1s"
-      MS4_api: "sla.response_time < 1s"
-      MS5_actual: "metrics.p99 < 1s"
+      VMS1_target: "response_time < 1s"
+      VMS4_api: "sla.response_time < 1s"
+      VMS5_actual: "metrics.p99 < 1s"
     severity: error
     
   - id: security-inheritance
     description: "セキュリティ要件が継承される"
     check:
-      MS1_requirement: "data_encryption"
-      MS3_model: "includes_encryption"
-      MS5_implementation: "uses_aes256"
+      VMS1_requirement: "data_encryption"
+      VMS3_model: "includes_encryption"
+      VMS5_implementation: "uses_aes256"
     severity: critical
 ```
 

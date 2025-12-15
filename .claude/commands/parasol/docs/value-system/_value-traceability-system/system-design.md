@@ -80,7 +80,7 @@ value_trace:
     vl1: "期待を超えるおいしさ"
     vl2: "製品イノベーション価値" 
     vl3: "発酵技術による味の革新"
-    ms: "MS2"
+    vms: "VMS2"
     vs: "VS2"
   evidence:
     - type: "market_analysis"
@@ -164,7 +164,7 @@ gate_types:
       - 次Phase準備確認
       
   milestone_gate:
-    trigger: "MS1-MS5到達時"
+    trigger: "VMS1-VMS5到達時"
     checks:
       - 価値マイルストーン達成確認
       - トレーサビリティチェーン検証

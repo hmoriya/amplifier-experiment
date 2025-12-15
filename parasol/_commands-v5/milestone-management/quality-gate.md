@@ -47,8 +47,8 @@ amplifier parasol:quality-gate check [--milestone <ms>] [--strict] [--fix]
 # 現在のマイルストーンをチェック
 amplifier parasol:quality-gate check
 
-# MS3を厳格モードでチェック
-amplifier parasol:quality-gate check --milestone MS3 --strict
+# VMS3を厳格モードでチェック
+amplifier parasol:quality-gate check --milestone VMS3 --strict
 
 # 価値継承カテゴリのみチェック
 amplifier parasol:quality-gate check --category value-inheritance
@@ -71,14 +71,14 @@ amplifier parasol:quality-gate run-all [--stop-on-error] [--parallel]
 ```
 全体品質ゲート実行結果:
 
-MS1: ✓ PASS (12/12 チェック)
-MS2: ✓ PASS (18/18 チェック)  
-MS3: ⚠ WARN (15/16 チェック, 1 警告)
-MS4: ✗ FAIL (8/14 チェック, 6 エラー)
-MS5: - SKIP (MS4未完了)
+VMS1: ✓ PASS (12/12 チェック)
+VMS2: ✓ PASS (18/18 チェック)
+VMS3: ⚠ WARN (15/16 チェック, 1 警告)
+VMS4: ✗ FAIL (8/14 チェック, 6 エラー)
+VMS5: - SKIP (VMS4未完了)
 
 総合スコア: 75.5%
-推奨アクション: MS4の問題を修正してください
+推奨アクション: VMS4の問題を修正してください
 ```
 
 ### add-rule - カスタムルールの追加
@@ -95,7 +95,7 @@ amplifier parasol:quality-gate add-rule --file <rule-file> [--validate]
 rules:
   - id: min-test-coverage
     name: "最小テストカバレッジ"
-    milestone: MS4
+    milestone: VMS4
     category: implementation
     check:
       type: metric
@@ -107,7 +107,7 @@ rules:
     
   - id: api-consistency
     name: "API一貫性チェック"
-    milestone: MS3
+    milestone: VMS3
     category: design
     check:
       type: pattern
@@ -153,119 +153,130 @@ config:
 
 ## 標準品質ゲート
 
-### MS1: 価値発見の品質ゲート
+**重要**: VMSは「プロセス完了」ではなく「**顧客が得ている価値状態**」を定義します。
+品質ゲートは、顧客がその価値状態に到達できるかを検証します。
+
+### VMS1: 顧客が最初の価値を体験できる状態（3ヶ月後）
 
 ```yaml
-MS1_gates:
-  - value_clarity:
-      description: "価値が明確に定義されているか"
+VMS1_gates:
+  - first_value_delivery:
+      description: "顧客が最初の具体的価値を体験できるか"
       checks:
-        - 価値の具体性（抽象的でない）
-        - 測定可能性（KPIとの関連）
-        - 実現可能性（技術的制約内）
-        
-  - stakeholder_coverage:
-      description: "主要ステークホルダーが網羅されているか"
+        - VL3レベルの価値が1つ以上実現
+        - 顧客が価値を認識できる接点が存在
+        - 価値指標での改善確認
+
+  - customer_touchpoint:
+      description: "顧客接点が機能しているか"
       checks:
-        - 内部ステークホルダーの特定
-        - 外部ステークホルダーの特定
-        - 利害関係の明確化
-        
-  - value_uniqueness:
-      description: "提供価値に独自性があるか"
+        - 価値を体験できるUIが稼働
+        - 基本的なユーザージャーニーが完了可能
+        - フィードバック収集メカニズムが稼働
+
+  - measurable_improvement:
+      description: "測定可能な改善が確認できるか"
       checks:
-        - 競合差別化要因
-        - 市場での位置付け
+        - ベースライン指標からの改善
+        - 顧客満足度指標の設定
+        - 価値実現の証拠
 ```
 
-### MS2: 価値設計の品質ゲート
+### VMS2: 顧客が価値を認識し選択できる状態（6ヶ月後）
 
 ```yaml
-MS2_gates:
-  - value_decomposition:
-      description: "価値が適切にケイパビリティに分解されているか"
+VMS2_gates:
+  - value_recognition:
+      description: "顧客が価値を認識しているか"
       checks:
-        - 完全性（すべての価値がカバー）
-        - 粒度の適切性（大きすぎず小さすぎず）
-        - 重複の排除
-        
-  - priority_consistency:
-      description: "優先順位が一貫しているか"
+        - 複数のVL3価値が実現
+        - 顧客からの価値認識フィードバック
+        - 利用パターンの形成
+
+  - choice_enablement:
+      description: "顧客が価値を選択できるか"
       checks:
-        - ビジネス価値との整合性
-        - 依存関係の考慮
-        - リソース制約の反映
-        
-  - capability_feasibility:
-      description: "ケイパビリティが実現可能か"
+        - 複数の価値オプションが利用可能
+        - 顧客が自分のニーズに合わせて選択可能
+        - パーソナライゼーションの基盤
+
+  - adoption_metrics:
+      description: "採用指標が目標に達しているか"
       checks:
-        - 技術的実現性
-        - チームスキルとの適合
-        - 予算内での実現性
+        - アクティブユーザー数の増加
+        - リピート利用率
+        - 機能利用率
 ```
 
-### MS3: 構造設計の品質ゲート
+### VMS3: 顧客が主要価値を日常的に体験できる状態（9ヶ月後）
 
 ```yaml
-MS3_gates:
-  - domain_consistency:
-      description: "ドメインモデルが一貫しているか"
+VMS3_gates:
+  - daily_value_experience:
+      description: "顧客が日常的に価値を体験しているか"
       checks:
-        - ユビキタス言語の統一
-        - 境界コンテキストの明確性
-        - ドメインイベントの完全性
-        
-  - structural_necessity:
-      description: "設計に構造的必然性があるか"
+        - VL2レベルの主要価値が実現
+        - 日常利用パターンの確立
+        - 習慣化指標の達成
+
+  - core_journey_completion:
+      description: "コアユーザージャーニーが完全か"
       checks:
-        - 過剰な抽象化の排除
-        - 適切な結合度
-        - 単一責任の原則
-        
-  - technical_alignment:
-      description: "技術選択が適切か"
+        - 主要ユースケースが全て稼働
+        - エンドツーエンドのフローが完成
+        - 主要機能の安定稼働
+
+  - quality_consistency:
+      description: "品質が一貫しているか"
       checks:
-        - 要件との整合性
-        - チームの技術力
-        - 保守性の考慮
+        - パフォーマンス目標の達成
+        - 可用性目標の達成
+        - ユーザー体験の一貫性
 ```
 
-### MS4: 実装設計の品質ゲート
+### VMS4: 顧客が全面的に価値を実感している状態（12ヶ月後）
 
 ```yaml
-MS4_gates:
-  - api_quality:
-      description: "APIが高品質か"
+VMS4_gates:
+  - comprehensive_value:
+      description: "顧客が全面的に価値を実感しているか"
       checks:
-        - RESTful原則の遵守
-        - 一貫したエラーハンドリング
-        - バージョニング戦略
-        
-  - data_integrity:
-      description: "データ整合性が保証されているか"
+        - VL1レベルの戦略的価値が実現
+        - 全バリューストリームが稼働
+        - 顧客ロイヤルティの向上
+
+  - business_impact:
+      description: "ビジネス成果が達成されているか"
       checks:
-        - トランザクション境界
-        - 一貫性レベルの定義
-        - バックアップ戦略
-        
-  - security_compliance:
-      description: "セキュリティ要件を満たすか"
+        - ROI目標の達成
+        - コスト削減/収益増加の証拠
+        - 競争優位性の確立
+
+  - operational_excellence:
+      description: "運用品質が高いか"
       checks:
-        - 認証・認可の実装
-        - データ暗号化
-        - 監査ログ
+        - SLA達成率
+        - インシデント対応時間
+        - システム安定性
 ```
 
-### MS5: 価値実現の品質ゲート
+### VMS5: 顧客が期待を超える価値を日常的に享受している状態（18ヶ月後）
 
 ```yaml
-MS5_gates:
-  - implementation_completeness:
-      description: "実装が完全か"
+VMS5_gates:
+  - exceeded_expectations:
+      description: "顧客の期待を超えているか"
       checks:
-        - 全機能の実装
-        - エラーハンドリング
-        - ロギングとモニタリング
+        - 顧客満足度が目標を超過
+        - NPS/CSATの継続的向上
+        - 顧客からの自発的推薦
+
+  - continuous_value_growth:
+      description: "価値が継続的に成長しているか"
+      checks:
+        - 新機能による価値追加
+        - 既存価値の深化
+        - イノベーションパイプライン
         
   - test_coverage:
       description: "十分なテストがあるか"
@@ -291,7 +302,7 @@ MS5_gates:
 amplifier parasol:quality-gate metrics
 
 # 特定マイルストーンのメトリクス
-amplifier parasol:quality-gate metrics --milestone MS3
+amplifier parasol:quality-gate metrics --milestone VMS3
 
 # トレンド表示
 amplifier parasol:quality-gate metrics --trend --days 30
@@ -299,7 +310,7 @@ amplifier parasol:quality-gate metrics --trend --days 30
 
 **出力例:**
 ```
-MS3 品質メトリクス:
+VMS3 品質メトリクス:
 
 構造的品質:
   複雑度スコア: 3.2/10 (良好)
@@ -322,13 +333,13 @@ MS3 品質メトリクス:
 metrics:
   - id: api-response-time
     name: "API応答時間"
-    milestone: MS4
+    milestone: VMS4
     calculation: "avg(response_times)"
     threshold: "<200ms"
     
   - id: value-delivery-rate
     name: "価値提供率"
-    milestone: MS5
+    milestone: VMS5
     calculation: "delivered_features / planned_features * 100"
     threshold: ">90%"
 ```

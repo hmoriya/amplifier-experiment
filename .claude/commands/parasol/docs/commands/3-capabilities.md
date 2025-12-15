@@ -2102,12 +2102,12 @@ Phase 3 完了後、検証を実行：
 - ✅ 命名規則: vs{N}-{name} 形式、kebab-case遵守
 - ✅ トレーサビリティ: VS詳細 → Subdomain → BC の紐付き確認
 
-## MS3マイルストーン設定（戦術設計完了）
+## VMS3マイルストーン設定（戦術設計完了）
 
-### MS3_Tactical_Design_Milestone
+### VMS3_Tactical_Design_Milestone
 
 ```yaml
-MS3_Tactical_Design_Milestone:
+VMS3_Tactical_Design_Milestone:
   target_completion: "Phase 3完了から4週間"
   success_criteria:
     domain_decomposition: "全VSのサブドメイン分解完了"
@@ -2119,35 +2119,35 @@ MS3_Tactical_Design_Milestone:
     - strategic-classification.md (CL1)
     - vs{N}-subdomains.md × 8 (CL2)
     - {subdomain}-bc.md × 全サブドメイン (CL3)
-    - ms3-completion-report.md
+    - vms3-completion-report.md
     - tactical-design-validation.md
-  
+
   measurement_framework:
     bc_completeness: "定義済みBC数 / 必要BC数"
     implementation_readiness: "実装可能なBC割合"
     integration_clarity: "Context Map関係定義率"
   
-  progression_requirements_to_ms4:
+  progression_requirements_to_vms4:
     architectural_decisions: "主要アーキテクチャ判断の文書化"
     service_boundaries: "マイクロサービス境界の確定"
     integration_patterns: "同期/非同期統合パターン選択"
     technology_stack: "技術スタック選定完了"
 ```
 
-### MS3成果物
+### VMS3成果物
 
 Phase 3.2で以下を作成：
 
-| ファイル | 目的 | MS4への影響 |
+| ファイル | 目的 | VMS4への影響 |
 |---------|------|-------------|
-| **ms3-completion-report.md** | MS3達成状況 | Phase 4開始条件 |
+| **vms3-completion-report.md** | VMS3達成状況 | Phase 4開始条件 |
 | **tactical-design-validation.md** | 戦術設計の品質評価 | 実装設計品質保証 |
 | **context-mapping-summary.md** | BC間統合パターン総括 | アーキテクチャ設計指針 |
 
-### 価値トレーサビリティ（MS3レベル）
+### 価値トレーサビリティ（VMS3レベル）
 
 ```yaml
-Value_Traceability_MS3:
+Value_Traceability_VMS3:
   source_validation: "全BCがVL2/VL3価値要素に対応"
   capability_alignment: "戦略ケイパビリティとBC設計の整合"
   implementation_readiness: "価値実現に向けた実装準備度"
@@ -2172,7 +2172,7 @@ Phase 4では:
 - サービス境界を確定（マイクロサービス構成）
 - 統合パターンを決定（同期/非同期、API/イベント）
 - Architecture Decision Records (ADR) を作成
-- MS4マイルストーン設定（運用設計完了）
+- VMS4マイルストーン設定（運用設計完了）
 
 ## 関連コマンド
 

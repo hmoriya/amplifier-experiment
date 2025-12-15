@@ -6,13 +6,13 @@
 
 ## 🎯 概要
 
-Parasol V5の統合コマンド体系は、**価値トレーサビリティシステム**と**MS1-MS5マイルストーン**を完全統合し、「想像の設計」を技術的に不可能にする革新的なコマンドシステムです。
+Parasol V5の統合コマンド体系は、**価値トレーサビリティシステム**と**VMS1-VMS5マイルストーン**を完全統合し、「想像の設計」を技術的に不可能にする革新的なコマンドシステムです。
 
 ### 核心的特徴
 
 1. **価値駆動** - すべてのコマンドが価値実現を中心に設計
 2. **構造的必然性保証** - 想像や希望的観測を自動排除
-3. **段階的実行** - MS1-MS5の順序と品質を自動保証
+3. **段階的実行** - VMS1-VMS5の順序と品質を自動保証
 4. **完全自動化** - 複雑な価値管理をワンクリック実行
 
 ---
@@ -32,11 +32,11 @@ Parasol V5の統合コマンド体系は、**価値トレーサビリティシ�
 
 ### 2. 🏁 マイルストーン管理コマンド群
 
-MS1-MS5の進捗と品質を管理：
+VMS1-VMS5の進捗と品質を管理：
 
 | コマンド | 説明 | 用途 |
 |----------|------|------|
-| `/parasol:milestone` | 統合マイルストーン管理 | MS1-MS5進捗確認 |
+| `/parasol:milestone` | 統合マイルストーン管理 | VMS1-VMS5進捗確認 |
 | `/parasol:quality-gate` | 品質ゲート実行 | 自動品質チェック |
 | `/parasol:value-inheritance` | 価値継承チェック | フェーズ間価値確認 |
 | `/parasol:ms-report` | マイルストーンレポート | 達成状況可視化 |
@@ -45,13 +45,13 @@ MS1-MS5の進捗と品質を管理：
 
 複数フェーズをワンクリック実行：
 
-| コマンド | 説明 | 対象MS |
+| コマンド | 説明 | 対象VMS |
 |----------|------|--------|
-| `/parasol:quick-start` | 高速プロジェクト開始 | MS1達成まで |
-| `/parasol:strategic-design` | 戦略設計完全実行 | MS1-MS2 |
-| `/parasol:full-design` | 完全設計実行 | MS1-MS3 |
-| `/parasol:ready-to-build` | 実装準備完了 | MS1-MS4 |
-| `/parasol:production-ready` | 本番環境準備完了 | MS1-MS5 |
+| `/parasol:quick-start` | 高速プロジェクト開始 | VMS1達成まで |
+| `/parasol:strategic-design` | 戦略設計完全実行 | VMS1-VMS2 |
+| `/parasol:full-design` | 完全設計実行 | VMS1-VMS3 |
+| `/parasol:ready-to-build` | 実装準備完了 | VMS1-VMS4 |
+| `/parasol:production-ready` | 本番環境準備完了 | VMS1-VMS5 |
 
 ### 4. 📊 分析・レポートコマンド群
 
@@ -85,26 +85,26 @@ MS1-MS5の進捗と品質を管理：
 ### 例1: 新規プロジェクトの高速開始
 
 ```bash
-# ワンコマンドでMS1（コンテキスト確立）まで達成
+# ワンコマンドでVMS1（コンテキスト確立）まで達成
 /parasol:quick-start https://company.com
 
 # 自動実行される内容：
 # 1. 企業分析（価値トレース記録）
 # 2. ステークホルダー特定（構造的必然性確認）
 # 3. VL1-VL3価値分解（想像排除）
-# 4. MS1品質ゲート実行
+# 4. VMS1品質ゲート実行
 # 5. 価値実現レポート生成
 ```
 
 ### 例2: 完全設計の実行
 
 ```bash
-# MS1-MS3（戦術設計）まで一括実行
+# VMS1-VMS3（戦術設計）まで一括実行
 /parasol:full-design
 
 # 段階的に実行：
-# - Phase 1-2: 戦略レベル設計（MS1-MS2）
-# - Phase 3: ドメイン分解（MS3）
+# - Phase 1-2: 戦略レベル設計（VMS1-VMS2）
+# - Phase 3: ドメイン分解（VMS3）
 # - 各段階で価値継承チェック
 # - 想像の設計を自動ブロック
 ```
@@ -134,8 +134,8 @@ MS1-MS5の進捗と品質を管理：
 # - 価値トレーサビリティ完全性: 98%
 # - 構造的必然性スコア: 4.8/5.0
 # - 想像検出件数: 0件
-# - MS進捗: MS3完了（4週間）
-# - 推奨アクション: MS4への移行準備
+# - VMS進捗: VMS3完了（4週間）
+# - 推奨アクション: VMS4への移行準備
 ```
 
 ---
@@ -170,17 +170,17 @@ value_trace:
 
 ```yaml
 quality_gates:
-  MS1:
+  VMS1:
     value_clarity: ">= 95%"
     stakeholder_coverage: ">= 90%"
     vl_decomposition: "完了"
-    
-  MS2:
+
+  VMS2:
     vs_validation: "100%"
     strategic_alignment: ">= 95%"
     dependency_clarity: "明確"
-    
-  MS3:
+
+  VMS3:
     domain_coverage: ">= 95%"
     bc_definition_quality: ">= 90%"
     value_inheritance: "確認済み"
@@ -210,7 +210,7 @@ graph TD
 1. **設計品質向上**: 想像排除により100%根拠ある判断
 2. **開発速度向上**: 自動化により50%時間短縮
 3. **手戻り削減**: 構造的必然性により80%削減
-4. **価値実現確率**: MS1-MS5により95%以上達成
+4. **価値実現確率**: VMS1-VMS5により95%以上達成
 
 ---
 
@@ -218,7 +218,7 @@ graph TD
 
 - [コマンドインデックス](./command-index.md) - 全コマンド詳細仕様
 - [価値管理コマンド](./value-management/) - 価値トレーサビリティ機能
-- [マイルストーン管理](./milestone-management/) - MS1-MS5管理機能
+- [マイルストーン管理](./milestone-management/) - VMS1-VMS5管理機能
 - [統合実行ガイド](./integrated-execution/) - バッチ実行方法
 - [分析レポート仕様](./analysis-reports/) - レポート形式と活用法
 

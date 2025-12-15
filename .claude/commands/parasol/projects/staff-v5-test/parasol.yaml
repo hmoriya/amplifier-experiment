@@ -17,7 +17,7 @@ phases:
     status: in_progress
     started: "2025-01-21T11:00:00Z"
     milestones:
-      MS3: "2025-01-21T11:30:00Z"  # CL1/CL2/CL3完了 - 能力分解完了
+      VMS3: "2025-01-21T11:30:00Z"  # CL1/CL2/CL3完了 - 能力分解完了
   phase4:
     status: pending
   phase5:

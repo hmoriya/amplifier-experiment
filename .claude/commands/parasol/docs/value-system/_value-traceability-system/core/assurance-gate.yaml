@@ -1,5 +1,5 @@
 # Parasol Assurance Gate - 価値保証ゲートシステム
-# MS1-MS5マイルストーンと各Phase間での価値継承・品質保証
+# VMS1-VMS5マイルストーンと各Phase間での価値継承・品質保証
 
 name: "Parasol Assurance Gate"
 version: "1.0.0"
@@ -113,7 +113,7 @@ gate_types:
         
   milestone_gate:
     name: "マイルストーンゲート"
-    description: "MS1-MS5での価値実現度と品質統合確認"
+    description: "VMS1-VMS5での価値実現度と品質統合確認"
     trigger: "milestone_achievement_claimed"
     
     validation_items:
@@ -140,7 +140,7 @@ gate_types:
 # ===== マイルストーン別ゲート設定 =====
 milestone_gates:
   ms1_foundation_gate:
-    name: "MS1：価値基礎確立ゲート"
+    name: "VMS1：価値基礎確立ゲート"
     timing: "3ヶ月後"
     focus: "価値発見と戦略能力の確立"
     
@@ -162,7 +162,7 @@ milestone_gates:
         validation: "KPI設定と測定方法の妥当性"
         
   ms2_strategic_gate:
-    name: "MS2：戦略展開ゲート"
+    name: "VMS2：戦略展開ゲート"
     timing: "6ヶ月後"
     focus: "戦略的ケイパビリティの展開"
     
@@ -184,7 +184,7 @@ milestone_gates:
         validation: "実現可能性と価値実現順序"
         
   ms3_tactical_gate:
-    name: "MS3：戦術設計ゲート" 
+    name: "VMS3：戦術設計ゲート" 
     timing: "9ヶ月後"
     focus: "戦術レベル設計の完成"
     
@@ -206,7 +206,7 @@ milestone_gates:
         validation: "システム間連携の実現可能性"
         
   ms4_operational_gate:
-    name: "MS4：運用準備ゲート"
+    name: "VMS4：運用準備ゲート"
     timing: "12ヶ月後"
     focus: "運用と実装の準備完了"
     
@@ -228,7 +228,7 @@ milestone_gates:
         validation: "エンドユーザーの満足度確認"
         
   ms5_realization_gate:
-    name: "MS5：価値実現ゲート"
+    name: "VMS5：価値実現ゲート"
     timing: "18ヶ月後"
     focus: "価値の完全実現と継続改善"
     
@@ -418,7 +418,7 @@ usage_examples:
   ms2_gate_execution:
     trigger: "milestone_achievement_claim"
     input:
-      milestone: "MS2"
+      milestone: "VMS2"
       claim_data:
         capability_decomposition: "completed"
         value_stream_design: "completed"

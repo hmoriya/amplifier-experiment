@@ -446,7 +446,7 @@ monitoring_diagnostics:
 usage_examples:
   ms2_strategic_gate_validation:
     input_data:
-      milestone: "MS2"
+      milestone: "VMS2"
       achievement_claims: ["capability_decomposition_complete", "value_stream_designed"]
       evidence_package: "comprehensive_documentation"
       

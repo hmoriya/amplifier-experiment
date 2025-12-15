@@ -2,7 +2,7 @@
 
 ## 概要
 
-MS1（価値発見）からMS5（価値実現）まで、プロジェクト全体を一括実行する究極の統合コマンドです。価値の定義から実装コードの生成、テスト、デプロイ準備まで、完全に自動化されたエンドツーエンドの実装を提供します。
+VMS1（価値発見）からVMS5（価値実現）まで、プロジェクト全体を一括実行する究極の統合コマンドです。価値の定義から実装コードの生成、テスト、デプロイ準備まで、完全に自動化されたエンドツーエンドの実装を提供します。
 
 ## コマンドの革新性
 
@@ -43,9 +43,9 @@ amplifier parasol:full-implementation --auto
 amplifier parasol:full-implementation --step-by-step
 
 フロー:
-MS1完了 → レビュー&承認 → MS2実行
-MS2完了 → レビュー&承認 → MS3実行
-... → MS5完了 → 最終確認
+VMS1完了 → レビュー&承認 → VMS2実行
+VMS2完了 → レビュー&承認 → VMS3実行
+... → VMS5完了 → 最終確認
 ```
 
 ### ドライランモード
@@ -63,29 +63,29 @@ amplifier parasol:full-implementation --dry-run
 
 ## 実行フロー詳細
 
-### Phase 1: 価値定義と設計（MS1-MS3）
+### Phase 1: 価値定義と設計（VMS1-VMS3）
 
 ```yaml
-MS1 - 価値発見（15分）:
+VMS1 - 価値発見（15分）:
   - URLまたはコードベースから価値抽出
   - ステークホルダー分析
   - KVI（Key Value Indicators）定義
-  
-MS2 - 価値設計（20分）:
+
+VMS2 - 価値設計（20分）:
   - 価値ストリーム設計
   - ケイパビリティ分解
   - 優先順位付けと依存関係解決
-  
-MS3 - 構造設計（25分）:
+
+VMS3 - 構造設計（25分）:
   - ドメインモデリング
   - バウンデッドコンテキスト定義
   - 技術アーキテクチャ決定
 ```
 
-### Phase 2: 実装準備（MS4）
+### Phase 2: 実装準備（VMS4）
 
 ```yaml
-MS4 - 実装設計（30分）:
+VMS4 - 実装設計（30分）:
   API設計:
     - RESTful/GraphQL エンドポイント定義
     - リクエスト/レスポンス スキーマ
@@ -102,10 +102,10 @@ MS4 - 実装設計（30分）:
     - 監査ログ設計
 ```
 
-### Phase 3: コード生成と実装（MS5）
+### Phase 3: コード生成と実装（VMS5）
 
 ```yaml
-MS5 - 価値実現（60-90分）:
+VMS5 - 価値実現（60-90分）:
   コード生成:
     - ドメインモデル実装
     - APIエンドポイント実装
@@ -144,18 +144,18 @@ $ amplifier parasol:full-implementation --auto --project ecommerce-platform
 [Phase 1: 価値定義と設計] 開始: 14:00:00
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-[MS1] 価値発見 ⚡ 14:00:00 - 14:15:23
+[VMS1] 価値発見 ⚡ 14:00:00 - 14:15:23
 ✓ 中核価値を3つ特定:
   1. シームレスな購買体験（カート離脱率を50%削減）
   2. パーソナライズされた商品推薦（売上30%向上）
   3. リアルタイム在庫管理（欠品率を80%削減）
 
-[MS2] 価値設計 ⚙️ 14:15:30 - 14:35:45
+[VMS2] 価値設計 ⚙️ 14:15:30 - 14:35:45
 ✓ 4つの価値ストリームに分解
 ✓ 47のケイパビリティを定義
 ✓ 実装優先順位を決定（P0: 12, P1: 20, P2: 15）
 
-[MS3] 構造設計 🏗️ 14:35:50 - 15:01:20
+[VMS3] 構造設計 🏗️ 14:35:50 - 15:01:20
 ✓ 6つのバウンデッドコンテキストを定義:
   - ProductCatalog（商品管理）
   - ShoppingCart（カート管理）
@@ -168,7 +168,7 @@ $ amplifier parasol:full-implementation --auto --project ecommerce-platform
 [Phase 2: 実装準備] 開始: 15:01:25
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-[MS4] 実装設計 📐 15:01:25 - 15:31:40
+[VMS4] 実装設計 📐 15:01:25 - 15:31:40
 ✓ API設計完了:
   - REST endpoints: 52
   - GraphQL schemas: 15
@@ -188,7 +188,7 @@ $ amplifier parasol:full-implementation --auto --project ecommerce-platform
 [Phase 3: コード生成と実装] 開始: 15:31:45
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-[MS5] 価値実現 💻 15:31:45 - 16:45:30
+[VMS5] 価値実現 💻 15:31:45 - 16:45:30
 
 ⚡ コード生成中...
 ✓ Backend Services:
@@ -391,11 +391,11 @@ amplifier parasol:full-implementation --monitor
 
 ```bash
 # エラー発生時の対処
-エラー: MS4でAPI設計が失敗
+エラー: VMS4でAPI設計が失敗
 
 対処:
 1. 部分的な再実行
-   $ amplifier parasol:full-implementation --resume-from MS4
+   $ amplifier parasol:full-implementation --resume-from VMS4
 
 2. 手動介入モード
    $ amplifier parasol:full-implementation --manual-intervention
