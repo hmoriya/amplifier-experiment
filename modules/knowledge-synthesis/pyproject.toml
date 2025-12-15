@@ -1,0 +1,30 @@
+[project]
+name = "amplifier-module-knowledge-synthesis"
+version = "0.1.0"
+description = "Advanced knowledge processing and synthesis module for Amplifier"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "amplifier-core>=0.1.0",
+    "anthropic>=0.20.0",
+    "networkx>=3.0",
+    "pydantic>=2.0.0",
+    "click>=8.1.0",
+    "tqdm>=4.65.0",
+    "rapidfuzz>=3.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.20.0",
+    "ruff>=0.1.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
