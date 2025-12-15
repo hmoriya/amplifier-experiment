@@ -4,6 +4,42 @@
 
 価値トレーサビリティシステムを活用して、プロジェクト全体の価値の流れを追跡・可視化・管理します。すべての設計判断と実装が価値にどう貢献するかを明確にし、構造的必然性を保証します。
 
+## 価値トレースの核心概念
+
+### VL×MS×VSの3軸マッピング
+
+価値トレースは以下の3軸で価値の所在を可視化します：
+
+```
+VL（Value Level）: 価値分解の階層
+  └─ VL1 → VL2 → VL3
+
+VMS（Value Milestone）: 価値実現の時間軸
+  └─ VMS5 ← VMS4 ← VMS3 ← VMS2 ← VMS1（バックキャスト）
+
+VS（Value Stage）: 価値が流れるステージ
+  └─ VS0 → VS1 → VS2 → ... → VS7
+```
+
+### フロー（順序が重要）
+
+```
+STEP 1: VL分解
+        VL1 → VL2 → VL3
+              ↓
+STEP 2: VMSバックキャスト（価値だけのマイルストーン）
+        VMS5 ← VMS4 ← VMS3 ← VMS2 ← VMS1
+              ↓
+STEP 3: VS設計（バリューストリームマップ）
+        VS0 → VS1 → ... → VS7
+              ↓
+STEP 4: VL×VSマッピング
+        どの価値がどのステージで実現されるか
+              ↓
+STEP 5: 優先順位決定
+        MS達成に必要なVS×VLの特定
+```
+
 ## コマンド構文
 
 ```bash
@@ -117,8 +153,64 @@ amplifier parasol:value-trace analyze [--component <name>] [--milestone <ms>]
 # プロジェクト全体の価値分析
 amplifier parasol:value-trace analyze --metrics
 
-# MS3時点での価値実現状況
-amplifier parasol:value-trace analyze --milestone MS3 --suggestions
+# VMS3時点での価値実現状況
+amplifier parasol:value-trace analyze --milestone VMS3 --suggestions
+```
+
+### mapping - VL×MS×VSマッピング
+
+価値分解、マイルストーン、バリューステージの3軸マッピングを生成します。
+
+```bash
+amplifier parasol:value-trace mapping [--output <file>] [--format <format>]
+```
+
+**オプション:**
+- `--output <file>`: マッピング出力ファイル
+- `--format <format>`: 出力形式（yaml, markdown, html）
+- `--milestone <ms>`: 特定MSのマッピングを表示
+- `--stage <vs>`: 特定VSのマッピングを表示
+
+**出力例:**
+```
+VL×VSマッピング:
+
+          VS1   VS2   VS3   VS4   VS5   VS6   主要VS
+VL3-1-1    △     ○     ●     ○     -     -    VS3
+VL3-1-2    -     △     ○     ●     ○     -    VS4
+VL3-2-1    -     -     -     ○     ●     ○    VS5
+
+凡例: ●=主要実現, ○=部分実現, △=準備, -=関係なし
+
+VL×VMSマッピング:
+
+          VMS1   VMS2   VMS3   VMS4   VMS5   備考
+VL1        -     ▽     △     ○     ◎    最上位価値
+VL2-1      ▽     △     ○     ◎     ◎
+VL3-1-1    △     ○     ◎     ◎     ◎    基盤価値
+
+凡例: ◎=完全実現, ○=主要実現, △=部分実現, ▽=初期実現, -=未実現
+```
+
+### priority - 優先順位決定
+
+次のMS達成に必要なVS×VLの優先順位を表示します。
+
+```bash
+amplifier parasol:value-trace priority [--target <milestone>]
+```
+
+**出力例:**
+```
+現在: VMS1達成済み
+目標: VMS2達成
+
+優先順位:
+P1（最優先）: VL3-1-1@VS4, VL3-3-1@VS3
+P2（高優先）: VL3-1-2@VS3
+P3（中優先）: VL3-2-1@VS4
+
+→ VMS2達成にはVS3×VL3-3-1を優先的に実装すべき
 ```
 
 ### report - 価値実現レポート
@@ -191,7 +283,7 @@ amplifier parasol:value-trace validate --fix --strict
 
 ```bash
 # マイルストーン進行時の自動価値チェック
-amplifier parasol:milestone advance --to MS3 --validate-values
+amplifier parasol:milestone advance --to VMS3 --validate-values
 
 # 構造的必然性チェックとの統合
 amplifier parasol:necessity-check --with-value-trace
@@ -206,23 +298,52 @@ amplifier parasol:value-trace init --ai-discover
 # .parasol/value-traces.yaml
 version: "5.0"
 project: asahi
-traces:
-  - id: val-001
-    component: customer-portal
-    value: "顧客の利便性向上による満足度向上"
-    impact: critical
-    created: 2024-01-15T10:00:00Z
-    tags: [ux, customer-satisfaction]
-    children:
-      - val-002
-      - val-003
-    metrics:
-      - name: customer_satisfaction_score
-        current: 4.2
-        target: 4.5
-      - name: portal_usage_rate
-        current: 65%
-        target: 80%
+
+# VL分解
+value_levels:
+  VL1:
+    statement: "期待を超える健康とおいしさを届ける"
+  VL2:
+    - id: VL2-1
+      statement: "製品イノベーション価値"
+      contributes_to: VL1
+    - id: VL2-2
+      statement: "顧客体験価値"
+      contributes_to: VL1
+  VL3:
+    - id: VL3-1-1
+      statement: "発酵技術による味の革新"
+      contributes_to: VL2-1
+    - id: VL3-2-1
+      statement: "シームレスな購買体験"
+      contributes_to: VL2-2
+
+# 価値マイルストーン（顧客価値状態として）
+milestones:
+  VMS1:
+    customer_state: "顧客が最初の価値を体験できる"
+    timeframe: "3ヶ月後"
+    realized_VLs: [VL3-1-1]
+  VMS2:
+    customer_state: "顧客が価値を認識し選択できる"
+    timeframe: "6ヶ月後"
+    realized_VLs: [VL3-1-1, VL3-2-1, VL2-1部分]
+  # ...
+
+# VL×VSマッピング
+vl_vs_mapping:
+  VL3-1-1:
+    primary_stage: VS3
+    stages: {VS1: △, VS2: ○, VS3: ●, VS4: ○}
+  VL3-2-1:
+    primary_stage: VS5
+    stages: {VS4: ○, VS5: ●, VS6: ○}
+
+# 優先順位（現在のVMS目標に基づく）
+current_priority:
+  target_milestone: VMS2
+  P1: [VL3-1-1@VS4, VL3-3-1@VS3]
+  P2: [VL3-1-2@VS3]
 ```
 
 ## ベストプラクティス

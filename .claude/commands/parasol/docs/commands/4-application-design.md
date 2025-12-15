@@ -945,12 +945,12 @@ Value Streams: {VS数}
 📊 ステータス確認:
 → `/parasol:0-status`
 
-## MS4マイルストーン設定（運用設計完了）
+## VMS4マイルストーン設定（運用設計完了）
 
-### MS4_Operational_Design_Milestone
+### VMS4_Operational_Design_Milestone
 
 ```yaml
-MS4_Operational_Design_Milestone:
+VMS4_Operational_Design_Milestone:
   target_completion: "Phase 3完了から6週間"
   success_criteria:
     architecture_completeness: "アプリケーションアーキテクチャ確定"
@@ -962,26 +962,26 @@ MS4_Operational_Design_Milestone:
     - architecture-overview.md (全体設計)
     - context-map.md (BC統合設計)
     - services/{service}/service-definition.md (サービス詳細)
-    - ms4-completion-report.md
+    - vms4-completion-report.md
     - operational-readiness-assessment.md
-  
+
   measurement_framework:
     service_design_quality: "実装可能なサービス定義割合"
     integration_completeness: "API契約定義率"
     architectural_consistency: "設計原則準拠率"
   
-  progression_requirements_to_ms5:
+  progression_requirements_to_vms5:
     implementation_planning: "実装計画とスケジュール"
     team_allocation: "開発チーム配置完了"
     technology_setup: "開発・運用環境準備"
     value_measurement: "価値測定システム準備"
 ```
 
-### MS4成果物（Phase 4-6統合）
+### VMS4成果物（Phase 4-6統合）
 
-| ファイル | Phase | 目的 | MS5への影響 |
+| ファイル | Phase | 目的 | VMS5への影響 |
 |---------|-------|------|-------------|
-| **ms4-completion-report.md** | 4-6 | MS4達成状況 | 価値実現開始条件 |
+| **vms4-completion-report.md** | 4-6 | VMS4達成状況 | 価値実現開始条件 |
 | **operational-readiness-assessment.md** | 4-6 | 運用準備度評価 | 価値測定体制準備 |
 | **implementation-validation.md** | 6 | 実装品質検証 | 価値実現システム基盤 |
 
@@ -991,7 +991,7 @@ MS4_Operational_Design_Milestone:
 Phase 5では各サービス/BCの詳細設計を行います：
 - ドメインモデル（Parasol Domain Language）
 - API仕様（OpenAPI）
-- MS4マイルストーン進捗管理
+- VMS4マイルストーン進捗管理
 - データベース設計
 - ビジネスオペレーション（Use Cases + UI）
 ```

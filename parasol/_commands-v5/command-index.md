@@ -50,17 +50,17 @@ amplifier parasol:imagination-detect refactor --confirm
 ## マイルストーン管理コマンド群
 
 ### /parasol:milestone
-MS1-MS5の統合管理
+VMS1-VMS5の統合管理
 
 ```bash
 # 現在のマイルストーン状況
 amplifier parasol:milestone status
 
 # 特定マイルストーンへ移行
-amplifier parasol:milestone advance --to MS3
+amplifier parasol:milestone advance --to VMS3
 
 # マイルストーン間の依存関係確認
-amplifier parasol:milestone dependencies --from MS2 --to MS4
+amplifier parasol:milestone dependencies --from VMS2 --to VMS4
 ```
 
 ### /parasol:quality-gate
@@ -94,7 +94,7 @@ amplifier parasol:value-inheritance repair
 ## 統合実行コマンド群
 
 ### /parasol:quick-start
-高速スタート（MS1まで自動実行）
+高速スタート（VMS1まで自動実行）
 
 ```bash
 # URLからプロジェクトを高速起動
@@ -108,7 +108,7 @@ amplifier parasol:quick-start --ai-assist
 ```
 
 ### /parasol:full-design
-完全設計（MS1-MS3まで一括実行）
+完全設計（VMS1-VMS3まで一括実行）
 
 ```bash
 # 標準的な完全設計
@@ -122,7 +122,7 @@ amplifier parasol:full-design --parallel --workers 4
 ```
 
 ### /parasol:full-implementation
-完全実装（MS1-MS5まで一括実行）
+完全実装（VMS1-VMS5まで一括実行）
 
 ```bash
 # 完全自動実装

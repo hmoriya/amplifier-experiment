@@ -134,7 +134,7 @@ Worktrees:
 ```
 outputs/2-value/exploration/value/
 ├── vl2-vl3-decomposition.md    # 価値軸でのVL2→VL3分解
-├── milestones.md               # MS5→MS1バックキャスティング
+├── milestones.md               # VMS5→VMS1バックキャスティング
 ├── value-streams.md            # バリューストリーム（1体系）
 └── cl1-classification.md       # CL1分類（統合）
 ```
@@ -190,7 +190,7 @@ outputs/2-value/exploration/value/
 ```
 outputs/2-value/exploration/business/
 ├── vl2-vl3-decomposition.md    # 事業部軸でのVL2→VL3分解
-├── milestones.md               # MS5→MS1（事業部別）
+├── milestones.md               # VMS5→VMS1（事業部別）
 ├── value-streams/              # バリューストリーム（事業部別）
 │   ├── business-a-vstr.md
 │   ├── business-b-vstr.md
@@ -238,7 +238,7 @@ outputs/2-value/exploration/business/
 ```
 outputs/2-value/exploration/hybrid/
 ├── vl2-vl3-decomposition.md    # ハイブリッドVL2→VL3分解
-├── milestones.md               # MS5→MS1（共通+事業別）
+├── milestones.md               # VMS5→VMS1（共通+事業別）
 ├── value-streams/              # バリューストリーム（2層）
 │   ├── common-vstr.md          # 共通基盤VStr
 │   ├── business-a-vstr.md      # 事業A差別化VStr

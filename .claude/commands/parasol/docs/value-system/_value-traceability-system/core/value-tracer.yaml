@@ -328,7 +328,7 @@ usage_examples:
         vl1: "期待を超えるおいしさ"
         vl2: "製品イノベーション価値"
         vl3: "発酵技術による味の革新"
-        ms: "MS2"
+        vms: "VMS2"
       evidence:
         - type: "market_analysis"
           source: "業界レポート2024"

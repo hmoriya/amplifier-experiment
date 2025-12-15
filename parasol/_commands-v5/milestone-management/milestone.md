@@ -1,35 +1,63 @@
-# parasol:milestone - マイルストーン統合管理コマンド
+# parasol:milestone - 価値マイルストーン管理コマンド
 
 ## 概要
 
-Parasol V5のMS1からMS5までのマイルストーンを統合的に管理し、価値実現の段階的な進行を保証します。各マイルストーンでの成果物と価値の継承を自動的に追跡し、構造的必然性を維持しながらプロジェクトを進行させます。
+Parasol V5の価値マイルストーン（VMS1-VMS5）を管理します。**VMSは「顧客が得ている価値状態」として定義**され、プロセス完了ではなく価値実現の段階を表します。VL（価値分解）からバックキャストで導出し、VS（バリューストリーム）へマッピングすることで、価値の所在と優先順位を明確にします。
 
-## マイルストーン概要
+## マイルストーン定義（価値実現型）
 
-### MS1: 価値発見（Value Discovery）
-- URLまたはコードベースから価値を抽出
-- ステークホルダーと価値の特定
-- 初期価値マップの作成
+**重要**: VMSは「組織が何を完了したか」ではなく「顧客が何を得ているか」で定義します。
 
-### MS2: 価値設計（Value Design）
-- 価値ストリームの詳細設計
-- ケイパビリティへの分解
-- 価値実現の優先順位付け
+### VMS1: 顧客が最初の価値を体験できる状態（3ヶ月後）
+- **顧客状態**: 顧客が最初の価値を体験できる状態
+- **実現VL**: VL3の一部（最小実現）
+- **成功基準**: 顧客が価値の存在を認識し、初回体験が可能
 
-### MS3: 構造設計（Structural Design）
-- ドメインモデルの確立
-- バウンデッドコンテキストの定義
-- 技術アーキテクチャの決定
+### VMS2: 顧客が価値を認識し選択できる状態（6ヶ月後）
+- **顧客状態**: 顧客が価値を認識し選択できる状態
+- **実現VL**: VL3の主要部分、VL2の一部
+- **成功基準**: 顧客が継続利用の意思決定が可能
 
-### MS4: 実装設計（Implementation Design）
-- 詳細な実装計画
-- API/インターフェース設計
-- データモデルの確定
+### VMS3: 顧客が主要価値を日常的に体験できる状態（9ヶ月後）
+- **顧客状態**: 顧客が主要製品で価値を体験できる状態
+- **実現VL**: VL2の主要部分
+- **成功基準**: 顧客満足度の向上、継続利用の定着
 
-### MS5: 価値実現（Value Realization）
-- コード生成と実装
-- 価値の検証とテスト
-- 本番環境への展開
+### VMS4: 顧客が全面的に価値を実感している状態（12ヶ月後）
+- **顧客状態**: 顧客が全製品ラインで価値を実感している状態
+- **実現VL**: VL2完全、VL1の主要部分
+- **成功基準**: 顧客ロイヤルティの確立、推奨行動の開始
+
+### VMS5: 顧客が期待を超える価値を日常的に享受している状態（18ヶ月後）
+- **顧客状態**: 顧客が期待を超える価値を日常的に享受している状態
+- **実現VL**: VL1完全実現
+- **成功基準**: 顧客の生活に価値が統合、共創関係の確立
+
+## 価値マイルストーンの原則
+
+### 1. バックキャスト導出
+```
+VMS5（理想状態）から逆算してVMS1を導出
+VMS5 ← VMS4 ← VMS3 ← VMS2 ← VMS1
+「VMS5に到達するにはVMS4で何が必要か？」の問いで各VMSを定義
+```
+
+### 2. 顧客視点の徹底
+```
+❌ 誤: 「システム開発完了」「機能リリース済」
+✅ 正: 「顧客が24時間注文できる状態」「顧客が即座に回答を得られる状態」
+```
+
+### 3. VL分解との連携
+```
+VL1 → VL2 → VL3 （価値分解）
+         ↓
+VMS5 ← ... ← VMS1 （バックキャスト）
+         ↓
+VS0 → ... → VS7 （バリューストリーム）
+         ↓
+    VL×VSマッピング
+```
 
 ## コマンド構文
 
@@ -50,16 +78,16 @@ amplifier parasol:milestone status [--detailed] [--format <format>]
 **出力例:**
 ```
 プロジェクト: asahi-digital-transform
-現在のマイルストーン: MS2 (進行中)
+現在のマイルストーン: VMS2 (進行中)
 
 マイルストーン進捗:
-MS1 [████████████████████] 100% ✓ 完了
-MS2 [████████████--------]  60% ⚡ 進行中
-MS3 [--------------------]   0% ⏸ 待機中
-MS4 [--------------------]   0% ⏸ 待機中
-MS5 [--------------------]   0% ⏸ 待機中
+VMS1 [████████████████████] 100% ✓ 完了
+VMS2 [████████████--------]  60% ⚡ 進行中
+VMS3 [--------------------]   0% ⏸ 待機中
+VMS4 [--------------------]   0% ⏸ 待機中
+VMS5 [--------------------]   0% ⏸ 待機中
 
-MS2の残タスク:
+VMS2の残タスク:
 - [ ] ケイパビリティマッピング (VS3, VS4)
 - [ ] 優先順位マトリックスの作成
 - [ ] ステークホルダーレビュー
@@ -77,7 +105,7 @@ amplifier parasol:milestone advance [--to <milestone>] [--force] [--validate]
 ```
 
 **オプション:**
-- `--to <milestone>`: 特定のマイルストーンへジャンプ（MS1-MS5）
+- `--to <milestone>`: 特定のマイルストーンへジャンプ（VMS1-VMS5）
 - `--force`: 検証をスキップして強制進行
 - `--validate`: 進行前に包括的な検証を実施
 - `--continue`: 現在のマイルストーンの作業を継続
@@ -87,8 +115,8 @@ amplifier parasol:milestone advance [--to <milestone>] [--force] [--validate]
 # 次のマイルストーンへ進行
 amplifier parasol:milestone advance
 
-# MS3へ直接移行（MS2完了が前提）
-amplifier parasol:milestone advance --to MS3 --validate
+# VMS3へ直接移行（VMS2完了が前提）
+amplifier parasol:milestone advance --to VMS3 --validate
 
 # 現在のマイルストーンを継続
 amplifier parasol:milestone advance --continue
@@ -112,8 +140,8 @@ amplifier parasol:milestone rollback [--to <milestone>] [--preserve-work]
 # 前のマイルストーンへ戻る
 amplifier parasol:milestone rollback --reason "価値定義の見直しが必要"
 
-# 作業を保持してMS1へ戻る
-amplifier parasol:milestone rollback --to MS1 --preserve-work
+# 作業を保持してVMS1へ戻る
+amplifier parasol:milestone rollback --to VMS1 --preserve-work
 ```
 
 ### checkpoint - チェックポイント作成
@@ -143,24 +171,24 @@ amplifier parasol:milestone validate [--milestone <ms>] [--fix] [--report]
 
 **検証内容:**
 
-**MS1検証:**
+**VMS1検証:**
 - 価値が明確に定義されているか
 - ステークホルダーが特定されているか
 - 価値の測定基準があるか
 
-**MS2検証:**
+**VMS2検証:**
 - すべての価値がケイパビリティに分解されているか
 - 優先順位が明確か
 - 依存関係が解決されているか
 
-**MS3検証:**
+**VMS3検証:**
 - ドメインモデルの一貫性
 - バウンデッドコンテキストの境界明確性
 - 技術選択の必然性
 
 **出力例:**
 ```
-MS2 検証結果:
+VMS2 検証結果:
 
 ✓ 価値ストリーム定義: 完了 (8/8)
 ✓ ケイパビリティ分解: 完了 (24/24)
@@ -191,14 +219,14 @@ amplifier parasol:milestone dependencies [--from <ms>] [--to <ms>] [--visualize]
 **出力例:**
 ```mermaid
 graph LR
-    MS1[価値発見] --> MS2[価値設計]
-    MS2 --> MS3[構造設計]
-    MS3 --> MS4[実装設計]
-    MS4 --> MS5[価値実現]
-    
-    MS1 -.->|価値定義| MS3
-    MS2 -.->|ケイパビリティ| MS4
-    MS3 -.->|ドメインモデル| MS5
+    VMS1[価値発見] --> VMS2[価値設計]
+    VMS2 --> VMS3[構造設計]
+    VMS3 --> VMS4[実装設計]
+    VMS4 --> VMS5[価値実現]
+
+    VMS1 -.->|価値定義| VMS3
+    VMS2 -.->|ケイパビリティ| VMS4
+    VMS3 -.->|ドメインモデル| VMS5
 ```
 
 ### timeline - タイムライン表示
@@ -213,11 +241,11 @@ amplifier parasol:milestone timeline [--days <n>] [--format <format>]
 ```
 プロジェクトタイムライン:
 
-2024-01-01 09:00 │ MS1 開始
+2024-01-01 09:00 │ VMS1 開始
 2024-01-02 14:30 │ ├─ 価値抽出完了
 2024-01-03 11:00 │ ├─ ステークホルダー分析完了
-2024-01-04 16:00 │ └─ MS1 完了 ✓
-2024-01-04 16:15 │ MS2 開始
+2024-01-04 16:00 │ └─ VMS1 完了 ✓
+2024-01-04 16:15 │ VMS2 開始
 2024-01-08 10:00 │ ├─ 価値ストリーム設計完了
 2024-01-10 15:30 │ ├─ ケイパビリティ分解 (進行中)
                  │
@@ -226,26 +254,36 @@ amplifier parasol:milestone timeline [--days <n>] [--format <format>]
 
 ## 品質ゲート統合
 
-### 自動品質チェック
+### 価値実現型品質チェック
 
-各マイルストーンには自動的に品質ゲートが設定されています：
+各マイルストーンの品質ゲートは**顧客価値の実現度**で判定します：
 
 ```yaml
 quality_gates:
-  MS1:
-    - 価値の具体性チェック
-    - ステークホルダーカバレッジ
-    - 測定指標の定義
-    
-  MS2:
-    - ケイパビリティ完全性
-    - 優先順位の一貫性
-    - リソース実現可能性
-    
-  MS3:
-    - ドメインモデル整合性
-    - 境界の明確性
-    - 技術的実現可能性
+  VMS1:
+    - 顧客が最小限の価値を体験できるか
+    - 価値の測定基準が定義されているか
+    - 顧客フィードバックの収集体制があるか
+
+  VMS2:
+    - 顧客が価値を選択・比較できるか
+    - 継続利用の障壁が除去されているか
+    - 顧客満足度が目標値を達成しているか
+
+  VMS3:
+    - 顧客が主要価値を日常的に利用しているか
+    - 顧客の課題が解決されているか
+    - NPS/顧客満足度が基準を満たすか
+
+  VMS4:
+    - 顧客が全製品ラインで価値を実感しているか
+    - 顧客ロイヤルティ指標が目標を達成しているか
+    - 推奨行動（口コミ等）が発生しているか
+
+  VMS5:
+    - 顧客の生活に価値が統合されているか
+    - 顧客との共創関係が確立されているか
+    - 長期的な価値提供基盤が整備されているか
 ```
 
 ### カスタム品質ルール
@@ -253,11 +291,11 @@ quality_gates:
 ```yaml
 # .parasol/milestone-rules.yaml
 custom_gates:
-  MS2:
+  VMS2:
     - id: capability-size
       rule: "各ケイパビリティは3-7の機能を含む"
       severity: warning
-      
+
     - id: value-trace
       rule: "すべてのケイパビリティが価値にトレース可能"
       severity: error
@@ -344,7 +382,7 @@ amplifier parasol:milestone validate --strict
 amplifier parasol:milestone advance
 
 # スキップは避ける
-# ✗ amplifier parasol:milestone advance --to MS5 --force
+# ✗ amplifier parasol:milestone advance --to VMS5 --force
 ```
 
 ### 2. 定期的なチェックポイント
@@ -364,7 +402,7 @@ amplifier parasol:milestone checkpoint --schedule weekly
 amplifier parasol:milestone share --format pdf
 
 # レビュー会の準備
-amplifier parasol:milestone prepare-review --milestone MS3
+amplifier parasol:milestone prepare-review --milestone VMS3
 ```
 
 ## 次のステップ

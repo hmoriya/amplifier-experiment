@@ -72,7 +72,7 @@ real_time_features:
 ### 2. 価値実現追跡ダッシュボード (Value Realization Tracking)
 
 #### 目的
-価値階層（VL1-VL3）とマイルストーン（MS1-MS5）の詳細進捗を追跡
+価値階層（VL1-VL3）とマイルストーン（VMS1-VMS5）の詳細進捗を追跡
 
 #### ビジュアライゼーション
 ```yaml
@@ -271,7 +271,7 @@ traceability_visualization:
   network_graph:
     node_types:
       value_nodes: "VL1-VL3価値ノード"
-      milestone_nodes: "MS1-MS5マイルストーンノード"
+      milestone_nodes: "VMS1-VMS5マイルストーンノード"
       capability_nodes: "ケイパビリティノード"
       implementation_nodes: "実装ノード"
       

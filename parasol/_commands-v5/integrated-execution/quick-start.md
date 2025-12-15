@@ -2,7 +2,7 @@
 
 ## 概要
 
-URLや既存コードベースから価値を自動抽出し、MS1（価値発見）まで高速で到達します。最小限の入力で最大限の価値発見を実現し、プロジェクトを迅速に立ち上げる統合コマンドです。
+URLや既存コードベースから価値を自動抽出し、VMS1（価値発見）まで高速で到達します。最小限の入力で最大限の価値発見を実現し、プロジェクトを迅速に立ち上げる統合コマンドです。
 
 ## なぜQuick Startが必要か
 
@@ -155,7 +155,7 @@ $ amplifier parasol:quick-start --url https://old-ec-site.com
 プロジェクト "ec-renewal" が作成されました！
 
 推奨される次のアクション:
-1. amplifier parasol:milestone advance  # MS2へ進行
+1. amplifier parasol:milestone advance  # VMS2へ進行
 2. amplifier parasol:value-trace visualize  # 価値を可視化
 3. amplifier parasol:quick-start --review  # 結果をレビュー
 
@@ -424,9 +424,9 @@ amplifier parasol:full-design
 amplifier parasol:value-trace refine
 
 # 早期実装
-amplifier parasol:milestone advance --to MS2
+amplifier parasol:milestone advance --to VMS2
 ```
 
 ## まとめ
 
-Quick Startは「**すぐ始められる、でも手を抜かない**」を実現します。URLを入力して10分待つだけで、従来なら数日かかった価値発見プロセスが完了し、MS1到達とともに明確な次のステップが見えてきます。
+Quick Startは「**すぐ始められる、でも手を抜かない**」を実現します。URLを入力して10分待つだけで、従来なら数日かかった価値発見プロセスが完了し、VMS1到達とともに明確な次のステップが見えてきます。
