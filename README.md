@@ -1,11 +1,37 @@
-# Amplifier: Metacognitive AI Development
+# Amplifier Experiment
 
-> _"Automate complex workflows by describing how you think through them."_
+An extension bundle for [Microsoft Amplifier](https://github.com/microsoft/amplifier) providing enterprise-focused development tools and AI-powered knowledge synthesis capabilities.
 
-> [!CAUTION]
-> This project is a research demonstrator. It is in early development and may change significantly. Using permissive AI tools in your repository requires careful attention to security considerations and careful human supervision, and even then things can still go wrong. Use it with caution, and at your own risk. See [Disclaimer](#disclaimer).
+> [!NOTE]
+> This project extends Microsoft Amplifier with specialized frameworks for Domain-Driven Design (DDD) and advanced knowledge processing. It follows Amplifier's modular architecture principles while adding enterprise-grade capabilities.
 
-Amplifier is a coordinated and accelerated development system that turns your expertise into reusable AI tools without requiring code. Describe the step-by-step thinking process for handling a task—a "metacognitive recipe"—and Amplifier builds a tool that executes it reliably. As you create more tools, they combine and build on each other, transforming individual solutions into a compounding automation system.
+## Features
+
+### 🏗️ Parasol Framework
+A comprehensive Domain-Driven Design (DDD) implementation framework that guides development through 7 phases:
+- **Phase 1**: Context (Organization, Market, Stakeholders)
+- **Phase 2**: Value (Value Streams, Enterprise Activities)
+- **Phase 3**: Capabilities (Domain Classification, Subdomains)
+- **Phase 4**: Architecture (Application Design, Integration)
+- **Phase 5**: Software Design (APIs, Domain Language)
+- **Phase 6**: Implementation (Code Generation)
+- **Phase 7**: Platform (Deployment, Monitoring)
+
+### 🧠 Knowledge Synthesis System
+Advanced knowledge processing and synthesis capabilities:
+- Multi-perspective concept extraction
+- Tension and uncertainty preservation
+- Knowledge archaeology (temporal evolution)
+- Graph-based knowledge representation
+- Insight synthesis across domains
+
+### 🛠️ Development Tools
+Professional development agents:
+- **Zen Architect**: Analysis-first development
+- **Modular Builder**: Component implementation
+- **Bug Hunter**: Systematic debugging
+- **Test Coverage**: Comprehensive testing
+- **Integration Specialist**: External service integration
 
 ## 🚀 QuickStart
 
@@ -71,12 +97,24 @@ Amplifier is a coordinated and accelerated development system that turns your ex
 
 </details>
 
-### Setup
+### Installation
+
+#### Option 1: As Amplifier Bundle (Recommended)
 
 ```bash
-# Clone Amplifier repository
-git clone https://github.com/microsoft/amplifier.git amplifier
-cd amplifier
+# Install Amplifier CLI first
+pip install amplifier
+
+# Use this bundle directly
+amplifier --bundle https://github.com/hmoriya/amplifier-experiment/bundle.md run "Start Parasol phase 1 analysis"
+```
+
+#### Option 2: Local Development
+
+```bash
+# Clone this repository
+git clone https://github.com/hmoriya/amplifier-experiment
+cd amplifier-experiment
 
 # Install dependencies
 make install
