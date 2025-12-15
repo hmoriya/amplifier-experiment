@@ -354,31 +354,18 @@ hybrid_value_stream_pattern:
         digital: "サービス稼働率"
         hybrid: "顧客成果達成率"
         
-  architecture:
-    ```mermaid
-    graph TB
-      subgraph "物理層"
-        FACT[工場]
-        PROD[製品]
-      end
-      
-      subgraph "デジタル層"
-        IOT[IoT基盤]
-        AI[AI分析]
-        SVC[サービス]
-      end
-      
-      subgraph "統合層"
-        VAL[統一価値管理]
-        CAP[融合ケイパビリティ]
-      end
-      
-      FACT --> CAP
-      IOT --> CAP
-      CAP --> VAL
-      VAL --> PROD
-      VAL --> SVC
-    ```
+  architecture: |
+    ┌─────────────────────────────────────────┐
+    │            統合層                       │
+    │  [統一価値管理] ← [融合ケイパビリティ]  │
+    └────────┬────────────────┬───────────────┘
+             │                │
+             ▼                ▼
+    ┌────────────────┐ ┌─────────────────────┐
+    │    物理層      │ │     デジタル層      │
+    │  [工場]        │ │ [IoT基盤] [AI分析]  │
+    │  [製品]        │ │ [サービス]          │
+    └────────────────┘ └─────────────────────┘
     
   results:
     business:
