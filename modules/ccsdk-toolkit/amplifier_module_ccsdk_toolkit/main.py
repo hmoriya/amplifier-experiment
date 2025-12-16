@@ -6,51 +6,48 @@ import json
 import re
 from typing import Any, Dict, Optional
 from textwrap import dedent
-import asyncio
-from tenacity import retry, stop_after_attempt, wait_exponential
 
 
 class CCSDKToolkitCLI:
     """Claude Code SDK Toolkit for building robust LLM-powered tools."""
-    
+
     def __init__(self):
         self.templates_dir = Path(__file__).parent / "templates"
         self.defensive_patterns = {
             "parse_json": self._parse_llm_json,
             "retry_with_feedback": self._retry_with_feedback_template,
-            "isolate_prompt": self._isolate_prompt_template
+            "isolate_prompt": self._isolate_prompt_template,
         }
-    
+
     @click.group()
     def cli(self):
         """CCSDK Toolkit for building robust LLM-powered tools."""
         pass
-    
+
     @cli.command()
-    @click.argument('tool_name')
-    @click.option('--template', '-t', type=click.Choice(['basic', 'streaming', 'multi-stage']), 
-                  default='basic')
-    @click.option('--output', '-o', default='.', help='Output directory')
+    @click.argument("tool_name")
+    @click.option("--template", "-t", type=click.Choice(["basic", "streaming", "multi-stage"]), default="basic")
+    @click.option("--output", "-o", default=".", help="Output directory")
     def create(self, tool_name: str, template: str, output: str):
         """Create a new CCSDK tool from template."""
         output_path = Path(output) / tool_name
         output_path.mkdir(parents=True, exist_ok=True)
-        
+
         # Create tool structure
         tool_content = self._get_template(template, tool_name)
-        
+
         # Write main tool file
-        with open(output_path / f"{tool_name}.py", 'w') as f:
+        with open(output_path / f"{tool_name}.py", "w") as f:
             f.write(tool_content)
-        
+
         # Write defensive utilities
-        with open(output_path / "defensive.py", 'w') as f:
+        with open(output_path / "defensive.py", "w") as f:
             f.write(self._get_defensive_utilities())
-        
+
         # Write example usage
-        with open(output_path / "example.py", 'w') as f:
+        with open(output_path / "example.py", "w") as f:
             f.write(self._get_example(template, tool_name))
-        
+
         click.echo(f"✓ Created CCSDK tool: {tool_name}")
         click.echo(f"  Location: {output_path}")
         click.echo(f"  Template: {template}")
@@ -58,14 +55,14 @@ class CCSDKToolkitCLI:
         click.echo(f"    - {tool_name}.py (main tool)")
         click.echo("    - defensive.py (utilities)")
         click.echo("    - example.py (usage example)")
-    
+
     @cli.command()
-    @click.argument('json_file', type=click.Path(exists=True))
+    @click.argument("json_file", type=click.Path(exists=True))
     def validate_json(self, json_file: str):
         """Validate and clean JSON from LLM output."""
-        with open(json_file, 'r') as f:
+        with open(json_file, "r") as f:
             content = f.read()
-        
+
         try:
             # Try standard JSON parsing first
             result = json.loads(content)
@@ -79,44 +76,44 @@ class CCSDKToolkitCLI:
                 click.echo(json.dumps(result, indent=2))
             else:
                 click.echo("✗ Could not extract valid JSON", err=True)
-    
+
     @cli.command()
     def patterns(self):
         """Show available defensive patterns."""
         click.echo("Available Defensive Patterns")
         click.echo("=" * 40)
         click.echo()
-        
+
         patterns = [
             ("parse_llm_json", "Extract JSON from any LLM response format"),
             ("retry_with_feedback", "Intelligent retry with error correction"),
             ("isolate_prompt", "Prevent context contamination"),
             ("validate_structure", "Ensure response matches expected format"),
             ("chunk_processing", "Handle large inputs in chunks"),
-            ("timeout_wrapper", "Prevent hanging operations")
+            ("timeout_wrapper", "Prevent hanging operations"),
         ]
-        
+
         for name, desc in patterns:
             click.echo(f"• {name}")
             click.echo(f"  {desc}")
             click.echo()
-    
+
     def _parse_llm_json(self, content: str) -> Optional[Dict[str, Any]]:
         """Extract JSON from various LLM response formats."""
         # Remove markdown code blocks
-        content = re.sub(r'```json\s*\n?', '', content)
-        content = re.sub(r'```\s*\n?', '', content)
-        
+        content = re.sub(r"```json\s*\n?", "", content)
+        content = re.sub(r"```\s*\n?", "", content)
+
         # Try to find JSON object or array
-        json_match = re.search(r'({[\s\S]*}|\[[\s\S]*\])', content)
+        json_match = re.search(r"({[\s\S]*}|\[[\s\S]*\])", content)
         if json_match:
             try:
                 return json.loads(json_match.group(1))
             except json.JSONDecodeError:
                 pass
-        
+
         return None
-    
+
     def _get_template(self, template_type: str, tool_name: str) -> str:
         """Get tool template content."""
         if template_type == "basic":
@@ -154,10 +151,10 @@ class CCSDKToolkitCLI:
                     result = asyncio.run(tool.process("example input"))
                     print(result)
             ''').strip()
-        
+
         # Add other templates as needed
         return self._get_template("basic", tool_name)
-    
+
     def _retry_with_feedback_template(self) -> str:
         """Template for retry with feedback pattern."""
         return dedent('''
@@ -186,7 +183,7 @@ class CCSDKToolkitCLI:
                 
                 raise Exception(f"Failed after {max_retries} attempts. Last error: {last_error}")
         ''').strip()
-    
+
     def _isolate_prompt_template(self) -> str:
         """Template for prompt isolation pattern."""
         return dedent('''
@@ -200,7 +197,7 @@ class CCSDKToolkitCLI:
                 Please process only the content between the <user_content> tags above.
                 """
         ''').strip()
-    
+
     def _get_defensive_utilities(self) -> str:
         """Get defensive utilities module content."""
         return dedent('''
@@ -304,7 +301,7 @@ class CCSDKToolkitCLI:
                 """Wrapper for API calls with automatic retry."""
                 return await func(*args, **kwargs)
         ''').strip()
-    
+
     def _get_example(self, template_type: str, tool_name: str) -> str:
         """Get example usage file content."""
         return dedent(f'''
