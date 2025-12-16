@@ -1,0 +1,170 @@
+# Parasol Phase Contracts
+# フェーズ間の入出力契約を定義
+
+contracts:
+  phase1_output:
+    description: "Phase 1 (Context) outputs that Phase 2 requires"
+    schema:
+      type: object
+      required:
+        - organization_analysis
+        - market_assessment
+        - stakeholder_map
+        - constraints
+      properties:
+        organization_analysis:
+          type: object
+          required: [name, industry, size, structure, culture]
+          properties:
+            name: { type: string }
+            industry: { type: string }
+            size: { type: string, enum: [startup, smb, enterprise] }
+            structure:
+              type: object
+              properties:
+                business_units: { type: array, items: { type: string } }
+                subsidiaries: { type: array, items: { type: string } }
+            culture:
+              type: object
+              properties:
+                values: { type: array, items: { type: string } }
+                digital_maturity: { type: integer, minimum: 1, maximum: 5 }
+                
+        market_assessment:
+          type: object
+          required: [segments, competition, trends]
+          properties:
+            segments:
+              type: array
+              items:
+                type: object
+                required: [name, size, growth_rate]
+            competition:
+              type: array
+              items:
+                type: object
+                required: [name, market_share, strengths]
+            trends:
+              type: array
+              items: { type: string }
+              
+        stakeholder_map:
+          type: object
+          required: [decision_makers, influencers, end_users]
+          properties:
+            decision_makers:
+              type: array
+              minItems: 1
+              items:
+                type: object
+                required: [name, role, concerns]
+                
+        constraints:
+          type: object
+          required: [technical, regulatory, timeline, budget]
+          properties:
+            technical: { type: array, items: { type: string } }
+            regulatory: { type: array, items: { type: string } }
+            timeline: { type: string }
+            budget: { type: string }
+            
+  phase2_output:
+    description: "Phase 2 (Value) outputs that Phase 3 requires"
+    schema:
+      type: object
+      required:
+        - value_streams
+        - enterprise_activities
+        - value_definition
+      properties:
+        value_streams:
+          type: array
+          minItems: 3
+          items:
+            type: object
+            required: [id, name, description, level, activities]
+            properties:
+              id: { type: string, pattern: "^VS[0-9]+$" }
+              name: { type: string }
+              description: { type: string }
+              level: { type: integer, minimum: 0, maximum: 2 }
+              parent_id: { type: string, pattern: "^VS[0-9]+$" }
+              activities:
+                type: array
+                minItems: 5
+                items:
+                  type: object
+                  required: [id, name, description, type]
+                  
+        enterprise_activities:
+          type: object
+          required: [total_count, by_value_stream, activity_types]
+          
+        value_definition:
+          type: object
+          required: [primary_value, supporting_values, value_metrics]
+          
+  phase3_output:
+    description: "Phase 3 (Capabilities) outputs that Phase 4 requires"
+    schema:
+      type: object
+      required:
+        - domains
+        - subdomains
+        - capabilities
+      properties:
+        domains:
+          type: array
+          items:
+            type: object
+            required: [id, name, type, value_streams]
+            properties:
+              id: { type: string }
+              name: { type: string }
+              type: { type: string, enum: [core, supporting, generic] }
+              value_streams: { type: array, items: { type: string } }
+              
+        subdomains:
+          type: array
+          items:
+            type: object
+            required: [id, name, domain_id, classification]
+            properties:
+              classification: { type: string, enum: [CL1, CL2, CL3] }
+              
+        capabilities:
+          type: array
+          items:
+            type: object
+            required: [id, name, subdomain_id, activities]
+
+# Validation rules for phase transitions
+phase_transitions:
+  phase1_to_phase2:
+    prerequisites:
+      - all_required_outputs_exist
+      - stakeholder_count_minimum_3
+      - market_segments_defined
+      - constraints_documented
+    validations:
+      - organization.digital_maturity >= 2
+      - market_assessment.segments.length >= 1
+      - stakeholder_map.decision_makers.length >= 1
+      
+  phase2_to_phase3:
+    prerequisites:
+      - value_streams_minimum_3
+      - activities_per_stream_minimum_5
+      - value_definition_complete
+    validations:
+      - value_streams.every(vs => vs.activities.length >= 5)
+      - enterprise_activities.total_count >= 15
+      
+  phase3_to_phase4:
+    prerequisites:
+      - all_value_streams_mapped_to_domains
+      - subdomain_classification_complete
+      - capabilities_defined
+    validations:
+      - domains.length >= 3
+      - subdomains.every(sd => sd.classification in ['CL1', 'CL2', 'CL3'])
