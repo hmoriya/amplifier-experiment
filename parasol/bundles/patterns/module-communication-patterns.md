@@ -148,10 +148,12 @@ spec:
         - containerPort: 8080
 ```
 
-## 3. Saga Pattern（分散トランザクション）
+## 3. Transaction Coordination Patterns
+
+**Note**: This section shows traditional SAGA patterns. For Parasol V5's frontend orchestration approach, see `v5-event-driven-patterns.md`.
 
 ```yaml
-saga_pattern:
+traditional_saga_pattern:
   purpose: 複数モジュールにまたがるトランザクション管理
   
   types:
@@ -162,6 +164,21 @@ saga_pattern:
     orchestration:
       description: 中央制御での管理
       use_case: 複雑なビジネスプロセス
+```
+
+**Parasol V5 Alternative**:
+```yaml
+v5_transaction_pattern:
+  purpose: フロントエンド主導のトランザクション管理
+  
+  approach:
+    frontend_orchestration:
+      description: エッジでのワークフロー管理
+      benefits: [simple_debugging, immediate_feedback, user_control]
+      
+    optimistic_coordination:
+      description: 楽観的ロックと補償ベース
+      benefits: [fast_ui, graceful_degradation, no_backend_state]
 ```
 
 ### Choreography実装例

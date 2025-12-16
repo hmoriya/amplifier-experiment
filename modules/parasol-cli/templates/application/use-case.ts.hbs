@@ -88,7 +88,17 @@ export class {{use_case.name}}UseCase implements UseCase<{{use_case.name}}Input,
     {{/if}}
     
     {{#if use_case.publishes_events}}
-    // Publish domain events
+    {{#if use_case.v5_style}}
+    // V5: Simple notification (non-blocking)
+    this.notificationService.notify({
+      type: '{{use_case.event_type}}',
+      entityId: result.id || input.id,
+      timestamp: new Date(),
+      triggeredBy: input.userId,
+      metadata: { /* additional context */ }
+    });
+    {{else}}
+    // Traditional: Publish domain events
     const allEvents: DomainEvent[] = [];
     {{#each use_case.event_sources}}
     allEvents.push(...{{helpers.camel_case name}}.getUncommittedEvents());
@@ -97,6 +107,7 @@ export class {{use_case.name}}UseCase implements UseCase<{{use_case.name}}Input,
     for (const event of allEvents) {
       await this.eventBus.publish(event);
     }
+    {{/if}}
     {{/if}}
     
     return result;

@@ -196,8 +196,10 @@ flow_of_control:
 
 ### 3. Event-Driven Modular Architecture
 
+**Note**: This section shows traditional event-driven patterns. For Parasol V5's lightweight approach, see `v5-event-driven-patterns.md`.
+
 ```yaml
-# architecture/event-driven-modular.yaml
+# architecture/event-driven-modular.yaml (Traditional approach)
 modules:
   product_catalog:
     publishes:
@@ -236,6 +238,29 @@ event_bus:
 event_store:
   type: event-sourcing
   implementation: eventstore-db
+```
+
+**Parasol V5 Alternative**:
+```yaml
+# V5: Lightweight event-driven approach
+modules:
+  product_service:
+    notifications:  # Not events, just notifications
+      - product.created
+      - product.updated
+      - product.price_changed
+      
+    listens_to:
+      - inventory.updated
+      - category.changed
+      
+event_bus:
+  type: simple_notifications
+  implementation: in-memory + sse
+  
+state_management:
+  type: crud_plus_notifications
+  storage: standard_database  # No event store needed
 ```
 
 #### Event-Driven実装例

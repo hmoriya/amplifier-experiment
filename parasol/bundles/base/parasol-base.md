@@ -73,6 +73,18 @@ agents:
     - parasol-value-tracer
     - parasol-quality-gate
     - parasol-milestone-checker
+    
+  architecture_variants:
+    traditional:
+      - event_sourcing
+      - backend_saga
+      - complex_cqrs
+      
+    v5_lightweight:
+      - crud_plus_notifications
+      - frontend_orchestration
+      - edge_transactions
+      - simple_state_management
 ---
 
 # Parasol Base Bundle
