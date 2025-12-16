@@ -27,64 +27,35 @@
 
 価値トレーサビリティとは、「定義された価値が、設計・実装のすべての段階で保持され、実現されることを保証する仕組み」です。
 
-```yaml
-value_traceability_concept:
-  analogy: "食品トレーサビリティ"
-  
-  food_traceability:
-    purpose: "農場から食卓まで品質を保証"
-    tracking:
-      - 生産地
-      - 加工過程
-      - 流通経路
-      - 品質検査
-    result: "安全な食品"
-    
-  value_traceability:
-    purpose: "ビジネス価値から実装まで純度を保証"
-    tracking:
-      - 価値定義（Phase 2）
-      - ケイパビリティ設計（Phase 3）
-      - アーキテクチャ（Phase 4）
-      - サービス実装（Phase 5-6）
-      - 運用成果（Phase 7）
-    result: "価値を実現するシステム"
-```
+| 観点 | 食品トレーサビリティ | 価値トレーサビリティ |
+|------|----------------------|----------------------|
+| **目的** | 農場から食卓まで品質を保証 | ビジネス価値から実装まで純度を保証 |
+| **追跡対象** | 生産地 → 加工過程 → 流通経路 → 品質検査 | 価値定義（Phase 2）→ ケイパビリティ設計（Phase 3）→ アーキテクチャ（Phase 4）→ サービス実装（Phase 5-6）→ 運用成果（Phase 7） |
+| **成果** | 安全な食品 | 価値を実現するシステム |
 
 ### なぜトレーサビリティが必要なのか
 
 システム開発の過程で、価値は様々な理由で変質します。
 
-```yaml
-value_degradation_patterns:
-  translation_loss:  # 翻訳損失
-    what: "ビジネス用語→技術用語への変換で意味が変わる"
-    example:
-      original: "顧客満足度向上"
-      degraded: "レスポンスタイム短縮"
-      lost: "満足度の他の要因（UIの使いやすさ等）"
-      
-  scope_creep:  # スコープの肥大化
-    what: "やりたいことが増えて焦点がぼける"
-    example:
-      original: "受注処理の高速化"
-      degraded: "受注＋在庫＋配送＋請求の統合システム"
-      lost: "高速化という核心"
-      
-  technical_bias:  # 技術的偏向
-    what: "技術的に面白い方向に流れる"
-    example:
-      original: "安定した基幹システム"
-      degraded: "最新のマイクロサービス実験場"
-      lost: "安定性"
-      
-  stakeholder_hijack:  # ステークホルダーの横やり
-    what: "声の大きい人の要望に引きずられる"
-    example:
-      original: "営業効率化"
-      degraded: "経理部も使えるシステム"
-      lost: "営業特化の使いやすさ"
-```
+**1. 翻訳損失（Translation Loss）**
+- **現象**: ビジネス用語→技術用語への変換で意味が変わる
+- **例**: 「顧客満足度向上」→「レスポンスタイム短縮」
+- **失われるもの**: 満足度の他の要因（UIの使いやすさ等）
+
+**2. スコープの肥大化（Scope Creep）**
+- **現象**: やりたいことが増えて焦点がぼける
+- **例**: 「受注処理の高速化」→「受注＋在庫＋配送＋請求の統合システム」
+- **失われるもの**: 高速化という核心
+
+**3. 技術的偏向（Technical Bias）**
+- **現象**: 技術的に面白い方向に流れる
+- **例**: 「安定した基幹システム」→「最新のマイクロサービス実験場」
+- **失われるもの**: 安定性
+
+**4. ステークホルダーの横やり（Stakeholder Hijack）**
+- **現象**: 声の大きい人の要望に引きずられる
+- **例**: 「営業効率化」→「経理部も使えるシステム」
+- **失われるもの**: 営業特化の使いやすさ
 
 ## V5の価値トレーサビリティシステム
 
@@ -92,118 +63,68 @@ value_degradation_patterns:
 
 V5では、価値を一貫して追跡するための構造を提供します。
 
-```yaml
-traceability_structure:
-  # 各フェーズで必ず記録する項目
-  
-  value_definition:  # Phase 2
-    id: "VAL-001"
-    statement: "受注から出荷まで24時間以内"
-    metrics:
-      current: "72時間"
-      target: "24時間"
-      impact: "顧客満足度20%向上"
-      
-  capability_mapping:  # Phase 3
-    value_id: "VAL-001"
-    capabilities:
-      - id: "CAP-001"
-        name: "リアルタイム在庫管理"
-        contribution: "在庫確認時間を即時に"
-      - id: "CAP-002"
-        name: "自動配送手配"
-        contribution: "手配時間を1時間→5分に"
-        
-  service_design:  # Phase 5
-    capability_id: "CAP-001"
-    services:
-      - id: "SVC-001"
-        name: "inventory-service"
-        responsibility: "在庫の即時確認と引当"
-        sla: "応答時間100ms以内"
-        
-  implementation:  # Phase 6
-    service_id: "SVC-001"
-    components:
-      - id: "COMP-001"
-        name: "InventoryCache"
-        purpose: "高速な在庫照会"
-        performance: "読み取り10ms以内"
-        
-  measurement:  # Phase 7
-    value_id: "VAL-001"
-    results:
-      achieved: "平均26時間"
-      achievement_rate: "92%"
-      impact_realized: "顧客満足度18%向上"
-```
+**Phase 2: 価値定義**
+> - **ID**: VAL-001
+> - **ステートメント**: 受注から出荷まで24時間以内
+> - **現状**: 72時間 → **目標**: 24時間
+> - **インパクト**: 顧客満足度20%向上
+
+**Phase 3: ケイパビリティマッピング**（価値ID: VAL-001）
+| ID | ケイパビリティ | 貢献 |
+|----|--------------|------|
+| CAP-001 | リアルタイム在庫管理 | 在庫確認時間を即時に |
+| CAP-002 | 自動配送手配 | 手配時間を1時間→5分に |
+
+**Phase 5: サービス設計**（ケイパビリティID: CAP-001）
+| ID | サービス名 | 責務 | SLA |
+|----|-----------|------|-----|
+| SVC-001 | inventory-service | 在庫の即時確認と引当 | 応答時間100ms以内 |
+
+**Phase 6: 実装**（サービスID: SVC-001）
+| ID | コンポーネント | 目的 | 性能要件 |
+|----|--------------|------|---------|
+| COMP-001 | InventoryCache | 高速な在庫照会 | 読み取り10ms以内 |
+
+**Phase 7: 計測**（価値ID: VAL-001）
+> - **達成値**: 平均26時間
+> - **達成率**: 92%
+> - **実現インパクト**: 顧客満足度18%向上
 
 ### トレーサビリティマトリクス
 
 価値の流れを可視化するマトリクスを作成します。
 
-```yaml
-traceability_matrix:
-  # 価値からコンポーネントまでの追跡
-  
-  VAL-001:  # 24時間配送
-    capabilities:
-      CAP-001:  # 在庫管理
-        services:
-          - SVC-001: "inventory-service"
-          - SVC-002: "stock-allocation-service"
-        implementation_status: "完了"
-        value_contribution: "確認時間を72→0.1時間"
-        
-      CAP-002:  # 配送手配
-        services:
-          - SVC-003: "shipping-service"
-          - SVC-004: "carrier-integration"
-        implementation_status: "進行中"
-        value_contribution: "手配を24→1時間"
-        
-    overall_status:
-      target: "24時間"
-      current_capability: "26時間"
-      gap: "2時間"
-      gap_analysis: "配送業者との連携部分がボトルネック"
-```
+**VAL-001: 24時間配送**
+
+| ケイパビリティ | サービス | 実装状況 | 価値貢献 |
+|--------------|---------|---------|---------|
+| CAP-001: 在庫管理 | inventory-service, stock-allocation-service | 完了 | 確認時間を72→0.1時間 |
+| CAP-002: 配送手配 | shipping-service, carrier-integration | 進行中 | 手配を24→1時間 |
+
+**全体ステータス**
+> - **目標**: 24時間
+> - **現在の能力**: 26時間
+> - **ギャップ**: 2時間
+> - **ギャップ分析**: 配送業者との連携部分がボトルネック
 
 ### 価値の健全性チェック
 
 定期的に価値の「健康診断」を行います。
 
-```yaml
-value_health_check:
-  frequency: "スプリントごと"
-  
-  checkpoints:
-    definition_clarity:
-      question: "価値定義は今も明確か？"
-      indicator:
-        - "全員が同じ説明ができる"
-        - "数値目標が変わっていない"
-        - "前提条件が有効"
-        
-    implementation_alignment:
-      question: "実装は価値に向かっているか？"
-      indicator:
-        - "コードが価値に貢献"
-        - "不要な機能がない"
-        - "優先順位が正しい"
-        
-    measurability:
-      question: "進捗を測定できているか？"
-      indicator:
-        - "KPIが計測されている"
-        - "改善傾向が見える"
-        - "ボトルネックが特定できる"
-        
-  actions:
-    green: "そのまま継続"
-    yellow: "軌道修正"
-    red: "立ち止まって再定義"
-```
+**実施頻度**: スプリントごと
+
+**チェックポイント**
+
+| チェック項目 | 確認質問 | 健全性の指標 |
+|------------|---------|-------------|
+| 定義の明確さ | 価値定義は今も明確か？ | 全員が同じ説明ができる / 数値目標が変わっていない / 前提条件が有効 |
+| 実装の整合性 | 実装は価値に向かっているか？ | コードが価値に貢献 / 不要な機能がない / 優先順位が正しい |
+| 測定可能性 | 進捗を測定できているか？ | KPIが計測されている / 改善傾向が見える / ボトルネックが特定できる |
+
+**アクション判定**
+- 🟢 **Green**: そのまま継続
+- 🟡 **Yellow**: 軌道修正
+- 🔴 **Red**: 立ち止まって再定義
 
 ## Claude Codeとの協働による価値追跡
 
@@ -356,44 +277,39 @@ Claude Code：開発速度と残作業を分析し、実現時期を予測しま
 
 最もシンプルで、始めやすい方法です。
 
-```yaml
-document_driven_pattern:
-  approach: "YAMLやMarkdownで価値の繋がりを記述"
-  
-  structure:
-    /project
-      /values
-        - VAL-001-24h-delivery.yaml
-        - VAL-002-customer-satisfaction.yaml
-      /capabilities
-        - CAP-001-inventory-mgmt.yaml
-        - CAP-002-shipping-automation.yaml
-      /services
-        - SVC-001-inventory-service.yaml
-        - SVC-002-shipping-service.yaml
-      /traceability
-        - value-capability-matrix.yaml
-        - capability-service-matrix.yaml
-        
-  example_file:
-    # VAL-001-24h-delivery.yaml
-    value:
-      id: VAL-001
-      name: "24時間以内配送"
-      current: "72時間"
-      target: "24時間"
-      
-    required_capabilities:
-      - CAP-001: "在庫即時確認"
-      - CAP-002: "自動配送手配"
-      - CAP-003: "リアルタイム追跡"
-      
-    kpis:
-      - id: KPI-001
-        name: "平均配送時間"
-        measurement: "注文確定→配送完了"
-        frequency: "日次"
+**アプローチ**: YAMLやMarkdownで価値の繋がりを記述
+
+**ディレクトリ構造**:
 ```
+/project
+  /values
+    - VAL-001-24h-delivery.yaml
+    - VAL-002-customer-satisfaction.yaml
+  /capabilities
+    - CAP-001-inventory-mgmt.yaml
+    - CAP-002-shipping-automation.yaml
+  /services
+    - SVC-001-inventory-service.yaml
+    - SVC-002-shipping-service.yaml
+  /traceability
+    - value-capability-matrix.yaml
+    - capability-service-matrix.yaml
+```
+
+**ファイル例（VAL-001-24h-delivery.yaml）**:
+
+> **価値定義**
+> - ID: VAL-001
+> - 名称: 24時間以内配送
+> - 現状: 72時間 → 目標: 24時間
+>
+> **必要なケイパビリティ**
+> - CAP-001: 在庫即時確認
+> - CAP-002: 自動配送手配
+> - CAP-003: リアルタイム追跡
+>
+> **KPI**
+> - KPI-001: 平均配送時間（注文確定→配送完了、日次計測）
 
 ### パターン2：コード埋め込み型トレーサビリティ
 
@@ -437,152 +353,131 @@ class InventoryService:
 
 実際の運用データから価値実現を追跡します。
 
-```yaml
-observability_pattern:
-  approach: "メトリクスとトレースから価値を測定"
-  
-  implementation:
-    metrics:
-      - name: "order_to_delivery_time"
-        type: "histogram"
-        labels: ["customer_segment", "region", "shipping_method"]
-        value_contribution: "VAL-001"
-        
-    traces:
-      - span: "order_processing"
-        attributes:
-          value_id: "VAL-001"
-          capability_id: "CAP-001"
-          service: "order-service"
-          
-    dashboards:
-      - name: "Value Realization Dashboard"
-        panels:
-          - title: "24h配送達成率"
-            query: "rate(deliveries_within_24h[1d])"
-          - title: "価値実現トレンド"
-            query: "avg(order_to_delivery_time[7d])"
-            
-    alerts:
-      - name: "価値毀損アラート"
-        condition: "平均配送時間 > 30時間"
-        action: "開発チームに通知"
-```
+**アプローチ**: メトリクスとトレースから価値を測定
+
+**メトリクス設計**
+| メトリクス名 | タイプ | ラベル | 価値貢献 |
+|------------|-------|-------|---------|
+| order_to_delivery_time | histogram | customer_segment, region, shipping_method | VAL-001 |
+
+**トレース設計**
+| スパン | 属性 |
+|-------|------|
+| order_processing | value_id: VAL-001, capability_id: CAP-001, service: order-service |
+
+**ダッシュボード: Value Realization Dashboard**
+| パネル | クエリ |
+|-------|-------|
+| 24h配送達成率 | `rate(deliveries_within_24h[1d])` |
+| 価値実現トレンド | `avg(order_to_delivery_time[7d])` |
+
+**アラート設定**
+> - **名称**: 価値毀損アラート
+> - **条件**: 平均配送時間 > 30時間
+> - **アクション**: 開発チームに通知
 
 ## トレーサビリティのアンチパターン
 
 ### 1. 形骸化したトレーサビリティ
 
-**誤り**：
-```yaml
-bureaucratic_traceability:
-  症状:
-    - "Excel方眼紙で管理"
-    - "更新は監査前だけ"
-    - "誰も見ない"
-    - "実態と乖離"
-```
+**誤り（形骸化した管理）**：
+- Excel方眼紙で管理
+- 更新は監査前だけ
+- 誰も見ない
+- 実態と乖離
 
-**改善**：
-```yaml
-living_traceability:
-  - "コードと一体化"
-  - "自動的に更新"
-  - "日々の判断に活用"
-  - "常に最新"
-```
+**改善（生きたトレーサビリティ）**：
+- コードと一体化
+- 自動的に更新
+- 日々の判断に活用
+- 常に最新
 
 ### 2. 過度に細かいトレース
 
-**誤り**：
-```yaml
-over_detailed_trace:
-  - "すべてのif文に価値ID"
-  - "1行ごとにトレース"
-  - "ノイズで本質が見えない"
-```
+**誤り（過度に細かい）**：
+- すべてのif文に価値ID
+- 1行ごとにトレース
+- ノイズで本質が見えない
 
 **適切な粒度**：
-```yaml
-appropriate_granularity:
-  - "サービスレベル"
-  - "主要な関数/メソッド"
-  - "重要な判断ポイント"
-```
+- サービスレベル
+- 主要な関数/メソッド
+- 重要な判断ポイント
 
 ### 3. 一方通行のトレース
 
-**誤り**：
-```yaml
-one_way_trace:
-  価値 → ケイパビリティ → サービス → 実装
-  # 逆向きの確認なし
-```
+**誤り（一方通行）**：
+
+> 価値 → ケイパビリティ → サービス → 実装
+> （逆向きの確認なし）
 
 **双方向の確認**：
-```yaml
-bidirectional_verification:
-  forward: "価値は実装されているか？"
-  backward: "この実装は価値に貢献しているか？"
-```
+- **Forward（順方向）**: 価値は実装されているか？
+- **Backward（逆方向）**: この実装は価値に貢献しているか？
 
 ## 実践演習：あなたのプロジェクトでトレーサビリティを始める
 
 ### 演習1：価値の棚卸し
 
-```yaml
-exercise_value_inventory:
-  step1_list_values:
-    "現在のプロジェクトの価値をすべてリストアップ"
-    - value_1: ""
-    - value_2: ""
-    - value_3: ""
-    
-  step2_prioritize:
-    "最も重要な価値を3つ選ぶ"
-    1: ""
-    2: ""
-    3: ""
-    
-  step3_trace_one:
-    "1つの価値を実装まで追跡"
-    value: ""
-    capabilities: []
-    services: []
-    code_files: []
-    
-  step4_check_health:
-    "その価値は健全に実装されているか？"
-    - 純度: "0-100%"
-    - 逸脱点: ""
-    - 改善案: ""
-```
+**Step 1: 価値のリストアップ**
+
+現在のプロジェクトの価値をすべてリストアップしてください。
+
+- [ ] 価値1: ________________
+- [ ] 価値2: ________________
+- [ ] 価値3: ________________
+
+**Step 2: 優先順位付け**
+
+最も重要な価値を3つ選んでください。
+
+1. ________________
+2. ________________
+3. ________________
+
+**Step 3: 1つの価値を追跡**
+
+選んだ価値の1つを、実装まで追跡してください。
+
+> - **価値**: ________________
+> - **ケイパビリティ**: ________________
+> - **サービス**: ________________
+> - **コードファイル**: ________________
+
+**Step 4: 健全性チェック**
+
+その価値は健全に実装されているか確認してください。
+
+- [ ] 純度（0-100%）: _____%
+- [ ] 逸脱点: ________________
+- [ ] 改善案: ________________
 
 ### 演習2：トレーサビリティマトリクスの作成
 
-```yaml
-exercise_create_matrix:
-  template:
-    values:
-      - id: ""
-        name: ""
-        target: ""
-        
-    capabilities:
-      - id: ""
-        name: ""
-        contributes_to: []
-        
-    services:
-      - id: ""
-        name: ""
-        implements: []
-        
-    verification:
-      - "すべての価値がカバーされているか？"
-      - "orphanなサービスはないか？"
-      - "過度に複雑な依存はないか？"
-```
+**テンプレート**
+
+**価値一覧**
+| ID | 名称 | 目標 |
+|----|------|------|
+| ______ | ______ | ______ |
+| ______ | ______ | ______ |
+
+**ケイパビリティ一覧**
+| ID | 名称 | 貢献先（価値ID） |
+|----|------|----------------|
+| ______ | ______ | ______ |
+| ______ | ______ | ______ |
+
+**サービス一覧**
+| ID | 名称 | 実装対象（ケイパビリティID） |
+|----|------|--------------------------|
+| ______ | ______ | ______ |
+| ______ | ______ | ______ |
+
+**検証チェックリスト**
+- [ ] すべての価値がカバーされているか？
+- [ ] orphan（孤立した）サービスはないか？
+- [ ] 過度に複雑な依存はないか？
 
 ## まとめ：価値を守り抜く技術
 

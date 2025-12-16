@@ -20,34 +20,17 @@ Phase 4-7は、抽象的な設計を具体的なシステムに変換する工�
 
 Phase 4-7は、本質的に「具体化と収束」のプロセスです。
 
-```yaml
-convergence_process:
-  phase_4_architecture:
-    abstraction_level: "高"
-    focus: "全体構造とパターン"
-    decisions: "技術スタック、分割方針"
-    
-  phase_5_service_design:
-    abstraction_level: "中"
-    focus: "個別サービスの設計"
-    decisions: "API、データモデル"
-    
-  phase_6_implementation:
-    abstraction_level: "低"
-    focus: "実際のコード"
-    decisions: "実装詳細、最適化"
-    
-  phase_7_deployment:
-    abstraction_level: "運用"
-    focus: "本番環境での稼働"
-    decisions: "インフラ、監視、保守"
-    
-  # 大切なのは一貫性
-  golden_thread:
-    - "Phase 2の価値"
-    - "Phase 3のケイパビリティ"
-    - "→ 一本の糸で繋がり続ける"
-```
+| Phase | 抽象度 | フォーカス | 決定事項 |
+|-------|--------|------------|----------|
+| Phase 4 アーキテクチャ | 高 | 全体構造とパターン | 技術スタック、分割方針 |
+| Phase 5 サービス設計 | 中 | 個別サービスの設計 | API、データモデル |
+| Phase 6 実装 | 低 | 実際のコード | 実装詳細、最適化 |
+| Phase 7 デプロイ | 運用 | 本番環境での稼働 | インフラ、監視、保守 |
+
+**大切なのは一貫性（Golden Thread）**：
+- Phase 2の価値
+- Phase 3のケイパビリティ
+- → 一本の糸で繋がり続ける
 
 設計の一貫性を保ちながら、段階的に具体化していく—— これがPhase 4-7の本質です。
 
@@ -57,166 +40,131 @@ convergence_process:
 
 アーキテクチャとは、「システムの基本構造と、その構造を決定する原則」です。
 
-```yaml
-architecture_essence:
-  what_it_is:
-    - "システムの骨格"
-    - "重要な決定の集合"
-    - "変更困難な基礎部分"
-    
-  what_it_is_not:
-    - "実装の詳細"
-    - "使用ライブラリの列挙"
-    - "完璧な未来予測"
-    
-  key_decisions:
-    structure: "モノリス vs マイクロサービス"
-    data: "統合DB vs 分散DB"
-    communication: "同期 vs 非同期"
-    consistency: "強整合性 vs 結果整合性"
-```
+**アーキテクチャとは何か**：
+- システムの骨格
+- 重要な決定の集合
+- 変更困難な基礎部分
+
+**アーキテクチャでないもの**：
+- 実装の詳細
+- 使用ライブラリの列挙
+- 完璧な未来予測
+
+**重要な決定事項**：
+| 観点 | 選択肢 |
+|------|--------|
+| 構造 | モノリス vs マイクロサービス |
+| データ | 統合DB vs 分散DB |
+| 通信 | 同期 vs 非同期 |
+| 整合性 | 強整合性 vs 結果整合性 |
 
 ### V5アーキテクチャパターンの選択
 
 Parasol V5は、ビジネス特性に応じた標準パターンを提供します。
 
-```yaml
-v5_architecture_patterns:
-  pattern_a_simple:
-    name: "シンプル統合型"
-    when_to_use:
-      - "スタートアップ"
-      - "単一チーム"
-      - "迅速な立ち上げ重視"
-    structure:
-      - "モジュラーモノリス"
-      - "統合データベース"
-      - "レイヤードアーキテクチャ"
-    benefits: "開発速度、簡潔性"
-    
-  pattern_b_balanced:
-    name: "バランス分離型"
-    when_to_use:
-      - "中規模企業"
-      - "複数チーム"
-      - "段階的な成長"
-    structure:
-      - "サービス指向"
-      - "ドメイン別DB"
-      - "イベント駆動連携"
-    benefits: "拡張性、チーム独立性"
-    
-  pattern_c_distributed:
-    name: "完全分散型"
-    when_to_use:
-      - "大規模企業"
-      - "グローバル展開"
-      - "高可用性要求"
-    structure:
-      - "マイクロサービス"
-      - "分散データ管理"
-      - "サービスメッシュ"
-    benefits: "スケーラビリティ、耐障害性"
-```
+#### パターンA：シンプル統合型
+
+**適用場面**：
+- スタートアップ
+- 単一チーム
+- 迅速な立ち上げ重視
+
+**構造**：モジュラーモノリス、統合データベース、レイヤードアーキテクチャ
+
+**メリット**：開発速度、簡潔性
+
+#### パターンB：バランス分離型
+
+**適用場面**：
+- 中規模企業
+- 複数チーム
+- 段階的な成長
+
+**構造**：サービス指向、ドメイン別DB、イベント駆動連携
+
+**メリット**：拡張性、チーム独立性
+
+#### パターンC：完全分散型
+
+**適用場面**：
+- 大規模企業
+- グローバル展開
+- 高可用性要求
+
+**構造**：マイクロサービス、分散データ管理、サービスメッシュ
+
+**メリット**：スケーラビリティ、耐障害性
 
 ### 実践例：ECサイトのアーキテクチャ設計
 
 Phase 3で定義したケイパビリティから、アーキテクチャを導出します。
 
-```yaml
-architecture_design_example:
-  business_context:
-    type: "BtoC ECサイト"
-    scale: "月間100万オーダー"
-    growth: "年率50%成長"
-    
-  capability_requirements:
-    - "リアルタイム在庫管理"
-    - "パーソナライズド推薦"
-    - "2時間配送"
-    
-  selected_pattern: "バランス分離型"
-  
-  service_breakdown:
-    customer_facing:
-      web_frontend:
-        technology: "Next.js"
-        responsibility: "顧客UI/UX"
-        scaling: "CDN + エッジ"
-        
-      mobile_apps:
-        technology: "React Native"
-        responsibility: "モバイル体験"
-        scaling: "アプリストア配信"
-        
-    core_services:
-      order_service:
-        technology: "Java/Spring Boot"
-        responsibility: "注文処理"
-        data: "PostgreSQL"
-        scaling: "水平スケール"
-        
-      inventory_service:
-        technology: "Go"
-        responsibility: "在庫管理"
-        data: "Redis + PostgreSQL"
-        scaling: "インメモリキャッシュ"
-        
-      recommendation_service:
-        technology: "Python/FastAPI"
-        responsibility: "商品推薦"
-        data: "MongoDB + ML Pipeline"
-        scaling: "GPU対応"
-        
-    integration_layer:
-      api_gateway:
-        technology: "Kong"
-        responsibility: "ルーティング、認証"
-        
-      event_bus:
-        technology: "Apache Kafka"
-        responsibility: "サービス間連携"
-        
-      service_mesh:
-        technology: "Istio"
-        responsibility: "通信管理、監視"
-```
+**ビジネスコンテキスト**：
+- タイプ：BtoC ECサイト
+- 規模：月間100万オーダー
+- 成長率：年率50%成長
+
+**ケイパビリティ要件**：
+- リアルタイム在庫管理
+- パーソナライズド推薦
+- 2時間配送
+
+**選択パターン**：バランス分離型
+
+**サービス分解**：
+
+*顧客向けサービス*
+
+| サービス | 技術 | 責務 | スケーリング |
+|----------|------|------|--------------|
+| Web Frontend | Next.js | 顧客UI/UX | CDN + エッジ |
+| Mobile Apps | React Native | モバイル体験 | アプリストア配信 |
+
+*コアサービス*
+
+| サービス | 技術 | 責務 | データ | スケーリング |
+|----------|------|------|--------|--------------|
+| Order Service | Java/Spring Boot | 注文処理 | PostgreSQL | 水平スケール |
+| Inventory Service | Go | 在庫管理 | Redis + PostgreSQL | インメモリキャッシュ |
+| Recommendation Service | Python/FastAPI | 商品推薦 | MongoDB + ML Pipeline | GPU対応 |
+
+*統合レイヤー*
+
+| コンポーネント | 技術 | 責務 |
+|----------------|------|------|
+| API Gateway | Kong | ルーティング、認証 |
+| Event Bus | Apache Kafka | サービス間連携 |
+| Service Mesh | Istio | 通信管理、監視 |
 
 ### アーキテクチャ決定記録（ADR）
 
 重要な決定は、必ず記録に残します。
 
-```yaml
-adr_example:
-  id: "ADR-001"
-  title: "マイクロサービス採用の決定"
-  
-  status: "承認済み"
-  date: "2025-12-14"
-  
-  context:
-    - "複数の開発チームが並行作業"
-    - "ビジネス要求の変化が速い"
-    - "サービスごとに異なるスケール要求"
-    
-  decision:
-    "ドメイン境界に基づいたマイクロサービスアーキテクチャを採用する"
-    
-  consequences:
-    positive:
-      - "チームの独立性向上"
-      - "個別スケーリング可能"
-      - "技術選択の自由度"
-    negative:
-      - "運用複雑性の増加"
-      - "分散トランザクション"
-      - "ネットワーク遅延"
-      
-  mitigation:
-    - "サービスメッシュで複雑性を管理"
-    - "Sagaパターンで整合性確保"
-    - "キャッシュ戦略で性能確保"
-```
+> **ADR-001：マイクロサービス採用の決定**
+>
+> **ステータス**：承認済み　**日付**：2025-12-14
+>
+> **コンテキスト**：
+> - 複数の開発チームが並行作業
+> - ビジネス要求の変化が速い
+> - サービスごとに異なるスケール要求
+>
+> **決定**：ドメイン境界に基づいたマイクロサービスアーキテクチャを採用する
+>
+> **結果（ポジティブ）**：
+> - チームの独立性向上
+> - 個別スケーリング可能
+> - 技術選択の自由度
+>
+> **結果（ネガティブ）**：
+> - 運用複雑性の増加
+> - 分散トランザクション
+> - ネットワーク遅延
+>
+> **軽減策**：
+> - サービスメッシュで複雑性を管理
+> - Sagaパターンで整合性確保
+> - キャッシュ戦略で性能確保
 
 ## Phase 5：サービス設計 ― 部品を詳細化する
 
@@ -224,119 +172,106 @@ adr_example:
 
 Phase 5では、Phase 3のケイパビリティがDDDのBounded Contextとして具体化されます。
 
-```yaml
-capability_to_service_mapping:
-  capability: "高速注文処理能力"
-  
-  bounded_context:
-    name: "注文管理コンテキスト"
-    
-    aggregates:
-      order:
-        root: "Order"
-        entities: ["OrderItem", "ShippingInfo"]
-        value_objects: ["Money", "Address", "OrderStatus"]
-        
-      cart:
-        root: "Cart"
-        entities: ["CartItem"]
-        value_objects: ["ProductSnapshot", "Price"]
-        
-    domain_events:
-      - "OrderPlaced"
-      - "OrderCancelled"
-      - "OrderShipped"
-      - "PaymentProcessed"
-      
-    domain_services:
-      - "PricingService"
-      - "InventoryCheckService"
-      - "TaxCalculationService"
-```
+**ケイパビリティ**：高速注文処理能力
+
+**境界づけられたコンテキスト**：注文管理コンテキスト
+
+*集約*
+
+| 集約 | ルート | エンティティ | 値オブジェクト |
+|------|--------|--------------|----------------|
+| Order | Order | OrderItem, ShippingInfo | Money, Address, OrderStatus |
+| Cart | Cart | CartItem | ProductSnapshot, Price |
+
+*ドメインイベント*：
+- OrderPlaced
+- OrderCancelled
+- OrderShipped
+- PaymentProcessed
+
+*ドメインサービス*：
+- PricingService
+- InventoryCheckService
+- TaxCalculationService
 
 ### API設計：契約としてのインターフェース
 
 サービス間の契約を明確に定義します。
 
-```yaml
-api_design_example:
-  service: "order-service"
-  version: "v1"
-  
-  endpoints:
-    create_order:
-      method: "POST"
-      path: "/api/v1/orders"
-      request:
-        type: "CreateOrderRequest"
-        fields:
-          customer_id: "string"
-          items: "OrderItem[]"
-          shipping_address: "Address"
-          payment_method: "PaymentMethod"
-      response:
-        type: "CreateOrderResponse"
-        fields:
-          order_id: "string"
-          status: "OrderStatus"
-          estimated_delivery: "datetime"
-          total_amount: "Money"
-      errors:
-        - code: "INSUFFICIENT_INVENTORY"
-        - code: "INVALID_PAYMENT"
-        - code: "SHIPPING_NOT_AVAILABLE"
-        
-    get_order:
-      method: "GET"
-      path: "/api/v1/orders/{orderId}"
-      response:
-        type: "OrderDetails"
-      errors:
-        - code: "ORDER_NOT_FOUND"
-        - code: "ACCESS_DENIED"
-```
+**サービス**：order-service（v1）
+
+#### POST /api/v1/orders（注文作成）
+
+**リクエスト** (CreateOrderRequest)：
+| フィールド | 型 |
+|------------|-----|
+| customer_id | string |
+| items | OrderItem[] |
+| shipping_address | Address |
+| payment_method | PaymentMethod |
+
+**レスポンス** (CreateOrderResponse)：
+| フィールド | 型 |
+|------------|-----|
+| order_id | string |
+| status | OrderStatus |
+| estimated_delivery | datetime |
+| total_amount | Money |
+
+**エラーコード**：
+- `INSUFFICIENT_INVENTORY`
+- `INVALID_PAYMENT`
+- `SHIPPING_NOT_AVAILABLE`
+
+#### GET /api/v1/orders/{orderId}（注文取得）
+
+**レスポンス**：OrderDetails
+
+**エラーコード**：
+- `ORDER_NOT_FOUND`
+- `ACCESS_DENIED`
 
 ### データモデル設計
 
 永続化層の設計も、ドメインモデルから導出します。
 
-```yaml
-data_model_design:
-  aggregate: "Order"
-  
-  tables:
-    orders:
-      columns:
-        - id: "uuid primary key"
-        - customer_id: "uuid not null"
-        - status: "varchar(20) not null"
-        - total_amount: "decimal(10,2)"
-        - created_at: "timestamp"
-        - updated_at: "timestamp"
-      indexes:
-        - "idx_customer_id"
-        - "idx_status"
-        - "idx_created_at"
-        
-    order_items:
-      columns:
-        - id: "uuid primary key"
-        - order_id: "uuid foreign key"
-        - product_id: "uuid not null"
-        - quantity: "integer not null"
-        - unit_price: "decimal(10,2)"
-      indexes:
-        - "idx_order_id"
-        
-  event_store:
-    order_events:
-      - event_id: "uuid"
-      - aggregate_id: "uuid"
-      - event_type: "varchar(50)"
-      - event_data: "jsonb"
-      - occurred_at: "timestamp"
-      - version: "integer"
-```
+**集約**：Order
+
+#### ordersテーブル
+
+| カラム | 型 |
+|--------|-----|
+| id | uuid primary key |
+| customer_id | uuid not null |
+| status | varchar(20) not null |
+| total_amount | decimal(10,2) |
+| created_at | timestamp |
+| updated_at | timestamp |
+
+**インデックス**：idx_customer_id, idx_status, idx_created_at
+
+#### order_itemsテーブル
+
+| カラム | 型 |
+|--------|-----|
+| id | uuid primary key |
+| order_id | uuid foreign key |
+| product_id | uuid not null |
+| quantity | integer not null |
+| unit_price | decimal(10,2) |
+
+**インデックス**：idx_order_id
+
+#### order_events（イベントストア）
+
+| カラム | 型 |
+|--------|-----|
+| event_id | uuid |
+| aggregate_id | uuid |
+| event_type | varchar(50) |
+| event_data | jsonb |
+| occurred_at | timestamp |
+| version | integer |
 
 ## Phase 6：実装 ― コードに命を吹き込む
 
@@ -567,38 +502,17 @@ class OptimizedOrder(Order):
 
 開発から本番まで、一貫した環境戦略が必要です。
 
-```yaml
-environment_strategy:
-  environments:
-    development:
-      purpose: "個人開発"
-      infrastructure: "ローカル/Docker"
-      data: "モックデータ"
-      integrations: "スタブ"
-      
-    testing:
-      purpose: "自動テスト"
-      infrastructure: "CI環境"
-      data: "テストデータ"
-      integrations: "テスト用API"
-      
-    staging:
-      purpose: "本番相当検証"
-      infrastructure: "本番相当"
-      data: "本番のサブセット"
-      integrations: "本番API（テストモード）"
-      
-    production:
-      purpose: "実運用"
-      infrastructure: "冗長構成"
-      data: "実データ"
-      integrations: "本番API"
-      
-  promotion_process:
-    dev_to_test: "自動（CI/CD）"
-    test_to_staging: "承認後自動"
-    staging_to_prod: "手動承認 + 自動"
-```
+| 環境 | 目的 | インフラ | データ | 外部連携 |
+|------|------|----------|--------|----------|
+| Development | 個人開発 | ローカル/Docker | モックデータ | スタブ |
+| Testing | 自動テスト | CI環境 | テストデータ | テスト用API |
+| Staging | 本番相当検証 | 本番相当 | 本番のサブセット | 本番API（テストモード） |
+| Production | 実運用 | 冗長構成 | 実データ | 本番API |
+
+**プロモーションプロセス**：
+- Dev → Test：自動（CI/CD）
+- Test → Staging：承認後自動
+- Staging → Prod：手動承認 + 自動
 
 ### Infrastructure as Code
 
@@ -662,42 +576,23 @@ spec:
 
 システムは作って終わりではありません。
 
-```yaml
-observability_stack:
-  metrics:
-    tool: "Prometheus + Grafana"
-    what_to_measure:
-      - "ビジネスメトリクス（注文数、売上）"
-      - "パフォーマンス（レイテンシ、スループット）"
-      - "リソース（CPU、メモリ、ディスク）"
-      - "エラー率"
-      
-  logging:
-    tool: "ELK Stack"
-    what_to_log:
-      - "ビジネスイベント"
-      - "エラーと例外"
-      - "パフォーマンス閾値超過"
-      - "セキュリティイベント"
-      
-  tracing:
-    tool: "Jaeger"
-    what_to_trace:
-      - "リクエストフロー"
-      - "サービス間通信"
-      - "データベースクエリ"
-      - "外部API呼び出し"
-      
-  alerting:
-    critical:
-      - "サービス停止"
-      - "エラー率 > 1%"
-      - "レスポンスタイム > 1秒"
-    warning:
-      - "CPU使用率 > 80%"
-      - "ディスク使用率 > 70%"
-      - "キュー遅延 > 5分"
-```
+| 領域 | ツール | 計測対象 |
+|------|--------|----------|
+| メトリクス | Prometheus + Grafana | ビジネスメトリクス（注文数、売上）、パフォーマンス（レイテンシ、スループット）、リソース（CPU、メモリ、ディスク）、エラー率 |
+| ロギング | ELK Stack | ビジネスイベント、エラーと例外、パフォーマンス閾値超過、セキュリティイベント |
+| トレーシング | Jaeger | リクエストフロー、サービス間通信、データベースクエリ、外部API呼び出し |
+
+**アラート設定**：
+
+*Critical（即時対応）*：
+- サービス停止
+- エラー率 > 1%
+- レスポンスタイム > 1秒
+
+*Warning（監視強化）*：
+- CPU使用率 > 80%
+- ディスク使用率 > 70%
+- キュー遅延 > 5分
 
 ## Phase 4-7の統合：価値の実現を確認する
 
@@ -705,116 +600,81 @@ observability_stack:
 
 最初の価値は、実現されているでしょうか？
 
-```yaml
-value_realization_check:
-  original_value: "注文から2時間以内に配送"
-  
-  architecture_support:
-    ✓ "マイクロサービスで並列処理可能"
-    ✓ "イベント駆動で即座に連携"
-    ✓ "キャッシュで高速化"
-    
-  service_implementation:
-    ✓ "注文サービス：5秒以内に処理"
-    ✓ "在庫サービス：リアルタイム更新"
-    ✓ "配送サービス：最適ルート30秒"
-    
-  infrastructure_capability:
-    ✓ "オートスケーリング対応"
-    ✓ "99.9%の可用性"
-    ✓ "ピーク時も性能維持"
-    
-  measured_result:
-    target: "2時間以内"
-    achieved: "平均95分"
-    success_rate: "98.5%"
-```
+**元の価値**：注文から2時間以内に配送
+
+**アーキテクチャによるサポート**：
+- [x] マイクロサービスで並列処理可能
+- [x] イベント駆動で即座に連携
+- [x] キャッシュで高速化
+
+**サービス実装**：
+- [x] 注文サービス：5秒以内に処理
+- [x] 在庫サービス：リアルタイム更新
+- [x] 配送サービス：最適ルート30秒
+
+**インフラ能力**：
+- [x] オートスケーリング対応
+- [x] 99.9%の可用性
+- [x] ピーク時も性能維持
+
+**計測結果**：
+| 指標 | 値 |
+|------|-----|
+| 目標 | 2時間以内 |
+| 実績 | 平均95分 |
+| 成功率 | 98.5% |
 
 ### 継続的改善のサイクル
 
 システムは生き物です。継続的に改善が必要です。
 
-```yaml
-continuous_improvement:
-  measure:
-    - "ビジネスKPI"
-    - "技術的メトリクス"
-    - "ユーザーフィードバック"
-    
-  analyze:
-    - "ボトルネックの特定"
-    - "改善機会の発見"
-    - "新しい要求の理解"
-    
-  improve:
-    - "パフォーマンスチューニング"
-    - "機能追加"
-    - "技術的負債の返済"
-    
-  deploy:
-    - "段階的ロールアウト"
-    - "A/Bテスト"
-    - "カナリアリリース"
-```
+| フェーズ | 活動 |
+|----------|------|
+| **Measure** | ビジネスKPI、技術的メトリクス、ユーザーフィードバック |
+| **Analyze** | ボトルネックの特定、改善機会の発見、新しい要求の理解 |
+| **Improve** | パフォーマンスチューニング、機能追加、技術的負債の返済 |
+| **Deploy** | 段階的ロールアウト、A/Bテスト、カナリアリリース |
 
 ## アンチパターンと落とし穴
 
 ### 1. 過度な先取り設計
 
-**誤り**：
-```yaml
-over_engineering:
-  "将来10倍のトラフィックに対応できるように..."
-  "AIが主流になったときのために..."
-  "マルチリージョン展開を見据えて..."
-  → 複雑性だけが残る
-```
+**誤り（過剰設計）**：
+> 「将来10倍のトラフィックに対応できるように...」
+> 「AIが主流になったときのために...」
+> 「マルチリージョン展開を見据えて...」
+> → 複雑性だけが残る
 
-**正しいアプローチ**：
-```yaml
-just_enough:
-  "今の1.5倍に対応できれば十分"
-  "必要になったら追加"
-  "YAGNIの原則"
-```
+**正しいアプローチ（Just Enough）**：
+> 「今の1.5倍に対応できれば十分」
+> 「必要になったら追加」
+> 「YAGNIの原則」
 
 ### 2. ビジネス価値の喪失
 
-**誤り**：
-```yaml
-tech_for_tech:
-  "最新のKubernetesを使いたい"
-  "GraphQLがトレンドだから"
-  "みんなServerlessだから"
-  → 価値との繋がりが不明
-```
+**誤り（技術のための技術）**：
+> 「最新のKubernetesを使いたい」
+> 「GraphQLがトレンドだから」
+> 「みんなServerlessだから」
+> → 価値との繋がりが不明
 
-**常に問う**：
-```yaml
-value_connection:
-  "この技術選択は、どの価値に貢献するか？"
-  "複雑性に見合う価値があるか？"
-  "もっとシンプルな方法はないか？"
-```
+**常に問う（価値との接続）**：
+> 「この技術選択は、どの価値に貢献するか？」
+> 「複雑性に見合う価値があるか？」
+> 「もっとシンプルな方法はないか？」
 
 ### 3. 完璧主義の罠
 
-**誤り**：
-```yaml
-perfection_paralysis:
-  "100%のテストカバレッジまで..."
-  "すべてのエッジケースに対応..."
-  "完全な自動化ができるまで..."
-  → リリースできない
-```
+**誤り（完璧主義の麻痺）**：
+> 「100%のテストカバレッジまで...」
+> 「すべてのエッジケースに対応...」
+> 「完全な自動化ができるまで...」
+> → リリースできない
 
 **実践的アプローチ**：
-```yaml
-pragmatic_delivery:
-  "コアバリューは確実に"
-  "段階的に改善"
-  "フィードバックから学ぶ"
-```
+> 「コアバリューは確実に」
+> 「段階的に改善」
+> 「フィードバックから学ぶ」
 
 ## まとめ：夢を形にする技術
 
