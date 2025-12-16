@@ -1,0 +1,133 @@
+// Generated Use Case: {{use_case.name}}
+// Generated at: {{generated_at}}
+// Module: {{module.name}} v{{module.version}}
+
+{{#each use_case.imports}}
+import { {{name}} } from '{{path}}';
+{{/each}}
+import { UseCase } from '../../../shared/application/use-case';
+import { DomainEvent } from '../../../shared/domain/domain-event';
+{{#if use_case.uses_repository}}
+import { {{module.name}}Repository } from '../ports/{{helpers.kebab_case module.name}}-repository';
+{{/if}}
+{{#if use_case.publishes_events}}
+import { EventBus } from '../ports/event-bus';
+{{/if}}
+
+/**
+ * Use Case: {{use_case.description}}
+ * 
+ * Input: {{use_case.input_description}}
+ * Output: {{use_case.output_description}}
+ * 
+ * Business Rules:
+ {{#each use_case.business_rules}}
+ * - {{this}}
+ {{/each}}
+ */
+
+export interface {{use_case.name}}Input {
+  {{#each use_case.input}}
+  {{name}}: {{type}};
+  {{/each}}
+}
+
+export interface {{use_case.name}}Output {
+  {{#each use_case.output}}
+  {{name}}: {{type}};
+  {{/each}}
+}
+
+export class {{use_case.name}}UseCase implements UseCase<{{use_case.name}}Input, {{use_case.name}}Output> {
+  constructor(
+    {{#if use_case.uses_repository}}
+    private readonly repository: {{module.name}}Repository,
+    {{/if}}
+    {{#if use_case.publishes_events}}
+    private readonly eventBus: EventBus,
+    {{/if}}
+    {{#each use_case.dependencies}}
+    private readonly {{helpers.camel_case name}}: {{type}},
+    {{/each}}
+  ) {}
+  
+  async execute(input: {{use_case.name}}Input): Promise<{{use_case.name}}Output> {
+    // Input validation
+    await this.validateInput(input);
+    
+    {{#if use_case.loads_aggregates}}
+    // Load required aggregates
+    {{#each use_case.aggregates_to_load}}
+    const {{helpers.camel_case name}} = await this.repository.findById(input.{{id_field}});
+    if (!{{helpers.camel_case name}}) {
+      throw new Error('{{name}} not found');
+    }
+    {{/each}}
+    {{/if}}
+    
+    // CUSTOM_LOGIC_START:{{use_case.name}}.execute
+    {{#if preserved_code.business_logic.[use_case.name].execute}}
+    {{{preserved_code.business_logic.[use_case.name].execute}}}
+    {{else}}
+    // TODO: Implement use case logic
+    // This is where the main business logic should be implemented
+    
+    {{#if use_case.sample_implementation}}
+    {{{use_case.sample_implementation}}}
+    {{else}}
+    throw new Error('Use case {{use_case.name}} not implemented');
+    {{/if}}
+    {{/if}}
+    // CUSTOM_LOGIC_END:{{use_case.name}}.execute
+    
+    {{#if use_case.saves_aggregates}}
+    // Persist changes
+    {{#each use_case.aggregates_to_save}}
+    await this.repository.save({{helpers.camel_case name}});
+    {{/each}}
+    {{/if}}
+    
+    {{#if use_case.publishes_events}}
+    // Publish domain events
+    const allEvents: DomainEvent[] = [];
+    {{#each use_case.event_sources}}
+    allEvents.push(...{{helpers.camel_case name}}.getUncommittedEvents());
+    {{/each}}
+    
+    for (const event of allEvents) {
+      await this.eventBus.publish(event);
+    }
+    {{/if}}
+    
+    return result;
+  }
+  
+  private async validateInput(input: {{use_case.name}}Input): Promise<void> {
+    {{#each use_case.input_validations}}
+    if ({{condition}}) {
+      throw new Error('{{error_message}}');
+    }
+    {{/each}}
+    
+    // CUSTOM_LOGIC_START:{{use_case.name}}.validateInput
+    {{#if preserved_code.business_logic.[use_case.name].validateInput}}
+    {{{preserved_code.business_logic.[use_case.name].validateInput}}}
+    {{else}}
+    // Additional custom validation logic can be added here
+    {{/if}}
+    // CUSTOM_LOGIC_END:{{use_case.name}}.validateInput
+  }
+  
+  {{#each use_case.helper_methods}}
+  private async {{name}}({{#each params}}{{name}}: {{type}}{{#unless @last}}, {{/unless}}{{/each}}): Promise<{{return_type}}> {
+    // CUSTOM_LOGIC_START:{{../use_case.name}}.{{name}}
+    {{#if ../../preserved_code.business_logic.[../use_case.name].[name]}}
+    {{{../../preserved_code.business_logic.[../use_case.name].[name]}}}
+    {{else}}
+    // TODO: Implement helper method {{name}}
+    throw new Error('Helper method {{name}} not implemented');
+    {{/if}}
+    // CUSTOM_LOGIC_END:{{../use_case.name}}.{{name}}
+  }
+  {{/each}}
+}

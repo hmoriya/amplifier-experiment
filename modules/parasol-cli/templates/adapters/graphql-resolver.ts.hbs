@@ -1,0 +1,183 @@
+// Generated GraphQL Resolver for {{module.name}}
+// Generated at: {{generated_at}}
+// Variant: {{variant}}
+
+import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from '../../../shared/guards/auth.guard';
+{{#each module.use_cases}}
+import { {{@key}}UseCase, {{@key}}Input, {{@key}}Output } from '../../application/use-cases/{{helpers.kebab_case @key}}';
+{{/each}}
+{{#each module.domain.aggregates}}
+import { {{@key}} } from '../../domain/entities/{{helpers.kebab_case @key}}';
+{{/each}}
+
+/**
+ * GraphQL Resolver for {{module.name}} Module
+ * 
+ * Provides GraphQL API endpoints for:
+ {{#each module.adapters.primary.graphql_api.queries}}
+ * - Query: {{name}}
+ {{/each}}
+ {{#each module.adapters.primary.graphql_api.mutations}}
+ * - Mutation: {{name}}
+ {{/each}}
+ */
+
+@Resolver('{{module.name}}')
+export class {{module.name}}Resolver {
+  constructor(
+    {{#each module.use_cases}}
+    private readonly {{helpers.camel_case @key}}UseCase: {{@key}}UseCase,
+    {{/each}}
+  ) {}
+  
+  {{#each module.adapters.primary.graphql_api.queries}}
+  @Query(() => {{return_type}})
+  {{#if requires_auth}}
+  @UseGuards(AuthGuard)
+  {{/if}}
+  async {{name}}(
+    {{#each args}}
+    @Args('{{name}}') {{name}}: {{type}},
+    {{/each}}
+    @Context() context: any
+  ): Promise<{{return_type}}> {
+    {{#if has_authorization}}
+    // Authorization check
+    await this.checkAuthorization(context.user, '{{permission}}');
+    {{/if}}
+    
+    // CUSTOM_LOGIC_START:{{../module.name}}Resolver.{{name}}
+    {{#if ../preserved_code.business_logic.[../module.name].[name]}}
+    {{{../preserved_code.business_logic.[../module.name].[name]}}}
+    {{else}}
+    {{#if linked_use_case}}
+    const input: {{linked_use_case}}Input = {
+      {{#each input_mapping}}
+      {{target}}: {{source}},
+      {{/each}}
+    };
+    
+    const result = await this.{{helpers.camel_case linked_use_case}}UseCase.execute(input);
+    
+    // Transform use case output to GraphQL response
+    return this.transformToGraphQLResponse(result);
+    {{else}}
+    // TODO: Implement query {{name}}
+    throw new Error('Query {{name}} not implemented');
+    {{/if}}
+    {{/if}}
+    // CUSTOM_LOGIC_END:{{../module.name}}Resolver.{{name}}
+  }
+  {{/each}}
+  
+  {{#each module.adapters.primary.graphql_api.mutations}}
+  @Mutation(() => {{return_type}})
+  {{#if requires_auth}}
+  @UseGuards(AuthGuard)
+  {{/if}}
+  async {{name}}(
+    {{#each args}}
+    @Args('{{name}}') {{name}}: {{type}},
+    {{/each}}
+    @Context() context: any
+  ): Promise<{{return_type}}> {
+    {{#if has_authorization}}
+    // Authorization check
+    await this.checkAuthorization(context.user, '{{permission}}');
+    {{/if}}
+    
+    {{#if has_input_validation}}
+    // Input validation
+    await this.validateInput({{#each args}}{{name}}{{#unless @last}}, {{/unless}}{{/each}});
+    {{/if}}
+    
+    // CUSTOM_LOGIC_START:{{../module.name}}Resolver.{{name}}
+    {{#if ../preserved_code.business_logic.[../module.name].[name]}}
+    {{{../preserved_code.business_logic.[../module.name].[name]}}}
+    {{else}}
+    {{#if linked_use_case}}
+    const input: {{linked_use_case}}Input = {
+      {{#each input_mapping}}
+      {{target}}: {{source}},
+      {{/each}}
+      {{#if has_user_context}}
+      userId: context.user.id,
+      {{/if}}
+    };
+    
+    const result = await this.{{helpers.camel_case linked_use_case}}UseCase.execute(input);
+    
+    // Transform use case output to GraphQL response
+    return this.transformToGraphQLResponse(result);
+    {{else}}
+    // TODO: Implement mutation {{name}}
+    throw new Error('Mutation {{name}} not implemented');
+    {{/if}}
+    {{/if}}
+    // CUSTOM_LOGIC_END:{{../module.name}}Resolver.{{name}}
+  }
+  {{/each}}
+  
+  {{#if module.adapters.primary.graphql_api.has_field_resolvers}}
+  {{#each module.adapters.primary.graphql_api.field_resolvers}}
+  @ResolveField('{{field_name}}')
+  async {{method_name}}(
+    @Parent() parent: {{parent_type}},
+    {{#each args}}
+    @Args('{{name}}') {{name}}: {{type}},
+    {{/each}}
+    @Context() context: any
+  ): Promise<{{return_type}}> {
+    // CUSTOM_LOGIC_START:{{../module.name}}Resolver.{{method_name}}
+    {{#if ../preserved_code.business_logic.[../module.name].[method_name]}}
+    {{{../preserved_code.business_logic.[../module.name].[method_name]}}}
+    {{else}}
+    // TODO: Implement field resolver {{method_name}}
+    throw new Error('Field resolver {{method_name}} not implemented');
+    {{/if}}
+    // CUSTOM_LOGIC_END:{{../module.name}}Resolver.{{method_name}}
+  }
+  {{/each}}
+  {{/if}}
+  
+  // Helper methods
+  
+  private async checkAuthorization(user: any, permission: string): Promise<void> {
+    // CUSTOM_LOGIC_START:{{module.name}}Resolver.checkAuthorization
+    {{#if preserved_code.business_logic.[module.name].checkAuthorization}}
+    {{{preserved_code.business_logic.[module.name].checkAuthorization}}}
+    {{else}}
+    // TODO: Implement authorization logic
+    // Check if user has the required permission
+    if (!user || !user.permissions?.includes(permission)) {
+      throw new Error('Access denied');
+    }
+    {{/if}}
+    // CUSTOM_LOGIC_END:{{module.name}}Resolver.checkAuthorization
+  }
+  
+  private async validateInput(...args: any[]): Promise<void> {
+    // CUSTOM_LOGIC_START:{{module.name}}Resolver.validateInput
+    {{#if preserved_code.business_logic.[module.name].validateInput}}
+    {{{preserved_code.business_logic.[module.name].validateInput}}}
+    {{else}}
+    // TODO: Implement input validation logic
+    // Add custom validation rules here
+    {{/if}}
+    // CUSTOM_LOGIC_END:{{module.name}}Resolver.validateInput
+  }
+  
+  private transformToGraphQLResponse(useCaseOutput: any): any {
+    // CUSTOM_LOGIC_START:{{module.name}}Resolver.transformToGraphQLResponse
+    {{#if preserved_code.business_logic.[module.name].transformToGraphQLResponse}}
+    {{{preserved_code.business_logic.[module.name].transformToGraphQLResponse}}}
+    {{else}}
+    // Transform use case output to match GraphQL schema
+    // Default implementation: return as-is
+    return useCaseOutput;
+    {{/if}}
+    // CUSTOM_LOGIC_END:{{module.name}}Resolver.transformToGraphQLResponse
+  }
+}

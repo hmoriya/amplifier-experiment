@@ -1,0 +1,124 @@
+// Generated from {{module.name}} module contract v{{module.version}}
+// Generated at: {{generated_at}}
+// DO NOT MODIFY MANUALLY - This file is auto-generated
+// To customize behavior, modify the contract and regenerate
+
+import { DomainEvent } from '../../../shared/domain/domain-event';
+import { AggregateRoot } from '../../../shared/domain/aggregate-root';
+{{#each entity.value_objects}}
+import { {{this}} } from '../value-objects/{{helpers.kebab_case this}}';
+{{/each}}
+
+/**
+ * {{entity.description}}
+ * 
+ * Aggregate: {{entity.aggregate}}
+ * Root Entity: {{entity.root_entity}}
+ */
+export class {{entity.name}} extends AggregateRoot {
+  {{#each entity.properties}}
+  private _{{name}}: {{type}};
+  {{/each}}
+  
+  constructor(
+    {{#each entity.constructor_params}}
+    private readonly {{name}}: {{type}},
+    {{/each}}
+  ) {
+    super();
+    
+    {{#each entity.invariants}}
+    this.enforceInvariant("{{condition}}", () => {{check}});
+    {{/each}}
+  }
+  
+  {{#each entity.properties}}
+  get {{name}}(): {{type}} {
+    return this._{{name}};
+  }
+  {{/each}}
+  
+  {{#each entity.methods}}
+  {{name}}({{#each params}}{{name}}: {{type}}{{#unless @last}}, {{/unless}}{{/each}}): {{#if generates_events}}DomainEvent[]{{else}}{{return_type}}{{/if}} {
+    {{#if generates_events}}
+    const events: DomainEvent[] = [];
+    {{/if}}
+    
+    {{#if has_validation}}
+    // Validation
+    {{#each validations}}
+    if ({{condition}}) {
+      throw new Error('{{error_message}}');
+    }
+    {{/each}}
+    {{/if}}
+    
+    // CUSTOM_LOGIC_START:{{../entity.name}}.{{name}}
+    {{#if preserved_code.business_logic.[../entity.name].[name]}}
+    {{{preserved_code.business_logic.[../entity.name].[name]}}}
+    {{else}}
+    // TODO: Implement business logic for {{name}}
+    throw new Error('Business logic not implemented for {{../entity.name}}.{{name}}');
+    {{/if}}
+    // CUSTOM_LOGIC_END:{{../entity.name}}.{{name}}
+    
+    {{#if generates_events}}
+    // Generate domain events
+    {{#each events}}
+    events.push(new {{event_type}}(
+      this.{{../entity.id_field}},
+      {{#each event_data}}
+      {{this}}{{#unless @last}},{{/unless}}
+      {{/each}}
+    ));
+    {{/each}}
+    
+    return events;
+    {{else}}
+    return result;
+    {{/if}}
+  }
+  {{/each}}
+  
+  {{#if entity.has_snapshot}}
+  toSnapshot(): {{entity.name}}Snapshot {
+    return {
+      {{#each entity.properties}}
+      {{name}}: this._{{name}},
+      {{/each}}
+      version: this.version,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+    };
+  }
+  
+  static fromSnapshot(snapshot: {{entity.name}}Snapshot): {{entity.name}} {
+    const entity = new {{entity.name}}(
+      {{#each entity.constructor_params}}
+      snapshot.{{name}},
+      {{/each}}
+    );
+    
+    {{#each entity.properties}}
+    {{#unless (eq this.name ../entity.constructor_params.name)}}
+    entity._{{name}} = snapshot.{{name}};
+    {{/unless}}
+    {{/each}}
+    
+    entity.version = snapshot.version;
+    entity.createdAt = snapshot.createdAt;
+    entity.updatedAt = snapshot.updatedAt;
+    
+    return entity;
+  }
+  {{/if}}
+  
+  /**
+   * Enforce business invariants
+   */
+  private enforceInvariant(description: string, check: () => boolean): void {
+    if (!check()) {
+      throw new Error(`Business rule violation: ${description}`);
+    }
+  }
+}

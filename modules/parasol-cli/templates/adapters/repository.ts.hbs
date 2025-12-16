@@ -1,0 +1,246 @@
+// Generated Repository Implementation for {{module.name}}
+// Generated at: {{generated_at}}
+// Variant: {{variant}}
+
+{{#if (eq variant "postgresql")}}
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository as TypeOrmRepository } from 'typeorm';
+import { {{module.name}}Entity } from '../entities/{{helpers.kebab_case module.name}}.entity';
+{{else if (eq variant "mongodb")}}
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { {{module.name}}Document, {{module.name}}Schema } from '../schemas/{{helpers.kebab_case module.name}}.schema';
+{{/if}}
+
+{{#each module.domain.aggregates}}
+import { {{@key}} } from '../../domain/entities/{{helpers.kebab_case @key}}';
+import { {{@key}}Id } from '../../domain/value-objects/{{helpers.kebab_case @key}}-id';
+{{/each}}
+import { {{module.name}}Repository } from '../../application/ports/{{helpers.kebab_case module.name}}-repository';
+
+/**
+ * {{variant}} Repository Implementation for {{module.name}}
+ * 
+ * Implements the {{module.name}}Repository port for {{variant}} database.
+ * 
+ * Responsibilities:
+ * - Aggregate persistence and retrieval
+ * - Query optimization for {{variant}}
+ * - Data mapping between domain and persistence models
+ */
+
+@Injectable()
+export class {{variant}}{{module.name}}Repository implements {{module.name}}Repository {
+  constructor(
+    {{#if (eq variant "postgresql")}}
+    @InjectRepository({{module.name}}Entity)
+    private readonly repository: TypeOrmRepository<{{module.name}}Entity>,
+    {{else if (eq variant "mongodb")}}
+    @InjectModel({{module.name}}Schema.name)
+    private readonly model: Model<{{module.name}}Document>,
+    {{/if}}
+  ) {}
+  
+  {{#each module.adapters.secondary.repository.methods}}
+  async {{name}}({{#each params}}{{name}}: {{type}}{{#unless @last}}, {{/unless}}{{/each}}): Promise<{{return_type}}> {
+    {{#if (eq ../variant "postgresql")}}
+    {{#if (eq method_type "findById")}}
+    const entity = await this.repository.findOne({
+      where: { id: {{params.0.name}}.value },
+      {{#if includes_relations}}
+      relations: [{{#each relations}}'{{this}}'{{#unless @last}}, {{/unless}}{{/each}}],
+      {{/if}}
+    });
+    
+    if (!entity) {
+      return null;
+    }
+    
+    return this.toDomainModel(entity);
+    
+    {{else if (eq method_type "save")}}
+    const entity = this.toPersistenceModel({{params.0.name}});
+    await this.repository.save(entity);
+    
+    {{else if (eq method_type "findMany")}}
+    const entities = await this.repository.find({
+      {{#if has_filters}}
+      where: this.buildWhereClause({{filter_param}}),
+      {{/if}}
+      {{#if has_sorting}}
+      order: this.buildOrderClause({{sort_param}}),
+      {{/if}}
+      {{#if has_pagination}}
+      skip: {{pagination_param}}.offset,
+      take: {{pagination_param}}.limit,
+      {{/if}}
+    });
+    
+    return entities.map(entity => this.toDomainModel(entity));
+    {{/if}}
+    
+    {{else if (eq ../variant "mongodb")}}
+    {{#if (eq method_type "findById")}}
+    const document = await this.model.findById({{params.0.name}}.value).exec();
+    
+    if (!document) {
+      return null;
+    }
+    
+    return this.toDomainModel(document);
+    
+    {{else if (eq method_type "save")}}
+    const document = this.toPersistenceModel({{params.0.name}});
+    await document.save();
+    
+    {{else if (eq method_type "findMany")}}
+    const query = this.model.find();
+    
+    {{#if has_filters}}
+    query.where(this.buildMongoQuery({{filter_param}}));
+    {{/if}}
+    {{#if has_sorting}}
+    query.sort(this.buildSortObject({{sort_param}}));
+    {{/if}}
+    {{#if has_pagination}}
+    query.skip({{pagination_param}}.offset).limit({{pagination_param}}.limit);
+    {{/if}}
+    
+    const documents = await query.exec();
+    return documents.map(doc => this.toDomainModel(doc));
+    {{/if}}
+    {{/if}}
+    
+    // CUSTOM_LOGIC_START:{{../../module.name}}Repository.{{name}}
+    {{#if ../../preserved_code.business_logic.[../../module.name].[name]}}
+    {{{../../preserved_code.business_logic.[../../module.name].[name]}}}
+    {{/if}}
+    // CUSTOM_LOGIC_END:{{../../module.name}}Repository.{{name}}
+  }
+  {{/each}}
+  
+  // Domain ↔ Persistence Mapping
+  
+  {{#if (eq variant "postgresql")}}
+  private toDomainModel(entity: {{module.name}}Entity): {{module.primary_aggregate}} {
+    // CUSTOM_LOGIC_START:{{module.name}}Repository.toDomainModel
+    {{#if preserved_code.business_logic.[module.name].toDomainModel}}
+    {{{preserved_code.business_logic.[module.name].toDomainModel}}}
+    {{else}}
+    return new {{module.primary_aggregate}}(
+      {{#each module.domain.aggregates.[module.primary_aggregate].constructor_params}}
+      new {{type}}(entity.{{helpers.snake_case name}}),
+      {{/each}}
+    );
+    {{/if}}
+    // CUSTOM_LOGIC_END:{{module.name}}Repository.toDomainModel
+  }
+  
+  private toPersistenceModel(domain: {{module.primary_aggregate}}): {{module.name}}Entity {
+    // CUSTOM_LOGIC_START:{{module.name}}Repository.toPersistenceModel
+    {{#if preserved_code.business_logic.[module.name].toPersistenceModel}}
+    {{{preserved_code.business_logic.[module.name].toPersistenceModel}}}
+    {{else}}
+    const entity = new {{module.name}}Entity();
+    {{#each module.domain.aggregates.[module.primary_aggregate].properties}}
+    entity.{{helpers.snake_case name}} = domain.{{name}}.value;
+    {{/each}}
+    return entity;
+    {{/if}}
+    // CUSTOM_LOGIC_END:{{module.name}}Repository.toPersistenceModel
+  }
+  
+  private buildWhereClause(filters: any): any {
+    // CUSTOM_LOGIC_START:{{module.name}}Repository.buildWhereClause
+    {{#if preserved_code.business_logic.[module.name].buildWhereClause}}
+    {{{preserved_code.business_logic.[module.name].buildWhereClause}}}
+    {{else}}
+    const where: any = {};
+    
+    // Add filter logic here
+    // Example: if (filters.status) where.status = filters.status;
+    
+    return where;
+    {{/if}}
+    // CUSTOM_LOGIC_END:{{module.name}}Repository.buildWhereClause
+  }
+  
+  {{else if (eq variant "mongodb")}}
+  private toDomainModel(document: {{module.name}}Document): {{module.primary_aggregate}} {
+    // CUSTOM_LOGIC_START:{{module.name}}Repository.toDomainModel
+    {{#if preserved_code.business_logic.[module.name].toDomainModel}}
+    {{{preserved_code.business_logic.[module.name].toDomainModel}}}
+    {{else}}
+    return new {{module.primary_aggregate}}(
+      {{#each module.domain.aggregates.[module.primary_aggregate].constructor_params}}
+      new {{type}}(document.{{helpers.snake_case name}}),
+      {{/each}}
+    );
+    {{/if}}
+    // CUSTOM_LOGIC_END:{{module.name}}Repository.toDomainModel
+  }
+  
+  private toPersistenceModel(domain: {{module.primary_aggregate}}): {{module.name}}Document {
+    // CUSTOM_LOGIC_START:{{module.name}}Repository.toPersistenceModel
+    {{#if preserved_code.business_logic.[module.name].toPersistenceModel}}
+    {{{preserved_code.business_logic.[module.name].toPersistenceModel}}}
+    {{else}}
+    return new this.model({
+      {{#each module.domain.aggregates.[module.primary_aggregate].properties}}
+      {{helpers.snake_case name}}: domain.{{name}}.value,
+      {{/each}}
+    });
+    {{/if}}
+    // CUSTOM_LOGIC_END:{{module.name}}Repository.toPersistenceModel
+  }
+  
+  private buildMongoQuery(filters: any): any {
+    // CUSTOM_LOGIC_START:{{module.name}}Repository.buildMongoQuery
+    {{#if preserved_code.business_logic.[module.name].buildMongoQuery}}
+    {{{preserved_code.business_logic.[module.name].buildMongoQuery}}}
+    {{else}}
+    const query: any = {};
+    
+    // Add MongoDB query logic here
+    // Example: if (filters.status) query.status = filters.status;
+    
+    return query;
+    {{/if}}
+    // CUSTOM_LOGIC_END:{{module.name}}Repository.buildMongoQuery
+  }
+  {{/if}}
+  
+  // Query optimization helpers
+  
+  private buildOrderClause(sortParams: any): any {
+    // CUSTOM_LOGIC_START:{{module.name}}Repository.buildOrderClause
+    {{#if preserved_code.business_logic.[module.name].buildOrderClause}}
+    {{{preserved_code.business_logic.[module.name].buildOrderClause}}}
+    {{else}}
+    const order: any = {};
+    
+    // Add sorting logic here
+    // Example: if (sortParams.field) order[sortParams.field] = sortParams.direction;
+    
+    return order;
+    {{/if}}
+    // CUSTOM_LOGIC_END:{{module.name}}Repository.buildOrderClause
+  }
+  
+  {{#if has_custom_queries}}
+  {{#each custom_queries}}
+  async {{name}}({{#each params}}{{name}}: {{type}}{{#unless @last}}, {{/unless}}{{/each}}): Promise<{{return_type}}> {
+    // CUSTOM_LOGIC_START:{{../../module.name}}Repository.{{name}}
+    {{#if ../../preserved_code.business_logic.[../../module.name].[name]}}
+    {{{../../preserved_code.business_logic.[../../module.name].[name]}}}
+    {{else}}
+    // TODO: Implement custom query {{name}}
+    throw new Error('Custom query {{name}} not implemented');
+    {{/if}}
+    // CUSTOM_LOGIC_END:{{../../module.name}}Repository.{{name}}
+  }
+  {{/each}}
+  {{/if}}
+}
