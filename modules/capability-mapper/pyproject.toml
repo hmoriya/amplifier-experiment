@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "capability-mapper"
+version = "0.1.0"
+description = "Capability decomposition and mapping tool for Parasol V5 Phase 3"
+authors = [
+    { name = "Parasol Team", email = "team@parasol.dev" }
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "click>=8.1.0",
+    "pydantic>=2.5.0",
+    "pyyaml>=6.0",
+    "rich>=13.0.0",
+    "networkx>=3.0",
+    "matplotlib>=3.7.0",
+]
+
+[project.scripts]
+capability-map = "amplifier_module_capability_mapper.main:cli"
+
+[tool.hatch.build]
+include = ["amplifier_module_capability_mapper/**/*.py"]
