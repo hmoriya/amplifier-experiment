@@ -168,7 +168,7 @@ Value Streams の詳細検証：
 Capability Hierarchy の詳細検証：
 - CL1: 活動領域識別（傾向的分類の妥当性・全VS網羅性）
 - CL2: ケイパビリティ設計（正式分類Core/Supporting/Generic・投資判断根拠）
-- CL3: オペレーション定義（各ケイパビリティの業務網羅性）
+- CL3: 詳細分解（≈BizOp）（各ケイパビリティの業務網羅性）
 - VS → Activity Area → Capability → Operation → BC のトレーサビリティ
 
 ### architecture 指定時

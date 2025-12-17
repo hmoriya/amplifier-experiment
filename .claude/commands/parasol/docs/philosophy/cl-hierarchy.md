@@ -46,7 +46,7 @@ CL1 (Value Stream Level) ──┬── Core/Supporting/Generic: 傾向的分�
 CL2 (Capability Level) ────┬── Core/Supporting/Generic: 正式分類（投資判断）
         │                  └── 事業判断：どの能力を内製/外注か   【Theme】
         ↓ 1:N
-CL3 (Business Operation) ──┬── 分類なし（網羅性が目的）
+CL3 (≈Business Operation) ─┬── 分類なし（網羅性が目的）
                            └── 運用判断：業務をどう実行するか   【Epic/Feature】
 
                            【Phase 4: アプリケーション設計】
@@ -208,18 +208,19 @@ independence:
 
 ---
 
-## CL3: Operation Level（オペレーション層）
+## CL3: ケイパビリティ分解 Level 3（≈Business Operation）
 
 ### 定義
 
 ```yaml
 CL3:
-  name: "Operation Level"
-  japanese: "オペレーション層"
-  purpose: "各Capabilityの具体的な業務オペレーションを詳細化する"
-  granularity: "1つのCapabilityを3-10個のOperationに分解"
+  name: "Capability Level 3"
+  japanese: "ケイパビリティ分解 Level 3"
+  purpose: "各Capabilityの具体的な業務を詳細化する"
+  granularity: "1つのCapabilityを3-10個に分解"
   owner: "業務担当者 / プロセスオーナー"
-  ddd_mapping: "Domain Model詳細（UseCase/Scenario相当）"
+  ddd_mapping: "≈Business Operation（Domain Model詳細）"
+  note: "CL3はケイパビリティ分解の第3レベル。DDDのBusiness Operationと概念レベルが同等"
 ```
 
 ### 分類

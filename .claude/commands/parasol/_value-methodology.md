@@ -906,7 +906,7 @@ PM2: プロジェクトマイルストーン2（6ヶ月）
 | フェーズ | V5コマンド | 本方法論の対応セクション |
 |---------|-----------|------------------------|
 | Phase 2 | `/parasol:2-value` | Phase 1（価値宣言・分解） + Phase 2（バックキャスティング） |
-| Phase 3 | `/parasol:3-capabilities` | CL1活動領域→CL2ケイパビリティ（正式分類）→CL3オペレーション |
+| Phase 3 | `/parasol:3-capabilities` | CL1活動領域→CL2ケイパビリティ（正式分類）→CL3（≈BizOp） |
 | Phase 4 | `/parasol:4-application-design` | Phase 3（バリューステージ設計） |
 | 実行計画 | （プロジェクト管理） | Phase 4（プロジェクトマイルストーン） |
 

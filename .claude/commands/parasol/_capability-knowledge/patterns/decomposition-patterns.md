@@ -153,7 +153,7 @@ Supporting    Core     Supporting  Core    Supporting
 
 ---
 
-## CL3: オペレーション定義パターン / BC境界パターン
+## CL3: 詳細分解パターン（≈Business Operation） / BC境界パターン
 
 ### パターン1: 集約ルート中心型
 

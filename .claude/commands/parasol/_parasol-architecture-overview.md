@@ -55,8 +55,8 @@
   - Core / Supporting / Generic の**傾向的分類**（参考情報）
 - CL2: Capability Design（ケイパビリティ設計）
   - **正式分類**（Core/Supporting/Generic）・投資判断根拠
-- CL3: Operation Definition（オペレーション定義）
-  - 業務オペレーションの詳細化（分類なし・網羅性重視）
+- CL3: 詳細分解（≈Business Operation）
+  - 業務の詳細化（分類なし・網羅性重視）
 - BC: Bounded Context（境界コンテキスト）
   - CL2の分類を継承・実装単位の境界定義
 
