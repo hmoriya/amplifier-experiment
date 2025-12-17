@@ -10,7 +10,7 @@
 
 ---
 
-## CL1: ドメイン分類パターン
+## CL1: 活動領域識別パターン（傾向的分類）
 
 ### パターン1: バリューチェーン分析型
 
@@ -54,7 +54,7 @@ Supporting    Core     Supporting  Core    Supporting
 
 ---
 
-## CL2: サブドメイン分解パターン
+## CL2: ケイパビリティ設計パターン（正式分類）
 
 ### パターン1: 研究開発分離型
 
@@ -153,7 +153,7 @@ Supporting    Core     Supporting  Core    Supporting
 
 ---
 
-## CL3: Bounded Context境界パターン
+## CL3: オペレーション定義パターン / BC境界パターン
 
 ### パターン1: 集約ルート中心型
 

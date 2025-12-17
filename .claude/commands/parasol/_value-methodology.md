@@ -146,8 +146,8 @@ Value Stream（VStr）= VS0からVS7への価値の流れ全体
 | 概念 | 定義 | 主語 | Phase |
 |------|------|------|-------|
 | **Value Stage (VS)** | 顧客の状態 | 顧客 | Phase 2 |
-| **Capability Domain (CD)** | 能力の分類（Core/Supporting/Generic） | 組織 | Phase 3 CL1 |
-| **Capability (Cap)** | 能力の単位（チーム/サービス境界） | 組織 | Phase 3 CL2 |
+| **Activity Area (AA)** | 活動領域識別（Core/Supporting/Generic**傾向**） | 組織 | Phase 3 CL1 |
+| **Capability (Cap)** | 能力の単位（**正式分類**・投資判断・サービス境界） | 組織 | Phase 3 CL2 |
 | **Operation (Op)** | 具体的な業務活動 | 組織 | Phase 3 CL3 |
 
 ```
@@ -730,7 +730,7 @@ PM2: プロジェクトマイルストーン2（6ヶ月）
 | フェーズ | V5コマンド | 本方法論の対応セクション |
 |---------|-----------|------------------------|
 | Phase 2 | `/parasol:2-value` | Phase 1（価値宣言・分解） + Phase 2（バックキャスティング） |
-| Phase 3 | `/parasol:3-capabilities` | CL1→CL2→CL3分解、コアサブドメイン特定 |
+| Phase 3 | `/parasol:3-capabilities` | CL1活動領域→CL2ケイパビリティ（正式分類）→CL3オペレーション |
 | Phase 4 | `/parasol:4-application-design` | Phase 3（バリューステージ設計） |
 | 実行計画 | （プロジェクト管理） | Phase 4（プロジェクトマイルストーン） |
 

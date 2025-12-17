@@ -98,9 +98,9 @@ Phase 2: Value Definition
 ✅ enterprise-activities.md 存在
 
 Phase 3: Capabilities
-✅ CL1: strategic-classification.md 存在
-✅ CL2: 3ドメインの全サブドメイン定義済み
-⚠️ CL3: 8サブドメイン中6つのBC未定義
+✅ CL1: activity-area-classification.md 存在（傾向的分類）
+✅ CL2: 3活動領域の全ケイパビリティ定義済み（正式分類）
+⚠️ CL3: 8ケイパビリティ中6つのオペレーション/BC未定義
 ```
 
 **2. 一貫性チェック**
@@ -166,10 +166,10 @@ Value Streams の詳細検証：
 ### phase3 / capabilities 指定時
 
 Capability Hierarchy の詳細検証：
-- CL1: ドメイン分類の妥当性（Core/Supporting/Generic バランス）
-- CL2: 各ドメインのサブドメイン定義完全性
-- CL3: 全サブドメインのBC定義完全性
-- VS → Domain → Subdomain → BC のトレーサビリティ
+- CL1: 活動領域識別（傾向的分類の妥当性・全VS網羅性）
+- CL2: ケイパビリティ設計（正式分類Core/Supporting/Generic・投資判断根拠）
+- CL3: オペレーション定義（各ケイパビリティの業務網羅性）
+- VS → Activity Area → Capability → Operation → BC のトレーサビリティ
 
 ### architecture 指定時
 

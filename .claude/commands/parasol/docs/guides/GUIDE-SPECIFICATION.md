@@ -112,15 +112,15 @@ Phase 1では、ステークホルダー分析と制約条件の整理を行い�
 **目的**: DDD統合型設計手法習得
 
 **構成内容**:
-ケイパビリティフェーズでは、Value Streamを技術実装可能な単位に分解します。Domain Classification（CL1）では、Core/Supporting/Generic分類を価値創造の観点から実施します。
+ケイパビリティフェーズでは、Value Streamを技術実装可能な単位に分解します。Activity Area（CL1）では、活動領域を識別しCore/Supporting/Genericの**傾向**を把握します（参考情報）。
 
-Subdomain Design（CL2）では、各Value Streamをマイクロサービス候補となるSubdomainに分解します。Bounded Context Design（CL3）では、DDDの戦術的パターンを適用し、実装可能な設計を作成します。
+Capability Design（CL2）では、各活動領域内のケイパビリティを特定し、**正式な**Core/Supporting/Generic分類を行います。この分類が投資判断の根拠です。Operation Definition（CL3）では、業務オペレーションを詳細化し網羅性を確保します。
 
 **実践要素**:
-- ドメイン分類技法
-- サブドメイン設計
-- Bounded Context定義
-- Aggregate設計
+- 活動領域識別（傾向的分類）
+- ケイパビリティ設計（正式分類）
+- オペレーション定義
+- Bounded Context設計（BC）
 
 #### 第8章：Phase 4-7：アーキテクチャから実装まで（25-30ページ）
 **目的**: 後期フェーズの効率的進行方法

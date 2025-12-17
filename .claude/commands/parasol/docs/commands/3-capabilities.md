@@ -22,7 +22,7 @@ description: Capability decomposition - L2 WHAT in ZIGZAG process (project:paras
 ## 使用方法
 
 ```bash
-# CL1: 活動領域分類（戦略的、投資判断）
+# CL1: 活動領域識別（傾向的分類、投資方向性の参考）
 /parasol:3-capabilities cl1
 
 # CL2: ケイパビリティ設計（戦術的、サービス境界）
@@ -116,14 +116,14 @@ Phase 3では、Parasolの「**保守性と変更容易性**」を重視して�
 
 ### 使用するサブエージェント
 
-**CL1: ドメイン分類**
+**CL1: 活動領域識別**
 - `zen-architect` (ANALYZE mode)
-- 戦略的分析により Core/Supporting/Generic を分類
-- 投資配分と優先順位を推奨
+- 戦略的分析により Core/Supporting/Generic の傾向を識別（参考情報）
+- 投資方向性の初期判断を支援
 
-**CL2: サブドメイン設計**
+**CL2: ケイパビリティ設計（正式分類）**
 - `zen-architect` (ARCHITECT mode)
-- ドメイン内のサブドメイン候補を抽出
+- 活動領域内のケイパビリティを特定・正式分類
 - マイクロサービス境界を設計
 
 **CL3: ビジネスオペレーション定義**
@@ -141,8 +141,8 @@ Phase 3では、Parasolの「**保守性と変更容易性**」を重視して�
 
 ケイパビリティの階層的分解により、ビジネス価値からソフトウェア設計への橋渡しを行います：
 
-- **CL1 活動領域**: 戦略的分類（Core/Supporting/Generic）- 経営層向け
-- **CL2 ケイパビリティ**: サービス境界の定義（≈マイクロサービス候補）- 事業部長向け
+- **CL1 活動領域**: 傾向的分類（Core/Supporting/Generic傾向）- 経営層向け（参考情報）
+- **CL2 ケイパビリティ**: サービス境界の定義 + **正式分類**（Core/Supporting/Generic）- 事業部長向け
 - **CL3 業務オペレーション**: 具体的な業務活動の定義 - 業務担当者向け
 - **BC 実装設計**: 技術設計（集約/イベント/API）- 開発者向け
 
@@ -160,8 +160,8 @@ Phase 3では、Parasolの「**保守性と変更容易性**」を重視して�
 
 | フェーズ | 出力内容 |
 |----------|----------|
-| **CL1ドメイン分類** | なぜこのVSをCore/Supporting/Genericに分類したか |
-| **CL2サブドメイン設計** | なぜこの粒度で分解したか、Phase 2からの継承関係 |
+| **CL1活動領域識別** | なぜこのVSをCore/Supporting/Generic傾向と識別したか（参考情報） |
+| **CL2ケイパビリティ設計** | なぜこの粒度で分解したか、Phase 2からの継承関係、正式分類の根拠 |
 | **CL3 BC定義** | なぜこの境界でBCを切ったか、既存BCとの関係 |
 
 ### 設計ストーリーテンプレート
@@ -276,8 +276,8 @@ Phase 3では、Parasolの「**保守性と変更容易性**」を重視して�
 
 ### チェックタイミング
 
-- **CL2（サブドメイン設計）完了時**: 新規サブドメイン名を登録
-- **CL3（BC定義）完了時**: BC名を登録
+- **CL2（ケイパビリティ設計）完了時**: 新規ケイパビリティ名を登録
+- **CL3（オペレーション/BC定義）完了時**: BC名を登録
 
 ### チェック方法
 
@@ -438,11 +438,11 @@ Value Stream (価値創造の流れ)
 │ ─────────────────────────────────────────────────────────────── │
 │ 【WHAT領域】何の活動領域か？                                       │
 │ • 対象: 経営層・事業企画                                          │
-│ • 目的: 投資判断・リソース配分の単位                               │
-│ • 分類: Core（差別化）/ Supporting（重要）/ Generic（標準）        │
+│ • 目的: 投資方向性の初期判断                                      │
+│ • 傾向: Core/Supporting/Generic（参考情報、CL2で正式分類）         │
 │ • 例: A1基盤技術研究, A2原料調達, A3酒類製品開発                   │
 │                                                                 │
-│ DDD対応: Domain Classification (Core/Supporting/Generic)         │
+│ DDD対応: Problem Space（傾向的分類のみ）                          │
 └─────────────────────────────────────────────────────────────────┘
      │
      ▼
@@ -452,11 +452,12 @@ Value Stream (価値創造の流れ)
 │ 【HOW構造】どう組織するか？                                        │
 │ • 対象: 事業部長・プロダクトオーナー                               │
 │ • 目的: チーム境界・システム境界・データ所有権の定義                │
+│ • 分類: Core/Supporting/Generic（★正式な投資判断はここで行う）     │
 │ • 粒度: 5-9名のチームで担当可能な範囲（≈マイクロサービス候補）      │
 │ • 例: fermentation-research, premium-beer-development           │
 │                                                                 │
-│ 【注意】小さな活動領域はCL2をスキップしてCL3へ進むことも可          │
-│ DDD対応: Subdomain                                              │
+│ 【重要】CL1の分類は継承しない。各Capabilityを独立評価する          │
+│ DDD対応: Subdomain（Core/Supporting/Generic分類の正式な場所）     │
 └─────────────────────────────────────────────────────────────────┘
      │
      ▼
@@ -585,7 +586,7 @@ CL3 = 活動（境界内で行われる業務操作）
 ```
 outputs/3-capabilities/
 ├── {vs-number}-{vs-slug}/                    # VSディレクトリ（Phase 2から導出）
-│   ├── cl1-domain-classification.md          # CL1: ドメイン分類（Core/Supporting/Generic）
+│   ├── cl1-activity-identification.md        # CL1: 活動領域識別（傾向的分類）
 │   ├── cl2-subdomain-design.md               # CL2: ケイパビリティ設計（サービス境界候補）
 │   └── cl3-business-operations/              # CL3: ビジネスオペレーション（What）
 │       └── {capability}-operations.md        #      各ケイパビリティの業務活動一覧
@@ -604,7 +605,7 @@ outputs/3-capabilities/
 ```
 # Phase 3: ビジネス観点（担当者：事業部長・PO・業務担当者）
 outputs/3-capabilities/{vs}/
-├── cl1-domain-classification.md      # Core/Supporting/Generic 分類
+├── cl1-activity-identification.md    # Core/Supporting/Generic 傾向識別
 ├── cl2-subdomain-design.md           # ケイパビリティ（サービス境界候補）
 └── cl3-business-operations/          # 具体的業務活動
     └── {capability}-operations.md
@@ -715,10 +716,11 @@ Task tool を使用して zen-architect (ANALYZE mode) を起動：
 
 プロンプト:
 """
-Parasol V5 - Phase 3a: Domain Classification (CL1)
+Parasol V5 - Phase 3a: Activity Area Identification (CL1)
 
 ## タスク
-outputs/2-value/ の成果物を分析し、ドメインをCore/Supporting/Genericに分類してください。
+outputs/2-value/ の成果物を分析し、活動領域のCore/Supporting/Generic傾向を識別してください。
+※ これは参考情報です。正式な分類はCL2で各Capability単位に行います。
 
 ## 入力
 - value-streams-mapping.md: VS0-VS7の定義
@@ -749,19 +751,19 @@ outputs/2-value/ の成果物を分析し、ドメインをCore/Supporting/Gener
 - 推奨投資配分: 10%（外部サービス購入推奨）
 
 ## 出力形式
-outputs/3-capabilities/{vs-dir}/cl1-domain-classification.md
+outputs/3-capabilities/{vs-dir}/cl1-activity-identification.md
 
 ※ {vs-dir} はPhase 2のVS定義から動的に決定（例: vs2-product-innovation/）
 
 テンプレート構造：
-1. ドメイン分類サマリー（Core/Supporting/Generic各リスト）
+1. 活動領域傾向サマリー（Core/Supporting/Generic傾向の識別結果）
 2. 各活動領域の詳細
 - 活動領域名
 - 説明
 - 戦略的重要性 / 競争優位性 / 複雑度
 - 分類理由
 3. 投資配分推奨
-4. 次のステップ（CL2: サブドメイン設計）
+4. 次のステップ（CL2: ケイパビリティ設計）
 """
 ```
 
@@ -779,7 +781,7 @@ outputs/3-capabilities/{vs-dir}/cl1-domain-classification.md
 成果物: outputs/3-capabilities/{vs-dir}/cl1-domain-classification.md
 
 次のステップ:
-→ `/parasol:3-capabilities cl2 {vs-number}` でサブドメイン設計
+→ `/parasol:3-capabilities cl2 {vs-number}` でケイパビリティ設計（正式分類）
 ```
 
 ### テンプレート: strategic-classification.md
@@ -912,7 +914,7 @@ Generic Domains (2個):    10% の投資（主に統合コスト）
 
 ## 次のステップ
 
-CL2: サブドメイン設計
+CL2: ケイパビリティ設計（正式分類）
 
 各Value Streamをサブドメイン（≈マイクロサービス候補）に分解：
 
@@ -1927,27 +1929,27 @@ Value Streamsを先に定義してください:
 ### CL1が完了していないのにCL2を実行
 
 ```
-⚠️ CL1: Domain Classification が完了していません
+⚠️ CL1: Activity Area Identification が完了していません
 
-先にドメイン分類を実行してください:
+先に活動領域識別を実行してください:
 → `/parasol:3-capabilities cl1`
 
 必要な成果物:
-- strategic-classification.md
+- activity-area-classification.md
 ```
 
 ### CL2が完了していないのにCL3を実行
 
 ```
-⚠️ CL2: Subdomain Design が完了していません
+⚠️ CL2: Capability Design が完了していません
 
-先にサブドメイン設計を実行してください:
+先にケイパビリティ設計（正式分類）を実行してください:
 → `/parasol:3-capabilities cl2`
 
 必要な成果物:
-- core-domain-subdomains.md
-- supporting-domain-subdomains.md
-- generic-domain-subdomains.md
+- core-capabilities.md
+- supporting-capabilities.md
+- generic-capabilities.md
 ```
 
 ### 無効なサブコマンド
@@ -1956,9 +1958,9 @@ Value Streamsを先に定義してください:
 ❌ 無効なサブコマンド: xyz
 
 有効なサブコマンド:
-- cl1: Domain Classification (戦略的分類)
-- cl2: Subdomain Design (サブドメイン設計)
-- cl3: Bounded Context Definition (BC定義)
+- cl1: Activity Area Identification (活動領域識別・傾向的分類)
+- cl2: Capability Design (ケイパビリティ設計・正式分類)
+- cl3: Operation / BC Definition (オペレーション/BC定義)
 
 使用例:
 → `/parasol:3-capabilities cl1`
@@ -2044,24 +2046,24 @@ Phase 3の進捗を確認：
 ```
 📊 Phase 3: Capabilities - 詳細ステータス
 
-3a. Domain Classification (CL1)
+3a. Activity Area Identification (CL1) - 傾向的分類
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ strategic-classification.md
-Core Domains: VS2, VS3, VS4
-Supporting Domains: VS1, VS5, VS6, VS7
-Generic Domains: VS0
+✅ activity-area-classification.md
+Core傾向: VS2, VS3, VS4
+Supporting傾向: VS1, VS5, VS6, VS7
+Generic傾向: VS0
 
-3b. Subdomain Design (CL2) - Value Stream別
+3b. Capability Design (CL2) - 正式分類
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ vs2-subdomains.md (Core: 製品開発 - 4サブドメイン)
-⏸️ vs3-subdomains.md (Core: ブランディング - 待機中)
-⏸️ vs4-subdomains.md (Core: 販売・流通 - 待機中)
-⏸️ vs0-subdomains.md (Generic: ビジョン策定 - 待機中)
+✅ vs2-capabilities.md (Core: 製品開発 - 4ケイパビリティ)
+⏸️ vs3-capabilities.md (Core: ブランディング - 待機中)
+⏸️ vs4-capabilities.md (Core: 販売・流通 - 待機中)
+⏸️ vs0-capabilities.md (Generic: ビジョン策定 - 待機中)
 ... 他4個
 
 完了: 1/8 VS (12.5%)
 
-3c. Bounded Context Design (CL3)
+3c. Operation Definition / BC Design (CL3)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ✅ vs2-fermentation-tech-bc.md (Core)
 ✅ vs2-product-development-bc.md (Core)
@@ -2096,11 +2098,11 @@ Phase 3 完了後、検証を実行：
 ```
 
 検証項目:
-- ✅ CL1: 全VS（VS0-VS7）のドメイン分類済み
-- ✅ CL2: 詳細化済みVSのサブドメイン定義完了
-- ✅ CL3: 全サブドメインのBC定義完了
+- ✅ CL1: 全VS（VS0-VS7）の活動領域識別済み（傾向的分類）
+- ✅ CL2: 詳細化済みVSのケイパビリティ設計完了（正式分類）
+- ✅ CL3: 全ケイパビリティのオペレーション/BC定義完了
 - ✅ 命名規則: vs{N}-{name} 形式、kebab-case遵守
-- ✅ トレーサビリティ: VS詳細 → Subdomain → BC の紐付き確認
+- ✅ トレーサビリティ: VS詳細 → Capability → Operation → BC の紐付き確認
 
 ## VMS3マイルストーン設定（顧客が主要価値を日常的に体験できる状態）
 

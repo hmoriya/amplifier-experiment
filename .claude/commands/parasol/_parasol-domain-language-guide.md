@@ -67,9 +67,9 @@ Phase 1: Context（ステークホルダー、制約）
 Phase 2: Value Streams（価値の流れ）
     ↓
 Phase 3: Capabilities（ケーパビリティ）
-    ├── CL1: ドメイン分類（Activity Area）
-    ├── CL2: サブドメイン設計（Capability）
-    └── CL3: 業務オペレーション定義（Business Operation）
+    ├── CL1: 活動領域識別（傾向的分類・参考情報）
+    ├── CL2: ケイパビリティ設計（正式分類・投資判断根拠）
+    └── CL3: 業務オペレーション定義（分類なし・網羅性重視）
     ↓
 Phase 4: Application Design（アプリケーション設計）
     ├── capability-bc-mapping.md（CL2-BC対応表）

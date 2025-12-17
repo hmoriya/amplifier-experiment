@@ -107,7 +107,7 @@ DEEP modeで詳細分析：
 ANALYZE modeで戦略的分析：
 - Value Streams候補の抽出（VS0-VS7）
 - エンタープライズ活動の識別
-- ドメイン分類の初期案
+- 活動領域識別（傾向的分類）の初期案
 
 ## 実行フロー
 
@@ -205,10 +205,10 @@ Task 3: zen-architect (ANALYZE mode)
 2. エンタープライズ活動の識別
 - 各VSに紐づく主要活動
 
-3. 初期ドメイン分類案
-- Core Domain候補
-- Supporting Domain候補
-- Generic Domain候補
+3. 初期活動領域識別案（傾向的分類・参考情報）
+- Core傾向の活動領域候補
+- Supporting傾向の活動領域候補
+- Generic傾向の活動領域候補
 
 出力形式: 戦略分析レポート（Markdown）
 """
@@ -410,7 +410,7 @@ Value Streams:  ★★★★☆ (75%) - 良い初期候補、詳細化必要
 4. outputs/2-value/ をレビュー
 5. `/parasol:2-value VS0` から各VSを詳細化
 6. `/parasol:status` で進捗確認
-7. `/parasol:3-capabilities cl1` でドメイン分類へ
+7. `/parasol:3-capabilities cl1` で活動領域識別へ
 ```
 
 ## --deep オプション

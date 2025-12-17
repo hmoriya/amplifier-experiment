@@ -99,9 +99,9 @@ Phase 2: Value Definition ✅ 完了
   ✅ エンタープライズ活動
 
 Phase 3: Capabilities 🔄 進行中
-  ✅ 3a. Domain Classification (CL1)
-  ✅ 3b. Subdomain Design (CL2) - 3/3 ドメイン完了
-  ⏸️ 3c. Bounded Context (CL3) - 2/8 サブドメイン完了
+  ✅ 3a. Activity Area Identification (CL1) - 傾向的分類
+  ✅ 3b. Capability Design (CL2) - 正式分類 3/3 完了
+  ⏸️ 3c. Operation Definition (CL3) - 2/8 ケイパビリティ完了
 
 Phase 4: Application Design ⏸️ 未着手
 Phase 5: Software Design ⏸️ 未着手
@@ -182,25 +182,25 @@ Phase 3の段階的進捗を表示：
 ```
 📊 Phase 3: Capabilities - 詳細ステータス
 
-3a. Domain Classification (CL1)
+3a. Activity Area Identification (CL1) - 傾向的分類
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ strategic-classification.md
-   Core Domains: 3
-   Supporting Domains: 4
-   Generic Domains: 2
+✅ activity-area-classification.md
+   Core傾向: 3 活動領域
+   Supporting傾向: 4 活動領域
+   Generic傾向: 2 活動領域
 
-3b. Subdomain Design (CL2)
+3b. Capability Design (CL2) - 正式分類
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ core-domain-subdomains.md (3 サブドメイン)
-✅ supporting-domain-subdomains.md (5 サブドメイン)
-⏸️ generic-domain-subdomains.md (未着手)
+✅ core-capabilities.md (3 ケイパビリティ)
+✅ supporting-capabilities.md (5 ケイパビリティ)
+⏸️ generic-capabilities.md (未着手)
 
-合計: 8 サブドメイン定義済み
+合計: 8 ケイパビリティ定義済み
 
-3c. Bounded Context Design (CL3)
+3c. Operation Definition (CL3) - 業務オペレーション
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ product-catalog-bc.md (Core)
-✅ order-management-bc.md (Core)
+✅ product-catalog-operations.md (Core)
+✅ order-management-operations.md (Core)
 ⏸️ inventory-management-bc.md (待機中)
 ⏸️ payment-processing-bc.md (待機中)
 ⏸️ customer-service-bc.md (待機中)
