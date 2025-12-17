@@ -358,12 +358,18 @@ Capability（サービス候補）
 
 ## DDD用語との対応（技術者向け参照）
 
-| Parasol用語 | DDD用語 | 備考 |
-|-------------|---------|------|
-| Value Stage | Domain | 戦略的分類を含む |
-| Capability | Subdomain | サービス候補 |
-| ハイレベルUC | Use Case | 業務オペレーション |
-| Service境界 | Bounded Context | Phase 4で確定 |
+| Parasol用語 | DDD用語 | Agile対応 | Core/Supporting/Generic | 備考 |
+|-------------|---------|-----------|------------------------|------|
+| CL1 (Activity Area) | ≈ Problem Space全体 | Initiative | 傾向的（参考） | 経営層向け |
+| CL2 (Capability) | ≈ **Subdomain** | Theme | **正式分類** | 事業部長向け |
+| CL3 (Business Operation) | ≈ Domain Model詳細 | Epic/Feature | なし（網羅性重視） | 業務担当者向け |
+| Actor UseCase | ≈ UseCase | **User Story** | なし | 開発チーム向け |
+| BC (Bounded Context) | = Bounded Context | - | CL2から継承 | アーキテクト向け |
+| View | ≈ Presentation | Task | なし | 開発者向け |
+
+> **重要**: CL1の分類はCL2に継承されない。Generic VSでもCore Capabilityが存在しうる。
+>
+> **シングルアクター原則**: Actor UseCaseは単一アクターの完結操作。Agile User Story（INVEST原則）に対応。
 
 ---
 
