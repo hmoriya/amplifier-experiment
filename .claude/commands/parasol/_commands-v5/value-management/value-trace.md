@@ -14,6 +14,8 @@ description: Value trace management command (project:parasol)
 /parasol:value-trace verify [trace-id]         # トレース検証
 /parasol:value-trace export [--format]         # トレースエクスポート
 /parasol:value-trace visualize                 # 価値チェーン可視化
+/parasol:value-trace okr-link                  # VMS-OKR連携設定
+/parasol:value-trace okr-status                # OKR達成状況確認
 ```
 
 ## 目的
@@ -103,7 +105,7 @@ vt-2024-042 | VS2: 市場成長性根拠        | 4.7    | ✅ 検証済み
 
 継承関係:
 ← 継承元: vt-2024-015 (VL2: ビジネス価値)
-→ 継承先: vt-2024-068 (CL2: サブドメイン設計)
+→ 継承先: vt-2024-068 (CL2: ケイパビリティ設計)
 
 総合判定: ✅ 妥当な価値トレース
 ```
@@ -267,6 +269,93 @@ graph TD
 3. **根拠を明示** - すべての主張にデータや証拠を
 4. **継承を意識** - 前フェーズとの関連を明確に
 5. **定期的に検証** - トレースの妥当性を継続確認
+
+## VMS-OKR連携機能
+
+### 概念: OKRは価値トレーサの測定レイヤー
+
+```
+【構造層: 価値トレーサ】
+VL1 → VL2 → VL3 → VS → Capability → BC
+                    │
+                    │ 紐付け
+                    ↓
+【状態層: VMS】
+VMS1 → VMS2 → VMS3 → VMS4 → VMS5
+                    │
+                    │ 測定
+                    ↓
+【測定層: OKR】
+Objective → KR1, KR2, KR3
+```
+
+### okr-link: VMS-OKR連携設定
+
+```bash
+/parasol:value-trace okr-link
+
+📊 VMS-OKR連携設定
+
+VMS選択: VMS2 - 顧客が価値を認識し選択できる状態
+
+OKR設定:
+  Objective: 新商品の市場浸透
+
+  KR入力:
+  KR1: 配荷率 80%
+  KR2: 認知度 60%
+  KR3: 初回購入率 15%
+
+VS紐付け:
+  KR1 ← VStr-03「流通・配荷」
+  KR2 ← VStr-05「マーケティング」
+  KR3 ← VStr-02「商品開発」+ VStr-05
+
+✅ VMS2-OKR連携を記録しました
+```
+
+### okr-status: OKR達成状況確認
+
+```bash
+/parasol:value-trace okr-status
+
+📈 OKR達成状況（VMS別）
+
+VMS2: 顧客が価値を認識し選択できる状態
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Objective: 新商品の市場浸透
+
+KR       | 目標  | 現在  | 達成率 | 貢献VS      | 状態
+---------|-------|-------|--------|-------------|------
+KR1 配荷 | 80%   | 65%   | 81%    | VStr-03     | ⏳ 進行中
+KR2 認知 | 60%   | 58%   | 97%    | VStr-05     | ✅ 達成間近
+KR3 購入 | 15%   | 8%    | 53%    | VStr-02,05  | ⚠️ 要注意
+
+総合達成率: 77%
+VMS2達成予測: 2週間遅延リスク
+
+💡 推奨アクション:
+  KR3改善のため、VStr-02「商品開発」のCAP-021を確認してください
+```
+
+### トレーサビリティ活用例
+
+```bash
+# KR未達時の原因追跡
+/parasol:value-trace verify --kr KR3
+
+🔍 KR3「初回購入率15%」原因分析
+
+トレースバック:
+  KR3 (8%) → VStr-02「商品開発」
+    └→ CAP-021「製品設計」
+       └→ BC-021「商品企画サービス」
+          └→ Actor UseCase: 「新商品スペック決定」
+             └→ ⚠️ 実装遅延: 2週間
+
+根本原因: BC-021の実装遅延がKR3に影響
+推奨: Actor UseCase優先度を上げて対応
+```
 
 ## 関連コマンド
 
