@@ -127,10 +127,10 @@ Phase 7: Platform ⏸️ 未着手
 **確認項目**:
 1. Phase 1: Context (outputs/1-context/)
 2. Phase 2: Value Definition (outputs/2-value/)
-3. Phase 3: Capabilities (outputs/3-capabilities/)
-   - 3a: domain-classification/strategic-classification.md
-   - 3b: subdomain-design/{domain}-subdomains.md
-   - 3c: bounded-context-design/{subdomain}-bc.md
+3. Phase 3: Capabilities (outputs/3-capabilities/{vs}/)
+   - 3a: cl1-activity-identification.md（傾向的分類）
+   - 3b: cl2-subdomain-design.md（ケイパビリティ設計）
+   - 3c: cl3-business-operations/{capability}-operations.md
 4. Phase 4: Application Design (outputs/4-architecture/)
 5. Phase 5: Software (outputs/5-software/services/)
 6. Phase 6: Implementation (outputs/6-implementation/)

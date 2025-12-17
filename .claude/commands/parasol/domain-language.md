@@ -127,9 +127,12 @@ generate # UI/API/DBコードを生成
 
 **生成されるファイル:**
 ```
-outputs/3-capabilities/{vs-name}/cl3-bounded-contexts/
-├── {bc-name}.md                    # 既存のCL3定義
-└── {bc-name}-domain-language.md    # 新規作成
+outputs/5-software/{service}/{bc-name}/
+└── domain-language.md              # パラソルドメイン言語（SSOT）
+
+# 参照元（Phase 3 CL3定義）:
+outputs/3-capabilities/{vs}/cl3-business-operations/
+└── {capability}-operations.md      # ビジネスオペレーション定義
 ```
 
 ### 2. update - 更新

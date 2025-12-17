@@ -410,7 +410,8 @@ Phase 3のCL3（Bounded Contexts）を基に、Value Stream毎にマイクロサ
 ## 含まれるBounded Contexts
 
 - **{bc-name} BC**
-  - 参照: `outputs/3-capabilities/{vs}/cl3-bounded-contexts/{bc}.md`
+  - CL3参照: `outputs/3-capabilities/{vs}/cl3-business-operations/{capability}-operations.md`
+  - BC設計: `outputs/5-software/{service}/{bc-name}/domain-language.md`
 
 **統合/分離理由:**
 {なぜこれらのBCを1つのサービスにまとめた/分離したか}

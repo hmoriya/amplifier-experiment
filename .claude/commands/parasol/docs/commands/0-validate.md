@@ -130,8 +130,8 @@ VS4: 販売活動
 ✅ 全サブドメイン名が kebab-case
 ✅ 全BC名が "{subdomain-name}-bc" パターン
 ⚠️ 以下のファイル名が規則に従っていません:
-- outputs/3-capabilities/subdomain-design/CoreDomain.md
-→ core-domain-subdomains.md にリネーム推奨
+- outputs/3-capabilities/{vs}/cl2-subdomain-design.md 内のケイパビリティ名
+→ kebab-case にリネーム推奨
 ```
 
 **4. ドキュメント品質チェック**
@@ -140,8 +140,8 @@ VS4: 販売活動
 
 ✅ 全ドキュメントにヘッダー存在
 ✅ 全BCに目的/責務セクション存在
-⚠️ 以下のドキュメントにユビキタス言語セクションが欠落:
-- outputs/3-capabilities/bounded-context-design/product-catalog-bc.md
+⚠️ 以下のドキュメントにドメイン言語セクションが欠落:
+- outputs/5-software/{service}/{bc}/domain-language.md（Phase 5で作成）
 
 ⚠️ 以下のドキュメントが空または不完全:
 - outputs/2-value/enterprise-activities.md (142 bytes)

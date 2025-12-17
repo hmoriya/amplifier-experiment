@@ -72,6 +72,8 @@ VMS5: 顧客が期待を超える価値を日常的に享受している状態�
 
 **設計フロー**: VL分解 → VMS導出（バックキャスト）→ VS設計 → VL×VSマッピング → 優先順位決定
 
+詳細は [VALUE-ANALYSIS-FLOW-DETAILED.md](./VALUE-ANALYSIS-FLOW-DETAILED.md) を参照。
+
 ### 世界初の特徴
 
 1. **想像の設計を技術的に不可能にする**
