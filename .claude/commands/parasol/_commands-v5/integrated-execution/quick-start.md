@@ -4,7 +4,7 @@ description: Quick project start with VMS1 achievement (project:parasol)
 
 # /parasol:quick-start - 高速プロジェクト開始
 
-ワンコマンドでVMS1（コンテキスト確立）まで達成する統合実行コマンド
+ワンコマンドでVMS1（顧客が最初の価値を体験できる状態）まで達成する統合実行コマンド
 
 ## 使用方法
 
@@ -94,7 +94,7 @@ VL3: システム価値（導出中...）
 ✅ VL分解完全性: 100%
 ✅ 構造的必然性平均: 4.83
 
-🎉 VMS1（コンテキスト確立）達成！
+🎉 VMS1（顧客が最初の価値を体験できる状態）達成！
 
 📄 成果物を生成中...
 ✅ outputs/1-context/stakeholder-analysis.md

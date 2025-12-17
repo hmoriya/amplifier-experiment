@@ -184,9 +184,9 @@ milestone_gates:
         validation: "実現可能性と価値実現順序"
         
   ms3_tactical_gate:
-    name: "VMS3：戦術設計ゲート" 
+    name: "VMS3：顧客が主要価値を日常的に体験できる状態ゲート"
     timing: "9ヶ月後"
-    focus: "戦術レベル設計の完成"
+    focus: "顧客の日常的価値体験の実現"
     
     specific_checks:
       technical_architecture:
