@@ -98,9 +98,9 @@ Phase 2: Value Definition
 ✅ enterprise-activities.md 存在
 
 Phase 3: Capabilities
-✅ CL1: strategic-classification.md 存在
-✅ CL2: 3ドメインの全サブドメイン定義済み
-⚠️ CL3: 8サブドメイン中6つのBC未定義
+✅ CL1: activity-area-classification.md 存在（傾向的分類）
+✅ CL2: 3活動領域の全ケイパビリティ定義済み（正式分類）
+⚠️ CL3: 8ケイパビリティ中6つの業務オペレーション未定義
 ```
 
 **2. 一貫性チェック**
@@ -130,8 +130,8 @@ VS4: 販売活動
 ✅ 全サブドメイン名が kebab-case
 ✅ 全BC名が "{subdomain-name}-bc" パターン
 ⚠️ 以下のファイル名が規則に従っていません:
-- outputs/3-capabilities/subdomain-design/CoreDomain.md
-→ core-domain-subdomains.md にリネーム推奨
+- outputs/3-capabilities/{vs}/cl2-subdomain-design.md 内のケイパビリティ名
+→ kebab-case にリネーム推奨
 ```
 
 **4. ドキュメント品質チェック**
@@ -140,8 +140,8 @@ VS4: 販売活動
 
 ✅ 全ドキュメントにヘッダー存在
 ✅ 全BCに目的/責務セクション存在
-⚠️ 以下のドキュメントにユビキタス言語セクションが欠落:
-- outputs/3-capabilities/bounded-context-design/product-catalog-bc.md
+⚠️ 以下のドキュメントにドメイン言語セクションが欠落:
+- outputs/5-software/{service}/{bc}/domain-language.md（Phase 5で作成）
 
 ⚠️ 以下のドキュメントが空または不完全:
 - outputs/2-value/enterprise-activities.md (142 bytes)
@@ -166,10 +166,10 @@ Value Streams の詳細検証：
 ### phase3 / capabilities 指定時
 
 Capability Hierarchy の詳細検証：
-- CL1: ドメイン分類の妥当性（Core/Supporting/Generic バランス）
-- CL2: 各ドメインのサブドメイン定義完全性
-- CL3: 全サブドメインのBC定義完全性
-- VS → Domain → Subdomain → BC のトレーサビリティ
+- CL1: 活動領域識別（傾向的分類の妥当性・全VS網羅性）
+- CL2: ケイパビリティ設計（正式分類Core/Supporting/Generic・投資判断根拠）
+- CL3: 詳細分解（≈BizOp）（各ケイパビリティの業務網羅性）
+- VS → Activity Area → Capability → Operation → BC のトレーサビリティ
 
 ### architecture 指定時
 
@@ -218,9 +218,9 @@ Phase 7 の詳細検証：
 
 ## エラー (要対応)
 
-❌ Phase 3 - CL3: BC未定義
-影響: Phase 4 アプリケーションデザインが不完全
-対応: `/parasol:3-capabilities cl3 {subdomain-name}` で定義
+❌ Phase 3 - CL3: 業務オペレーション未定義
+影響: Phase 4 BC境界確定への入力が不完全
+対応: `/parasol:3-capabilities cl3 {capability-name}` で業務オペレーション定義
 
 ❌ Phase 2 - VS4: 販売活動の定義不完全
 影響: VS4に紐付くドメイン/サブドメインが不明

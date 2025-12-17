@@ -18,10 +18,19 @@
 
 ### 価値関連情報
 **VL1（最上位価値）**: {vl1_value}
-**VL2（価値グループ）**: {vl2_value}  
+**VL2（価値グループ）**: {vl2_value}
 **VL3（詳細価値）**: {vl3_value}
 **対応マイルストーン**: {corresponding_milestone}
 **対応バリューステージ**: {corresponding_value_stage}
+
+### VMS-OKR連携
+**対応VMS**: {vms_number} - {vms_description}
+**貢献OKR**:
+- **Objective**: {okr_objective}
+- **貢献KR**: {contributing_kr}
+- **KR目標値**: {kr_target}
+- **現在値**: {kr_current}
+- **貢献度**: {contribution_percentage}%
 
 ## 根拠データ
 

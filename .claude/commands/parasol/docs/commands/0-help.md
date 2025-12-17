@@ -58,7 +58,7 @@ Parasol V5 フレームワークの包括的なガイドとヘルプを提供し
 🚀 クイックスタート:
 1. `/parasol:1-context` でプロジェクト文脈を確立
 2. `/parasol:2-value` で価値ステージ（顧客状態遷移）を定義
-3. `/parasol:3-capabilities cl1` でドメイン分類
+3. `/parasol:3-capabilities cl1` で活動領域識別（傾向的分類）
 4. `/parasol:status` で進捗確認
 
 ```
@@ -88,8 +88,8 @@ Parasol V5の特徴的な機能として、**設計ストーリー（なぜそ�
 | フェーズ | 設計ストーリー内容 |
 |----------|-------------------|
 | **Phase 2: 価値定義** | 価値分解・MSバックキャスティング・MS→VS変換の理由 |
-| **Phase 3: ケーパビリティ** | ドメイン分類・サブドメイン粒度・BC境界の理由、継承関係、重複回避の工夫 |
-| **Phase 4: アーキテクチャ** | サービス境界・Context Map・統合パターン選択の理由 |
+| **Phase 3: ケーパビリティ** | CL1活動領域識別（傾向的分類）・CL2ケイパビリティ（正式分類）・CL3業務オペレーション、継承関係、重複回避の工夫 |
+| **Phase 4: アーキテクチャ** | BC境界確定・サービス境界・Context Map・統合パターン選択の理由 |
 
 #### 設計ストーリーの参照
 
@@ -109,15 +109,17 @@ Parasol V5の特徴的な機能として、**設計ストーリー（なぜそ�
 - 成果物: value-definition.md, value-streams-mapping.md, vs{N}-detail.md
 
 **Phase 3: Capabilities（段階的、VS単位）**
-- 3a. CL1: `/parasol:3-capabilities cl1` - 活動領域分類（Core/Supporting/Generic）
-- 3b. CL2: `/parasol:3-capabilities cl2 [VS番号]` - ケイパビリティ設計（サービス境界）
+- 3a. CL1: `/parasol:3-capabilities cl1` - 活動領域識別（Core/Supporting/Generic**傾向**・参考情報）
+- 3b. CL2: `/parasol:3-capabilities cl2 [VS番号]` - ケイパビリティ設計（**正式分類**・投資判断根拠）
   - 例: `/parasol:3-capabilities cl2 VS2` (製品開発)
-- 3c. CL3: `/parasol:3-capabilities cl3 [capability]` - 業務オペレーション定義
+- 3c. CL3: `/parasol:3-capabilities cl3 [capability]` - 業務オペレーション定義（分類なし・網羅性重視）
   - 例: `/parasol:3-capabilities cl3 fermentation-research`
-- 3d. BC: `/parasol:3-capabilities bc [capability]` - 実装設計（技術者向け）
-  - 例: `/parasol:3-capabilities bc fermentation-research`
 
-**Phase 4-7**: Application Design, Software Design, Implementation, Platform
+**Phase 4: Application Design（BC境界確定）**
+- `/parasol:4-application-design` - サービス境界確定、Context Map定義
+- BC境界確定: Phase 3のCL3定義を入力としてBC境界を決定
+
+**Phase 5-7**: Software Design, Implementation, Platform
 
 ### トピック: commands
 
@@ -137,12 +139,11 @@ Parasol V5の特徴的な機能として、**設計ストーリー（なぜそ�
 **フェーズコマンド**:
 - `/parasol:1-context`
 - `/parasol:2-value [VS番号]` - 例: `/parasol:2-value VS2`
-- `/parasol:3-capabilities cl1` - 活動領域分類（CL1）
-- `/parasol:3-capabilities cl2 [VS番号]` - ケイパビリティ設計（CL2）
-- `/parasol:3-capabilities cl3 [capability]` - 業務オペレーション定義（CL3）
-- `/parasol:3-capabilities bc [capability]` - 実装設計（BC）
-- `/parasol:4-application-design`
-- `/parasol:5-software-design [service] [bc]`
+- `/parasol:3-capabilities cl1` - 活動領域識別（CL1・傾向的分類）
+- `/parasol:3-capabilities cl2 [VS番号]` - ケイパビリティ設計（CL2・正式分類）
+- `/parasol:3-capabilities cl3 [capability]` - 業務オペレーション定義（CL3・分類なし）
+- `/parasol:4-application-design` - BC境界確定・Context Map定義
+- `/parasol:5-software-design [service] [bc]` - BC実装設計（Parasolドメイン言語）
 - `/parasol:6-implementation [service] [bc]`
 - `/parasol:7-platform`
 
@@ -235,7 +236,7 @@ VSを「時間文脈を持つオペレーションフェーズ」として解釈
 | **文脈最適化** | 同じCapabilityでもVS文脈で具体Operationが異なる |
 | **参照可能性** | 先行VSで確立したCapabilityを後続VSが参照・再利用 |
 
-**Capability Domain分類と顧客接点**:
+**Capability分類と顧客接点**（CL2正式分類）:
 
 | 分類 | 顧客接点 | VS紐付け | 例 |
 |------|---------|---------|-----|
@@ -295,9 +296,9 @@ DDD/マイクロサービスへの完全なマッピング：
 |-------------|-------|---------|------|
 | Value Stage (VS) | 2 | Domain | **顧客状態として定義**（組織活動ではない） |
 | Value Stream (VStr) | 2 | - | VS0→VS7の価値の流れ全体 |
-| Capability Domain (CD) | 3 CL1 | - | Core/Supporting/Generic分類 |
-| Capability (Cap) | 3 CL2 | Subdomain | サービス候補、チーム境界 |
-| Operation (Op) | 3 CL3 | - | Capabilityから導出される具体的組織活動 |
+| Activity Area (AA) | 3 CL1 | Problem Space | Core/Supporting/Generic**傾向**（参考情報） |
+| Capability (Cap) | 3 CL2 | Subdomain | **正式分類**・投資判断・サービス境界 |
+| Operation (Op) | 3 CL3 | Domain Model詳細 | 分類なし・業務オペレーション詳細 |
 | Service境界 | 4 | Bounded Context | ここで確定 |
 | ハイレベルUC | 3-4 | Use Case | Capability内の業務 |
 | Domain Model | 5 | Aggregates, Entities | 実装設計 |
@@ -318,11 +319,10 @@ DDD/マイクロサービスへの完全なマッピング：
 
 **Phase 2**: vs{N}-detail.md（各VSの詳細定義）
 **Phase 3**:
-  - CL1: cl1-domain-classification.md（ドメイン分類）
-  - CL2: cl2-subdomain-design.md（ビジネスオペレーション群）
-  - CL3: cl3-business-operations/{subdomain}-operations.md（ビジネスオペレーション）
-  - BC: bounded-contexts/{subdomain}-bc.md（実装設計）
-**Phase 4**: service-boundary-template.md, context-map-template.md, adr-template.md
+  - CL1: cl1-activity-area.md（活動領域識別・傾向的分類）
+  - CL2: cl2-capability-design.md（ケイパビリティ設計・正式分類）
+  - CL3: cl3-operations/{capability}-operations.md（業務オペレーション・分類なし）
+**Phase 4**: service-boundary-template.md, context-map-template.md, capability-bc-mapping.md, adr-template.md
 **Phase 5**: domain-language-template.md, api-specification-template.md, database-design-template.md, use-case-template.md, page-definition-template.md
 
 **V5解析エンジン対応テンプレート** (Mermaid非依存):
@@ -348,8 +348,8 @@ Parasol V5 は Amplifier のサブエージェントと連携して、各フェ�
 | **Phase 3** | zen-architect (ANALYZE) | CL1活動領域分類 |
 | | zen-architect (ARCHITECT) | CL2ケイパビリティ設計 |
 | | zen-architect (ARCHITECT) | CL3業務オペレーション定義 |
-| | zen-architect (ARCHITECT) + api-contract-designer | BC実装設計 |
-| **Phase 4** | zen-architect (ARCHITECT) | システム設計 |
+| **Phase 4** | zen-architect (ARCHITECT) | BC境界確定・システム設計 |
+| | api-contract-designer | Context Map定義 |
 | | database-architect | データベース設計 |
 | | integration-specialist | 外部システム連携 |
 | | security-guardian | セキュリティレビュー |

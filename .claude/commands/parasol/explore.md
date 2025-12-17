@@ -121,7 +121,7 @@ Worktrees:
 3. VL3詳細化
 4. MSバックキャスティング
 5. バリューストリーム（VStr）導出
-6. CL1分類（Core/Supporting/Generic）
+6. CL1活動領域識別（傾向的分類：Core/Supporting/Generic）
 7. コミット
 
 #### run value - 価値軸探索
@@ -295,7 +295,9 @@ outputs/2-value/exploration/hybrid/
 各探索軸の `cl1-classification.md` で使用:
 
 ```markdown
-# CL1 活動領域分類
+# CL1 活動領域識別（傾向的分類）
+
+※この分類は参考情報です。CL2で各ケイパビリティを個別に正式分類します。
 
 ## 分類サマリー
 
@@ -353,8 +355,8 @@ Coreを支える重要な活動。効率化・標準化。
 |------|--------|----------|--------------|
 | VL2数 | N個 | N個 | 共通N個+事業N個 |
 | VStr数 | 1体系 | 事業数体系 | 1+事業数体系 |
-| CL1 Core数 | N個 | N個 | N個 |
-| CL1 Core投資比率 | XX% | XX% | XX% |
+| CL1 Core傾向数 | N個 | N個 | N個 |
+| CL1 Core傾向投資比率 | XX% | XX% | XX% |
 
 ## VL2構造の比較
 
@@ -572,9 +574,10 @@ Worktrees:
 
 ### CL1まで作成する理由
 
-- CL1（Core/Supporting/Generic）まで見ると投資判断がしやすい
+- CL1（傾向的分類：Core/Supporting/Generic）まで見ると投資方向性が把握しやすい
 - 価値分解の妥当性をCL1で検証できる
 - 3軸の違いがCL1で明確になる
+- ※CL1は参考情報、CL2で正式分類を行う
 
 ---
 

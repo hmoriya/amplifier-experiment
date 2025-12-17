@@ -2,7 +2,99 @@
 
 ## 概要
 
-パラソルドメイン言語の定義を作成・更新・検証するコマンドです。Phase 3（CL3）で定義されたBounded Contextに対して、アーキテクチャ非依存のドメインモデル定義を作成します。
+パラソルドメイン言語の定義を作成・更新・検証するコマンドです。Phase 4-5で定義されたBounded Contextに対して、アーキテクチャ非依存のドメインモデル定義を作成します。
+
+## 🔗 VL/CL/VMSとの関係
+
+パラソルドメイン言語は、価値トレーサビリティチェーンの一部として位置づけられます。
+
+### 全体での位置づけ
+
+```
+VL1（最上位価値）
+  ↓ 分解
+VL2 → VL3 → VMS（価値マイルストーン）
+              ↓ 実現
+        VS（バリューストリーム）
+              ↓ 分解
+        CL1（活動領域識別）
+              ↓
+        CL2（ケイパビリティ設計）
+              ↓
+        CL3（業務オペレーション）
+              ↓ Phase 4-5で境界確定
+        Bounded Context
+              ↓ ★ここでパラソルドメイン言語を適用
+        パラソルドメイン言語定義
+              ↓ 生成
+        UI / API / DB
+```
+
+### パラソルドメイン言語の価値トレーサビリティ
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                  パラソルドメイン言語と価値の連鎖                    │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  【VL3: 詳細価値】                                                  │
+│  「糖質30%オフビール」                                              │
+│       │                                                             │
+│       │ トレース                                                    │
+│       ▼                                                             │
+│  【VMS2: 顧客が価値を認識し選択できる状態】                         │
+│       │                                                             │
+│       │ 実現                                                        │
+│       ▼                                                             │
+│  【VS: 商品開発バリューストリーム】                                 │
+│       │                                                             │
+│       │ 分解                                                        │
+│       ▼                                                             │
+│  【BC: 商品企画BC】（Phase 4-5で定義）                              │
+│       │                                                             │
+│       │ パラソルドメイン言語定義                                    │
+│       ▼                                                             │
+│  Aggregate: Product                                                 │
+│  ├─ Property: nutritionInfo (NutritionValue)                        │
+│  ├─ Invariant: "糖質は基準製品の70%以下であること"                  │
+│  └─ Behavior: calculateSugarReduction()                             │
+│       │                                                             │
+│       │ コード生成                                                  │
+│       ▼                                                             │
+│  【実装】                                                           │
+│  ├─ API: POST /products (糖質検証含む)                              │
+│  ├─ DB: nutrition_info JSONB (制約付き)                             │
+│  └─ UI: 糖質表示コンポーネント                                      │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### 価値トレーサビリティの確認
+
+パラソルドメイン言語を定義する際、以下の価値連鎖を確認してください：
+
+| 確認項目 | 質問 | 根拠 |
+|---------|------|------|
+| VL3との紐付け | このBCはどのVL3を実現するか？ | value-hierarchy.md |
+| VMSとの対応 | どのVMSの達成に貢献するか？ | vms-definitions.md |
+| VSとの整合 | どのバリューストリームに属するか？ | Phase 2成果物 |
+| CL3との一致 | CL3定義と矛盾がないか？ | Phase 3成果物 |
+
+**重要**: パラソルドメイン言語で定義されるInvariants（不変条件）やBehaviors（振る舞い）は、VL3で定義された顧客価値を直接反映している必要があります。
+
+### コマンド実行時の価値確認
+
+```bash
+/parasol:domain-language create vs2-product-innovation fermentation-research-bc
+
+# 実行時に以下を自動確認:
+✅ VL3紐付け: VL3-2-1「発酵技術による差別化」
+✅ VMS対応: VMS2（顧客が価値を認識し選択できる状態）
+✅ VS整合: VS2「商品開発」
+✅ CL3一致: fermentation-research-bc定義と整合
+
+→ 価値トレーサビリティ確認完了
+```
 
 ## 使用方法
 
@@ -19,7 +111,7 @@ generate # UI/API/DBコードを生成
 
 ## 前提条件
 
-- Phase 3（CL3）のBounded Context定義が完了していること
+- Phase 4-5のBounded Context定義が完了していること
 - プロジェクトがParasolで初期化されていること
 
 ## コマンド詳細
@@ -37,9 +129,12 @@ generate # UI/API/DBコードを生成
 
 **生成されるファイル:**
 ```
-outputs/3-capabilities/{vs-name}/cl3-bounded-contexts/
-├── {bc-name}.md                    # 既存のCL3定義
-└── {bc-name}-domain-language.md    # 新規作成
+outputs/5-software/{service}/{bc-name}/
+└── domain-language.md              # パラソルドメイン言語（SSOT）
+
+# 参照元（Phase 3 CL3定義）:
+outputs/3-capabilities/{vs}/cl3-business-operations/
+└── {capability}-operations.md      # ビジネスオペレーション定義
 ```
 
 ### 2. update - 更新

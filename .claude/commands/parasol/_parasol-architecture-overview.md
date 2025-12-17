@@ -51,12 +51,14 @@
 ### 2. 中間層：ケーパビリティ中心（Capability-Centric）
 
 **Phase 3: Capabilities**
-- CL1: Domain Classification（ドメイン分類）
-  - Core / Supporting / Generic
-- CL2: Subdomain Design（サブドメイン設計）
-  - 各VSを能力単位に分解
-- CL3: Bounded Context Definition（BC定義）
-  - ビジネス面とパラソルドメイン言語
+- CL1: Activity Area Identification（活動領域識別）
+  - Core / Supporting / Generic の**傾向的分類**（参考情報）
+- CL2: Capability Design（ケイパビリティ設計）
+  - **正式分類**（Core/Supporting/Generic）・投資判断根拠
+- CL3: 詳細分解（≈Business Operation）
+  - 業務の詳細化（分類なし・網羅性重視）
+- BC: Bounded Context（境界コンテキスト）
+  - CL2の分類を継承・実装単位の境界定義
 
 ```
 ケーパビリティの分解例（VS2）

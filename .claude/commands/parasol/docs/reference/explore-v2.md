@@ -109,7 +109,8 @@ VL1（共通・mainブランチ）
         ▼              ▼              ▼
    VL2→VL3        VL2→VL3        VL2→VL3
    MS→VStr        MS→VStr        MS→VStr
-   CL1            CL1            CL1
+   CL1(傾向)      CL1(傾向)      CL1(傾向)
+   →CL2(正式)    →CL2(正式)    →CL2(正式)
         │              │              │
         └──────────────┼──────────────┘
                        ▼
@@ -250,8 +251,8 @@ outputs/2-value/exploration/multi-tier/
 | VL2構造 | {特徴} | {特徴} | {特徴} |
 | VStr数 | N個 | N個 | N個 |
 | 特殊要素 | {軸固有} | {軸固有} | {軸固有} |
-| CL1 Core数 | N個 | N個 | N個 |
-| CL1 Core投資比率 | XX% | XX% | XX% |
+| CL1 Core傾向数 | N個 | N個 | N個 |
+| CL1 Core傾向投資比率 | XX% | XX% | XX% |
 
 ## 軸別特性評価
 

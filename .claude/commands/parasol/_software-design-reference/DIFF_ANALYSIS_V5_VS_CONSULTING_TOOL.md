@@ -86,14 +86,17 @@ L3 Capability = What（能力の定義）
 
 **Parasol V5の定義:**
 ```
-CL3 = Operation（操作レベルの実装単位）
-  └── Bounded Context
+CL3 = Business Operation（業務オペレーション）
+  │   ↓ Phase 4で境界確定
+  └── Bounded Context（Phase 4-5で定義）
         └── Software Module
 ```
 
+> **注意**: CL3はBCではなくBCへの入力となる業務オペレーションです。BC境界の確定はPhase 4で行います。
+
 **主要な差分:**
 1. consultingToolはL3とOperationを分離（What vs How）
-2. V5はCL3を直接BCにマッピング
+2. V5はCL3（業務オペレーション）をPhase 4でBC境界確定への入力として使用
 3. consultingToolのUseCase層がV5では未定義
 
 ### 2.3 数量関係
@@ -110,8 +113,10 @@ CL3 = Operation（操作レベルの実装単位）
 1 VS = 複数 CL1
 1 CL1 = 複数 CL2
 1 CL2 = 複数 CL3
-1 CL3 = 1 BC（多対多の場合あり）
+N CL3 → M BC（Phase 4で境界確定、多対多の場合あり）
 ```
+
+> **注意**: CL3からBCへのマッピングはPhase 4（Application Design）で明示的に定義されます。
 
 ---
 
@@ -123,7 +128,7 @@ CL3 = Operation（操作レベルの実装単位）
 |---------|---------------|------------|
 | **Domain** | BC | VS |
 | **Subdomain** | L3 Capability | CL2 (Capability) |
-| **Bounded Context** | BC-XXX | CL3 (Operation) |
+| **Bounded Context** | BC-XXX | Phase 4-5で定義（CL3を入力として） |
 | **Aggregate** | domain/aggregates.md | 未定義 |
 | **Entity** | domain/entities.md | 未定義 |
 | **Value Object** | domain/value-objects.md | 未定義 |
@@ -369,7 +374,7 @@ _software-design-reference/
 | 領域 | consultingTool | Parasol V5 | 優先対応 |
 |------|---------------|------------|----------|
 | 価値定義 | シンプル | VS-Swimlane詳細 | V5が優位 |
-| ケイパビリティ | L3-Operation分離 | CL3直接BC | consultingTool統合 |
+| ケイパビリティ | L3-Operation分離 | CL3→Phase4でBC確定 | consultingTool統合 |
 | DDD | 詳細定義あり | マッピングのみ | consultingTool統合 |
 | API設計 | 完全な仕様書 | 未定義 | consultingTool統合 |
 | DB設計 | 完全な仕様書 | 未定義 | consultingTool統合 |
