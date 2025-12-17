@@ -400,8 +400,8 @@ Phase 2: Value → VMS2
   └─ 戦略ケイパビリティ
 
 Phase 3: Capabilities → VMS3
-  ├─ ドメイン分解
-  └─ BC定義
+  ├─ ドメイン分解（CL1→CL2→CL3）
+  └─ BC境界確定への入力準備
 ```
 
 ### `/parasol:production-ready`
@@ -513,7 +513,7 @@ enhancements:
 |----------|----------|
 | `/parasol:1-context` | VL分解時の価値根拠記録 |
 | `/parasol:2-value` | VS設計の必然性検証 |
-| `/parasol:3-capabilities` | BC価値継承確認 |
+| `/parasol:3-capabilities` | CL3価値継承確認（BC入力） |
 | `/parasol:4-application` | サービス境界価値検証 |
 | `/parasol:5-software` | 実装価値妥当性確認 |
 | `/parasol:6-implementation` | 価値実現検証 |

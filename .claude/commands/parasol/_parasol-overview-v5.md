@@ -106,7 +106,7 @@ VMS5: 顧客が期待を超える価値を日常的に享受している状態�
 
 ### Phase 3: Capabilities - ケイパビリティ分解
 - **目的**: ビジネス能力の詳細化
-- **成果物**: CL1活動領域識別（傾向的分類）、CL2ケイパビリティ設計（正式分類）、CL3詳細分解（≈BizOp）、BC定義
+- **成果物**: CL1活動領域識別（傾向的分類）、CL2ケイパビリティ設計（正式分類）、CL3詳細分解（≈BizOp）
 - **達成マイルストーン**: VMS2 - 顧客が価値を認識し選択できる状態（6ヶ月後）
 
 ### Phase 4: Application Design - アプリケーション設計
@@ -225,6 +225,23 @@ _value-traceability-system/
 **Parasol V5**は、単なる設計フレームワークを超えて、「**価値実現を保証する哲学的システム**」として完成しました。
 
 灼熱の想像から守り、涼しい価値の日陰を作る - それがParasolです。
+
+---
+
+## 📖 関連ドキュメント
+
+### コア概念
+- [PARASOL-CONCEPT.md](./PARASOL-CONCEPT.md) - パラソルの中核コンセプト
+- [PHILOSOPHY.md](./PHILOSOPHY.md) - 設計哲学の詳細解説
+- [VALUE-ANALYSIS-FLOW-DETAILED.md](./VALUE-ANALYSIS-FLOW-DETAILED.md) - 価値分解プロセス
+
+### アーキテクチャ
+- [_parasol-architecture-overview.md](./_parasol-architecture-overview.md) - 3層構造の概要
+- [_parasol-domain-language-guide.md](./_parasol-domain-language-guide.md) - パラソルドメイン言語ガイド
+- [_value-methodology.md](./_value-methodology.md) - 価値方法論
+
+### 比較・分析
+- [DDD-VS-PARASOL-ANALYSIS.md](./DDD-VS-PARASOL-ANALYSIS.md) - DDDとの比較分析
 
 ---
 

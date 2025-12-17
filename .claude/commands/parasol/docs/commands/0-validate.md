@@ -100,7 +100,7 @@ Phase 2: Value Definition
 Phase 3: Capabilities
 ✅ CL1: activity-area-classification.md 存在（傾向的分類）
 ✅ CL2: 3活動領域の全ケイパビリティ定義済み（正式分類）
-⚠️ CL3: 8ケイパビリティ中6つのオペレーション/BC未定義
+⚠️ CL3: 8ケイパビリティ中6つの業務オペレーション未定義
 ```
 
 **2. 一貫性チェック**
@@ -218,9 +218,9 @@ Phase 7 の詳細検証：
 
 ## エラー (要対応)
 
-❌ Phase 3 - CL3: BC未定義
-影響: Phase 4 アプリケーションデザインが不完全
-対応: `/parasol:3-capabilities cl3 {subdomain-name}` で定義
+❌ Phase 3 - CL3: 業務オペレーション未定義
+影響: Phase 4 BC境界確定への入力が不完全
+対応: `/parasol:3-capabilities cl3 {capability-name}` で業務オペレーション定義
 
 ❌ Phase 2 - VS4: 販売活動の定義不完全
 影響: VS4に紐付くドメイン/サブドメインが不明

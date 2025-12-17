@@ -88,8 +88,8 @@ Parasol V5の特徴的な機能として、**設計ストーリー（なぜそ�
 | フェーズ | 設計ストーリー内容 |
 |----------|-------------------|
 | **Phase 2: 価値定義** | 価値分解・MSバックキャスティング・MS→VS変換の理由 |
-| **Phase 3: ケーパビリティ** | CL1活動領域識別（傾向的分類）・CL2ケイパビリティ（正式分類）・BC境界の理由、継承関係、重複回避の工夫 |
-| **Phase 4: アーキテクチャ** | サービス境界・Context Map・統合パターン選択の理由 |
+| **Phase 3: ケーパビリティ** | CL1活動領域識別（傾向的分類）・CL2ケイパビリティ（正式分類）・CL3業務オペレーション、継承関係、重複回避の工夫 |
+| **Phase 4: アーキテクチャ** | BC境界確定・サービス境界・Context Map・統合パターン選択の理由 |
 
 #### 設計ストーリーの参照
 
@@ -114,10 +114,12 @@ Parasol V5の特徴的な機能として、**設計ストーリー（なぜそ�
   - 例: `/parasol:3-capabilities cl2 VS2` (製品開発)
 - 3c. CL3: `/parasol:3-capabilities cl3 [capability]` - 業務オペレーション定義（分類なし・網羅性重視）
   - 例: `/parasol:3-capabilities cl3 fermentation-research`
-- 3d. BC: `/parasol:3-capabilities bc [capability]` - 実装設計（CL2分類継承・技術者向け）
-  - 例: `/parasol:3-capabilities bc fermentation-research`
 
-**Phase 4-7**: Application Design, Software Design, Implementation, Platform
+**Phase 4: Application Design（BC境界確定）**
+- `/parasol:4-application-design` - サービス境界確定、Context Map定義
+- BC境界確定: Phase 3のCL3定義を入力としてBC境界を決定
+
+**Phase 5-7**: Software Design, Implementation, Platform
 
 ### トピック: commands
 
@@ -140,9 +142,8 @@ Parasol V5の特徴的な機能として、**設計ストーリー（なぜそ�
 - `/parasol:3-capabilities cl1` - 活動領域識別（CL1・傾向的分類）
 - `/parasol:3-capabilities cl2 [VS番号]` - ケイパビリティ設計（CL2・正式分類）
 - `/parasol:3-capabilities cl3 [capability]` - 業務オペレーション定義（CL3・分類なし）
-- `/parasol:3-capabilities bc [capability]` - 実装設計（BC・CL2継承）
-- `/parasol:4-application-design`
-- `/parasol:5-software-design [service] [bc]`
+- `/parasol:4-application-design` - BC境界確定・Context Map定義
+- `/parasol:5-software-design [service] [bc]` - BC実装設計（Parasolドメイン言語）
 - `/parasol:6-implementation [service] [bc]`
 - `/parasol:7-platform`
 
@@ -321,8 +322,7 @@ DDD/マイクロサービスへの完全なマッピング：
   - CL1: cl1-activity-area.md（活動領域識別・傾向的分類）
   - CL2: cl2-capability-design.md（ケイパビリティ設計・正式分類）
   - CL3: cl3-operations/{capability}-operations.md（業務オペレーション・分類なし）
-  - BC: bounded-contexts/{capability}-bc.md（実装設計・CL2継承）
-**Phase 4**: service-boundary-template.md, context-map-template.md, adr-template.md
+**Phase 4**: service-boundary-template.md, context-map-template.md, capability-bc-mapping.md, adr-template.md
 **Phase 5**: domain-language-template.md, api-specification-template.md, database-design-template.md, use-case-template.md, page-definition-template.md
 
 **V5解析エンジン対応テンプレート** (Mermaid非依存):
@@ -348,8 +348,8 @@ Parasol V5 は Amplifier のサブエージェントと連携して、各フェ�
 | **Phase 3** | zen-architect (ANALYZE) | CL1活動領域分類 |
 | | zen-architect (ARCHITECT) | CL2ケイパビリティ設計 |
 | | zen-architect (ARCHITECT) | CL3業務オペレーション定義 |
-| | zen-architect (ARCHITECT) + api-contract-designer | BC実装設計 |
-| **Phase 4** | zen-architect (ARCHITECT) | システム設計 |
+| **Phase 4** | zen-architect (ARCHITECT) | BC境界確定・システム設計 |
+| | api-contract-designer | Context Map定義 |
 | | database-architect | データベース設計 |
 | | integration-specialist | 外部システム連携 |
 | | security-guardian | セキュリティレビュー |

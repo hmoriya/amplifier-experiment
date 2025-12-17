@@ -136,10 +136,10 @@ Phase 4では以下のサブエージェントを活用して、アーキテク�
 Task tool を使用して zen-architect (ARCHITECT mode) を起動：
 
 プロンプト:
-「Phase 3のBC定義を基に、サービスアーキテクチャを設計してください。
+「Phase 3のCL3定義を基に、BC境界を確定しサービスアーキテクチャを設計してください。
 
 入力:
-- Bounded Contexts: {bc_list_from_phase3}
+- CL3業務オペレーション: {cl3_list_from_phase3}
 - Core/Supporting/Generic分類: {domain_classification}
 - 統合要件: {integration_requirements}
 
@@ -378,7 +378,7 @@ outputs/4-architecture/
 
 ### ステップ2: サービス境界の決定とサービス定義
 
-Phase 3のCL3（Bounded Contexts）を基に、Value Stream毎にマイクロサービス境界を決定し、
+Phase 3のCL3（業務オペレーション）を基に、Value Stream毎にマイクロサービス境界を決定し、
 サービス毎にディレクトリを作成してサービス定義ファイルを配置します。
 
 **成果物**: `outputs/4-architecture/{vs-name}/services/{service-name}/service-definition.md`
@@ -532,27 +532,29 @@ vs2-product-innovation/
     ├── fermentation-research-service/
     │   ├── service-definition.md
     │   └── bounded-contexts/
-    │       └── fermentation-research-bc.md → symlink to Phase 3
+    │       └── fermentation-research-boundary.md  # BC境界定義（Phase 4で作成）
     ├── beer-development-service/
     │   ├── service-definition.md
     │   └── bounded-contexts/
-    │       ├── premium-beer-development-bc.md → symlink
-    │       └── craft-innovation-development-bc.md → symlink
+    │       ├── premium-beer-development-boundary.md  # BC境界定義
+    │       └── craft-innovation-development-boundary.md
     └── ...
 ```
 
-### ステップ2.5: BCシンボリックリンクの作成
+### ステップ2.5: BC定義ファイルの作成
 
-サービスに含まれるBCをディレクトリから可視化するため、Phase 3のBCファイルへの
-シンボリックリンクを作成します。
+サービスに含まれるBCの境界を確定し、定義ファイルを作成します。
+
+> **注意**: BCはPhase 3ではなく、Phase 4で境界を確定します。
+> Phase 3のCL3（業務オペレーション）定義を入力として、BC境界を決定します。
 
 ```bash
-# サービスディレクトリ内でシンボリックリンクを作成
+# サービスディレクトリ内でBC定義を作成
 cd outputs/4-architecture/{vs-name}/services/{service-name}
 mkdir -p bounded-contexts
 
-# Phase 3のBCファイルへのシンボリックリンク作成
-ln -sf ../../../../../3-capabilities/{vs-name}/cl3-bounded-contexts/{bc-name}-bc.md bounded-contexts/
+# BC境界定義ファイルを作成（capability-bc-mapping.mdの内容を基に）
+touch bounded-contexts/{bc-name}-boundary.md
 ```
 
 **例: Beer Development Service**
@@ -560,15 +562,16 @@ ln -sf ../../../../../3-capabilities/{vs-name}/cl3-bounded-contexts/{bc-name}-bc
 cd outputs/4-architecture/vs2-product-innovation/services/beer-development-service
 mkdir -p bounded-contexts
 
-ln -sf ../../../../../3-capabilities/vs2-product-innovation/cl3-bounded-contexts/premium-beer-development-bc.md bounded-contexts/
-ln -sf ../../../../../3-capabilities/vs2-product-innovation/cl3-bounded-contexts/craft-innovation-development-bc.md bounded-contexts/
+# BC境界定義（Phase 3のCL3を入力として作成）
+touch bounded-contexts/premium-beer-development-boundary.md
+touch bounded-contexts/craft-innovation-development-boundary.md
 ```
 
 **確認方法:**
 ```bash
 ls -la bounded-contexts/
-# premium-beer-development-bc.md -> ../../../../../3-capabilities/.../premium-beer-development-bc.md
-# craft-innovation-development-bc.md -> ../../../../../3-capabilities/.../craft-innovation-development-bc.md
+# premium-beer-development-boundary.md  - BC境界定義
+# craft-innovation-development-boundary.md - BC境界定義
 ```
 
 ### コングロマリット（事業部軸パターン）でのContext Map

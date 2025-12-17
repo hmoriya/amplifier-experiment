@@ -77,7 +77,7 @@ VMS1-VMS5の進捗と品質を管理：
 |----------|----------|
 | `/parasol:1-context` | VL1-VL3価値分解での自動トレース |
 | `/parasol:2-value` | VS設計での構造的必然性検証 |
-| `/parasol:3-capabilities` | BC定義での価値継承確認 |
+| `/parasol:3-capabilities` | CL3定義での価値継承確認（BC入力） |
 | `/parasol:4-application` | サービス境界での価値維持検証 |
 | `/parasol:5-software` | 実装価値の妥当性確認 |
 | `/parasol:6-implementation` | 価値実現の検証 |
