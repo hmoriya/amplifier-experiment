@@ -44,16 +44,19 @@ def generate_book_with_diagrams():
         sys.exit(1)
     
     # Book metadata
+    from datetime import datetime
+    now = datetime.now()
+    
     metadata = {
         'title': 'Parasol V5 完全ガイドブック',
         'subtitle': '価値駆動による実践的システム設計',
         'version': '2.0.0',
-        'date': '2025年12月18日',
+        'date': now.strftime('%Y年%m月%d日'),
         'author': 'Parasol Team',
         'language': 'ja',
         'diagram_version': '5.0',
         'diagram_type': 'Modular Configuration-Driven Engine',
-        'build_time': '2025-12-18 14:40 JST'
+        'build_time': now.strftime('%Y-%m-%d %H:%M JST')
     }
     
     # Chapter structure
