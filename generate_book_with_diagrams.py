@@ -692,6 +692,7 @@ def convert_markdown_to_html(content: str) -> str:
                 # Check if it's a graph/chart in ASCII art
                 elif is_ascii_graph(block):
                     # Convert ASCII graph to SVG
+                    logger.info(f"Converting ASCII graph to SVG...")
                     replacement = convert_ascii_graph_to_svg(block)
                 else:
                     # Regular code block
@@ -766,19 +767,34 @@ def is_ascii_graph(block: str) -> bool:
     
     # Look for graph patterns
     graph_patterns = [
-        '↑',  # Y-axis arrow
-        '→',  # X-axis arrow
-        '╱',  # Diagonal lines
-        '╲',  # Diagonal lines
+        ('↑', '→'),  # Axis arrows together
+        ('│', '└'),  # Vertical axis with corner
+        ('╱', '╲'),  # Diagonal lines for curves
         '═',  # Horizontal lines
-        '│',  # Vertical axis
-        '└─', # Axis corner
         'リリース時の価値',  # Specific graph labels
-        '継続的改善'
+        '継続的改善',
+        '保守されないシステム',
+        '価値を保つ'
     ]
     
-    # Check if multiple graph patterns exist
-    pattern_count = sum(1 for pattern in graph_patterns if pattern in content)
+    # Check if it contains axis indicators and graph-specific terms
+    has_axis = any(pattern in content for pattern in ['↑', '→', '└─', '└──', '時間', '価値'])
+    has_graph_terms = any(term in content for term in ['リリース時の価値', '継続的改善', '保守されないシステム', '価値を保つ'])
+    
+    # Must have both axis-like structure and graph terms
+    if has_axis and has_graph_terms:
+        return True
+    
+    # Alternative check: count matching patterns
+    pattern_count = 0
+    for pattern in graph_patterns:
+        if isinstance(pattern, tuple):
+            # Check if all parts of tuple are present
+            if all(p in content for p in pattern):
+                pattern_count += 1
+        elif pattern in content:
+            pattern_count += 1
+    
     return pattern_count >= 3
 
 def convert_ascii_graph_to_svg(block: str) -> str:
@@ -794,7 +810,7 @@ def convert_ascii_graph_to_svg(block: str) -> str:
         content = '\n'.join(lines)
     
     # Check if it's the value decay curve
-    if 'リリース時の価値' in content:
+    if 'リリース時の価値' in content or ('価値' in content and '時間' in content and '継続的改善' in content):
         # Value decay curve
         svg = '''
 <div class="diagram-container" style="margin: 30px 0; text-align: center;">
