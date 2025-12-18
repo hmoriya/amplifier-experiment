@@ -7,6 +7,7 @@ import logging
 import sys
 from pathlib import Path
 import re
+from typing import List
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -52,7 +53,7 @@ def generate_book_with_diagrams():
         'language': 'ja',
         'diagram_version': '5.0',
         'diagram_type': 'Modular Configuration-Driven Engine',
-        'build_time': '2025-12-18 11:20 JST'
+        'build_time': '2025-12-18 14:40 JST'
     }
     
     # Chapter structure
@@ -454,6 +455,17 @@ def generate_html(chapters, metadata, output_dir):
             border-radius: 5px;
             overflow-x: auto;
             border-left: 4px solid #01579b;
+            white-space: pre;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }}
+        
+        pre code {{
+            white-space: pre;
+            font-family: inherit;
+            font-size: inherit;
+            line-height: inherit;
         }}
         
         blockquote {{
@@ -548,15 +560,30 @@ def convert_markdown_to_html(content: str) -> str:
     
     content = re.sub(r'```.*?```', preserve_code_block, content, flags=re.DOTALL)
     
+    # Detect and convert ASCII tables that are not in code blocks
+    content = convert_ascii_tables_in_text(content)
+    
     # Headers
     content = re.sub(r'^#### (.+)$', r'<h4>\1</h4>', content, flags=re.MULTILINE)
     content = re.sub(r'^### (.+)$', r'<h3>\1</h3>', content, flags=re.MULTILINE)
     content = re.sub(r'^## (.+)$', r'<h2>\1</h2>', content, flags=re.MULTILINE)
     content = re.sub(r'^# (.+)$', r'<h1>\1</h1>', content, flags=re.MULTILINE)
     
-    # Bold and italic
+    # Inline code - preserve content and mark with placeholders
+    code_segments = []
+    def preserve_inline_code(match):
+        code_segments.append(f'<code>{match.group(1)}</code>')
+        return f'___INLINECODE_{len(code_segments)-1}___'
+    
+    content = re.sub(r'`([^`]+)`', preserve_inline_code, content)
+    
+    # Bold and italic (won't affect preserved code segments)
     content = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', content)
     content = re.sub(r'(?<!\*)\*([^*]+?)\*(?!\*)', r'<em>\1</em>', content)
+    
+    # Restore inline code segments
+    for i, segment in enumerate(code_segments):
+        content = content.replace(f'___INLINECODE_{i}___', segment)
     
     # Links
     content = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', content)
@@ -582,67 +609,110 @@ def convert_markdown_to_html(content: str) -> str:
         else:
             # Check if it's a table in a code block
             code_content_lines = block.strip('```').strip().split('\n')
-            if len(code_content_lines) > 1 and '│' in block and '─' in block and '┌' in block:
+            # Check for ASCII table patterns
+            has_table_pattern = False
+            for line in code_content_lines:
+                # Look for separator lines with pipes and dashes
+                if re.match(r'^[\s\-|]+$', line) and '|' in line and '-' in line:
+                    has_table_pattern = True
+                    break
+                # Also check for box-drawing characters
+                if any(char in line for char in ['│', '─', '┌', '└', '├', '┤', '┬', '┴', '┼']):
+                    has_table_pattern = True
+                    break
+            
+            if has_table_pattern:
                 # This looks like an ASCII table, convert it to HTML
                 replacement = convert_ascii_table_to_html(block)
             else:
                 # Regular code block
-                language_match = re.match(r'```(\w+)', block)
-                language = language_match.group(1) if language_match else ''
-                code_content = block[3+len(language):-3].strip()
-                replacement = f'<pre><code class="language-{language}">{code_content}</code></pre>'
+                language_match = re.match(r'```(\w*)', block)
+                if language_match:
+                    language = language_match.group(1) if language_match.group(1) else ''
+                    # Remove the backticks and language identifier
+                    lines = block.split('\n')
+                    if lines[0].startswith('```'):
+                        lines = lines[1:]
+                    if lines and lines[-1].strip() == '```':
+                        lines = lines[:-1]
+                    code_content = '\n'.join(lines)
+                else:
+                    language = ''
+                    code_content = block
+                
+                # Preserve whitespace and formatting in code blocks
+                # First escape HTML entities
+                code_content = code_content.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+                
+                # For tree structures, ensure spacing is preserved
+                if '├──' in code_content or '└──' in code_content or '│' in code_content:
+                    # Wrap in pre to strictly preserve formatting
+                    replacement = f'<pre style="white-space: pre; font-family: monospace;"><code class="language-{language}">{code_content}</code></pre>'
+                else:
+                    replacement = f'<pre><code class="language-{language}">{code_content}</code></pre>'
         content = content.replace(f'___CODEBLOCK_{i}___', replacement)
     
     return content
 
 def convert_ascii_table_to_html(block: str) -> str:
     """Convert ASCII art table to HTML table"""
-    lines = block.strip('```').strip().split('\n')
+    # Remove code block markers if present
+    content = block
+    if content.startswith('```'):
+        lines = content.split('\n')
+        # Remove first line (``` or ```language)
+        if lines[0].startswith('```'):
+            lines = lines[1:]
+        # Remove last line if it's ```
+        if lines and lines[-1].strip() == '```':
+            lines = lines[:-1]
+        content = '\n'.join(lines)
     
-    # Check for two types of ASCII tables
-    if '│' in block:
-        # Box-drawing style table
-        content_lines = []
-        for line in lines:
-            if '│' in line and not line.strip().startswith('┌') and not line.strip().startswith('└') and not line.strip().startswith('├'):
-                content_lines.append(line)
-        
-        if not content_lines:
-            return f'<pre><code>{block}</code></pre>'
-        
-        # Extract cells from each content line
-        rows = []
-        for line in content_lines:
-            # Split by │ and clean up
-            cells = [cell.strip() for cell in line.split('│') if cell.strip()]
+    lines = content.strip().split('\n')
+    
+    # Detect if this is an ASCII table
+    is_ascii_table = False
+    
+    # Check for various table patterns
+    for i, line in enumerate(lines):
+        # Look for lines like ---|---|--- or similar
+        if re.match(r'^[\s\-|]+$', line) and '|' in line and '-' in line:
+            is_ascii_table = True
+            break
+        # Check for box-drawing characters
+        if any(char in line for char in ['│', '─', '┌', '└', '├', '┤', '┬', '┴', '┼']):
+            is_ascii_table = True
+            break
+    
+    if not is_ascii_table:
+        # Not a table, return as code block
+        return f'<pre><code>{block}</code></pre>'
+    
+    # Extract table rows
+    rows = []
+    for i, line in enumerate(lines):
+        # Skip separator lines
+        if re.match(r'^[\s\-|]+$', line) and '-' in line:
+            continue
+        # Skip box-drawing lines
+        if line.strip().startswith(('┌', '└', '├', '┤')) or re.match(r'^[─│┬┴┼\s]+$', line):
+            continue
+            
+        # Process data lines with pipes or box-drawing vertical bars
+        if '|' in line or '│' in line:
+            # Split by pipe or box-drawing vertical bar
+            if '│' in line:
+                cells = [cell.strip() for cell in line.split('│')]
+            else:
+                cells = [cell.strip() for cell in line.split('|')]
+            # Remove empty first/last cells
+            if cells and cells[0] == '':
+                cells = cells[1:]
+            if cells and cells[-1] == '':
+                cells = cells[:-1]
+            
             if cells:
                 rows.append(cells)
-    
-    elif '|' in block and '-' in block:
-        # Markdown-style table with | and ---
-        rows = []
-        separator_found = False
-        
-        for line in lines:
-            if '|' in line:
-                # Check if this is a separator line
-                if set(line.replace('|', '').replace(' ', '').replace('-', '')) == set():
-                    separator_found = True
-                    continue
-                
-                # Extract cells
-                cells = [cell.strip() for cell in line.split('|')]
-                # Remove empty first/last cells from | at line start/end
-                if cells and cells[0] == '':
-                    cells = cells[1:]
-                if cells and cells[-1] == '':
-                    cells = cells[:-1]
-                
-                if cells:
-                    rows.append(cells)
-    
-    else:
-        return f'<pre><code>{block}</code></pre>'
     
     if not rows:
         return f'<pre><code>{block}</code></pre>'
@@ -672,44 +742,106 @@ def convert_ascii_table_to_html(block: str) -> str:
     
     return '\n'.join(html)
 
-def convert_tables(content: str) -> str:
-    """Convert markdown tables to HTML"""
+def convert_ascii_tables_in_text(content: str) -> str:
+    """Convert ASCII tables that appear in regular text (not in code blocks)"""
     lines = content.split('\n')
     result = []
     i = 0
     
     while i < len(lines):
-        # Check if this line looks like a table header
-        if i + 1 < len(lines) and '|' in lines[i] and '|' in lines[i + 1] and re.match(r'^[\s\-:|]+$', lines[i + 1].replace('|', '')):
-            # Found a table
-            table_html = ['<table>']
+        # Check for ASCII table with separator line (e.g., ---|---|---)
+        if (i + 1 < len(lines) and 
+            '|' in lines[i] and 
+            '|' in lines[i + 1] and 
+            re.match(r'^[\s\-|]+$', lines[i + 1])):
             
-            # Process header row
-            header_cells = [cell.strip() for cell in lines[i].split('|') if cell.strip()]
-            table_html.append('<thead>')
-            table_html.append('<tr>')
-            for cell in header_cells:
-                table_html.append(f'<th>{cell}</th>')
-            table_html.append('</tr>')
-            table_html.append('</thead>')
+            # Found a potential ASCII table
+            table_lines = [lines[i]]
+            i += 1
             
-            # Skip separator row
-            i += 2
+            # Collect separator line
+            table_lines.append(lines[i])
+            i += 1
             
-            # Process body rows
-            table_html.append('<tbody>')
+            # Collect data rows
             while i < len(lines) and '|' in lines[i] and lines[i].strip():
-                cells = [cell.strip() for cell in lines[i].split('|') if cell.strip()]
-                if cells:  # Only add row if it has content
-                    table_html.append('<tr>')
-                    for cell in cells:
-                        table_html.append(f'<td>{cell}</td>')
-                    table_html.append('</tr>')
+                table_lines.append(lines[i])
                 i += 1
-            table_html.append('</tbody>')
-            table_html.append('</table>')
             
-            result.append('\n'.join(table_html))
+            # Convert to HTML table
+            html_table = convert_ascii_table_lines_to_html(table_lines)
+            result.append(html_table)
+        else:
+            result.append(lines[i])
+            i += 1
+    
+    return '\n'.join(result)
+
+def convert_ascii_table_lines_to_html(lines: List[str]) -> str:
+    """Convert ASCII table lines to HTML table"""
+    if len(lines) < 2:
+        return '\n'.join(lines)
+    
+    # Extract cells from each line
+    rows = []
+    for idx, line in enumerate(lines):
+        if idx == 1 and re.match(r'^[\s\-|]+$', line):
+            # Skip separator line
+            continue
+        
+        # Extract cells
+        cells = [cell.strip() for cell in line.split('|')]
+        # Remove empty first/last cells from | at line start/end
+        if cells and cells[0] == '':
+            cells = cells[1:]
+        if cells and cells[-1] == '':
+            cells = cells[:-1]
+        
+        if cells:
+            rows.append(cells)
+    
+    if not rows:
+        return '\n'.join(lines)
+    
+    # Build HTML table
+    html = ['<table>']
+    
+    # First row is header
+    html.append('<thead>')
+    html.append('<tr>')
+    for cell in rows[0]:
+        html.append(f'<th>{cell}</th>')
+    html.append('</tr>')
+    html.append('</thead>')
+    
+    # Rest are body rows
+    if len(rows) > 1:
+        html.append('<tbody>')
+        for row in rows[1:]:
+            html.append('<tr>')
+            for cell in row:
+                html.append(f'<td>{cell}</td>')
+            html.append('</tr>')
+        html.append('</tbody>')
+    
+    html.append('</table>')
+    
+    return '\n'.join(html)
+
+def convert_tables(content: str) -> str:
+    """Convert markdown tables to HTML"""
+    # This function is now primarily for standard Markdown tables
+    # ASCII tables are handled by convert_ascii_tables_in_text
+    lines = content.split('\n')
+    result = []
+    i = 0
+    
+    while i < len(lines):
+        # Standard Markdown table detection (already handled by convert_ascii_tables_in_text)
+        # Skip if already converted
+        if '<table>' in lines[i]:
+            result.append(lines[i])
+            i += 1
         else:
             result.append(lines[i])
             i += 1
@@ -736,8 +868,11 @@ def convert_lists(content: str) -> str:
             # Start of ordered list
             list_html = ['<ol>']
             while i < len(lines) and re.match(r'^\d+\.\s', lines[i].strip()):
+                # Extract the actual number from the source
+                match = re.match(r'^(\d+)\.\s', lines[i].strip())
+                number = int(match.group(1))
                 item_content = re.sub(r'^\d+\.\s+', '', lines[i].strip())
-                list_html.append(f'<li>{item_content}</li>')
+                list_html.append(f'<li value="{number}">{item_content}</li>')
                 i += 1
             list_html.append('</ol>')
             result.append('\n'.join(list_html))
