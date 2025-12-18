@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parasol V5 完全ガイドブック</title>
+    
+    <!-- Mermaid.js for diagram rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'cardinal'
+            },
+            themeVariables: {
+                primaryColor: '#e1f5fe',
+                primaryTextColor: '#000',
+                primaryBorderColor: '#01579b',
+                lineColor: '#666',
+                sectionBkgColor: '#f5f5f5'
+            }
+        });
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            background: #fafafa;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .title-page {
+            text-align: center;
+            padding: 60px 20px;
+            border-bottom: 3px solid #01579b;
+            margin-bottom: 40px;
+        }
+        .title-page h1 {
+            font-size: 2.5em;
+            color: #01579b;
+            margin-bottom: 10px;
+        }
+        .title-page .subtitle {
+            font-size: 1.3em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .toc {
+            margin: 40px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-left: 4px solid #01579b;
+        }
+        .toc h2 {
+            color: #01579b;
+            margin-top: 0;
+        }
+        .toc ol {
+            padding-left: 20px;
+        }
+        .toc a {
+            color: #333;
+            text-decoration: none;
+            padding: 5px 0;
+            display: inline-block;
+        }
+        .toc a:hover {
+            color: #01579b;
+            text-decoration: underline;
+        }
+        .chapter {
+            margin: 60px 0;
+            page-break-before: always;
+        }
+        .chapter-header {
+            border-bottom: 2px solid #01579b;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+        }
+        .chapter-header h1 {
+            color: #01579b;
+            margin: 0;
+            font-size: 1.8em;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #333;
+            margin-top: 2em;
+            margin-bottom: 1em;
+        }
+        h1 { font-size: 1.8em; border-bottom: 2px solid #01579b; padding-bottom: 0.5em; }
+        h2 { font-size: 1.5em; color: #01579b; }
+        h3 { font-size: 1.3em; }
+        h4 { font-size: 1.1em; }
+        
+        p {
+            margin: 1em 0;
+            text-align: justify;
+        }
+        
+        .diagram-container {
+            margin: 30px 0;
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        .mermaid-diagram {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        }
+        
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 4px solid #01579b;
+        }
+        
+        blockquote {
+            border-left: 4px solid #01579b;
+            margin: 20px 0;
+            padding: 10px 20px;
+            background: #f8f9fa;
+            font-style: italic;
+        }
+        
+        ul, ol {
+            margin: 1em 0;
+            padding-left: 2em;
+        }
+        
+        li {
+            margin: 0.5em 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+        
+        strong {
+            color: #01579b;
+            font-weight: bold;
+        }
+        
+        .footer {
+            margin-top: 60px;
+            padding: 20px 0;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title-page">
+            <h1>Parasol V5 完全ガイドブック</h1>
+            <div class="subtitle">価値駆動による実践的システム設計</div>
+            <div class="meta">
+                <p>Book Version 2.0.0 | Diagrams v5.0</p>
+                <p>Generated: 2025-12-18 11:20 JST</p>
+                <p>著者: Parasol Team</p>
+            </div>
+        </div>
+        
+        <nav class='toc'><h2>目次</h2><ol></ol></nav>
+        
+        <main>
+            
+        </main>
+        
+        <footer class="footer">
+            <p>Generated with Parasol V5 Book Generator | 2025年12月18日</p>
+        </footer>
+    </div>
+</body>
+</html>

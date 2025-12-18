@@ -1,0 +1,173 @@
+# Book Updater Configuration
+# Parasol V5 書籍更新ルール
+
+rules:
+  # コマンドリファレンスの同期
+  command_sync:
+    enabled: true
+    source: /parasol/commands/
+    target_pattern: "## コマンドリファレンス"
+    update_mode: merge  # replace, merge, append
+    
+  # コード例の更新
+  code_examples:
+    sources:
+      - /modules/*/examples/
+      - /parasol/examples/
+    validation: true
+    syntax_check: true
+    update_strategy:
+      - match_by_name     # 名前で一致
+      - match_by_context  # 文脈で一致
+      - match_by_pattern  # パターンで一致
+  
+  # 用語の統一
+  terminology:
+    glossary_file: /parasol/docs/glossary.yaml
+    strict_mode: false
+    case_sensitive: false
+    preserve_context: true
+  
+  # パターンの更新
+  patterns:
+    source: /parasol/bundles/patterns/
+    validation:
+      - check_completeness
+      - check_consistency
+      - check_examples
+
+# 廃止された機能・用語
+deprecated:
+  - pattern: "Event Sourcing"
+    replacement: "軽量イベント通知"
+    reason: "V5では軽量なイベント通知パターンを採用"
+    
+  - pattern: "Backend SAGA"
+    replacement: "フロントエンドオーケストレーション"
+    reason: "V5ではエッジでのオーケストレーションを推奨"
+    
+  - pattern: "CQRS"
+    replacement: "シンプルなCRUD + 軽量イベント"
+    reason: "V5では必要な場合のみ部分的に適用"
+    
+  - pattern: "マイクロサービス"
+    replacement: "モジュラーBC"
+    reason: "V5ではBounded Contextベースのモジュール設計"
+    
+  - pattern: "イベントストア"
+    replacement: "イベントログ (オプション)"
+    reason: "V5では必須ではなくオプショナル"
+
+# 新しい概念・用語
+new_terms:
+  - term: "ZIGZAG パターン"
+    description: "価値ストリームからビジネスオペレーションへの分解手法"
+    introduced: "Phase 3"
+    
+  - term: "契約駆動再生成"
+    description: "契約を維持しながらモジュールを再生成する手法"
+    introduced: "モジュラー設計"
+    
+  - term: "フロントエンドオーケストレーション"
+    description: "エッジでの軽量なプロセス調整"
+    introduced: "V5 アーキテクチャ"
+
+# 除外設定
+exclude:
+  # 更新しないファイル
+  files:
+    - appendices/history.md      # 歴史的文書
+    - appendices/migration.md    # 移行ガイド（古いパターン含む）
+    - examples/legacy/           # レガシー例
+    
+  # 更新しないセクション
+  sections:
+    - "## 歴史的背景"
+    - "## V4からの移行"
+    - "## 従来のパターン"
+
+# 検証設定
+validation:
+  # リンクチェック
+  links:
+    check_internal: true
+    check_external: true
+    check_anchors: true
+    timeout: 5000  # ms
+    
+  # コード検証
+  code:
+    languages:
+      - python
+      - typescript
+      - javascript
+      - bash
+    check_syntax: true
+    check_imports: true
+    
+  # 一貫性チェック
+  consistency:
+    check_terminology: true
+    check_command_format: true
+    check_v5_compliance: true
+    
+  # 品質チェック
+  quality:
+    min_description_length: 50
+    max_code_block_lines: 100
+    require_examples: true
+
+# 更新戦略
+update_strategy:
+  # バックアップ
+  backup:
+    enabled: true
+    location: ./backups
+    keep_versions: 5
+    
+  # 更新モード
+  mode: interactive  # interactive, automatic, dry-run
+  
+  # 承認プロセス
+  approval:
+    required_for:
+      - major_changes
+      - destructive_updates
+      - pattern_changes
+    
+  # ロールバック
+  rollback:
+    enabled: true
+    snapshot_before: true
+
+# レポート設定
+reporting:
+  # レポート形式
+  format: markdown  # markdown, json, html
+  
+  # レポート内容
+  include:
+    - summary
+    - detailed_changes
+    - validation_results
+    - recommendations
+    
+  # 出力先
+  output:
+    directory: ./reports
+    filename_pattern: "update-report-{timestamp}.md"
+
+# カスタムルール
+custom_rules:
+  # V5 固有のルール
+  v5_specific:
+    - enforce_lightweight_events
+    - check_frontend_orchestration
+    - validate_modular_bc
+    - ensure_contract_driven
+    
+  # プロジェクト固有
+  project_specific:
+    - check_parasol_commands
+    - validate_phase_references
+    - ensure_value_stream_alignment

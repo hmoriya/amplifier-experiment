@@ -1,0 +1,42 @@
+{
+  "summary": {
+    "total_issues": 3,
+    "new_commands": 0,
+    "updated_patterns": 0,
+    "outdated_examples": 0,
+    "deprecated_terms": 0,
+    "broken_links": 0,
+    "invalid_code": 3
+  },
+  "differences": {
+    "new_commands": [],
+    "updated_patterns": [],
+    "outdated_examples": [],
+    "deprecated_terms": [],
+    "broken_links": [],
+    "invalid_code": [
+      {
+        "file": ".claude/commands/parasol/docs/book/part3-practice/chapter11-claude-code.md",
+        "line": 0,
+        "language": "python",
+        "error": "invalid character '：' (U+FF1A) (<string>, line 3)",
+        "type": "invalid_code"
+      },
+      {
+        "file": ".claude/commands/parasol/docs/book/part3-practice/chapter11-claude-code.md",
+        "line": 0,
+        "language": "python",
+        "error": "invalid character '：' (U+FF1A) (<string>, line 1)",
+        "type": "invalid_code"
+      },
+      {
+        "file": ".claude/commands/parasol/docs/book/part1-foundation/chapter3-philosophy.md",
+        "line": 0,
+        "language": "python",
+        "error": "invalid syntax (<string>, line 6)",
+        "type": "invalid_code"
+      }
+    ]
+  },
+  "timestamp": "2025-12-18T06:59:40.041565"
+}

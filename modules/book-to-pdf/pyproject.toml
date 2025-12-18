@@ -1,0 +1,35 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "book-to-pdf"
+version = "0.1.0"
+description = "Convert Parasol V5 book from Markdown to PDF"
+authors = [
+    { name = "Parasol Team", email = "team@parasol.dev" }
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "click>=8.1.0",
+    "markdown>=3.5.0",
+    "weasyprint>=60.0",
+    "pygments>=2.17.0",
+    "pyyaml>=6.0",
+    "beautifulsoup4>=4.12.0",
+    "markupsafe>=2.1.0",
+    "jinja2>=3.1.0",
+    "rich>=13.0.0",
+    "watchdog>=3.0.0",
+]
+
+[project.scripts]
+book2pdf = "amplifier_module_book_to_pdf.main:cli"
+
+[tool.hatch.build]
+include = [
+    "amplifier_module_book_to_pdf/**/*.py",
+    "amplifier_module_book_to_pdf/templates/**/*.html",
+    "amplifier_module_book_to_pdf/styles/**/*.css",
+]
