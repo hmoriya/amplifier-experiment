@@ -515,6 +515,57 @@ def generate_html(chapters, metadata, output_dir):
             color: #666;
             font-size: 0.9em;
         }}
+        
+        .hierarchy-diagram {{
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            overflow-x: auto;
+        }}
+        
+        .hierarchy-diagram pre {{
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            border: none;
+            color: #333;
+        }}
+        
+        .hierarchy-box {{
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+        }}
+        
+        .hierarchy-box .vms-title {{
+            font-weight: bold;
+            color: #01579b;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }}
+        
+        .hierarchy-box .objective {{
+            margin-left: 20px;
+            margin-top: 10px;
+            padding: 10px;
+            background: #e3f2fd;
+            border-left: 3px solid #1976d2;
+            border-radius: 4px;
+        }}
+        
+        .hierarchy-box .key-result {{
+            margin-left: 40px;
+            margin-top: 5px;
+            padding: 8px;
+            background: #fff;
+            border-left: 2px solid #64b5f6;
+            border-radius: 4px;
+        }}
     </style>
 </head>
 <body>
@@ -594,8 +645,8 @@ def convert_markdown_to_html(content: str) -> str:
     # Lists
     content = convert_lists(content)
     
-    # Blockquotes
-    content = re.sub(r'^> (.+)$', r'<blockquote>\1</blockquote>', content, flags=re.MULTILINE)
+    # Blockquotes - handle multi-line blockquotes
+    content = convert_blockquotes(content)
     
     # Paragraphs
     content = add_paragraphs(content)
@@ -625,34 +676,166 @@ def convert_markdown_to_html(content: str) -> str:
                 # This looks like an ASCII table, convert it to HTML
                 replacement = convert_ascii_table_to_html(block)
             else:
-                # Regular code block
-                language_match = re.match(r'```(\w*)', block)
-                if language_match:
-                    language = language_match.group(1) if language_match.group(1) else ''
-                    # Remove the backticks and language identifier
-                    lines = block.split('\n')
-                    if lines[0].startswith('```'):
-                        lines = lines[1:]
-                    if lines and lines[-1].strip() == '```':
-                        lines = lines[:-1]
-                    code_content = '\n'.join(lines)
+                # Check if it's a tree/hierarchy structure
+                if is_hierarchy_structure(block):
+                    # Keep as preformatted text with proper styling
+                    content_lines = block.strip('```').strip().split('\n')
+                    if content_lines and content_lines[0] and not any(char in content_lines[0] for char in ['│', '├', '└', '─']):
+                        content_lines = content_lines[1:]
+                    content = '\n'.join(content_lines)
+                    # Escape HTML entities
+                    content = content.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+                    replacement = f'<div class="hierarchy-diagram"><pre style="font-family: monospace; line-height: 1.4;">{content}</pre></div>'
+                # Check if it's a graph/chart in ASCII art
+                elif is_ascii_graph(block):
+                    # Convert ASCII graph to SVG
+                    replacement = convert_ascii_graph_to_svg(block)
                 else:
-                    language = ''
-                    code_content = block
-                
-                # Preserve whitespace and formatting in code blocks
-                # First escape HTML entities
-                code_content = code_content.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-                
-                # For tree structures, ensure spacing is preserved
-                if '├──' in code_content or '└──' in code_content or '│' in code_content:
-                    # Wrap in pre to strictly preserve formatting
-                    replacement = f'<pre style="white-space: pre; font-family: monospace;"><code class="language-{language}">{code_content}</code></pre>'
-                else:
-                    replacement = f'<pre><code class="language-{language}">{code_content}</code></pre>'
+                    # Regular code block
+                    language_match = re.match(r'```(\w*)', block)
+                    if language_match:
+                        language = language_match.group(1) if language_match.group(1) else ''
+                        # Remove the backticks and language identifier
+                        lines = block.split('\n')
+                        if lines[0].startswith('```'):
+                            lines = lines[1:]
+                        if lines and lines[-1].strip() == '```':
+                            lines = lines[:-1]
+                        code_content = '\n'.join(lines)
+                    else:
+                        language = ''
+                        code_content = block
+                    
+                    # Preserve whitespace and formatting in code blocks
+                    # First escape HTML entities
+                    code_content = code_content.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+                    
+                    # For tree structures, ensure spacing is preserved
+                    if '├──' in code_content or '└──' in code_content or '│' in code_content:
+                        # Wrap in pre to strictly preserve formatting
+                        replacement = f'<pre style="white-space: pre; font-family: monospace;"><code class="language-{language}">{code_content}</code></pre>'
+                    else:
+                        replacement = f'<pre><code class="language-{language}">{code_content}</code></pre>'
         content = content.replace(f'___CODEBLOCK_{i}___', replacement)
     
     return content
+
+def is_hierarchy_structure(block: str) -> bool:
+    """Detect if a code block is a hierarchy/tree structure"""
+    content = block.strip()
+    if content.startswith('```'):
+        lines = content.split('\n')
+        if lines[0].startswith('```'):
+            lines = lines[1:]
+        if lines and lines[-1].strip() == '```':
+            lines = lines[:-1]
+        content = '\n'.join(lines)
+    
+    # Look for tree/hierarchy patterns
+    tree_patterns = [
+        '│',  # Vertical line
+        '├─', # Branch
+        '└─', # Last branch
+        '├──', # Extended branch
+        '└──', # Extended last branch
+        '    ├─', # Indented branch
+        '    └─', # Indented last branch
+        'VMS', # Specific content patterns
+        'OKR',
+        'Objective',
+        'Key Results'
+    ]
+    
+    # Check if multiple tree patterns exist
+    pattern_count = sum(1 for pattern in tree_patterns if pattern in content)
+    return pattern_count >= 3
+
+def is_ascii_graph(block: str) -> bool:
+    """Detect if a code block is an ASCII graph/chart"""
+    content = block.strip()
+    if content.startswith('```'):
+        lines = content.split('\n')
+        if lines[0].startswith('```'):
+            lines = lines[1:]
+        if lines and lines[-1].strip() == '```':
+            lines = lines[:-1]
+        content = '\n'.join(lines)
+    
+    # Look for graph patterns
+    graph_patterns = [
+        '↑',  # Y-axis arrow
+        '→',  # X-axis arrow
+        '╱',  # Diagonal lines
+        '╲',  # Diagonal lines
+        '═',  # Horizontal lines
+        '│',  # Vertical axis
+        '└─', # Axis corner
+        'リリース時の価値',  # Specific graph labels
+        '継続的改善'
+    ]
+    
+    # Check if multiple graph patterns exist
+    pattern_count = sum(1 for pattern in graph_patterns if pattern in content)
+    return pattern_count >= 3
+
+def convert_ascii_graph_to_svg(block: str) -> str:
+    """Convert ASCII graph to SVG visualization"""
+    # Extract content from code block
+    content = block.strip()
+    if content.startswith('```'):
+        lines = content.split('\n')
+        if lines[0].startswith('```'):
+            lines = lines[1:]
+        if lines and lines[-1].strip() == '```':
+            lines = lines[:-1]
+        content = '\n'.join(lines)
+    
+    # Check if it's the value decay curve
+    if 'リリース時の価値' in content:
+        # Value decay curve
+        svg = '''
+<div class="diagram-container" style="margin: 30px 0; text-align: center;">
+    <svg width="500" height="300" viewBox="0 0 500 300" style="border: 1px solid #ddd; background: #fff;">
+        <!-- Title -->
+        <text x="250" y="20" text-anchor="middle" font-size="16" font-weight="bold">価値の減衰曲線</text>
+        
+        <!-- Axes -->
+        <line x1="50" y1="250" x2="450" y2="250" stroke="#333" stroke-width="2" />
+        <line x1="50" y1="250" x2="50" y2="50" stroke="#333" stroke-width="2" />
+        
+        <!-- Arrow heads -->
+        <polygon points="450,250 440,245 440,255" fill="#333" />
+        <polygon points="50,50 45,60 55,60" fill="#333" />
+        
+        <!-- Axis labels -->
+        <text x="250" y="280" text-anchor="middle" font-size="14">時間</text>
+        <text x="20" y="150" text-anchor="middle" font-size="14" transform="rotate(-90, 20, 150)">価値</text>
+        
+        <!-- Decay curve (no maintenance) -->
+        <path d="M 50,100 Q 150,100 200,150 T 350,230" 
+              stroke="#dc3545" stroke-width="2" fill="none" stroke-dasharray="5,5" />
+        
+        <!-- Maintained value line -->
+        <line x1="50" y1="100" x2="350" y2="100" stroke="#28a745" stroke-width="3" />
+        
+        <!-- Labels -->
+        <text x="100" y="90" font-size="12" fill="#333">リリース時の価値</text>
+        <text x="300" y="90" font-size="12" fill="#28a745">継続的改善 →</text>
+        <text x="280" y="210" font-size="12" fill="#dc3545">保守されないシステム</text>
+        
+        <!-- Legend -->
+        <line x1="320" y1="140" x2="350" y2="140" stroke="#28a745" stroke-width="3" />
+        <text x="355" y="145" font-size="11">価値を保つ</text>
+        
+        <line x1="320" y1="160" x2="350" y2="160" stroke="#dc3545" stroke-width="2" stroke-dasharray="5,5" />
+        <text x="355" y="165" font-size="11">価値が減衰</text>
+    </svg>
+</div>
+        '''
+        return svg
+    
+    # For other ASCII graphs, show as code
+    return f'<pre><code>{content}</code></pre>'
 
 def convert_ascii_table_to_html(block: str) -> str:
     """Convert ASCII art table to HTML table"""
@@ -848,6 +1031,188 @@ def convert_tables(content: str) -> str:
     
     return '\n'.join(result)
 
+def convert_blockquotes(content: str) -> str:
+    """Convert markdown blockquotes to HTML, handling multi-line quotes"""
+    lines = content.split('\n')
+    result = []
+    i = 0
+    
+    while i < len(lines):
+        if lines[i].strip().startswith('>'):
+            # Start of blockquote
+            quote_lines = []
+            
+            # Process continuous blockquote lines
+            while i < len(lines) and (lines[i].strip().startswith('>') or 
+                                     (lines[i].strip() == '' and i + 1 < len(lines) and 
+                                      lines[i + 1].strip().startswith('>'))):
+                if lines[i].strip().startswith('>'):
+                    # Remove the '>' and any following space
+                    line = lines[i]
+                    # Find the position of '>' and preserve indentation before it
+                    quote_pos = line.find('>')
+                    if quote_pos >= 0:
+                        line_content = line[quote_pos + 1:].lstrip()
+                        quote_lines.append(line_content)
+                else:
+                    # Empty line within blockquote
+                    quote_lines.append('')
+                i += 1
+            
+            # Process the blockquote content to handle nested structures
+            quote_html = process_blockquote_content(quote_lines)
+            result.append(f'<blockquote>{quote_html}</blockquote>')
+        else:
+            result.append(lines[i])
+            i += 1
+    
+    return '\n'.join(result)
+
+def process_blockquote_content(lines):
+    """Process blockquote content to handle lists and other structures"""
+    result = []
+    i = 0
+    
+    while i < len(lines):
+        line = lines[i]
+        
+        # Check for hierarchy structure (VMS-OKR format)
+        if is_hierarchy_blockquote(lines, i):
+            # Process hierarchy structure
+            hierarchy_html = process_hierarchy_blockquote(lines, i)
+            result.append(hierarchy_html['html'])
+            i = hierarchy_html['next_index']
+        
+        # Check for Markdown table
+        elif i + 1 < len(lines) and '|' in line and '|' in lines[i + 1] and re.match(r'^[\s\-|]+$', lines[i + 1]):
+            # Found a table, collect all table lines
+            table_lines = [line]
+            i += 1
+            # Add separator line
+            table_lines.append(lines[i])
+            i += 1
+            # Collect data rows
+            while i < len(lines) and '|' in lines[i] and lines[i].strip():
+                table_lines.append(lines[i])
+                i += 1
+            # Convert table to HTML
+            table_html = convert_markdown_table_to_html(table_lines)
+            result.append(table_html)
+        
+        # Check for list items with dash
+        elif line.strip().startswith('- '):
+            # Start of list
+            list_items = []
+            while i < len(lines) and lines[i].strip().startswith('- '):
+                item = lines[i].strip()[2:].strip()
+                list_items.append(f'<li>{item}</li>')
+                i += 1
+            if list_items:
+                result.append('<ul>' + ''.join(list_items) + '</ul>')
+        
+        # Check for indented content (code or special formatting)
+        elif line.startswith('  ') and line.strip():
+            # Collect indented lines
+            code_lines = []
+            while i < len(lines) and (lines[i].startswith('  ') or not lines[i].strip()):
+                if lines[i].strip():
+                    code_lines.append(lines[i][2:])  # Remove 2 spaces of indentation
+                else:
+                    code_lines.append('')
+                i += 1
+            if code_lines:
+                # Check if it's a table-like structure
+                if any('|' in line for line in code_lines):
+                    # Try to process as a table
+                    table_html = try_convert_indented_table(code_lines)
+                    if table_html:
+                        result.append(table_html)
+                    else:
+                        result.append('<pre>' + '\n'.join(code_lines) + '</pre>')
+                else:
+                    result.append('<pre>' + '\n'.join(code_lines) + '</pre>')
+        else:
+            # Regular line
+            if line.strip():
+                result.append(line)
+            else:
+                result.append('<br>')
+            i += 1
+    
+    return ''.join(result)
+
+def convert_markdown_table_to_html(lines):
+    """Convert markdown table lines to HTML"""
+    if len(lines) < 2:
+        return '\n'.join(lines)
+    
+    # Extract cells from each line
+    rows = []
+    for idx, line in enumerate(lines):
+        if idx == 1 and re.match(r'^[\s\-|]+$', line):
+            # Skip separator line
+            continue
+        
+        # Extract cells
+        cells = [cell.strip() for cell in line.split('|')]
+        # Remove empty first/last cells from | at line start/end
+        if cells and cells[0] == '':
+            cells = cells[1:]
+        if cells and cells[-1] == '':
+            cells = cells[:-1]
+        
+        if cells:
+            rows.append(cells)
+    
+    if not rows:
+        return '\n'.join(lines)
+    
+    # Build HTML table
+    html = ['<table>']
+    
+    # First row is header
+    html.append('<thead>')
+    html.append('<tr>')
+    for cell in rows[0]:
+        html.append(f'<th>{cell}</th>')
+    html.append('</tr>')
+    html.append('</thead>')
+    
+    # Rest are body rows
+    if len(rows) > 1:
+        html.append('<tbody>')
+        for row in rows[1:]:
+            html.append('<tr>')
+            for cell in row:
+                html.append(f'<td>{cell}</td>')
+            html.append('</tr>')
+        html.append('</tbody>')
+    
+    html.append('</table>')
+    
+    return '\n'.join(html)
+
+def try_convert_indented_table(lines):
+    """Try to convert indented lines to a table if they look like a table"""
+    # Check if lines contain table-like structure
+    has_separator = any(re.match(r'^[\s\-|]+$', line) and '|' in line for line in lines)
+    
+    if not has_separator:
+        return None
+    
+    # Find separator line
+    separator_idx = -1
+    for idx, line in enumerate(lines):
+        if re.match(r'^[\s\-|]+$', line) and '|' in line:
+            separator_idx = idx
+            break
+    
+    if separator_idx <= 0:
+        return None
+    
+    # Process as table
+    return convert_markdown_table_to_html(lines)
+
 def convert_lists(content: str) -> str:
     """Convert markdown lists to HTML"""
     lines = content.split('\n')
@@ -881,6 +1246,83 @@ def convert_lists(content: str) -> str:
             i += 1
     
     return '\n'.join(result)
+
+def is_hierarchy_blockquote(lines, start_index):
+    """Check if the blockquote contains a hierarchy structure"""
+    if start_index >= len(lines):
+        return False
+    
+    # Look for VMS-OKR patterns
+    hierarchy_keywords = ['VMS', 'Objective', 'KR', '├─', '└─', '│']
+    
+    # Check the next few lines for hierarchy patterns
+    for i in range(start_index, min(start_index + 5, len(lines))):
+        if any(keyword in lines[i] for keyword in hierarchy_keywords):
+            return True
+    
+    return False
+
+def process_hierarchy_blockquote(lines, start_index):
+    """Process hierarchy structure in blockquote with box-style display"""
+    hierarchy_lines = []
+    i = start_index
+    
+    # Collect all hierarchy lines
+    while i < len(lines):
+        line = lines[i]
+        # Check if line is part of hierarchy (contains tree symbols or is indented continuation)
+        if any(symbol in line for symbol in ['VMS', '├─', '└─', '│', 'Objective', 'KR']) or (line.strip() and hierarchy_lines):
+            hierarchy_lines.append(line)
+            i += 1
+        elif not line.strip() and hierarchy_lines:
+            # Empty line might be part of hierarchy, check next line
+            if i + 1 < len(lines) and any(symbol in lines[i + 1] for symbol in ['├─', '└─', '│', 'KR']):
+                hierarchy_lines.append(line)
+                i += 1
+            else:
+                break
+        else:
+            break
+    
+    # Build hierarchy HTML
+    html = ['<div class="hierarchy-box" style="']
+    html.append('background: #f8f9fa;')
+    html.append('border: 1px solid #dee2e6;')
+    html.append('border-radius: 8px;')
+    html.append('padding: 20px;')
+    html.append('margin: 20px 0;')
+    html.append('font-family: monospace;')
+    html.append('">')
+    
+    # Process each line
+    for line in hierarchy_lines:
+        if 'VMS' in line and ':' in line:
+            # Main VMS line
+            parts = line.split(':', 1)
+            vms_id = parts[0].strip()
+            vms_desc = parts[1].strip() if len(parts) > 1 else ''
+            html.append(f'<div style="font-weight: bold; color: #01579b; font-size: 1.1em; margin-bottom: 10px;">{vms_id}: {vms_desc}</div>')
+        elif 'Objective:' in line:
+            # Objective line
+            obj_text = line.replace('└─', '').replace('├─', '').strip()
+            html.append(f'<div style="margin-left: 20px; margin-top: 10px; padding: 10px; background: #e3f2fd; border-left: 3px solid #1976d2; border-radius: 4px;">{obj_text}</div>')
+        elif 'KR' in line and ':' in line:
+            # Key Result line
+            kr_text = line.replace('├─', '').replace('└─', '').replace('│', '').strip()
+            html.append(f'<div style="margin-left: 40px; margin-top: 5px; padding: 8px; background: #fff; border-left: 2px solid #64b5f6; border-radius: 4px;">{kr_text}</div>')
+        elif line.strip():
+            # Other content
+            clean_line = line.replace('│', '').strip()
+            if clean_line:
+                indent_level = (len(line) - len(line.lstrip())) * 10
+                html.append(f'<div style="margin-left: {indent_level}px; margin-top: 5px;">{clean_line}</div>')
+    
+    html.append('</div>')
+    
+    return {
+        'html': ''.join(html),
+        'next_index': i
+    }
 
 def add_paragraphs(content: str) -> str:
     """Add paragraph tags to plain text blocks"""

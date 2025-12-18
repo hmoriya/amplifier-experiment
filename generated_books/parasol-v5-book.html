@@ -196,6 +196,57 @@
             color: #666;
             font-size: 0.9em;
         }
+        
+        .hierarchy-diagram {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        
+        .hierarchy-diagram pre {
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            border: none;
+            color: #333;
+        }
+        
+        .hierarchy-box {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+        }
+        
+        .hierarchy-box .vms-title {
+            font-weight: bold;
+            color: #01579b;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .hierarchy-box .objective {
+            margin-left: 20px;
+            margin-top: 10px;
+            padding: 10px;
+            background: #e3f2fd;
+            border-left: 3px solid #1976d2;
+            border-radius: 4px;
+        }
+        
+        .hierarchy-box .key-result {
+            margin-left: 40px;
+            margin-top: 5px;
+            padding: 8px;
+            background: #fff;
+            border-left: 2px solid #64b5f6;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -1194,8 +1245,7 @@ API/データ: AD3-2-1-api（在庫確認API）
 <li><strong>口座有効化</strong>：審査完了後の口座開設処理</li>
 </ul></p>
 
-<blockquote><strong>注意</strong>: Bounded Context（BC）の定義はPhase 3には含まれません。</blockquote>
-<blockquote>Phase 3はビジネス観点（What）の定義に集中し、BCの境界確定と実装設計はPhase 4-5で行います。</blockquote>
+<blockquote><strong>注意</strong>: Bounded Context（BC）の定義はPhase 3には含まれません。Phase 3はビジネス観点（What）の定義に集中し、BCの境界確定と実装設計はPhase 4-5で行います。</blockquote>
 
 <strong>成果物</strong>：
 <ul>
@@ -2086,12 +2136,7 @@ ROI明確         ROI不確実</code></pre>
 <strong>バランスの取れた解決策</strong>：
 <strong>バランスの取れたAPI設計</strong>
 
-<blockquote><strong>基本はRESTfulに</strong></blockquote>
-<blockquote><code>GET /api/customers/{id}</code></blockquote>
->
-<blockquote><strong>画面用には専用エンドポイント</strong></blockquote>
-<blockquote><code>GET /api/views/customer-profile/{id}</code></blockquote>
-<blockquote>（内部で複数のリソースを集約）</blockquote>
+<blockquote><strong>基本はRESTfulに</strong><code>GET /api/customers/{id}</code><br><strong>画面用には専用エンドポイント</strong><code>GET /api/views/customer-profile/{id}</code>（内部で複数のリソースを集約）</blockquote>
 
 <strong>運用のために</strong>
 <ul>
@@ -2708,14 +2753,7 @@ class OrderService {
 
 <strong>V5のアプローチ</strong>：
 
-<blockquote><strong>価値ストリーム：受注履行</strong></blockquote>
-<blockquote>- トリガー：顧客が商品を購入する</blockquote>
-<blockquote>- アウトカム：商品が顧客に届く</blockquote>
->
-<blockquote><strong>この過程で自然に言語が定まる（主要用語）：</strong></blockquote>
-<blockquote>- 受注：顧客の購入意思表示</blockquote>
-<blockquote>- 在庫引当：商品を顧客のために確保</blockquote>
-<blockquote>- 出荷指示：倉庫への配送命令</blockquote>
+<blockquote><strong>価値ストリーム：受注履行</strong><ul><li>トリガー：顧客が商品を購入する</li><li>アウトカム：商品が顧客に届く</li></ul><br><strong>この過程で自然に言語が定まる（主要用語）：</strong><ul><li>受注：顧客の購入意思表示</li><li>在庫引当：商品を顧客のために確保</li><li>出荷指示：倉庫への配送命令</li></ul></blockquote>
 
 <p>価値を定義する過程で、ビジネスと開発が自然に同じ言葉を使い始めます。</p>
 
@@ -2723,13 +2761,7 @@ class OrderService {
 
 <p>Phase 3「ケイパビリティ分解」では、価値を実現するために必要な能力を洗い出します。この時、業務オペレーション（CL3）を網羅的に定義し、Phase 4-5でのBounded Context境界確定の入力とします。</p>
 
-<blockquote><strong>ケイパビリティ：在庫管理</strong></blockquote>
-<blockquote>- 目的：正確な在庫数を維持し、適切な引当を行う</blockquote>
-<blockquote>- 業務オペレーション（CL3）：</blockquote>
-<blockquote>  - 在庫数管理オペレーション</blockquote>
-<blockquote>  - 引当オペレーション</blockquote>
-<blockquote>  - 棚卸オペレーション</blockquote>
-<blockquote>- Phase 4-5でBC境界を確定：在庫コンテキスト</blockquote>
+<blockquote><strong>ケイパビリティ：在庫管理</strong><ul><li>目的：正確な在庫数を維持し、適切な引当を行う</li><li>業務オペレーション（CL3）：</li><li>在庫数管理オペレーション</li><li>引当オペレーション</li><li>棚卸オペレーション</li><li>Phase 4-5でBC境界を確定：在庫コンテキスト</li></ul></blockquote>
 
 <p>「どこに境界を引くか」という難しい問題を、「どんな業務オペレーションが必要か」という具体的な問いに変換し、Phase 4-5で実装境界を確定します。</p>
 
@@ -2739,20 +2771,49 @@ class OrderService {
 
 <strong>Phase 4-5：技術設計</strong>
 
-<blockquote><strong>サービス設計</strong></blockquote>
-<blockquote>- コンテキスト：在庫コンテキスト</blockquote>
->
-<blockquote><strong>集約</strong></blockquote>
-<blockquote>| 集約名 | ルート | エンティティ | 値オブジェクト |</blockquote>
-<blockquote>|--------|--------|--------------|----------------|</blockquote>
-<blockquote>| 在庫 | 商品在庫 | 在庫履歴 | 在庫数, 引当情報 |</blockquote>
->
-<blockquote><strong>API設計</strong></blockquote>
-<blockquote>| 種別 | 操作 | エンドポイント |</blockquote>
-<blockquote>|------|------|----------------|</blockquote>
-<blockquote>| コマンド | 在庫追加 | POST /inventory/add |</blockquote>
-<blockquote>| コマンド | 在庫引当 | POST /inventory/reserve |</blockquote>
-<blockquote>| クエリ | 在庫照会 | GET /inventory/{productId} |</blockquote>
+<blockquote><strong>サービス設計</strong><ul><li>コンテキスト：在庫コンテキスト</li></ul><br><strong>集約</strong><table>
+<thead>
+<tr>
+<th>集約名</th>
+<th>ルート</th>
+<th>エンティティ</th>
+<th>値オブジェクト</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>在庫</td>
+<td>商品在庫</td>
+<td>在庫履歴</td>
+<td>在庫数, 引当情報</td>
+</tr>
+</tbody>
+</table><br><strong>API設計</strong><table>
+<thead>
+<tr>
+<th>種別</th>
+<th>操作</th>
+<th>エンドポイント</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>コマンド</td>
+<td>在庫追加</td>
+<td>POST /inventory/add</td>
+</tr>
+<tr>
+<td>コマンド</td>
+<td>在庫引当</td>
+<td>POST /inventory/reserve</td>
+</tr>
+<tr>
+<td>クエリ</td>
+<td>在庫照会</td>
+<td>GET /inventory/{productId}</td>
+</tr>
+</tbody>
+</table></blockquote>
 
 <p>抽象的なモデルが、具体的なAPIとサービス設計に自然に変換されます。</p>
 
@@ -2776,32 +2837,34 @@ class OrderService {
 
 <strong>Phase 2：価値分析</strong>
 
-<blockquote><strong>価値ストリーム：オンライン受注</strong></blockquote>
->
-<blockquote><strong>ビジネス価値：</strong></blockquote>
-<blockquote>- 売上獲得：月間1億円</blockquote>
-<blockquote>- 顧客満足：24時間いつでも購入可能</blockquote>
-<blockquote>- 業務効率：自動化により人件費削減</blockquote>
->
-<blockquote><strong>プロセスフロー：</strong></blockquote>
-<blockquote>1. 顧客が商品を選ぶ</blockquote>
-<blockquote>2. カートに入れる</blockquote>
-<blockquote>3. 注文を確定する</blockquote>
-<blockquote>4. 在庫を引き当てる</blockquote>
-<blockquote>5. 決済を処理する</blockquote>
-<blockquote>6. 出荷指示を出す</blockquote>
+<blockquote><strong>価値ストリーム：オンライン受注</strong><br><strong>ビジネス価値：</strong><ul><li>売上獲得：月間1億円</li><li>顧客満足：24時間いつでも購入可能</li><li>業務効率：自動化により人件費削減</li></ul><br><strong>プロセスフロー：</strong>1. 顧客が商品を選ぶ2. カートに入れる3. 注文を確定する4. 在庫を引き当てる5. 決済を処理する6. 出荷指示を出す</blockquote>
 
 <p>この段階で、チームはビジネス価値を共有し、プロセスの全体像を掴みます。</p>
 
 <strong>Phase 3：ケイパビリティ分解</strong>
 
-<blockquote><strong>ケイパビリティ一覧</strong></blockquote>
->
-<blockquote>| ケイパビリティ | 責務 |</blockquote>
-<blockquote>|--------------|------|</blockquote>
-<blockquote>| 受注管理 | 注文の受付と管理、注文ステータスの追跡 |</blockquote>
-<blockquote>| 在庫管理 | 在庫数の管理、在庫の引当と解放 |</blockquote>
-<blockquote>| 決済処理 | 支払い処理、返金処理 |</blockquote>
+<blockquote><strong>ケイパビリティ一覧</strong><br><table>
+<thead>
+<tr>
+<th>ケイパビリティ</th>
+<th>責務</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>受注管理</td>
+<td>注文の受付と管理、注文ステータスの追跡</td>
+</tr>
+<tr>
+<td>在庫管理</td>
+<td>在庫数の管理、在庫の引当と解放</td>
+</tr>
+<tr>
+<td>決済処理</td>
+<td>支払い処理、返金処理</td>
+</tr>
+</tbody>
+</table></blockquote>
 
 <p>ケイパビリティが、自然にBounded Contextの候補になります。</p>
 
@@ -2813,28 +2876,34 @@ class OrderService {
 
 <p>Phase 3で見つけた「まとまり」が集約になる：</p>
 
-<blockquote><strong>注文集約（Order Aggregate）</strong></blockquote>
->
-<blockquote><strong>不変条件：</strong></blockquote>
-<blockquote>- 注文金額は明細の合計と一致する</blockquote>
-<blockquote>- キャンセルは出荷前のみ可能</blockquote>
->
-<blockquote><strong>構成要素：</strong></blockquote>
-<blockquote>| 種別 | 名前 |</blockquote>
-<blockquote>|------|------|</blockquote>
-<blockquote>| ルート | Order |</blockquote>
-<blockquote>| エンティティ | OrderLine（注文明細） |</blockquote>
-<blockquote>| 値オブジェクト | Money（金額）、Address（配送先） |</blockquote>
+<blockquote><strong>注文集約（Order Aggregate）</strong><br><strong>不変条件：</strong><ul><li>注文金額は明細の合計と一致する</li><li>キャンセルは出荷前のみ可能</li></ul><br><strong>構成要素：</strong><table>
+<thead>
+<tr>
+<th>種別</th>
+<th>名前</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ルート</td>
+<td>Order</td>
+</tr>
+<tr>
+<td>エンティティ</td>
+<td>OrderLine（注文明細）</td>
+</tr>
+<tr>
+<td>値オブジェクト</td>
+<td>Money（金額）、Address（配送先）</td>
+</tr>
+</tbody>
+</table></blockquote>
 
 <strong>イベントの識別</strong>
 
 <p>Phase 2の流れから、自然にイベントが見える：</p>
 
-<blockquote><strong>ドメインイベント：</strong></blockquote>
-<blockquote>- 注文受付完了</blockquote>
-<blockquote>- 在庫引当完了</blockquote>
-<blockquote>- 決済承認</blockquote>
-<blockquote>- 出荷指示済み</blockquote>
+<blockquote><strong>ドメインイベント：</strong><ul><li>注文受付完了</li><li>在庫引当完了</li><li>決済承認</li><li>出荷指示済み</li></ul></blockquote>
 
 <h3>実装への落とし込み</h3>
 
@@ -2871,16 +2940,22 @@ class OrderAggregate:
 
 <p>DDDは「ビジネス価値」を語りますが、定量化までは求めません。V5は違います。</p>
 
-<blockquote><strong>価値メトリクス：受注処理の高速化</strong></blockquote>
->
-<blockquote>| 項目 | 現状 | 目標 |</blockquote>
-<blockquote>|------|------|------|</blockquote>
-<blockquote>| 処理時間 | 平均3分/注文 | 平均30秒/注文 |</blockquote>
->
-<blockquote><strong>インパクト：</strong></blockquote>
-<blockquote>- 顧客満足度：4.2 → 4.8</blockquote>
-<blockquote>- カート放棄率：25% → 10%</blockquote>
-<blockquote>- 売上増加：年間3000万円</blockquote>
+<blockquote><strong>価値メトリクス：受注処理の高速化</strong><br><table>
+<thead>
+<tr>
+<th>項目</th>
+<th>現状</th>
+<th>目標</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>処理時間</td>
+<td>平均3分/注文</td>
+<td>平均30秒/注文</td>
+</tr>
+</tbody>
+</table><br><strong>インパクト：</strong><ul><li>顧客満足度：4.2 → 4.8</li><li>カート放棄率：25% → 10%</li><li>売上増加：年間3000万円</li></ul></blockquote>
 
 <p>すべての設計判断が、具体的な数値に基づいて行われます。</p>
 
@@ -2888,28 +2963,42 @@ class OrderAggregate:
 
 <p>DDDは「深いモデル」を重視しますが、変更への対応は開発者の力量に委ねられます。V5は、変更を前提とした設計を行います。</p>
 
-<blockquote><strong>ケイパビリティ進化：在庫管理（v1.0）</strong></blockquote>
->
-<blockquote><strong>将来の検討事項：</strong></blockquote>
-<blockquote>- 複数倉庫対応</blockquote>
-<blockquote>- リアルタイム在庫同期</blockquote>
-<blockquote>- AI需要予測</blockquote>
->
-<blockquote><strong>拡張ポイント（将来の拡張ポイントを明示）：</strong></blockquote>
-<blockquote>- 在庫計算ロジックのプラグイン化</blockquote>
-<blockquote>- 外部倉庫システムとの連携API</blockquote>
+<blockquote><strong>ケイパビリティ進化：在庫管理（v1.0）</strong><br><strong>将来の検討事項：</strong><ul><li>複数倉庫対応</li><li>リアルタイム在庫同期</li><li>AI需要予測</li></ul><br><strong>拡張ポイント（将来の拡張ポイントを明示）：</strong><ul><li>在庫計算ロジックのプラグイン化</li><li>外部倉庫システムとの連携API</li></ul></blockquote>
 
 <h3>3. 段階的な洗練</h3>
 
 <p>DDDは「正しいモデル」を求めますが、V5は「段階的な改善」を前提とします。</p>
 
-<blockquote><strong>モデル成熟度</strong></blockquote>
->
-<blockquote>| フェーズ | モデル | 適用範囲 | トリガー |</blockquote>
-<blockquote>|----------|--------|----------|----------|</blockquote>
-<blockquote>| Phase 1 | シンプル（単一倉庫、即時引当） | MVP、月商1000万円まで | - |</blockquote>
-<blockquote>| Phase 2 | 拡張（複数倉庫、予約引当） | - | 月商5000万円超、在庫切れクレーム増加 |</blockquote>
-<blockquote>| Phase 3 | 高度（AI予測、動的配分） | - | グローバル展開、在庫回転率の最適化要求 |</blockquote>
+<blockquote><strong>モデル成熟度</strong><br><table>
+<thead>
+<tr>
+<th>フェーズ</th>
+<th>モデル</th>
+<th>適用範囲</th>
+<th>トリガー</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Phase 1</td>
+<td>シンプル（単一倉庫、即時引当）</td>
+<td>MVP、月商1000万円まで</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Phase 2</td>
+<td>拡張（複数倉庫、予約引当）</td>
+<td>-</td>
+<td>月商5000万円超、在庫切れクレーム増加</td>
+</tr>
+<tr>
+<td>Phase 3</td>
+<td>高度（AI予測、動的配分）</td>
+<td>-</td>
+<td>グローバル展開、在庫回転率の最適化要求</td>
+</tr>
+</tbody>
+</table></blockquote>
 
 <p>「今」必要十分なモデルから始め、ビジネスの成長に合わせて洗練させていきます。</p>
 
@@ -2998,14 +3087,37 @@ Claude：モデルの進化を提案します。
 
 <p>V5とDDDを組み合わせた、新しい設計プロセスを整理しましょう。</p>
 
-<blockquote><strong>統合プロセス</strong></blockquote>
->
-<blockquote>| ステージ | V5フェーズ | DDDアクティビティ |</blockquote>
-<blockquote>|----------|------------|-------------------|</blockquote>
-<blockquote>| 基盤構築 | Phase 0, 1 | ドメインエキスパートの特定、初期の語彙収集 |</blockquote>
-<blockquote>| モデリング | Phase 2, 3 | ユビキタス言語の確立、Bounded Contextの識別、コアドメインの特定 |</blockquote>
-<blockquote>| 設計 | Phase 4, 5 | 集約の設計、ドメインサービスの定義、リポジトリインターフェース |</blockquote>
-<blockquote>| 実装 | Phase 6, 7 | 戦術的パターンの実装、イベント駆動の統合 |</blockquote>
+<blockquote><strong>統合プロセス</strong><br><table>
+<thead>
+<tr>
+<th>ステージ</th>
+<th>V5フェーズ</th>
+<th>DDDアクティビティ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>基盤構築</td>
+<td>Phase 0, 1</td>
+<td>ドメインエキスパートの特定、初期の語彙収集</td>
+</tr>
+<tr>
+<td>モデリング</td>
+<td>Phase 2, 3</td>
+<td>ユビキタス言語の確立、Bounded Contextの識別、コアドメインの特定</td>
+</tr>
+<tr>
+<td>設計</td>
+<td>Phase 4, 5</td>
+<td>集約の設計、ドメインサービスの定義、リポジトリインターフェース</td>
+</tr>
+<tr>
+<td>実装</td>
+<td>Phase 6, 7</td>
+<td>戦術的パターンの実装、イベント駆動の統合</td>
+</tr>
+</tbody>
+</table></blockquote>
 
 <p>各段階で、V5の構造がDDDの実践をガイドします。</p>
 
@@ -3015,53 +3127,61 @@ Claude：モデルの進化を提案します。
 
 <p>単なる用語集でなく、価値と紐づける：</p>
 
-<blockquote><strong>用語定義：プレミアム会員</strong></blockquote>
->
-<blockquote>| 観点 | 内容 |</blockquote>
-<blockquote>|------|------|</blockquote>
-<blockquote>| ビジネス上の意味 | 年間10万円以上購入する優良顧客 |</blockquote>
-<blockquote>| システム表現 | <code>Customer.tier == "PREMIUM"</code> |</blockquote>
->
-<blockquote><strong>価値へのインパクト：</strong></blockquote>
-<blockquote>- LTV：通常会員の3.5倍</blockquote>
-<blockquote>- 解約率：5%（通常会員は20%）</blockquote>
+<blockquote><strong>用語定義：プレミアム会員</strong><br><table>
+<thead>
+<tr>
+<th>観点</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ビジネス上の意味</td>
+<td>年間10万円以上購入する優良顧客</td>
+</tr>
+<tr>
+<td>システム表現</td>
+<td><code>Customer.tier == "PREMIUM"</code></td>
+</tr>
+</tbody>
+</table><br><strong>価値へのインパクト：</strong><ul><li>LTV：通常会員の3.5倍</li><li>解約率：5%（通常会員は20%）</li></ul></blockquote>
 
 <strong>2. 段階的なContext分割</strong>
 
 <p>最初は大きく、徐々に分割：</p>
 
-<blockquote><strong>初期コンテキスト：</strong></blockquote>
-<blockquote>- 販売システム（すべて含む）</blockquote>
->
-<blockquote><strong>成熟期コンテキスト：</strong></blockquote>
-<blockquote>- 商品カタログContext</blockquote>
-<blockquote>- 受注管理Context</blockquote>
-<blockquote>- 在庫管理Context</blockquote>
-<blockquote>- 配送管理Context</blockquote>
-<blockquote>- 顧客管理Context</blockquote>
->
-<blockquote><strong>分割トリガー：</strong></blockquote>
-<blockquote>- チーム分割</blockquote>
-<blockquote>- パフォーマンス要求</blockquote>
-<blockquote>- 独立したデプロイ要求</blockquote>
+<blockquote><strong>初期コンテキスト：</strong><ul><li>販売システム（すべて含む）</li></ul><br><strong>成熟期コンテキスト：</strong><ul><li>商品カタログContext</li><li>受注管理Context</li><li>在庫管理Context</li><li>配送管理Context</li><li>顧客管理Context</li></ul><br><strong>分割トリガー：</strong><ul><li>チーム分割</li><li>パフォーマンス要求</li><li>独立したデプロイ要求</li></ul></blockquote>
 
 <strong>3. Living Documentation</strong>
 
 <p>V5の設計書 = 生きたドキュメント：</p>
 
-<blockquote><strong>ドキュメント設定</strong></blockquote>
->
-<blockquote>| 項目 | 内容 |</blockquote>
-<blockquote>|------|------|</blockquote>
-<blockquote>| フォーマット | YAML/Markdown |</blockquote>
-<blockquote>| 配置場所 | リポジトリ内 |</blockquote>
-<blockquote>| 更新方法 | プルリクエストで更新 |</blockquote>
-<blockquote>| 検証 | Claude Codeが整合性チェック |</blockquote>
->
-<blockquote><strong>メリット：</strong></blockquote>
-<blockquote>- コードと設計の乖離を防ぐ</blockquote>
-<blockquote>- 新メンバーの理解が早い</blockquote>
-<blockquote>- AIが常に最新情報を参照</blockquote>
+<blockquote><strong>ドキュメント設定</strong><br><table>
+<thead>
+<tr>
+<th>項目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>フォーマット</td>
+<td>YAML/Markdown</td>
+</tr>
+<tr>
+<td>配置場所</td>
+<td>リポジトリ内</td>
+</tr>
+<tr>
+<td>更新方法</td>
+<td>プルリクエストで更新</td>
+</tr>
+<tr>
+<td>検証</td>
+<td>Claude Codeが整合性チェック</td>
+</tr>
+</tbody>
+</table><br><strong>メリット：</strong><ul><li>コードと設計の乖離を防ぐ</li><li>新メンバーの理解が早い</li><li>AIが常に最新情報を参照</li></ul></blockquote>
 
 <h2>まとめ：DDDの理想を、みんなのものに</h2>
 
@@ -3161,20 +3281,7 @@ Claude：モデルの進化を提案します。
 
 <strong>プロジェクトの生い立ち</strong>
 
-<blockquote><strong>発端となった出来事</strong></blockquote>
-<blockquote>- 何が起きたか：競合他社が革新的なサービスをリリース</blockquote>
-<blockquote>- 時期：2025年3月</blockquote>
-<blockquote>- 影響：3ヶ月で市場シェア10%を奪われた</blockquote>
->
-<blockquote><strong>最初の反応</strong></blockquote>
-<blockquote>- 誰が：CEO緊急会議</blockquote>
-<blockquote>- 決定：我々も対抗サービスを作る</blockquote>
-<blockquote>- 期限：6ヶ月以内にリリース</blockquote>
->
-<blockquote><strong>本当の問題</strong></blockquote>
-<blockquote>- 表面的：競合に追いつく</blockquote>
-<blockquote>- より深く：顧客ニーズの変化に対応できていない</blockquote>
-<blockquote>- 根本原因：既存システムが硬直化している</blockquote>
+<blockquote><strong>発端となった出来事</strong><ul><li>何が起きたか：競合他社が革新的なサービスをリリース</li><li>時期：2025年3月</li><li>影響：3ヶ月で市場シェア10%を奪われた</li></ul><br><strong>最初の反応</strong><ul><li>誰が：CEO緊急会議</li><li>決定：我々も対抗サービスを作る</li><li>期限：6ヶ月以内にリリース</li></ul><br><strong>本当の問題</strong><ul><li>表面的：競合に追いつく</li><li>より深く：顧客ニーズの変化に対応できていない</li><li>根本原因：既存システムが硬直化している</li></ul></blockquote>
 
 <p>表面的な「競合対抗」から、本質的な「システムの硬直性」まで掘り下げることで、本当に解決すべき問題が見えてきます。</p>
 
@@ -3363,11 +3470,7 @@ Claude：モデルの進化を提案します。
 
 <strong>プロジェクトチャーター例</strong>
 
-<blockquote><strong>プロジェクト名</strong>：次世代受発注システム NextOrder</blockquote>
->
-<blockquote><strong>ビジョン</strong></blockquote>
-<blockquote>- ステートメント：顧客の声に即座に応える、柔軟で信頼できる受発注基盤</blockquote>
-<blockquote>- 成功イメージ：営業が自信を持って顧客に提案できる</blockquote>
+<blockquote><strong>プロジェクト名</strong>：次世代受発注システム NextOrder<br><strong>ビジョン</strong><ul><li>ステートメント：顧客の声に即座に応える、柔軟で信頼できる受発注基盤</li><li>成功イメージ：営業が自信を持って顧客に提案できる</li></ul></blockquote>
 
 <strong>主要目標</strong>
 <ul>
@@ -3608,9 +3711,7 @@ Claude：モデルの進化を提案します。
 
 <strong>ビジネスコンテキスト例：グローバルトレード株式会社</strong>
 
-<blockquote><strong>ビジネスモデル</strong></blockquote>
-<blockquote>- 事業内容：工業用部品の輸入販売</blockquote>
-<blockquote>- 価値提案：小ロット・短納期・技術サポート</blockquote>
+<blockquote><strong>ビジネスモデル</strong><ul><li>事業内容：工業用部品の輸入販売</li><li>価値提案：小ロット・短納期・技術サポート</li></ul></blockquote>
 
 <strong>収益構造</strong>
 
@@ -5101,17 +5202,40 @@ Claude Code：仮説を多角的に検証します。
 
 <strong>ワークシート</strong>：
 
-<blockquote><strong>プロセス名</strong>：_______________</blockquote>
->
-<blockquote>| ステップ | アクション | 所要時間 | ペインポイント | 価値損失 |</blockquote>
-<blockquote>|----------|------------|----------|----------------|----------|</blockquote>
-<blockquote>| 1 | | | | |</blockquote>
-<blockquote>| 2 | | | | |</blockquote>
-<blockquote>| （必要なだけ追加） | | | | |</blockquote>
->
-<blockquote><strong>価値損失の合計</strong></blockquote>
-<blockquote>- 定量的：金額や時間</blockquote>
-<blockquote>- 定性的：機会損失や信頼</blockquote>
+<blockquote><strong>プロセス名</strong>：_______________<br><table>
+<thead>
+<tr>
+<th>ステップ</th>
+<th>アクション</th>
+<th>所要時間</th>
+<th>ペインポイント</th>
+<th>価値損失</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>（必要なだけ追加）</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table><br><strong>価値損失の合計</strong><ul><li>定量的：金額や時間</li><li>定性的：機会損失や信頼</li></ul></blockquote>
 
 <h3>演習2：6軸から3軸を選ぶ</h3>
 
@@ -5120,23 +5244,47 @@ Claude Code：仮説を多角的に検証します。
 
 <strong>選択ガイド</strong>：
 
-<blockquote><strong>業界</strong>：_______________</blockquote>
->
-<blockquote>Phase 2では、価値発見に最適な3軸を選択します。</blockquote>
->
-<blockquote>| 軸 | 関連度（高/中/低） | 評価の観点 |</blockquote>
-<blockquote>|----|-------------------|------------|</blockquote>
-<blockquote>| ケイパビリティ軸 | | 価値実現に必要な能力を特定できるか？ |</blockquote>
-<blockquote>| ビジネスユニット軸 | | 部門別の価値分析が重要か？ |</blockquote>
-<blockquote>| 価値軸 | | 価値の種類と受益者の明確化が中心か？ |</blockquote>
-<blockquote>| プラットフォーム軸 | | 共通基盤が価値創造の鍵か？ |</blockquote>
-<blockquote>| フュージョン軸 | | 異種の組み合わせが価値を生むか？ |</blockquote>
-<blockquote>| 多層価値ストリーム軸 | | 階層構造が価値の流れを左右するか？ |</blockquote>
->
-<blockquote><strong>選択した3軸</strong>：</blockquote>
-<blockquote>1. _______________</blockquote>
-<blockquote>2. _______________</blockquote>
-<blockquote>3. _______________</blockquote>
+<blockquote><strong>業界</strong>：_______________<br>Phase 2では、価値発見に最適な3軸を選択します。<br><table>
+<thead>
+<tr>
+<th>軸</th>
+<th>関連度（高/中/低）</th>
+<th>評価の観点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ケイパビリティ軸</td>
+<td></td>
+<td>価値実現に必要な能力を特定できるか？</td>
+</tr>
+<tr>
+<td>ビジネスユニット軸</td>
+<td></td>
+<td>部門別の価値分析が重要か？</td>
+</tr>
+<tr>
+<td>価値軸</td>
+<td></td>
+<td>価値の種類と受益者の明確化が中心か？</td>
+</tr>
+<tr>
+<td>プラットフォーム軸</td>
+<td></td>
+<td>共通基盤が価値創造の鍵か？</td>
+</tr>
+<tr>
+<td>フュージョン軸</td>
+<td></td>
+<td>異種の組み合わせが価値を生むか？</td>
+</tr>
+<tr>
+<td>多層価値ストリーム軸</td>
+<td></td>
+<td>階層構造が価値の流れを左右するか？</td>
+</tr>
+</tbody>
+</table><br><strong>選択した3軸</strong>：1. _______________2. _______________3. _______________</blockquote>
 
 <h3>演習3：価値の定量化</h3>
 
@@ -5145,23 +5293,7 @@ Claude Code：仮説を多角的に検証します。
 
 <strong>定量化フレームワーク</strong>：
 
-<blockquote><strong>改善案</strong>：_______________</blockquote>
->
-<blockquote><strong>直接価値</strong></blockquote>
-<blockquote>- 時間削減：○時間/年</blockquote>
-<blockquote>- コスト削減：○円/年</blockquote>
-<blockquote>- 売上増加：○円/年</blockquote>
->
-<blockquote><strong>間接価値</strong></blockquote>
-<blockquote>- 生産性：○%向上</blockquote>
-<blockquote>- 品質：不良率○%減</blockquote>
-<blockquote>- 満足度：○ポイント向上</blockquote>
->
-<blockquote><strong>投資対効果</strong></blockquote>
-<blockquote>- 年間総価値：○億円</blockquote>
-<blockquote>- 必要投資額：○億円</blockquote>
-<blockquote>- 回収期間：○ヶ月</blockquote>
-<blockquote>- 3年間ROI：○%</blockquote>
+<blockquote><strong>改善案</strong>：_______________<br><strong>直接価値</strong><ul><li>時間削減：○時間/年</li><li>コスト削減：○円/年</li><li>売上増加：○円/年</li></ul><br><strong>間接価値</strong><ul><li>生産性：○%向上</li><li>品質：不良率○%減</li><li>満足度：○ポイント向上</li></ul><br><strong>投資対効果</strong><ul><li>年間総価値：○億円</li><li>必要投資額：○億円</li><li>回収期間：○ヶ月</li><li>3年間ROI：○%</li></ul></blockquote>
 
 <h2>Phase 2の成功基準</h2>
 
@@ -5765,19 +5897,7 @@ Generic     : 汎用的、外部調達可能
 </tbody>
 </table>
 
-<blockquote><strong>悪い例：技術だけに偏る</strong></blockquote>
->
-<blockquote>「最新のAIを導入しました！」</blockquote>
-<blockquote>- でも使える人がいない</blockquote>
-<blockquote>- プロセスも未整備</blockquote>
-<blockquote>- 結果：宝の持ち腐れ</blockquote>
-
-<blockquote><strong>良い例：3要素の統合</strong></blockquote>
->
-<blockquote>「AI需要予測能力」</blockquote>
-<blockquote>- データサイエンティストを採用（人）</blockquote>
-<blockquote>- 予測→発注の業務フロー確立（プロセス）</blockquote>
-<blockquote>- 機械学習基盤を構築（技術）</blockquote>
+<blockquote><strong>悪い例：技術だけに偏る</strong><br>「最新のAIを導入しました！」<ul><li>でも使える人がいない</li><li>プロセスも未整備</li><li>結果：宝の持ち腐れ</li></ul><br><strong>良い例：3要素の統合</strong><br>「AI需要予測能力」<ul><li>データサイエンティストを採用（人）</li><li>予測→発注の業務フロー確立（プロセス）</li><li>機械学習基盤を構築（技術）</li></ul></blockquote>
 
 <h2>Phase 3の実践：ケイパビリティマップの作成</h2>
 
@@ -6329,24 +6449,17 @@ Claude Code：技術、組織、コストの観点から実装難易度を分析
 
 <strong>誤り</strong>：
 
-<blockquote>「最新のマイクロサービスアーキテクチャを導入する能力」</blockquote>
-<blockquote>- なぜマイクロサービスが必要？</blockquote>
-<blockquote>- 価値は何？</blockquote>
+<blockquote>「最新のマイクロサービスアーキテクチャを導入する能力」<ul><li>なぜマイクロサービスが必要？</li><li>価値は何？</li></ul></blockquote>
 
 <strong>正しいアプローチ</strong>：
 
-<blockquote>「サービスを独立して素早くリリースする能力」</blockquote>
-<blockquote>- 価値：市場投入速度の向上</blockquote>
-<blockquote>- 手段：マイクロサービス（も選択肢の一つ）</blockquote>
+<blockquote>「サービスを独立して素早くリリースする能力」<ul><li>価値：市場投入速度の向上</li><li>手段：マイクロサービス（も選択肢の一つ）</li></ul></blockquote>
 
 <h3>2. 現状の制約に囚われる</h3>
 
 <strong>誤り</strong>：
 
-<blockquote>「うちには技術者がいないから...」</blockquote>
-<blockquote>「予算がないから...」</blockquote>
-<blockquote>「今のシステムでは無理だから...」</blockquote>
-<blockquote>→ 最初から諦める</blockquote>
+<blockquote>「うちには技術者がいないから...」「予算がないから...」「今のシステムでは無理だから...」→ 最初から諦める</blockquote>
 
 <strong>正しい思考</strong>：
 
@@ -6366,12 +6479,7 @@ Claude Code：技術、組織、コストの観点から実装難易度を分析
 
 <strong>誤り</strong>：
 
-<blockquote>- AI活用能力</blockquote>
-<blockquote>- ビッグデータ分析能力</blockquote>
-<blockquote>- ブロックチェーン能力</blockquote>
-<blockquote>- IoT能力</blockquote>
-<blockquote>- 量子コンピューティング能力</blockquote>
-<blockquote>→ 焦点が定まらない</blockquote>
+<blockquote><ul><li>AI活用能力</li><li>ビッグデータ分析能力</li><li>ブロックチェーン能力</li><li>IoT能力</li><li>量子コンピューティング能力</li></ul>→ 焦点が定まらない</blockquote>
 
 <strong>選択と集中</strong>：
 
@@ -7095,31 +7203,7 @@ Phase 2で定義した価値一つを選び、必要なケイパビリティを�
 
 <p>重要な決定は、必ず記録に残します。</p>
 
-<blockquote><strong>ADR-001：マイクロサービス採用の決定</strong></blockquote>
->
-<blockquote><strong>ステータス</strong>：承認済み　<strong>日付</strong>：2025-12-14</blockquote>
->
-<blockquote><strong>コンテキスト</strong>：</blockquote>
-<blockquote>- 複数の開発チームが並行作業</blockquote>
-<blockquote>- ビジネス要求の変化が速い</blockquote>
-<blockquote>- サービスごとに異なるスケール要求</blockquote>
->
-<blockquote><strong>決定</strong>：ドメイン境界に基づいたマイクロサービスアーキテクチャを採用する</blockquote>
->
-<blockquote><strong>結果（ポジティブ）</strong>：</blockquote>
-<blockquote>- チームの独立性向上</blockquote>
-<blockquote>- 個別スケーリング可能</blockquote>
-<blockquote>- 技術選択の自由度</blockquote>
->
-<blockquote><strong>結果（ネガティブ）</strong>：</blockquote>
-<blockquote>- 運用複雑性の増加</blockquote>
-<blockquote>- 分散トランザクション</blockquote>
-<blockquote>- ネットワーク遅延</blockquote>
->
-<blockquote><strong>軽減策</strong>：</blockquote>
-<blockquote>- サービスメッシュで複雑性を管理</blockquote>
-<blockquote>- Sagaパターンで整合性確保</blockquote>
-<blockquote>- キャッシュ戦略で性能確保</blockquote>
+<blockquote><strong>ADR-001：マイクロサービス採用の決定</strong><br><strong>ステータス</strong>：承認済み　<strong>日付</strong>：2025-12-14<br><strong>コンテキスト</strong>：<ul><li>複数の開発チームが並行作業</li><li>ビジネス要求の変化が速い</li><li>サービスごとに異なるスケール要求</li></ul><br><strong>決定</strong>：ドメイン境界に基づいたマイクロサービスアーキテクチャを採用する<br><strong>結果（ポジティブ）</strong>：<ul><li>チームの独立性向上</li><li>個別スケーリング可能</li><li>技術選択の自由度</li></ul><br><strong>結果（ネガティブ）</strong>：<ul><li>運用複雑性の増加</li><li>分散トランザクション</li><li>ネットワーク遅延</li></ul><br><strong>軽減策</strong>：<ul><li>サービスメッシュで複雑性を管理</li><li>Sagaパターンで整合性確保</li><li>キャッシュ戦略で性能確保</li></ul></blockquote>
 
 <h2>Phase 5：サービス設計 ― 部品を詳細化する</h2>
 
@@ -7127,25 +7211,7 @@ Phase 2で定義した価値一つを選び、必要なケイパビリティを�
 
 <p>Phase 5では、Phase 3のケイパビリティがDDDのBounded Contextとして具体化されます。</p>
 
-<blockquote><strong>DDDを初めて聞く方へ</strong></blockquote>
->
-<blockquote>DDD（ドメイン駆動設計）は、複雑なビジネスロジックをソフトウェアで表現するための設計手法です。2003年にエリック・エヴァンスが提唱しました。</blockquote>
->
-<blockquote>DDDの核心は「ビジネスの言葉でシステムを設計する」ことです。技術者とビジネス担当者が同じ言葉（ユビキタス言語）で会話し、その言葉がそのままコードに反映されることを目指します。</blockquote>
->
-<blockquote>以下で使われる用語を簡単に説明します：</blockquote>
->
-<blockquote>- <strong>境界づけられたコンテキスト（Bounded Context）</strong>：「この言葉はこの範囲内でこの意味」という境界線です。例えば「商品」という言葉も、販売部門では「売り物」、物流部門では「配送物」、会計部門では「資産」と意味が異なります。それぞれの文脈を明確に分けることで、混乱を防ぎます</blockquote>
->
-<blockquote>- <strong>集約（Aggregate）</strong>：「一緒に変更されるべきデータのまとまり」です。注文と注文明細は常に一緒に扱われるべきなので、一つの集約になります</blockquote>
->
-<blockquote>- <strong>集約ルート（Aggregate Root）</strong>：集約への入り口となるエンティティです。外部からは必ずこのルートを通じてアクセスします。直接内部のデータを触らせないことで、整合性を保ちます</blockquote>
->
-<blockquote>- <strong>値オブジェクト（Value Object）</strong>：IDを持たず、値そのものが意味を持つオブジェクトです。「1000円」という金額は、「どの1000円か」ではなく「1000円という値」が重要です</blockquote>
->
-<blockquote>- <strong>エンティティ（Entity）</strong>：IDで識別されるオブジェクトです。「注文#12345」と「注文#12346」は、内容が同じでも別物です</blockquote>
->
-<blockquote>- <strong>ドメインイベント（Domain Event）</strong>：「ビジネス上、何か重要なことが起きた」という記録です。「注文が確定した」「支払いが完了した」など</blockquote>
+<blockquote><strong>DDDを初めて聞く方へ</strong><br>DDD（ドメイン駆動設計）は、複雑なビジネスロジックをソフトウェアで表現するための設計手法です。2003年にエリック・エヴァンスが提唱しました。<br>DDDの核心は「ビジネスの言葉でシステムを設計する」ことです。技術者とビジネス担当者が同じ言葉（ユビキタス言語）で会話し、その言葉がそのままコードに反映されることを目指します。<br>以下で使われる用語を簡単に説明します：<br><ul><li><strong>境界づけられたコンテキスト（Bounded Context）</strong>：「この言葉はこの範囲内でこの意味」という境界線です。例えば「商品」という言葉も、販売部門では「売り物」、物流部門では「配送物」、会計部門では「資産」と意味が異なります。それぞれの文脈を明確に分けることで、混乱を防ぎます</li></ul><br><ul><li><strong>集約（Aggregate）</strong>：「一緒に変更されるべきデータのまとまり」です。注文と注文明細は常に一緒に扱われるべきなので、一つの集約になります</li></ul><br><ul><li><strong>集約ルート（Aggregate Root）</strong>：集約への入り口となるエンティティです。外部からは必ずこのルートを通じてアクセスします。直接内部のデータを触らせないことで、整合性を保ちます</li></ul><br><ul><li><strong>値オブジェクト（Value Object）</strong>：IDを持たず、値そのものが意味を持つオブジェクトです。「1000円」という金額は、「どの1000円か」ではなく「1000円という値」が重要です</li></ul><br><ul><li><strong>エンティティ（Entity）</strong>：IDで識別されるオブジェクトです。「注文#12345」と「注文#12346」は、内容が同じでも別物です</li></ul><br><ul><li><strong>ドメインイベント（Domain Event）</strong>：「ビジネス上、何か重要なことが起きた」という記録です。「注文が確定した」「支払いが完了した」など</li></ul></blockquote>
 
 <strong>ケイパビリティ</strong>：高速注文処理能力
 
@@ -7866,41 +7932,26 @@ spec:
 <h3>1. 過度な先取り設計</h3>
 
 <strong>誤り（過剰設計）</strong>：
-<blockquote>「将来10倍のトラフィックに対応できるように...」</blockquote>
-<blockquote>「AIが主流になったときのために...」</blockquote>
-<blockquote>「マルチリージョン展開を見据えて...」</blockquote>
-<blockquote>→ 複雑性だけが残る</blockquote>
+<blockquote>「将来10倍のトラフィックに対応できるように...」「AIが主流になったときのために...」「マルチリージョン展開を見据えて...」→ 複雑性だけが残る</blockquote>
 
 <strong>正しいアプローチ（Just Enough）</strong>：
-<blockquote>「今の1.5倍に対応できれば十分」</blockquote>
-<blockquote>「必要になったら追加」</blockquote>
-<blockquote>「YAGNIの原則」</blockquote>
+<blockquote>「今の1.5倍に対応できれば十分」「必要になったら追加」「YAGNIの原則」</blockquote>
 
 <h3>2. ビジネス価値の喪失</h3>
 
 <strong>誤り（技術のための技術）</strong>：
-<blockquote>「最新のKubernetesを使いたい」</blockquote>
-<blockquote>「GraphQLがトレンドだから」</blockquote>
-<blockquote>「みんなServerlessだから」</blockquote>
-<blockquote>→ 価値との繋がりが不明</blockquote>
+<blockquote>「最新のKubernetesを使いたい」「GraphQLがトレンドだから」「みんなServerlessだから」→ 価値との繋がりが不明</blockquote>
 
 <strong>常に問う（価値との接続）</strong>：
-<blockquote>「この技術選択は、どの価値に貢献するか？」</blockquote>
-<blockquote>「複雑性に見合う価値があるか？」</blockquote>
-<blockquote>「もっとシンプルな方法はないか？」</blockquote>
+<blockquote>「この技術選択は、どの価値に貢献するか？」「複雑性に見合う価値があるか？」「もっとシンプルな方法はないか？」</blockquote>
 
 <h3>3. 完璧主義の罠</h3>
 
 <strong>誤り（完璧主義の麻痺）</strong>：
-<blockquote>「100%のテストカバレッジまで...」</blockquote>
-<blockquote>「すべてのエッジケースに対応...」</blockquote>
-<blockquote>「完全な自動化ができるまで...」</blockquote>
-<blockquote>→ リリースできない</blockquote>
+<blockquote>「100%のテストカバレッジまで...」「すべてのエッジケースに対応...」「完全な自動化ができるまで...」→ リリースできない</blockquote>
 
 <strong>実践的アプローチ</strong>：
-<blockquote>「コアバリューは確実に」</blockquote>
-<blockquote>「段階的に改善」</blockquote>
-<blockquote>「フィードバックから学ぶ」</blockquote>
+<blockquote>「コアバリューは確実に」「段階的に改善」「フィードバックから学ぶ」</blockquote>
 
 <h2>まとめ：夢を形にする技術</h2>
 
@@ -8136,10 +8187,7 @@ spec:
 <p>V5では、価値を一貫して追跡するための構造を提供します。</p>
 
 <strong>Phase 2: 価値定義</strong>
-<blockquote>- <strong>ID</strong>: VAL-001</blockquote>
-<blockquote>- <strong>ステートメント</strong>: 受注から出荷まで24時間以内</blockquote>
-<blockquote>- <strong>現状</strong>: 72時間 → <strong>目標</strong>: 24時間</blockquote>
-<blockquote>- <strong>インパクト</strong>: 顧客満足度20%向上</blockquote>
+<blockquote><ul><li><strong>ID</strong>: VAL-001</li><li><strong>ステートメント</strong>: 受注から出荷まで24時間以内</li><li><strong>現状</strong>: 72時間 → <strong>目標</strong>: 24時間</li><li><strong>インパクト</strong>: 顧客満足度20%向上</li></ul></blockquote>
 
 <strong>Phase 3: ケイパビリティマッピング</strong>（価値ID: VAL-001）
 <table>
@@ -8205,9 +8253,7 @@ spec:
 </table>
 
 <strong>Phase 7: 計測</strong>（価値ID: VAL-001）
-<blockquote>- <strong>達成値</strong>: 平均26時間</blockquote>
-<blockquote>- <strong>達成率</strong>: 92%</blockquote>
-<blockquote>- <strong>実現インパクト</strong>: 顧客満足度18%向上</blockquote>
+<blockquote><ul><li><strong>達成値</strong>: 平均26時間</li><li><strong>達成率</strong>: 92%</li><li><strong>実現インパクト</strong>: 顧客満足度18%向上</li></ul></blockquote>
 
 <h3>トレーサビリティマトリクス</h3>
 
@@ -8241,10 +8287,7 @@ spec:
 </table>
 
 <strong>全体ステータス</strong>
-<blockquote>- <strong>目標</strong>: 24時間</blockquote>
-<blockquote>- <strong>現在の能力</strong>: 26時間</blockquote>
-<blockquote>- <strong>ギャップ</strong>: 2時間</blockquote>
-<blockquote>- <strong>ギャップ分析</strong>: 配送業者との連携部分がボトルネック</blockquote>
+<blockquote><ul><li><strong>目標</strong>: 24時間</li><li><strong>現在の能力</strong>: 26時間</li><li><strong>ギャップ</strong>: 2時間</li><li><strong>ギャップ分析</strong>: 配送業者との連携部分がボトルネック</li></ul></blockquote>
 
 <h3>価値の健全性チェック</h3>
 
@@ -8671,18 +8714,7 @@ Claude Code：開発速度と残作業を分析し、実現時期を予測しま
 
 <strong>ファイル例（VAL-001-24h-delivery.yaml）</strong>:
 
-<blockquote><strong>価値定義</strong></blockquote>
-<blockquote>- ID: VAL-001</blockquote>
-<blockquote>- 名称: 24時間以内配送</blockquote>
-<blockquote>- 現状: 72時間 → 目標: 24時間</blockquote>
->
-<blockquote><strong>必要なケイパビリティ</strong></blockquote>
-<blockquote>- CAP-001: 在庫即時確認</blockquote>
-<blockquote>- CAP-002: 自動配送手配</blockquote>
-<blockquote>- CAP-003: リアルタイム追跡</blockquote>
->
-<blockquote><strong>KPI</strong></blockquote>
-<blockquote>- KPI-001: 平均配送時間（注文確定→配送完了、日次計測）</blockquote>
+<blockquote><strong>価値定義</strong><ul><li>ID: VAL-001</li><li>名称: 24時間以内配送</li><li>現状: 72時間 → 目標: 24時間</li></ul><br><strong>必要なケイパビリティ</strong><ul><li>CAP-001: 在庫即時確認</li><li>CAP-002: 自動配送手配</li><li>CAP-003: リアルタイム追跡</li></ul><br><strong>KPI</strong><ul><li>KPI-001: 平均配送時間（注文確定→配送完了、日次計測）</li></ul></blockquote>
 
 <h3>パターン2：コード埋め込み型トレーサビリティ</h3>
 
@@ -8783,9 +8815,7 @@ class InventoryService:
 </table>
 
 <strong>アラート設定</strong>
-<blockquote>- <strong>名称</strong>: 価値毀損アラート</blockquote>
-<blockquote>- <strong>条件</strong>: 平均配送時間 > 30時間</blockquote>
-<blockquote>- <strong>アクション</strong>: 開発チームに通知</blockquote>
+<blockquote><ul><li><strong>名称</strong>: 価値毀損アラート</li><li><strong>条件</strong>: 平均配送時間 > 30時間</li><li><strong>アクション</strong>: 開発チームに通知</li></ul></blockquote>
 
 <h3>3つのパターンの比較と選び方</h3>
 
@@ -8930,8 +8960,7 @@ class InventoryService:
 
 <strong>誤り（一方通行）</strong>：
 
-<blockquote>価値 → ケイパビリティ → サービス → 実装</blockquote>
-<blockquote>（逆向きの確認なし）</blockquote>
+<blockquote>価値 → ケイパビリティ → サービス → 実装（逆向きの確認なし）</blockquote>
 
 <strong>双方向の確認</strong>：
 <ul>
@@ -8967,10 +8996,7 @@ class InventoryService:
 
 <p>選んだ価値の1つを、実装まで追跡してください。</p>
 
-<blockquote>- <strong>価値</strong>: ________________</blockquote>
-<blockquote>- <strong>ケイパビリティ</strong>: ________________</blockquote>
-<blockquote>- <strong>サービス</strong>: ________________</blockquote>
-<blockquote>- <strong>コードファイル</strong>: ________________</blockquote>
+<blockquote><ul><li><strong>価値</strong>: ________________</li><li><strong>ケイパビリティ</strong>: ________________</li><li><strong>サービス</strong>: ________________</li><li><strong>コードファイル</strong>: ________________</li></ul></blockquote>
 
 <strong>Step 4: 健全性チェック</strong>
 
@@ -9333,20 +9359,7 @@ class InventoryService:
 
 <h4>ケーススタディ：自動車部品メーカーA社</h4>
 
-<blockquote><strong>課題</strong>: 多品種少量生産での収益性確保</blockquote>
->
-<blockquote><strong>Phase 2 価値定義</strong>:</blockquote>
-<blockquote>- 段取り時間50%削減</blockquote>
-<blockquote>- 不良率を1/10に</blockquote>
->
-<blockquote><strong>Phase 3 ケイパビリティ</strong>:</blockquote>
-<blockquote>- AIによる最適生産計画</blockquote>
-<blockquote>- 予知保全能力</blockquote>
->
-<blockquote><strong>成果</strong>:</blockquote>
-<blockquote>- 稼働率: 65% → 85%</blockquote>
-<blockquote>- 不良率: 0.1% → 0.01%</blockquote>
-<blockquote>- 利益率: 5% → 12%</blockquote>
+<blockquote><strong>課題</strong>: 多品種少量生産での収益性確保<br><strong>Phase 2 価値定義</strong>:<ul><li>段取り時間50%削減</li><li>不良率を1/10に</li></ul><br><strong>Phase 3 ケイパビリティ</strong>:<ul><li>AIによる最適生産計画</li><li>予知保全能力</li></ul><br><strong>成果</strong>:<ul><li>稼働率: 65% → 85%</li><li>不良率: 0.1% → 0.01%</li><li>利益率: 5% → 12%</li></ul></blockquote>
 
 <h3>パターン2：小売業 ― 顧客体験の最適化</h3>
 
@@ -9475,20 +9488,7 @@ class InventoryService:
 
 <h4>ケーススタディ：アパレル小売B社</h4>
 
-<blockquote><strong>課題</strong>: ECと店舗の分断による機会損失</blockquote>
->
-<blockquote><strong>Phase 2 価値定義</strong>:</blockquote>
-<blockquote>- どこでも買える・受け取れる</blockquote>
-<blockquote>- 在庫の有効活用</blockquote>
->
-<blockquote><strong>Phase 3 ケイパビリティ</strong>:</blockquote>
-<blockquote>- 全在庫可視化</blockquote>
-<blockquote>- 店舗からの配送</blockquote>
->
-<blockquote><strong>成果</strong>:</blockquote>
-<blockquote>- 在庫回転率: 4 → 6</blockquote>
-<blockquote>- 顧客満足度: 3.5 → 4.3</blockquote>
-<blockquote>- 売上: +35%（2年間）</blockquote>
+<blockquote><strong>課題</strong>: ECと店舗の分断による機会損失<br><strong>Phase 2 価値定義</strong>:<ul><li>どこでも買える・受け取れる</li><li>在庫の有効活用</li></ul><br><strong>Phase 3 ケイパビリティ</strong>:<ul><li>全在庫可視化</li><li>店舗からの配送</li></ul><br><strong>成果</strong>:<ul><li>在庫回転率: 4 → 6</li><li>顧客満足度: 3.5 → 4.3</li><li>売上: +35%（2年間）</li></ul></blockquote>
 
 <h3>パターン3：金融業 ― 信頼とイノベーションの両立</h3>
 
@@ -9619,20 +9619,7 @@ class InventoryService:
 
 <h4>ケーススタディ：地方銀行C</h4>
 
-<blockquote><strong>課題</strong>: デジタルバンキング対応の遅れ</blockquote>
->
-<blockquote><strong>Phase 2 価値定義</strong>:</blockquote>
-<blockquote>- 24時間365日サービス</blockquote>
-<blockquote>- 5分で口座開設</blockquote>
->
-<blockquote><strong>Phase 3 ケイパビリティ</strong>:</blockquote>
-<blockquote>- API基盤構築</blockquote>
-<blockquote>- AI不正検知</blockquote>
->
-<blockquote><strong>成果</strong>:</blockquote>
-<blockquote>- デジタル利用率: 15% → 60%</blockquote>
-<blockquote>- 口座開設: 2週間 → 5分</blockquote>
-<blockquote>- 若年層獲得: +200%</blockquote>
+<blockquote><strong>課題</strong>: デジタルバンキング対応の遅れ<br><strong>Phase 2 価値定義</strong>:<ul><li>24時間365日サービス</li><li>5分で口座開設</li></ul><br><strong>Phase 3 ケイパビリティ</strong>:<ul><li>API基盤構築</li><li>AI不正検知</li></ul><br><strong>成果</strong>:<ul><li>デジタル利用率: 15% → 60%</li><li>口座開設: 2週間 → 5分</li><li>若年層獲得: +200%</li></ul></blockquote>
 
 <h3>パターン4：医療・ヘルスケア ― 人命優先の設計</h3>
 
@@ -9738,20 +9725,7 @@ class InventoryService:
 
 <h4>ケーススタディ：総合病院Dグループ</h4>
 
-<blockquote><strong>課題</strong>: 紙カルテから電子化への移行</blockquote>
->
-<blockquote><strong>Phase 2 価値定義</strong>:</blockquote>
-<blockquote>- 医療過誤50%削減</blockquote>
-<blockquote>- 診療効率20%向上</blockquote>
->
-<blockquote><strong>Phase 3 ケイパビリティ</strong>:</blockquote>
-<blockquote>- 統合患者ビュー</blockquote>
-<blockquote>- AIによる診断支援</blockquote>
->
-<blockquote><strong>成果</strong>:</blockquote>
-<blockquote>- インシデント: -65%</blockquote>
-<blockquote>- 患者待ち時間: -40%</blockquote>
-<blockquote>- 医師の満足度: 向上</blockquote>
+<blockquote><strong>課題</strong>: 紙カルテから電子化への移行<br><strong>Phase 2 価値定義</strong>:<ul><li>医療過誤50%削減</li><li>診療効率20%向上</li></ul><br><strong>Phase 3 ケイパビリティ</strong>:<ul><li>統合患者ビュー</li><li>AIによる診断支援</li></ul><br><strong>成果</strong>:<ul><li>インシデント: -65%</li><li>患者待ち時間: -40%</li><li>医師の満足度: 向上</li></ul></blockquote>
 
 <h2>産業の境界を越えて：クロスインダストリーの視点</h2>
 
@@ -9936,68 +9910,15 @@ Claude Code：医療機器規制との適合性を確認します。
 
 <h3>演習1：産業DNA分析</h3>
 
-<blockquote><strong>あなたの産業DNA</strong></blockquote>
->
-<blockquote><strong>産業名</strong>: _______________</blockquote>
->
-<blockquote><strong>コア価値観</strong>:</blockquote>
-<blockquote>1.</blockquote>
-<blockquote>2.</blockquote>
-<blockquote>3.</blockquote>
->
-<blockquote><strong>固有の制約</strong>:</blockquote>
-<blockquote>1.</blockquote>
-<blockquote>2.</blockquote>
-<blockquote>3.</blockquote>
->
-<blockquote><strong>成功要因</strong>:</blockquote>
-<blockquote>1.</blockquote>
-<blockquote>2.</blockquote>
-<blockquote>3.</blockquote>
->
-<blockquote><strong>規制要件</strong>:</blockquote>
-<blockquote>-</blockquote>
-<blockquote>-</blockquote>
+<blockquote><strong>あなたの産業DNA</strong><br><strong>産業名</strong>: _______________<br><strong>コア価値観</strong>:1.2.3.<br><strong>固有の制約</strong>:1.2.3.<br><strong>成功要因</strong>:1.2.3.<br><strong>規制要件</strong>:--</blockquote>
 
 <h3>演習2：3軸の選択と理由</h3>
 
-<blockquote><strong>選択する3軸</strong></blockquote>
->
-<blockquote><strong>軸1</strong>:</blockquote>
-<blockquote>- 名前:</blockquote>
-<blockquote>- 理由:</blockquote>
-<blockquote>- フォーカス:</blockquote>
->
-<blockquote><strong>軸2</strong>:</blockquote>
-<blockquote>- 名前:</blockquote>
-<blockquote>- 理由:</blockquote>
-<blockquote>- フォーカス:</blockquote>
->
-<blockquote><strong>軸3</strong>:</blockquote>
-<blockquote>- 名前:</blockquote>
-<blockquote>- 理由:</blockquote>
-<blockquote>- フォーカス:</blockquote>
->
-<blockquote><strong>選択しなかった軸の理由</strong>:</blockquote>
-<blockquote>- ケイパビリティ軸:</blockquote>
-<blockquote>- 事業ユニット軸:</blockquote>
-<blockquote>- 価値軸:</blockquote>
-<blockquote>- プラットフォーム軸:</blockquote>
-<blockquote>- 融合軸:</blockquote>
-<blockquote>- 多層VSTR軸:</blockquote>
+<blockquote><strong>選択する3軸</strong><br><strong>軸1</strong>:<ul><li>名前:</li><li>理由:</li><li>フォーカス:</li></ul><br><strong>軸2</strong>:<ul><li>名前:</li><li>理由:</li><li>フォーカス:</li></ul><br><strong>軸3</strong>:<ul><li>名前:</li><li>理由:</li><li>フォーカス:</li></ul><br><strong>選択しなかった軸の理由</strong>:<ul><li>ケイパビリティ軸:</li><li>事業ユニット軸:</li><li>価値軸:</li><li>プラットフォーム軸:</li><li>融合軸:</li><li>多層VSTR軸:</li></ul></blockquote>
 
 <h3>演習3：他業界からの学び</h3>
 
-<blockquote><strong>クロスインダストリー・インスピレーション</strong></blockquote>
->
-<blockquote><strong>参考にする業界</strong>:</blockquote>
->
-<blockquote><strong>その業界が優れている点</strong>:</blockquote>
->
-<blockquote><strong>自社への適用</strong>:</blockquote>
-<blockquote>- 元のプラクティス:</blockquote>
-<blockquote>- 適応バージョン:</blockquote>
-<blockquote>- 期待される効果:</blockquote>
+<blockquote><strong>クロスインダストリー・インスピレーション</strong><br><strong>参考にする業界</strong>:<br><strong>その業界が優れている点</strong>:<br><strong>自社への適用</strong>:<ul><li>元のプラクティス:</li><li>適応バージョン:</li><li>期待される効果:</li></ul></blockquote>
 
 <h2>まとめ：産業の文脈を活かす設計</h2>
 
@@ -10482,29 +10403,11 @@ $ pytest tests/test_inventory_service.py -v
 
 <strong>悪い例</strong>
 
-<blockquote>プロンプト：「在庫システムを作って」</blockquote>
->
-<blockquote>結果：汎用的で曖昧な実装</blockquote>
+<blockquote>プロンプト：「在庫システムを作って」<br>結果：汎用的で曖昧な実装</blockquote>
 
 <strong>良い例</strong>
 
-<blockquote>プロンプト：</blockquote>
->
-<blockquote>コンテキスト：</blockquote>
-<blockquote>- 業種：アパレル小売（多品種少量）</blockquote>
-<blockquote>- 規模：月間100万SKU×10店舗</blockquote>
-<blockquote>- 課題：在庫の偏在による機会損失</blockquote>
-<blockquote>- 制約：既存POSとの連携必須</blockquote>
->
-<blockquote>要求：</blockquote>
-<blockquote>全店舗の在庫をリアルタイムに把握し、店舗間で融通可能にする在庫管理システム</blockquote>
->
-<blockquote>技術要件：</blockquote>
-<blockquote>- 既存POS（Java）とREST APIで連携</blockquote>
-<blockquote>- 1秒以内の応答速度</blockquote>
-<blockquote>- 99.9%の可用性</blockquote>
->
-<blockquote>結果：具体的で実装可能な設計</blockquote>
+<blockquote>プロンプト：<br>コンテキスト：<ul><li>業種：アパレル小売（多品種少量）</li><li>規模：月間100万SKU×10店舗</li><li>課題：在庫の偏在による機会損失</li><li>制約：既存POSとの連携必須</li></ul><br>要求：全店舗の在庫をリアルタイムに把握し、店舗間で融通可能にする在庫管理システム<br>技術要件：<ul><li>既存POS（Java）とREST APIで連携</li><li>1秒以内の応答速度</li><li>99.9%の可用性</li></ul><br>結果：具体的で実装可能な設計</blockquote>
 
 <h3>段階的詳細化のテクニック</h3>
 
@@ -11640,23 +11543,7 @@ human：「一時対処を適用後、恒久対策を計画」
 
 <strong>コミュニケーションテンプレート</strong>
 
-<blockquote><strong>価値ステートメント</strong></blockquote>
->
-<blockquote>形式：【価値】{測定可能な成果}により{ビジネスインパクト}</blockquote>
->
-<blockquote>例：【価値】配送時間を24時間短縮により顧客満足度20%向上</blockquote>
-
-<blockquote><strong>ケイパビリティ記述</strong></blockquote>
->
-<blockquote>形式：【能力】{what}を{how}する能力</blockquote>
->
-<blockquote>例：【能力】在庫をリアルタイムに把握する能力</blockquote>
-
-<blockquote><strong>決定記録</strong></blockquote>
->
-<blockquote>形式：【決定】{what}を{why}の理由で{how}する</blockquote>
->
-<blockquote>例：【決定】マイクロサービスを拡張性のために段階的に導入する</blockquote>
+<blockquote><strong>価値ステートメント</strong><br>形式：【価値】{測定可能な成果}により{ビジネスインパクト}<br>例：【価値】配送時間を24時間短縮により顧客満足度20%向上<br><strong>ケイパビリティ記述</strong><br>形式：【能力】{what}を{how}する能力<br>例：【能力】在庫をリアルタイムに把握する能力<br><strong>決定記録</strong><br>形式：【決定】{what}を{why}の理由で{how}する<br>例：【決定】マイクロサービスを拡張性のために段階的に導入する</blockquote>
 
 <h3>効果的な会議パターン</h3>
 
@@ -11914,23 +11801,17 @@ human：「一時対処を適用後、恒久対策を計画」
 
 <strong>誤り</strong>：
 
-<blockquote>アプローチ：「来月から全員V5を使うように」</blockquote>
->
-<blockquote>結果：混乱と抵抗、生産性の急落、最終的な拒絶</blockquote>
+<blockquote>アプローチ：「来月から全員V5を使うように」<br>結果：混乱と抵抗、生産性の急落、最終的な拒絶</blockquote>
 
 <strong>正しいアプローチ</strong>：
 
-<blockquote>アプローチ：「小さく始めて段階的に拡大」</blockquote>
->
-<blockquote>結果：成功体験の蓄積、自然な普及、持続的な改善</blockquote>
+<blockquote>アプローチ：「小さく始めて段階的に拡大」<br>結果：成功体験の蓄積、自然な普及、持続的な改善</blockquote>
 
 <h3>2. トップダウンのみの推進</h3>
 
 <strong>誤り</strong>：
 
-<blockquote>アプローチ：「経営が決めたから従え」</blockquote>
->
-<blockquote>結果：表面的な順守、創造性の欠如、形骸化</blockquote>
+<blockquote>アプローチ：「経営が決めたから従え」<br>結果：表面的な順守、創造性の欠如、形骸化</blockquote>
 
 <strong>バランスの取れたアプローチ</strong>：
 
@@ -11961,15 +11842,11 @@ human：「一時対処を適用後、恒久対策を計画」
 
 <strong>誤り</strong>：
 
-<blockquote>アプローチ：「V5を100%正しく使うまで待つ」</blockquote>
->
-<blockquote>結果：いつまでも始まらない、学習機会の喪失、モメンタムの消失</blockquote>
+<blockquote>アプローチ：「V5を100%正しく使うまで待つ」<br>結果：いつまでも始まらない、学習機会の喪失、モメンタムの消失</blockquote>
 
 <strong>実践的アプローチ</strong>：
 
-<blockquote>アプローチ：「80%の理解で始めて改善」</blockquote>
->
-<blockquote>結果：実践からの学習、継続的な改善、現実的な成功</blockquote>
+<blockquote>アプローチ：「80%の理解で始めて改善」<br>結果：実践からの学習、継続的な改善、現実的な成功</blockquote>
 
 <h2>組織文化の変革：V5が根付く土壌作り</h2>
 
@@ -14216,19 +14093,13 @@ Claude Code：パターンの弱点を分析し、改善します。
    問題：デバイス数の急増
    対策：動的階層再編成</code></pre>
 
-<blockquote><strong>オートスケーリング設定</strong></blockquote>
-<blockquote>- トリガー条件: cluster_size > threshold, response_time > sla</blockquote>
-<blockquote>- アクション: 自動的に中間層を追加、負荷分散の再計算、ケイパビリティの再配分</blockquote>
+<blockquote><strong>オートスケーリング設定</strong><ul><li>トリガー条件: cluster_size > threshold, response_time > sla</li><li>アクション: 自動的に中間層を追加、負荷分散の再計算、ケイパビリティの再配分</li></ul></blockquote>
 
 <pre><code class="language-">3. **セキュリティ考慮**
    問題：階層型攻撃のリスク
    対策：ゼロトラストアーキテクチャ</code></pre>
 
-<blockquote><strong>セキュリティレイヤー</strong></blockquote>
-<blockquote>- デバイス認証: 個別証明書</blockquote>
-<blockquote>- クラスター認証: 動的グループ鍵</blockquote>
-<blockquote>- 通信: エンドツーエンド暗号化</blockquote>
-<blockquote>- 異常検知: 振る舞い分析</blockquote>
+<blockquote><strong>セキュリティレイヤー</strong><ul><li>デバイス認証: 個別証明書</li><li>クラスター認証: 動的グループ鍵</li><li>通信: エンドツーエンド暗号化</li><li>異常検知: 振る舞い分析</li></ul></blockquote>
 
 <pre><code class="language-">4. **パフォーマンス最適化**</code></pre>
 
