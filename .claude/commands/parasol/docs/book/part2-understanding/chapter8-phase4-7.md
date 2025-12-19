@@ -395,6 +395,7 @@ Claude Code：Phase 3の定義を参照し、実装を支援します。
 [ケイパビリティ定義を読み込み]
 
 理解しました。以下の実装を提案します：
+```
 
 ```python
 from dataclasses import dataclass
@@ -479,6 +480,7 @@ class Order:
         return total
 ```
 
+```
 この実装は：
 - Phase 3で定義された「高速注文処理能力」を実現
 - ドメインルールをコードで表現

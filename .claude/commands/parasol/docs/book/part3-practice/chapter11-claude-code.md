@@ -657,7 +657,7 @@ Claude Code：多層的なドキュメントを生成します。
 
 ## 2. アーキテクチャ
 
-```
+~~~
 アーキテクチャ構成図
 ====================
 
@@ -686,7 +686,7 @@ Claude Code：多層的なドキュメントを生成します。
 │     (PostgreSQL)      (Redis)        [Kafka]               │
 │       永続化          キャッシュ      メッセージング        │
 └─────────────────────────────────────────────────────────────┘
-```
+~~~
 
 ## 3. API仕様
 
@@ -695,13 +695,13 @@ Claude Code：多層的なドキュメントを生成します。
 **エンドポイント**: `GET /api/v1/inventory/{productId}`
 
 **リクエスト例**:
-```bash
+~~~bash
 curl -X GET "https://api.example.com/api/v1/inventory/PROD-001" \
   -H "Authorization: Bearer {token}"
-```
+~~~
 
 **レスポンス例**:
-```json
+~~~json
 {
   "productId": "PROD-001",
   "availableQuantity": 150,
@@ -719,28 +719,28 @@ curl -X GET "https://api.example.com/api/v1/inventory/PROD-001" \
   ],
   "lastUpdated": "2025-12-14T10:30:00Z"
 }
-```
+~~~
 
 ## 4. 運用ガイド
 
 ### デプロイメント
 
 1. 環境変数の設定
-```bash
+~~~bash
 export DATABASE_URL="postgresql://..."
 export REDIS_URL="redis://..."
 export KAFKA_BROKERS="broker1:9092,broker2:9092"
-```
+~~~
 
 2. Dockerイメージのビルド
-```bash
+~~~bash
 docker build -t inventory-service:latest .
-```
+~~~
 
 3. Kubernetes適用
-```bash
+~~~bash
 kubectl apply -f k8s/inventory-service.yaml
-```
+~~~
 
 ### モニタリング
 

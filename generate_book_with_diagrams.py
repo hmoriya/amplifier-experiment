@@ -119,6 +119,12 @@ def generate_book_with_diagrams():
             # Process diagram references
             processed_content = process_diagram_references(content)
             
+            # Debug: log content length for chapters 6 and 7
+            if chapter_num in [6, 7]:
+                logger.info(f"Chapter {chapter_num} content length: {len(processed_content)}")
+                # Log first 200 chars to check what's in content
+                logger.info(f"Chapter {chapter_num} start: {processed_content[:200]}...")
+            
             chapters.append({
                 'number': chapter_num,
                 'title': title,
@@ -458,17 +464,24 @@ def generate_html(chapters, metadata, output_dir):
             border-radius: 5px;
             overflow-x: auto;
             border-left: 4px solid #01579b;
-            white-space: pre;
+            white-space: pre-wrap;
+            word-break: break-word;
             font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
             font-size: 0.9em;
             line-height: 1.4;
+            max-width: 100%;
+            display: block;
         }}
         
         pre code {{
-            white-space: pre;
+            white-space: pre-wrap;
+            word-break: break-word;
             font-family: inherit;
             font-size: inherit;
             line-height: inherit;
+            background: transparent;
+            padding: 0;
+            display: block;
         }}
         
         blockquote {{
@@ -534,6 +547,8 @@ def generate_html(chapters, metadata, output_dir):
             background: transparent;
             border: none;
             color: #333;
+            white-space: pre !important;
+            overflow-x: auto;
         }}
         
         .hierarchy-box {{
@@ -568,6 +583,73 @@ def generate_html(chapters, metadata, output_dir):
             background: #fff;
             border-left: 2px solid #64b5f6;
             border-radius: 4px;
+        }}
+        
+        .architecture-diagram {{
+            margin: 20px auto;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 25px;
+            overflow-x: auto;
+            max-width: 900px;
+        }}
+        
+        /* CSS-based architecture diagram styles */
+        .architecture-diagram-css {{
+            font-family: sans-serif;
+            margin: 20px 0;
+        }}
+        
+        .architecture-diagram-css .arch-layer {{
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            text-align: center;
+        }}
+        
+        .architecture-diagram-css h3 {{
+            margin: 0 0 15px 0;
+            color: #01579b;
+            font-size: 1.1em;
+        }}
+        
+        .architecture-diagram-css .arch-components {{
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }}
+        
+        .architecture-diagram-css .component {{
+            background: #e3f2fd;
+            border: 1px solid #1976d2;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 0.95em;
+        }}
+        
+        .architecture-diagram-css .arrow-down {{
+            text-align: center;
+            font-size: 20px;
+            color: #666;
+            margin: 5px 0;
+        }}
+        
+        .architecture-diagram-css .arrow-down::after {{
+            content: "▼";
+        }}
+        
+        .architecture-diagram pre {{
+            white-space: pre !important;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.0;
+            margin: 0;
+            color: #333;
+            letter-spacing: -0.5px;
         }}
     </style>
 </head>
@@ -606,13 +688,23 @@ def generate_html(chapters, metadata, output_dir):
 def convert_markdown_to_html(content: str) -> str:
     """Simple markdown to HTML conversion"""
     
+    # Debug: log content length before processing
+    logger.debug(f"Converting markdown, content length: {len(content)}")
+    
     # Convert code blocks first (preserve them)
     code_blocks = []
+    
+    # Pre-process to handle practice example blocks with nested content
+    # No preprocessing needed - we'll handle them as regular code blocks
+    
     def preserve_code_block(match):
-        code_blocks.append(match.group(0))
+        # Extract the full code block including language identifier
+        full_block = match.group(0)
+        code_blocks.append(full_block)
         return f"___CODEBLOCK_{len(code_blocks)-1}___"
     
-    content = re.sub(r'```.*?```', preserve_code_block, content, flags=re.DOTALL)
+    # Use DOTALL flag to match across lines, including code blocks with triple backticks
+    content = re.sub(r'```[^\n]*\n.*?```', preserve_code_block, content, flags=re.DOTALL)
     
     # Detect and convert ASCII tables that are not in code blocks
     content = convert_ascii_tables_in_text(content)
@@ -651,78 +743,239 @@ def convert_markdown_to_html(content: str) -> str:
     # Blockquotes - handle multi-line blockquotes
     content = convert_blockquotes(content)
     
-    # Paragraphs
-    content = add_paragraphs(content)
-    
-    # Restore code blocks
+    # Restore code blocks first before adding paragraphs
+    # This ensures code blocks and special elements are processed correctly
     for i, block in enumerate(code_blocks):
+        # Debug: log architecture diagram detection
+        if 'アーキテクチャ構成図' in block:
+            logger.debug(f"Found architecture diagram in code block {i}")
+            logger.debug(f"is_architecture_diagram: {is_architecture_diagram(block)}")
+        
         if block.startswith('```mermaid'):
             # Mermaid diagram
             diagram_content = block[10:-3].strip()  # Remove ```mermaid and ```
             replacement = f'<div class="diagram-container"><div class="mermaid">{diagram_content}</div></div>'
         else:
-            # Check if it's a table in a code block
-            code_content_lines = block.strip('```').strip().split('\n')
-            # Check for ASCII table patterns
-            has_table_pattern = False
-            for line in code_content_lines:
-                # Look for separator lines with pipes and dashes
-                if re.match(r'^[\s\-|]+$', line) and '|' in line and '-' in line:
-                    has_table_pattern = True
-                    break
-                # Also check for box-drawing characters
-                if any(char in line for char in ['│', '─', '┌', '└', '├', '┤', '┬', '┴', '┼']):
-                    has_table_pattern = True
-                    break
+            # First check if this is an ASCII graph - must check before table!
+            # Check if this is a practice example block first
+            lines = block.split('\n')
+            is_practice_example = False
+            if len(lines) >= 2 and lines[0].startswith('```') and lines[1].startswith('実践例：'):
+                is_practice_example = True
             
-            if has_table_pattern:
-                # This looks like an ASCII table, convert it to HTML
-                replacement = convert_ascii_table_to_html(block)
+            if is_practice_example:
+                # This is a practice example block
+                # Extract content without backticks
+                if lines[0].startswith('```'):
+                    lines = lines[1:]
+                if lines and lines[-1].strip() == '```':
+                    lines = lines[:-1]
+                
+                # Process the content to convert any ~~~ back to ``` for display
+                example_content = '\n'.join(lines)
+                example_content = example_content.replace('~~~', '```')
+                
+                # Process code blocks within the practice example
+                processed_content = []
+                current_pos = 0
+                
+                # Find all code blocks within the practice example
+                code_block_pattern = re.compile(r'```[^\n]*\n(.*?)```', re.DOTALL)
+                
+                for match in code_block_pattern.finditer(example_content):
+                    # Add content before this code block
+                    processed_content.append(example_content[current_pos:match.start()])
+                    
+                    # Check if this code block is an architecture diagram
+                    code_block_content = match.group(1)
+                    if is_architecture_diagram('```\n' + code_block_content + '\n```'):
+                        # Create a properly styled architecture diagram
+                        # Remove title and separator lines if present
+                        lines = code_block_content.strip().split('\n')
+                        
+                        # Remove title and separator lines
+                        cleaned_lines = []
+                        for line in lines:
+                            stripped = line.strip()
+                            # Skip title lines and separators
+                            if stripped == 'アーキテクチャ構成図' or stripped == '=' * len(stripped):
+                                continue
+                            cleaned_lines.append(line)
+                        
+                        # Join the cleaned content
+                        diagram_content = '\n'.join(cleaned_lines).strip()
+                        
+                        # Wrap in a div with fixed-width font and proper styling
+                        processed_content.append(f'''
+<div class="architecture-diagram" style="margin: 20px 0; background: #f8f8f8; padding: 15px; border-radius: 4px; overflow-x: auto;">
+<pre style="font-family: 'Consolas', 'Monaco', 'Courier New', Courier, monospace; font-size: 10px; line-height: 1.05; letter-spacing: -0.4px; margin: 0; white-space: pre;">{diagram_content}</pre>
+</div>''')
+                    else:
+                        # Keep as regular code block
+                        processed_content.append(match.group(0))
+                    
+                    current_pos = match.end()
+                
+                # Add remaining content
+                processed_content.append(example_content[current_pos:])
+                example_content = ''.join(processed_content)
+                
+                # Don't escape HTML entities for practice examples
+                # Just wrap in a special div with appropriate styling
+                replacement = f'''___PRACTICE_EXAMPLE_START___
+<div class="practice-example" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+<div style="font-family: monospace; white-space: pre-wrap; overflow-x: auto; margin: 0;">{example_content}</div>
+</div>
+___PRACTICE_EXAMPLE_END___'''
+            elif is_ascii_graph(block):
+                replacement = convert_ascii_graph_to_svg(block)
+            elif is_architecture_diagram(block):
+                # Keep architecture diagrams as preformatted text with proper styling
+                content_lines = block.strip('```').strip().split('\n')
+                
+                # Check if this is a wide diagram that needs special handling
+                # Check the actual width of all content lines (not stripped)
+                max_line_length = 0
+                for line in content_lines:
+                    # Skip title lines and separators but check everything else
+                    stripped = line.strip()
+                    if stripped and not (stripped == '=' * len(stripped)):
+                        # Use the actual line length, not stripped
+                        max_line_length = max(max_line_length, len(line))
+                
+                # Special handling for known wide diagrams
+                is_role_division_diagram = '人間の責任領域' in content and '協働領域' in content and 'AIの責任領域' in content
+                
+                is_wide_diagram = max_line_length > 90 or is_role_division_diagram  # Changed threshold to 90 for better detection
+                
+                
+                # Remove empty lines from the beginning
+                while content_lines and content_lines[0].strip() == '':
+                    content_lines = content_lines[1:]
+                
+                # Remove title and separator lines if present
+                while content_lines:
+                    first_line = content_lines[0].strip()
+                    # Check if this is a title line (contains text but no box-drawing chars)
+                    if first_line and not any(char in first_line for char in ['┌', '└', '│', '─', '┬', '┴', '├', '┤', '▼', '▲']):
+                        # This is likely a title, remove it
+                        content_lines = content_lines[1:]
+                    # Check if this is a separator line (only = or -)
+                    elif first_line and (set(first_line) <= set('=') or set(first_line) <= set('-')):
+                        # This is a separator, remove it
+                        content_lines = content_lines[1:]
+                    else:
+                        # This looks like actual diagram content, stop removing lines
+                        break
+                
+                arch_content = '\n'.join(content_lines)
+                # Escape HTML entities
+                arch_content = arch_content.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+                
+                # Use different styling for wide diagrams
+                if is_wide_diagram:
+                    # For wide diagrams, use smaller font and tighter spacing
+                    replacement = f'<div class="architecture-diagram wide-diagram" style="margin: 20px 0; background: #f8f8f8; padding: 15px; border-radius: 4px; overflow-x: auto;"><pre style="font-family: \'Consolas\', \'Monaco\', \'Courier New\', monospace; line-height: 1.0; white-space: pre; letter-spacing: -0.7px; font-size: 9px; margin: 0;">{arch_content}</pre></div>'
+                else:
+                    replacement = f'<div class="architecture-diagram"><pre style="font-family: monospace, \'Courier New\', Courier; line-height: 1.1; white-space: pre; overflow-x: auto; letter-spacing: -0.5px; font-size: 14px;">{arch_content}</pre></div>'
             else:
-                # Check if it's a tree/hierarchy structure
+                # Check if it's a hierarchy/tree structure
                 if is_hierarchy_structure(block):
                     # Keep as preformatted text with proper styling
                     content_lines = block.strip('```').strip().split('\n')
                     if content_lines and content_lines[0] and not any(char in content_lines[0] for char in ['│', '├', '└', '─']):
                         content_lines = content_lines[1:]
-                    content = '\n'.join(content_lines)
+                    hierarchy_content = '\n'.join(content_lines)
                     # Escape HTML entities
-                    content = content.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-                    replacement = f'<div class="hierarchy-diagram"><pre style="font-family: monospace; line-height: 1.4;">{content}</pre></div>'
-                # Check if it's a graph/chart in ASCII art
-                elif is_ascii_graph(block):
-                    # Convert ASCII graph to SVG
-                    logger.info(f"Converting ASCII graph to SVG...")
-                    replacement = convert_ascii_graph_to_svg(block)
+                    hierarchy_content = hierarchy_content.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+                    replacement = f'<div class="hierarchy-diagram"><pre style="font-family: monospace; line-height: 1.4;">{hierarchy_content}</pre></div>'
                 else:
-                    # Regular code block
-                    language_match = re.match(r'```(\w*)', block)
-                    if language_match:
-                        language = language_match.group(1) if language_match.group(1) else ''
-                        # Remove the backticks and language identifier
+                    # Check if it's a table in a code block
+                    code_content_lines = block.strip('```').strip().split('\n')
+                    # Check for ASCII table patterns
+                    has_table_pattern = False
+                    for line in code_content_lines:
+                        # Look for separator lines with pipes and dashes
+                        if re.match(r'^[\s\-|]+$', line) and '|' in line and '-' in line:
+                            has_table_pattern = True
+                            break
+                    
+                    if has_table_pattern:
+                        # This looks like an ASCII table, convert it to HTML
+                        replacement = convert_ascii_table_to_html(block)
+                    else:
+                        # Regular code block
+                        # Extract content without backticks
                         lines = block.split('\n')
-                        if lines[0].startswith('```'):
-                            lines = lines[1:]
+                        language = ''
+                        
+                        # Check for language identifier
+                        if lines and lines[0].startswith('```'):
+                            language_match = re.match(r'```(\w*)', lines[0])
+                            if language_match and language_match.group(1):
+                                language = language_match.group(1)
+                            lines = lines[1:]  # Remove first line with backticks
+                        
+                        # Remove closing backticks if present
                         if lines and lines[-1].strip() == '```':
                             lines = lines[:-1]
+                        
                         code_content = '\n'.join(lines)
-                    else:
-                        language = ''
-                        code_content = block
-                    
-                    # Preserve whitespace and formatting in code blocks
-                    # First escape HTML entities
-                    code_content = code_content.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-                    
-                    # For tree structures, ensure spacing is preserved
-                    if '├──' in code_content or '└──' in code_content or '│' in code_content:
-                        # Wrap in pre to strictly preserve formatting
-                        replacement = f'<pre style="white-space: pre; font-family: monospace;"><code class="language-{language}">{code_content}</code></pre>'
-                    else:
-                        replacement = f'<pre><code class="language-{language}">{code_content}</code></pre>'
+                        
+                        # Preserve whitespace and formatting in code blocks
+                        # First escape HTML entities
+                        code_content = code_content.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+                        
+                        # For tree structures, ensure spacing is preserved
+                        if '├──' in code_content or '└──' in code_content or '│' in code_content:
+                            # Wrap in pre to strictly preserve formatting
+                            replacement = f'<pre style="white-space: pre; font-family: monospace; overflow-x: auto;"><code class="language-{language}">{code_content}</code></pre>'
+                        else:
+                            # Regular code block with proper formatting (allow wrapping for long lines)
+                            replacement = f'<pre><code class="language-{language}">{code_content}</code></pre>'
         content = content.replace(f'___CODEBLOCK_{i}___', replacement)
     
+    
+    # Add paragraphs last, after all other processing
+    content = add_paragraphs(content)
+    
     return content
+
+def is_architecture_diagram(block: str) -> bool:
+    """Detect if a code block is an architecture diagram"""
+    content = block.strip()
+    if content.startswith('```'):
+        lines = content.split('\n')
+        if lines[0].startswith('```'):
+            lines = lines[1:]
+        if lines and lines[-1].strip() == '```':
+            lines = lines[:-1]
+        content = '\n'.join(lines)
+    
+    # Look for architecture diagram patterns
+    arch_patterns = [
+        '┌─', '└─', '├─', '┤',  # Box corners and edges
+        '┐', '┘', '┴', '┬',  # More box parts
+        '───', '│',  # Lines
+        '[',']',  # Component markers
+        'フロントエンド', 'バックエンド', 'API', 'サービス',  # Architecture terms
+        'Gateway', 'Service', 'Database', 'Redis', 'Kafka',  # Tech terms
+        '▼', '▲', '◄', '►',  # Arrow symbols
+        'アーキテクチャ構成図', '====================',  # Specific architecture diagram markers
+        '永続化', 'キャッシュ', 'メッセージング',  # Data store descriptions
+    ]
+    
+    # Additional check for diagram-like structures
+    has_multi_box = content.count('┌') >= 2 or content.count('[') >= 3
+    has_arrows = '▼' in content or '►' in content or '→' in content
+    
+    # Check if it looks like an architecture diagram
+    pattern_count = sum(1 for pattern in arch_patterns if pattern in content)
+    has_boxes = '┌' in content and '┘' in content
+    has_components = '[' in content and ']' in content
+    has_arch_title = 'アーキテクチャ構成図' in content
+    
+    return (pattern_count >= 5 and (has_boxes or has_components)) or has_arch_title or (has_multi_box and has_arrows)
 
 def is_hierarchy_structure(block: str) -> bool:
     """Detect if a code block is a hierarchy/tree structure"""
@@ -747,12 +1000,17 @@ def is_hierarchy_structure(block: str) -> bool:
         'VMS', # Specific content patterns
         'OKR',
         'Objective',
-        'Key Results'
+        'Key Results',
+        'VL1', 'VL2', 'VL3', # Value levels
+        '価値トレーサビリティ', # Specific Japanese terms
+        '━━━' # Horizontal lines used in diagrams
     ]
     
     # Check if multiple tree patterns exist
     pattern_count = sum(1 for pattern in tree_patterns if pattern in content)
-    return pattern_count >= 3
+    # Also check it's not an architecture diagram
+    is_not_arch = not is_architecture_diagram(block)
+    return pattern_count >= 3 and is_not_arch
 
 def is_ascii_graph(block: str) -> bool:
     """Detect if a code block is an ASCII graph/chart"""
@@ -957,22 +1215,32 @@ def convert_ascii_tables_in_text(content: str) -> str:
             '|' in lines[i + 1] and 
             re.match(r'^[\s\-|]+$', lines[i + 1])):
             
-            # Found a potential ASCII table
-            table_lines = [lines[i]]
-            i += 1
+            # Check if this looks like a hierarchy structure (not a table)
+            is_hierarchy = False
+            if any(pattern in lines[i] for pattern in ['├─', '└─', '│']):
+                is_hierarchy = True
             
-            # Collect separator line
-            table_lines.append(lines[i])
-            i += 1
-            
-            # Collect data rows
-            while i < len(lines) and '|' in lines[i] and lines[i].strip():
+            if not is_hierarchy:
+                # Found a potential ASCII table
+                table_lines = [lines[i]]
+                i += 1
+                
+                # Collect separator line
                 table_lines.append(lines[i])
                 i += 1
-            
-            # Convert to HTML table
-            html_table = convert_ascii_table_lines_to_html(table_lines)
-            result.append(html_table)
+                
+                # Collect data rows
+                while i < len(lines) and '|' in lines[i] and lines[i].strip():
+                    table_lines.append(lines[i])
+                    i += 1
+                
+                # Convert to HTML table
+                html_table = convert_ascii_table_lines_to_html(table_lines)
+                result.append(html_table)
+            else:
+                # Skip hierarchy structures
+                result.append(lines[i])
+                i += 1
         else:
             result.append(lines[i])
             i += 1
@@ -1345,17 +1613,49 @@ def process_hierarchy_blockquote(lines, start_index):
 
 def add_paragraphs(content: str) -> str:
     """Add paragraph tags to plain text blocks"""
+    # First, protect practice example blocks from paragraph processing
+    practice_blocks = []
+    def protect_practice_block(match):
+        practice_blocks.append(match.group(0))
+        return f'___PROTECTED_PRACTICE_{len(practice_blocks)-1}___'
+    
+    content = re.sub(r'___PRACTICE_EXAMPLE_START___.*?___PRACTICE_EXAMPLE_END___', 
+                     protect_practice_block, content, flags=re.DOTALL)
+    
     paragraphs = content.split('\n\n')
     result = []
     
     for para in paragraphs:
         para = para.strip()
-        if para and not para.startswith('<') and not re.match(r'^___\w+___', para):
-            result.append(f'<p>{para}</p>')
+        # Skip if it's already an HTML tag, a placeholder, or contains diagram markers
+        if (para and 
+            not para.startswith('<') and 
+            not re.match(r'^___\w+_\d+___', para) and  # Better pattern for placeholders
+            not '___CODEBLOCK_' in para and  # Skip code block placeholders
+            not '___PROTECTED_PRACTICE_' in para and  # Skip protected practice blocks
+            not '=====================' in para and  # Skip diagram separators
+            not 'アーキテクチャ構成図' in para and  # Skip architecture diagram titles
+            not all(c in '─│┌┐└┘├┤┬┴┼━' for c in para.replace(' ', '').replace('\n', ''))  # Skip ASCII art lines
+        ):
+            # Check if the paragraph contains ASCII art patterns
+            if any(pattern in para for pattern in ['┌─', '└─', '│', '├─', '▼', '▲']):
+                # This looks like ASCII art, don't wrap in <p>
+                result.append(para)
+            else:
+                result.append(f'<p>{para}</p>')
         else:
             result.append(para)
     
-    return '\n\n'.join(result)
+    content = '\n\n'.join(result)
+    
+    # Restore practice blocks
+    for i, block in enumerate(practice_blocks):
+        # Remove the markers from the restored content
+        block = block.replace('___PRACTICE_EXAMPLE_START___\n', '')
+        block = block.replace('\n___PRACTICE_EXAMPLE_END___', '')
+        content = content.replace(f'___PROTECTED_PRACTICE_{i}___', block)
+    
+    return content
 
 def generate_pdf(output_dir):
     """Try to generate PDF from HTML"""

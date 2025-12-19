@@ -136,17 +136,24 @@
             border-radius: 5px;
             overflow-x: auto;
             border-left: 4px solid #01579b;
-            white-space: pre;
+            white-space: pre-wrap;
+            word-break: break-word;
             font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
             font-size: 0.9em;
             line-height: 1.4;
+            max-width: 100%;
+            display: block;
         }
         
         pre code {
-            white-space: pre;
+            white-space: pre-wrap;
+            word-break: break-word;
             font-family: inherit;
             font-size: inherit;
             line-height: inherit;
+            background: transparent;
+            padding: 0;
+            display: block;
         }
         
         blockquote {
@@ -212,6 +219,8 @@
             background: transparent;
             border: none;
             color: #333;
+            white-space: pre !important;
+            overflow-x: auto;
         }
         
         .hierarchy-box {
@@ -247,6 +256,73 @@
             border-left: 2px solid #64b5f6;
             border-radius: 4px;
         }
+        
+        .architecture-diagram {
+            margin: 20px auto;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 25px;
+            overflow-x: auto;
+            max-width: 900px;
+        }
+        
+        /* CSS-based architecture diagram styles */
+        .architecture-diagram-css {
+            font-family: sans-serif;
+            margin: 20px 0;
+        }
+        
+        .architecture-diagram-css .arch-layer {
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            text-align: center;
+        }
+        
+        .architecture-diagram-css h3 {
+            margin: 0 0 15px 0;
+            color: #01579b;
+            font-size: 1.1em;
+        }
+        
+        .architecture-diagram-css .arch-components {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .architecture-diagram-css .component {
+            background: #e3f2fd;
+            border: 1px solid #1976d2;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 0.95em;
+        }
+        
+        .architecture-diagram-css .arrow-down {
+            text-align: center;
+            font-size: 20px;
+            color: #666;
+            margin: 5px 0;
+        }
+        
+        .architecture-diagram-css .arrow-down::after {
+            content: "▼";
+        }
+        
+        .architecture-diagram pre {
+            white-space: pre !important;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.0;
+            margin: 0;
+            color: #333;
+            letter-spacing: -0.5px;
+        }
     </style>
 </head>
 <body>
@@ -256,7 +332,7 @@
             <div class="subtitle">価値駆動による実践的システム設計</div>
             <div class="meta">
                 <p>Book Version 2.0.0 | Diagrams v5.0</p>
-                <p>Generated: 2025-12-18 23:59 JST</p>
+                <p>Generated: 2025-12-19 10:15 JST</p>
                 <p>著者: Parasol Team</p>
             </div>
         </div>
@@ -907,43 +983,18 @@ API/データ: AD3-2-1-api（在庫確認API）
 
 <p>例：「現場→部門→全社」「店舗→地域→本部」「個人→チーム→組織」</p>
 
-<table>
-<thead>
-<tr>
-<th>6軸システム</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>軸</td>
-<td>問い（分析の焦点）</td>
-</tr>
-<tr>
-<td>capability-axis</td>
-<td>何ができるか？（能力）</td>
-</tr>
-<tr>
-<td>business-unit-axis</td>
-<td>誰が担うか？（組織）</td>
-</tr>
-<tr>
-<td>value-axis</td>
-<td>どんな価値か？（成果）</td>
-</tr>
-<tr>
-<td>platform-axis</td>
-<td>何が支えるか？（基盤）</td>
-</tr>
-<tr>
-<td>fusion-axis</td>
-<td>組み合わせ効果は？（融合）</td>
-</tr>
-<tr>
-<td>multi-tier-vstr-axis</td>
-<td>どう積み上がるか？（階層）</td>
-</tr>
-</tbody>
-</table>
+<div class="architecture-diagram"><pre style="font-family: monospace, 'Courier New', Courier; line-height: 1.1; white-space: pre; overflow-x: auto; letter-spacing: -0.5px; font-size: 14px;">┌────────────────────────────────────────────────────────────┐
+│                    6軸システム                              │
+├──────────────────────┬─────────────────────────────────────┤
+│ 軸                   │ 問い（分析の焦点）                   │
+├──────────────────────┼─────────────────────────────────────┤
+│ capability-axis      │ 何ができるか？（能力）               │
+│ business-unit-axis   │ 誰が担うか？（組織）                 │
+│ value-axis           │ どんな価値か？（成果）               │
+│ platform-axis        │ 何が支えるか？（基盤）               │
+│ fusion-axis          │ 組み合わせ効果は？（融合）           │
+│ multi-tier-vstr-axis │ どう積み上がるか？（階層）           │
+└──────────────────────┴─────────────────────────────────────┘</pre></div>
 
 <h3>軸の組み合わせによる発見</h3>
 
@@ -1214,14 +1265,14 @@ API/データ: AD3-2-1-api（在庫確認API）
    - 地域密着型相談サービス
    - 中小企業向け融資判断
 
-   Supporting傾向（必要だが差別化にならない）:
+<p>Supporting傾向（必要だが差別化にならない）:
    - 口座管理
-   - 決済処理
+   - 決済処理</p>
 
-   Generic傾向（汎用的）:
+<p>Generic傾向（汎用的）:
    - 認証・認可
    - 帳票出力</code></pre>
-   ※CL1の分類は参考情報。CL2で個別に正式分類される。
+   ※CL1の分類は参考情報。CL2で個別に正式分類される。</p>
 
 <ol>
 <li value="2"><strong>ケイパビリティ設計（CL2）- 正式分類（投資判断の根拠）</strong></li>
@@ -1279,9 +1330,7 @@ API/データ: AD3-2-1-api（在庫確認API）
 <ol>
 <li value="1"><strong>レイヤー構成の決定（AR1）</strong></li>
 </ol>
-   <pre><code>```
-   プレゼンテーション層
-   ├── Web（React）
+   <div class="hierarchy-diagram"><pre style="font-family: monospace; line-height: 1.4;">   ├── Web（React）
    ├── Mobile（React Native）
    └── 行員向け管理画面
    
@@ -1298,8 +1347,7 @@ API/データ: AD3-2-1-api（在庫確認API）
    インフラ層
    ├── データベース
    ├── メッセージング
-   └── 外部連携
-   ```</code></pre>
+   └── 外部連携</pre></div>
 
 <ol>
 <li value="2"><strong>サービス設計（AR2）</strong></li>
@@ -1523,13 +1571,13 @@ API/データ: AD3-2-1-api（在庫確認API）
   Phase 0-1: 共通実施
   Phase 2-7: 顧客管理に特化して実施
 
-チームB: 商品管理領域  
+<p>チームB: 商品管理領域  
   Phase 0-1: 共通実施
-  Phase 2-7: 商品管理に特化して実施
+  Phase 2-7: 商品管理に特化して実施</p>
 
-統合チーム:
+<p>統合チーム:
   各チームのPhase 3完了後に統合ポイントを調整
-  Phase 5でAPI仕様を統一</code></pre>
+  Phase 5でAPI仕様を統一</code></pre></p>
 
 <p>このように、領域ごとに並行して進めながら、重要なポイントで統合を図ります。</p>
 
@@ -1718,10 +1766,10 @@ API/データ: AD3-2-1-api（在庫確認API）
             ↓ これは組織の志（HOW）
             ↓ 直接的にAPIやDBは設計できない
 
-Parasol VL3: 「糖質30%オフビール」「機能性表示食品」
+<p>Parasol VL3: 「糖質30%オフビール」「機能性表示食品」
             ↓ これは顧客への提供物（WHAT）
             ↓ VL3 → VMS → VS → CL → BC → UseCase → API/DB
-            ↓ 完全にトレース可能で、実装に落とし込める</code></pre>
+            ↓ 完全にトレース可能で、実装に落とし込める</code></pre></p>
 
 <p>Core Valuesの「誠実さ」からAPIは設計できませんが、VL3の「糖質30%オフ製品のパーソナライズ提案」からは設計できます。</p>
 
@@ -1830,10 +1878,7 @@ A: 購買の不安が減って、返品率が下がるはずです。
 
 <p>V5の価値トレーサビリティは、この「価値の変質」を防ぎます：</p>
 
-<pre><code>```
-価値トレーサビリティの階層構造
-================================
-
+<div class="architecture-diagram"><pre style="font-family: monospace, 'Courier New', Courier; line-height: 1.1; white-space: pre; overflow-x: auto; letter-spacing: -0.5px; font-size: 14px;">
   [価値ストリーム]        ← 最上位：ビジネス価値
        購買判断支援
            │
@@ -1854,11 +1899,10 @@ A: 購買の不安が減って、返品率が下がるはずです。
     POST /reviews
     GET /products/{id}/reviews
 
-  ・・・・・・・・・・・・・・・・・・・
+<p>・・・・・・・・・・・・・・・・・・・
   :  価値の純度を保つ             :
   :  （各層で「なぜ必要か」を検証） :
-  ・・・・・・・・・・・・・・・・・・・
-```</code></pre>
+  ・・・・・・・・・・・・・・・・・・・</pre></div></p>
 
 <p>各レベルで「なぜこれが必要か」を明確にし、最初の価値（購買判断支援）から逸脱していないかを常にチェックします。</p>
 
@@ -1928,9 +1972,9 @@ A: 購買の不安が減って、返品率が下がるはずです。
 → 問題：在庫は倉庫や調達など、注文以外からも影響を受ける
 → 結論：境界として不適切
 
-境界B：注文と在庫を分離
+<p>境界B：注文と在庫を分離
 → 利点：それぞれの関心事に集中できる
-→ 結論：より自然な境界</code></pre>
+→ 結論：より自然な境界</code></pre></p>
 
 <h4>2. この構造でなければ実現できないか？</h4>
 
@@ -1939,8 +1983,8 @@ A: 購買の不安が減って、返品率が下がるはずです。
 <pre><code class="language-">構造A：定期的なバッチ更新
 → 問題：「在庫あり」表示なのに売り切れる
 
-構造B：イベント駆動更新
-→ 必然性：リアルタイム性の要求から必然的に導かれる</code></pre>
+<p>構造B：イベント駆動更新
+→ 必然性：リアルタイム性の要求から必然的に導かれる</code></pre></p>
 
 <h4>3. ビジネスがこう言うだろうか？</h4>
 
@@ -1949,10 +1993,10 @@ A: 購買の不安が減って、返品率が下がるはずです。
 <pre><code class="language-">技術的な表現：
 「チケット管理サービス」「SLA監視サービス」
 
-ビジネスの表現：
-「顧客問題解決」「顧客満足度向上」
+<p>ビジネスの表現：
+「顧客問題解決」「顧客満足度向上」</p>
 
-→ 後者の方が本質的で必然的</code></pre>
+<p>→ 後者の方が本質的で必然的</code></pre></p>
 
 <h3>コンウェイの法則を味方にする</h3>
 
@@ -2033,19 +2077,19 @@ class Repository(Generic[T]):
     def find(self, specification: Specification[T]) -&gt; List[T]:
         return self._apply_specification(specification)
 
-class AndSpecification(Specification[T]):
+<p>class AndSpecification(Specification[T]):
     def __init__(self, *specs: Specification[T]):
         self.specs = specs
     
     def is_satisfied_by(self, candidate: T) -&gt; bool:
-        return all(spec.is_satisfied_by(candidate) for spec in self.specs)
+        return all(spec.is_satisfied_by(candidate) for spec in self.specs)</p>
 
-# 実用的なコード
+<p># 実用的なコード
 class CustomerRepository:
     def find_active_premium_customers(self) -&gt; List[Customer]:
         return self.db.query(
             "SELECT * FROM customers WHERE status = 'active' AND tier = 'premium'"
-        )</code></pre>
+        )</code></pre></p>
 
 <p>どちらが良いでしょうか？</p>
 
@@ -2166,30 +2210,43 @@ ROI明確         ROI不確実</code></pre>
 
 <strong>価値の減衰曲線</strong>：
 
-<table>
-<thead>
-<tr>
-<th>リリース時の価値</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>╱╲</td>
-</tr>
-<tr>
-<td>╱  ╲___</td>
-</tr>
-<tr>
-<td>╱        ╲___  ← 保守されないシステム</td>
-</tr>
-<tr>
-<td>╱             ╲___</td>
-</tr>
-<tr>
-<td>╱    継続的改善 → ═══════  ← 価値を保つ</td>
-</tr>
-</tbody>
-</table>
+<div class="diagram-container" style="margin: 30px 0; text-align: center;">
+    <svg width="500" height="300" viewBox="0 0 500 300" style="border: 1px solid #ddd; background: #fff;">
+        <!-- Title -->
+        <text x="250" y="20" text-anchor="middle" font-size="16" font-weight="bold">価値の減衰曲線</text>
+        
+        <!-- Axes -->
+        <line x1="50" y1="250" x2="450" y2="250" stroke="#333" stroke-width="2" />
+        <line x1="50" y1="250" x2="50" y2="50" stroke="#333" stroke-width="2" />
+        
+        <!-- Arrow heads -->
+        <polygon points="450,250 440,245 440,255" fill="#333" />
+        <polygon points="50,50 45,60 55,60" fill="#333" />
+        
+        <!-- Axis labels -->
+        <text x="250" y="280" text-anchor="middle" font-size="14">時間</text>
+        <text x="20" y="150" text-anchor="middle" font-size="14" transform="rotate(-90, 20, 150)">価値</text>
+        
+        <!-- Decay curve (no maintenance) -->
+        <path d="M 50,100 Q 150,100 200,150 T 350,230" 
+              stroke="#dc3545" stroke-width="2" fill="none" stroke-dasharray="5,5" />
+        
+        <!-- Maintained value line -->
+        <line x1="50" y1="100" x2="350" y2="100" stroke="#28a745" stroke-width="3" />
+        
+        <!-- Labels -->
+        <text x="100" y="90" font-size="12" fill="#333">リリース時の価値</text>
+        <text x="300" y="90" font-size="12" fill="#28a745">継続的改善 →</text>
+        <text x="280" y="210" font-size="12" fill="#dc3545">保守されないシステム</text>
+        
+        <!-- Legend -->
+        <line x1="320" y1="140" x2="350" y2="140" stroke="#28a745" stroke-width="3" />
+        <text x="355" y="145" font-size="11">価値を保つ</text>
+        
+        <line x1="320" y1="160" x2="350" y2="160" stroke="#dc3545" stroke-width="2" stroke-dasharray="5,5" />
+        <text x="355" y="165" font-size="11">価値が減衰</text>
+    </svg>
+</div>
 
 <strong>価値を保つ3つの活動</strong>：
 
@@ -2254,12 +2311,12 @@ ROI明確         ROI不確実</code></pre>
 <pre><code class="language-python"># 技術視点のメッセージ
 raise ValueError("Invalid parameter: user_id must be positive integer")
 
-# 価値視点のメッセージ
+<p># 価値視点のメッセージ
 raise ValueError(
     "ユーザーIDが正しくありません。"
     "もう一度ログインしてお試しください。"
     "問題が続く場合は、お問い合わせください。"
-)</code></pre>
+)</code></pre></p>
 
 <p>ユーザーにとっての価値（問題を解決して先に進める）を考えると、自然と後者になります。</p>
 
@@ -2570,10 +2627,10 @@ B. 検索専用サービスが最も必然的
 <pre><code class="language-">販売コンテキスト：
   「顧客」= 購入者、クレジットカード情報を持つ
 
-サポートコンテキスト：
-  「顧客」= 問い合わせ者、サポート履歴を持つ
+<p>サポートコンテキスト：
+  「顧客」= 問い合わせ者、サポート履歴を持つ</p>
 
-→ 同じ「顧客」でも、文脈によって意味が変わることを認める</code></pre>
+<p>→ 同じ「顧客」でも、文脈によって意味が変わることを認める</code></pre></p>
 
 <strong>集約（Aggregate）</strong>
 <pre><code class="language-">注文集約 {
@@ -2610,7 +2667,7 @@ class Order {
     }
 }
 
-// 現実のコード
+<p>// 現実のコード
 class OrderService {
     @Transactional
     public OrderDTO placeOrder(OrderRequest request) {
@@ -2622,7 +2679,7 @@ class OrderService {
         // エラーハンドリング
         // ... 技術的関心事で埋もれるビジネスロジック
     }
-}</code></pre>
+}</code></pre></p>
 
 <h4>3. 文化的障壁</h4>
 
@@ -2681,27 +2738,14 @@ class OrderService {
 
 <strong>重要な設計原則</strong>
 
-<table>
-<thead>
-<tr>
-<th>CL1の分類はCL2に継承されない</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>CL1: 傾向的分類（参考情報のみ）</td>
-</tr>
-<tr>
-<td>CL2: 独立した再評価（投資判断の正式な根拠）</td>
-</tr>
-<tr>
-<td>CL3: 分類なし（網羅性を重視、業務オペレーションを定義）</td>
-</tr>
-<tr>
-<td>Phase 4-5: CL3を基にBounded Contextの境界確定と実装設計</td>
-</tr>
-</tbody>
-</table>
+<div class="architecture-diagram"><pre style="font-family: monospace, 'Courier New', Courier; line-height: 1.1; white-space: pre; overflow-x: auto; letter-spacing: -0.5px; font-size: 14px;">┌─────────────────────────────────────────────────────────────┐
+│ CL1の分類はCL2に継承されない                                 │
+│ ─────────────────────────────────────────────────────────── │
+│ CL1: 傾向的分類（参考情報のみ）                               │
+│ CL2: 独立した再評価（投資判断の正式な根拠）                   │
+│ CL3: 分類なし（網羅性を重視、業務オペレーションを定義）       │
+│ Phase 4-5: CL3を基にBounded Contextの境界確定と実装設計      │
+└─────────────────────────────────────────────────────────────┘</pre></div>
 
 <strong>なぜこの構造が重要か？</strong>
 
@@ -2721,13 +2765,18 @@ class OrderService {
 
 <p>Phase 4-5で定義されたBounded Contextには、<strong>パラソルドメイン言語</strong>が適用されます。</p>
 
-<table>
-<thead>
-<tr>
-<th>Phase 4-5で境界確定</th>
-</tr>
-</thead>
-</table>
+<div class="hierarchy-diagram"><pre style="font-family: monospace; line-height: 1.4;">  │ Phase 4-5で境界確定
+  ▼
+Bounded Context
+  │
+  ├─ Aggregate（集約）
+  ├─ Value Object（値オブジェクト）
+  ├─ Domain Event（ドメインイベント）
+  ├─ Domain Service（ドメインサービス）
+  └─ Repository（リポジトリ）
+  │
+  ▼
+UI / API / DB（実装）</pre></div>
 
 <p>パラソルドメイン言語は、DDDの戦術的パターンを<strong>アーキテクチャ非依存</strong>で定義し、そこからUI/API/DBのコードを生成します。</p>
 
@@ -3015,21 +3064,21 @@ class OrderAggregate:
 <strong>Claude Codeとの対話</strong>：
 <pre><code class="language-">あなた：在庫引当のルールは、注文集約と在庫集約、どちらに入れるべきでしょうか？
 
-Claude：在庫引当のルールを分析しましょう。
+<p>Claude：在庫引当のルールを分析しましょう。</p>
 
-責任の観点：
+<p>責任の観点：
 - 注文：「何を」「いくつ」引き当てるか
-- 在庫：「引当可能か」「どう引き当てるか」
+- 在庫：「引当可能か」「どう引き当てるか」</p>
 
-凝集性の観点：
+<p>凝集性の観点：
 - 引当ロジックが変わっても注文は変わらない
-- 引当方式は在庫管理の関心事
+- 引当方式は在庫管理の関心事</p>
 
-推奨：在庫集約に配置
-理由：引当は在庫の一貫性に関わる中核的な責任
+<p>推奨：在庫集約に配置
+理由：引当は在庫の一貫性に関わる中核的な責任</p>
 
-実装例：
-[具体的なコード例を提示]</code></pre>
+<p>実装例：
+[具体的なコード例を提示]</code></pre></p>
 
 <p>AIが、DDDの原則に基づいて、具体的な判断をサポートします。</p>
 
@@ -3039,21 +3088,21 @@ Claude：在庫引当のルールを分析しましょう。
 
 <pre><code class="language-">あなた：ユーザー認証情報は値オブジェクトにすべきですか？
 
-Claude：ユーザー認証情報の特性を確認しましょう。
+<p>Claude：ユーザー認証情報の特性を確認しましょう。</p>
 
-値オブジェクトの条件：
+<p>値オブジェクトの条件：
 1. 不変性 → パスワード変更があるので✗
 2. 概念的な全体性 → 認証情報は独立した概念○
-3. 交換可能性 → 更新はあるが交換ではない△
+3. 交換可能性 → 更新はあるが交換ではない△</p>
 
-推奨：エンティティとして扱う
+<p>推奨：エンティティとして扱う
 理由：
 - ライフサイクルを持つ（作成→更新→無効化）
 - 監査証跡が必要
-- 一意性が重要（同一ユーザーの認証情報）
+- 一意性が重要（同一ユーザーの認証情報）</p>
 
-ただし、パスワードハッシュは値オブジェクトに：
-[実装例]</code></pre>
+<p>ただし、パスワードハッシュは値オブジェクトに：
+[実装例]</code></pre></p>
 
 <h3>継続的なモデル改善</h3>
 
@@ -3065,21 +3114,21 @@ Claude：ユーザー認証情報の特性を確認しましょう。
 - 在庫の部分引当ニーズが発生
 - 配送日指定の要望増加
 
-Claude：モデルの進化を提案します。
+<p>Claude：モデルの進化を提案します。</p>
 
-1. 注文変更への対応
+<p>1. 注文変更への対応
    - イベントソーシングの部分適用
-   - 変更履歴の永続化
+   - 変更履歴の永続化</p>
 
-2. 在庫の部分引当
+<p>2. 在庫の部分引当
    - 引当単位の細分化
-   - 引当状態の詳細化
+   - 引当状態の詳細化</p>
 
-3. 配送オプションの拡張
+<p>3. 配送オプションの拡張
    - 配送ポリシーの外部化
-   - ストラテジーパターンの適用
+   - ストラテジーパターンの適用</p>
 
-[各提案の詳細設計]</code></pre>
+<p>[各提案の詳細設計]</code></pre></p>
 
 <h2>V5×DDD：新しい設計プロセス</h2>
 
@@ -4068,33 +4117,33 @@ Claude：モデルの進化を提案します。
 
 <pre><code class="language-">あなた：企業の公開情報から、ビジネスモデルと課題を分析してください。
 
-Claude Code：ウェブサイトと公開資料を分析します。
+<p>Claude Code：ウェブサイトと公開資料を分析します。</p>
 
-[企業サイト、IR情報、ニュースリリースを自動収集]
+<p>[企業サイト、IR情報、ニュースリリースを自動収集]</p>
 
-分析結果：
+<p>分析結果：
 1. ビジネスモデル
    - B2B専門商社（工業用部品）
    - 売上構成：商品販売70%、技術サービス30%
-   - 主要顧客：自動車、電機、機械メーカー
+   - 主要顧客：自動車、電機、機械メーカー</p>
 
-2. 最近の動向
+<p>2. 最近の動向
    - 3年連続で売上微減（-2%/年）
    - 「デジタル変革推進」を中期計画に明記
-   - 若手人材の採用強化
+   - 若手人材の採用強化</p>
 
-3. 推測される課題
+<p>3. 推測される課題
    - レガシーシステムによる業務効率の低下
    - 競合のデジタル化による差別化の喪失
-   - ベテラン依存の属人的業務
+   - ベテラン依存の属人的業務</p>
 
-4. 注目すべきポイント
+<p>4. 注目すべきポイント
    - 社長メッセージで「顧客対応スピード」を5回言及
    - 採用ページで「DX人材」を強調
-   - 決算説明で「システム投資」が3年連続増加
+   - 決算説明で「システム投資」が3年連続増加</p>
 
-これらの情報から、Phase 1で深掘りすべき領域：
-[具体的な調査項目のリスト]</code></pre>
+<p>これらの情報から、Phase 1で深掘りすべき領域：
+[具体的な調査項目のリスト]</code></pre></p>
 
 <h3>ステークホルダー分析の深化</h3>
 
@@ -4102,31 +4151,31 @@ Claude Code：ウェブサイトと公開資料を分析します。
 
 <pre><code class="language-">あなた：組織図と議事録から、真の意思決定構造を分析してください。
 
-Claude Code：提供された資料を分析します。
+<p>Claude Code：提供された資料を分析します。</p>
 
-発見したパターン：
+<p>発見したパターン：</p>
 
-1. 公式の決定フロー vs 実態
+<p>1. 公式の決定フロー vs 実態
    公式：部長会議 → 役員会
-   実態：営業本部長が事前調整 → 形式的承認
+   実態：営業本部長が事前調整 → 形式的承認</p>
 
-2. キーパーソン分析
+<p>2. キーパーソン分析
    - 営業本部長：全ての議題に関与（発言率35%）
    - 技術部長：反対すると通らない（拒否権的存在）
-   - 若手の企画課長：新規提案の8割を起案
+   - 若手の企画課長：新規提案の8割を起案</p>
 
-3. 意思決定の特徴
+<p>3. 意思決定の特徴
    - 「前例」という単語が議事録に平均12回/回
    - 新規提案の承認率：部長提案80%、課長提案20%
-   - 決定までの平均期間：通常案件2週間、新規案件1.5ヶ月
+   - 決定までの平均期間：通常案件2週間、新規案件1.5ヶ月</p>
 
-4. 推奨アプローチ
+<p>4. 推奨アプローチ
    - 営業本部長を早期に味方につける
    - 技術部長の懸念を先回りして解消
-   - 若手企画課長を推進チームに引き入れる
+   - 若手企画課長を推進チームに引き入れる</p>
 
-注意点：
-[組織文化に基づく注意事項]</code></pre>
+<p>注意点：
+[組織文化に基づく注意事項]</code></pre></p>
 
 <h3>リスクの早期発見</h3>
 
@@ -4134,11 +4183,11 @@ Claude Code：提供された資料を分析します。
 
 <pre><code class="language-">あなた：このプロジェクトの潜在的リスクを網羅的に洗い出してください。
 
-Claude Code：プロジェクト情報を分析し、多角的にリスクを評価します。
+<p>Claude Code：プロジェクト情報を分析し、多角的にリスクを評価します。</p>
 
-リスクカテゴリ別分析：
+<p>リスクカテゴリ別分析：</p>
 
-1. 技術的リスク
+<p>1. 技術的リスク
    ☆高リスク：
    - COBOLシステムとのリアルタイム連携
    - 15年分のデータ移行（形式不統一）
@@ -4146,20 +4195,20 @@ Claude Code：プロジェクト情報を分析し、多角的にリスクを評
 2. 組織的リスク
    ☆高リスク：
    - 経理部長の定年退職（来年3月）
-   - 繁忙期（3月）とリリース時期の重複
+   - 繁忙期（3月）とリリース時期の重複</p>
 
-3. 外部要因リスク
+<p>3. 外部要因リスク
    ☆中リスク：
    - 電子帳簿保存法の改正対応
-   - 主要顧客の基幹システム更新
+   - 主要顧客の基幹システム更新</p>
 
-4. 見落とされがちなリスク
+<p>4. 見落とされがちなリスク
    - 既存Excelマクロに依存した業務（文書化なし）
    - ベテラン社員の暗黙知（マニュアル化されていない例外処理）
-   - 地方拠点の通信環境（本社の1/10の帯域）
+   - 地方拠点の通信環境（本社の1/10の帯域）</p>
 
-リスク対策マトリクス：
-[影響度×発生確率で整理した対策案]</code></pre>
+<p>リスク対策マトリクス：
+[影響度×発生確率で整理した対策案]</code></pre></p>
 
 <h2>Phase 0-1の実践的テクニック</h2>
 
@@ -4515,40 +4564,17 @@ Claude Code：プロジェクト情報を分析し、多角的にリスクを評
 
 <p>これらは<strong>WHAT（何を届けるか）</strong>を規定し、顧客理解の深化により<strong>進化（深化）</strong>していきます。</p>
 
-<table>
-<thead>
-<tr>
-<th>企業価値体系</th>
-<th>パラソル価値</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>(HOW: どう振る舞うか)</td>
-<td>(WHAT: 何を届けるか)</td>
-</tr>
-<tr>
-<td>Vision: 「健康で豊かな社会」</td>
-<td>VL1: 「健康価値の提供」</td>
-</tr>
-<tr>
-<td>Mission: 「食を通じて幸せを」</td>
-<td>VL2: 「低糖質商品群」</td>
-</tr>
-<tr>
-<td>Values: 「品質へのこだわり」</td>
-<td>VL3: 「糖質30%オフビール」</td>
-</tr>
-<tr>
-<td>★ 10年以上不変</td>
-<td>★ 顧客理解と共に深化</td>
-</tr>
-<tr>
-<td>★ 組織文化の土台</td>
-<td>★ 設計判断の直接的根拠</td>
-</tr>
-</tbody>
-</table>
+<div class="architecture-diagram"><pre style="font-family: monospace, 'Courier New', Courier; line-height: 1.1; white-space: pre; overflow-x: auto; letter-spacing: -0.5px; font-size: 14px;">┌────────────────────────────────────────────────────────────────┐
+│  企業価値体系                 │  パラソル価値                  │
+│  (HOW: どう振る舞うか)        │  (WHAT: 何を届けるか)          │
+├────────────────────────────────────────────────────────────────┤
+│  Vision: 「健康で豊かな社会」  │  VL1: 「健康価値の提供」       │
+│  Mission: 「食を通じて幸せを」 │  VL2: 「低糖質商品群」         │
+│  Values: 「品質へのこだわり」  │  VL3: 「糖質30%オフビール」    │
+├────────────────────────────────────────────────────────────────┤
+│  ★ 10年以上不変               │  ★ 顧客理解と共に深化          │
+│  ★ 組織文化の土台             │  ★ 設計判断の直接的根拠        │
+└────────────────────────────────────────────────────────────────┘</pre></div>
 
 <strong>なぜこの区別が重要か？</strong>
 
@@ -5066,34 +5092,34 @@ Claude Code：プロジェクト情報を分析し、多角的にリスクを評
 
 <pre><code class="language-">あなた：弊社の受注システムで、まだ発見できていない価値を探してください。
 
-Claude Code：受注データと関連情報を分析します。
+<p>Claude Code：受注データと関連情報を分析します。</p>
 
-[データ分析実行]
+<p>[データ分析実行]</p>
 
-隠れた価値の発見：
+<p>隠れた価値の発見：</p>
 
-1. 予測価値
+<p>1. 予測価値
    現状：受注後に在庫確認
    発見：受注パターンから3日後の需要を85%の精度で予測可能
-   価値：先行手配により納期を2日短縮、緊急配送コスト年間3000万円削減
+   価値：先行手配により納期を2日短縮、緊急配送コスト年間3000万円削減</p>
 
-2. 関係性価値  
+<p>2. 関係性価値  
    現状：顧客を個別に管理
    発見：発注パターンから企業間の関連性を検出
-   価値：グループ提案により受注額30%向上の可能性
+   価値：グループ提案により受注額30%向上の可能性</p>
 
-3. タイミング価値
+<p>3. タイミング価値
    現状：顧客からの発注を待つ
    発見：過去データから「発注忘れ」パターンを特定
-   価値：プロアクティブな提案で失注を年間5000万円防止
+   価値：プロアクティブな提案で失注を年間5000万円防止</p>
 
-4. 異常検知価値
+<p>4. 異常検知価値
    現状：クレーム後に対応
    発見：通常と異なる発注パターンから問題を事前検知
-   価値：顧客満足度の低下を未然に防止
+   価値：顧客満足度の低下を未然に防止</p>
 
-実現のための次のステップ：
-[具体的な実装提案]</code></pre>
+<p>実現のための次のステップ：
+[具体的な実装提案]</code></pre></p>
 
 <h3>価値の定量化支援</h3>
 
@@ -5101,34 +5127,34 @@ Claude Code：受注データと関連情報を分析します。
 
 <pre><code class="language-">あなた：「配送時間の短縮」の価値を定量化してください。
 
-Claude Code：多面的に価値を分析し、定量化します。
+<p>Claude Code：多面的に価値を分析し、定量化します。</p>
 
-配送時間短縮の価値分析：
+<p>配送時間短縮の価値分析：</p>
 
-1. 直接的な価値
+<p>1. 直接的な価値
    - 顧客満足度：配送1日短縮で+0.3ポイント
    - リピート率：翌日配送で+15%
-   - 単価向上：急ぎ料金として+500円/件の支払い意欲
+   - 単価向上：急ぎ料金として+500円/件の支払い意欲</p>
 
-2. 間接的な価値
+<p>2. 間接的な価値
    - 在庫削減：リードタイム短縮で安全在庫20%削減
    - キャッシュフロー：売上債権回収が平均2日早期化
-   - 競合差別化：競合からの乗り換え年間100社
+   - 競合差別化：競合からの乗り換え年間100社</p>
 
-3. 波及的な価値
+<p>3. 波及的な価値
    - 従業員満足：クレーム対応50%減でストレス軽減
    - ブランド価値：「即日配送の○○」として認知
-   - 新規開拓：配送力を武器に新市場参入可能
+   - 新規開拓：配送力を武器に新市場参入可能</p>
 
-年間価値試算：
+<p>年間価値試算：
 - 売上増加：2.5億円
 - コスト削減：8000万円
-- 総価値：3.3億円
+- 総価値：3.3億円</p>
 
-投資対効果：
+<p>投資対効果：
 - 必要投資：1.2億円
 - 回収期間：5ヶ月
-- 3年間ROI：780%</code></pre>
+- 3年間ROI：780%</code></pre></p>
 
 <h3>価値仮説の検証</h3>
 
@@ -5136,36 +5162,36 @@ Claude Code：多面的に価値を分析し、定量化します。
 
 <pre><code class="language-">あなた：「若年層向けサブスクで売上30%増」という仮説を検証してください。
 
-Claude Code：仮説を多角的に検証します。
+<p>Claude Code：仮説を多角的に検証します。</p>
 
-仮説検証レポート：
+<p>仮説検証レポート：</p>
 
-1. 市場分析
+<p>1. 市場分析
    ✓ 20-30代のサブスク利用率：65%（増加傾向）
    ✓ 競合のサブスク成功事例：3社で平均25%増
-   △ 自社顧客の20-30代比率：現在15%（業界平均25%）
+   △ 自社顧客の20-30代比率：現在15%（業界平均25%）</p>
 
-2. 実現可能性評価
+<p>2. 実現可能性評価
    ✓ 技術的実現性：既存システムの拡張で対応可能
    △ 運用体制：カスタマーサポートの増強必要
-   ✗ 在庫管理：現状では対応困難（要改修）
+   ✗ 在庫管理：現状では対応困難（要改修）</p>
 
-3. リスク分析
+<p>3. リスク分析
    - 既存顧客の反発リスク：中（買い切り派の離反）
    - 収益構造の変化：短期的には減少の可能性
-   - 運転資金の増加：初期は持ち出し
+   - 運転資金の増加：初期は持ち出し</p>
 
-4. 修正仮説の提案
+<p>4. 修正仮説の提案
    original: "若年層向けサブスクで売上30%増"
    revised: "段階的導入で18ヶ月後に売上20%増"
    
    前提条件：
    - 第1フェーズ：限定商品でテスト（3ヶ月）
    - 第2フェーズ：20-30代に展開（6ヶ月）
-   - 第3フェーズ：全年齢層へ（9ヶ月後）
+   - 第3フェーズ：全年齢層へ（9ヶ月後）</p>
 
-推奨アクション：
-[具体的な実行計画]</code></pre>
+<p>推奨アクション：
+[具体的な実行計画]</code></pre></p>
 
 <h2>価値設計のアンチパターン</h2>
 
@@ -5420,36 +5446,24 @@ Claude Code：仮説を多角的に検証します。
 
 <strong>VMS-OKR連携の構造</strong>
 
-<table>
-<thead>
-<tr>
-<th>└─ Objective: 初期価値体験の実現</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>├─ KR1: 新規顧客100名が価値を体験</td>
-</tr>
-<tr>
-<td>├─ KR2: 満足度スコア4.0以上</td>
-</tr>
-<tr>
-<td>└─ KR3: 再利用意向80%以上</td>
-</tr>
-<tr>
-<td>└─ Objective: 価値認識と選択促進</td>
-</tr>
-<tr>
-<td>├─ KR1: 価値認知率60%達成</td>
-</tr>
-<tr>
-<td>├─ KR2: 競合比較での選択率40%</td>
-</tr>
-<tr>
-<td>└─ KR3: 有料転換率25%</td>
-</tr>
-</tbody>
-</table>
+<div class="hierarchy-diagram"><pre style="font-family: monospace; line-height: 1.4;">  │
+  ├─ VMS1: 顧客が最初の価値を体験できる状態
+  │     └─ Objective: 初期価値体験の実現
+  │           ├─ KR1: 新規顧客100名が価値を体験
+  │           ├─ KR2: 満足度スコア4.0以上
+  │           └─ KR3: 再利用意向80%以上
+  │
+  ├─ VMS2: 顧客が価値を認識し選択できる状態
+  │     └─ Objective: 価値認識と選択促進
+  │           ├─ KR1: 価値認知率60%達成
+  │           ├─ KR2: 競合比較での選択率40%
+  │           └─ KR3: 有料転換率25%
+  │
+  └─ VMS3: 顧客が主要価値を日常的に体験できる状態
+        └─ Objective: 日常的価値体験の定着
+              ├─ KR1: DAU/MAU比率30%以上
+              ├─ KR2: 継続利用率85%以上
+              └─ KR3: NPS 50以上</pre></div>
 
 <strong>OKRがVMSを測定する理由</strong>
 
@@ -5739,30 +5753,21 @@ Generic     : 汎用的、外部調達可能
 
 <strong>CL1からCL3への流れ</strong>
 
-<table>
-<thead>
-<tr>
-<th>傾向的分類（参考のみ）</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>※CL2に継承されない</td>
-</tr>
-<tr>
-<td>正式分類（投資判断の根拠）</td>
-</tr>
-<tr>
-<td>※独立して再評価</td>
-</tr>
-<tr>
-<td>分類なし（網羅性重視）</td>
-</tr>
-<tr>
-<td>= Business Operation（業務オペレーション）</td>
-</tr>
-</tbody>
-</table>
+<pre style="white-space: pre; font-family: monospace; overflow-x: auto;"><code class="language-">CL1（活動領域識別）
+  │  傾向的分類（参考のみ）
+  │  ※CL2に継承されない
+  ▼
+CL2（ケイパビリティ設計）
+  │  正式分類（投資判断の根拠）
+  │  ※独立して再評価
+  ▼
+CL3（オペレーション定義）
+  │  分類なし（網羅性重視）
+  │  = Business Operation（業務オペレーション）
+  ▼
+Phase 4-5（BC境界確定・実装設計）
+  ▼
+パラソルドメイン言語 → 実装</code></pre>
 
 <strong>なぜCL1の分類はCL2に継承されないのか？</strong>
 
@@ -6006,10 +6011,7 @@ Generic     : 汎用的、外部調達可能
 
 <h3>ケイパビリティ依存関係の可視化</h3>
 
-<pre><code>```
-ケイパビリティ依存関係図
-========================
-
+<div class="architecture-diagram"><pre style="font-family: monospace, 'Courier New', Courier; line-height: 1.1; white-space: pre; overflow-x: auto; letter-spacing: -0.5px; font-size: 14px;">
   [需要予測]
       │
       ▼
@@ -6027,8 +6029,7 @@ Generic     : 汎用的、外部調達可能
       ▼
   [配送実行]
 
-※ 在庫管理・注文処理がハブとなる中核ケイパビリティ
-```</code></pre>
+<p>※ 在庫管理・注文処理がハブとなる中核ケイパビリティ</pre></div></p>
 
 <h3>ステップ3：ケイパビリティの成熟度評価</h3>
 
@@ -6117,48 +6118,32 @@ Generic     : 汎用的、外部調達可能
 
 <p>すべてのケイパビリティが同じ重要度ではありません。</p>
 
-<table>
-<thead>
-<tr>
-<th>コアケイパビリティ（競争優位の源泉）          【最重要】</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>・1時間配送</td>
-</tr>
-<tr>
-<td>・AI味覚マッチング</td>
-</tr>
-<tr>
-<td>・産地直送ネットワーク</td>
-</tr>
-<tr>
-<td>競争的ケイパビリティ（業界標準レベル）        【標準】</td>
-</tr>
-<tr>
-<td>・クレジット決済</td>
-</tr>
-<tr>
-<td>・商品検索</td>
-</tr>
-<tr>
-<td>・顧客サポート</td>
-</tr>
-<tr>
-<td>基礎的ケイパビリティ（ビジネスの前提条件）    【基盤】</td>
-</tr>
-<tr>
-<td>・経理処理</td>
-</tr>
-<tr>
-<td>・給与計算</td>
-</tr>
-<tr>
-<td>・オフィスIT</td>
-</tr>
-</tbody>
-</table>
+<div class="architecture-diagram"><pre style="font-family: monospace, 'Courier New', Courier; line-height: 1.1; white-space: pre; overflow-x: auto; letter-spacing: -0.5px; font-size: 14px;">
+┌─────────────────────────────────────────────────────────────┐
+│ コアケイパビリティ（競争優位の源泉）          【最重要】   │
+├─────────────────────────────────────────────────────────────┤
+│  ・1時間配送                                                │
+│  ・AI味覚マッチング                                         │
+│  ・産地直送ネットワーク                                     │
+└─────────────────────────────────────────────────────────────┘
+            │
+            ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 競争的ケイパビリティ（業界標準レベル）        【標準】     │
+├─────────────────────────────────────────────────────────────┤
+│  ・クレジット決済                                           │
+│  ・商品検索                                                 │
+│  ・顧客サポート                                             │
+└─────────────────────────────────────────────────────────────┘
+            │
+            ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 基礎的ケイパビリティ（ビジネスの前提条件）    【基盤】     │
+├─────────────────────────────────────────────────────────────┤
+│  ・経理処理                                                 │
+│  ・給与計算                                                 │
+│  ・オフィスIT                                               │
+└─────────────────────────────────────────────────────────────┘</pre></div>
 
 <strong>コアケイパビリティ（競争優位の源泉）</strong>
 
@@ -6297,11 +6282,11 @@ Generic     : 汎用的、外部調達可能
 
 <pre><code>あなた：現在のシステムで「2時間配送」を実現するためのギャップを分析してください。
 
-Claude Code：システム情報とビジネス要件を分析します。
+<p>Claude Code：システム情報とビジネス要件を分析します。</p>
 
-ギャップ分析レポート：
+<p>ギャップ分析レポート：</p>
 
-1. 技術的ギャップ
+<p>1. 技術的ギャップ
    
    必要な能力：リアルタイム在庫管理
    現状：日次バッチ更新
@@ -6315,9 +6300,9 @@ Claude Code：システム情報とビジネス要件を分析します。
    ギャップ：
    - アルゴリズム：最適化エンジン不在
    - 連携：配送業者APIなし
-   - 意思決定：15分→30秒に短縮必要
+   - 意思決定：15分→30秒に短縮必要</p>
 
-2. プロセスギャップ
+<p>2. プロセスギャップ
    
    必要プロセス：受注即時処理
    現状：30分ごとのバッチ処理
@@ -6325,9 +6310,9 @@ Claude Code：システム情報とビジネス要件を分析します。
    
    必要プロセス：動的在庫割当
    現状：固定ルールベース
-   影響：在庫の偏在で欠品多発
+   影響：在庫の偏在で欠品多発</p>
 
-3. 組織的ギャップ
+<p>3. 組織的ギャップ
    
    必要スキル：データアナリスト
    現状：0名
@@ -6335,12 +6320,12 @@ Claude Code：システム情報とビジネス要件を分析します。
    
    必要体制：24時間監視
    現状：営業時間のみ
-   影響：夜間の異常対応不可
+   影響：夜間の異常対応不可</p>
 
-優先対応項目：
+<p>優先対応項目：
 1. リアルタイム在庫（前提条件）
 2. 受注即時処理（ボトルネック）
-3. 24時間体制（サービス条件）</code></pre>
+3. 24時間体制（サービス条件）</code></pre></p>
 
 <h3>ケイパビリティ間の相乗効果発見</h3>
 
@@ -6348,11 +6333,11 @@ Claude Code：システム情報とビジネス要件を分析します。
 
 <pre><code class="language-">あなた：ケイパビリティ間の相乗効果を分析してください。
 
-Claude Code：ケイパビリティマップを分析し、潜在的な相乗効果を発見します。
+<p>Claude Code：ケイパビリティマップを分析し、潜在的な相乗効果を発見します。</p>
 
-相乗効果分析：
+<p>相乗効果分析：</p>
 
-1. データ活用の相乗効果
+<p>1. データ活用の相乗効果
    
    組み合わせ：「需要予測」×「在庫最適化」×「価格最適化」
    
@@ -6364,9 +6349,9 @@ Claude Code：ケイパビリティマップを分析し、潜在的な相乗効
    相乗効果：
    - 三位一体で運用：欠品率10%、回転率15、粗利率30%
    - 理由：需要に応じた在庫と価格の動的調整
-   - 追加価値：年間5000万円の利益増
+   - 追加価値：年間5000万円の利益増</p>
 
-2. 顧客体験の相乗効果
+<p>2. 顧客体験の相乗効果
    
    組み合わせ：「リアルタイム在庫」×「正確な配送時間予測」×「プロアクティブ通知」
    
@@ -6378,9 +6363,9 @@ Claude Code：ケイパビリティマップを分析し、潜在的な相乗効
    相乗効果：
    - 統合体験：NPS 30→55（業界トップ）
    - 理由：期待値管理の完璧な実現
-   - 追加価値：リピート率60%→80%
+   - 追加価値：リピート率60%→80%</p>
 
-3. オペレーション効率の相乗効果
+<p>3. オペレーション効率の相乗効果
    
    組み合わせ：「自動発注」×「配送ルート最適化」×「倉庫自動化」
    
@@ -6392,11 +6377,11 @@ Claude Code：ケイパビリティマップを分析し、潜在的な相乗効
    相乗効果：
    - エンドツーエンド最適化：総コスト-55%
    - 理由：全体最適による無駄の排除
-   - 追加価値：価格競争力の大幅向上
+   - 追加価値：価格競争力の大幅向上</p>
 
-推奨事項：
+<p>推奨事項：
 相乗効果を最大化するための実装順序とKPI設定
-[詳細な実装計画]</code></pre>
+[詳細な実装計画]</code></pre></p>
 
 <h3>実装難易度の評価</h3>
 
@@ -6404,11 +6389,11 @@ Claude Code：ケイパビリティマップを分析し、潜在的な相乗効
 
 <pre><code class="language-">あなた：各ケイパビリティの実装難易度を評価してください。
 
-Claude Code：技術、組織、コストの観点から実装難易度を分析します。
+<p>Claude Code：技術、組織、コストの観点から実装難易度を分析します。</p>
 
-実装難易度マトリクス：
+<p>実装難易度マトリクス：</p>
 
-高価値・低難易度（Quick Win）:
+<p>高価値・低難易度（Quick Win）:
 1. モバイルアプリ改善
    - 価値：利便性向上で売上10%増
    - 難易度：既存基盤の拡張で対応可
@@ -6419,9 +6404,9 @@ Claude Code：技術、組織、コストの観点から実装難易度を分析
    - 価値：欠品率を半減
    - 難易度：OSSツールで実現可能
    - 期間：2ヶ月
-   - 投資：1500万円
+   - 投資：1500万円</p>
 
-高価値・高難易度（戦略投資）:
+<p>高価値・高難易度（戦略投資）:
 1. 完全自動倉庫
    - 価値：人件費80%削減
    - 難易度：大規模な設備投資必要
@@ -6432,16 +6417,16 @@ Claude Code：技術、組織、コストの観点から実装難易度を分析
    - 価値：顧客単価50%向上
    - 難易度：データ基盤から構築必要
    - 期間：12ヶ月
-   - 投資：2億円
+   - 投資：2億円</p>
 
-実装のリスク要因：
+<p>実装のリスク要因：
 1. 組織の変更抵抗
 2. レガシーシステムとの統合
 3. 必要スキルの不足
-4. ベンダーロックイン
+4. ベンダーロックイン</p>
 
-リスク軽減策：
-[具体的な対策プラン]</code></pre>
+<p>リスク軽減策：
+[具体的な対策プラン]</code></pre></p>
 
 <h2>ケイパビリティ設計のアンチパターン</h2>
 
@@ -7045,15 +7030,12 @@ Phase 2で定義した価値一つを選び、必要なケイパビリティを�
 
 <strong>パターン選択の判断フローチャート</strong>：
 
-<pre><code>```
-チームは10人以下か？
-  ├─ Yes → パターンA（シンプル統合型）
+<div class="hierarchy-diagram"><pre style="font-family: monospace; line-height: 1.4;">  ├─ Yes → パターンA（シンプル統合型）
   └─ No → 独立したデプロイサイクルが必要か？
             ├─ No → パターンA
             └─ Yes → 開発者100人以上 or 99.99%可用性要求？
                       ├─ No → パターンB（バランス分離型）
-                      └─ Yes → パターンC（完全分散型）
-```</code></pre>
+                      └─ Yes → パターンC（完全分散型）</pre></div>
 
 <h3>実践例：ECサイトのアーキテクチャ設計</h3>
 
@@ -7480,27 +7462,27 @@ Phase 2で定義した価値一つを選び、必要なケイパビリティを�
 
 <pre><code class="language-">あなた：Order集約の実装を開始します。Phase 3のケイパビリティ定義に基づいて。
 
-Claude Code：Phase 3の定義を参照し、実装を支援します。
+<p>Claude Code：Phase 3の定義を参照し、実装を支援します。</p>
 
-[ケイパビリティ定義を読み込み]
+<p>[ケイパビリティ定義を読み込み]</p>
 
-理解しました。以下の実装を提案します：
-</code></pre>python
-from dataclasses import dataclass
+<p>理解しました。以下の実装を提案します：</code></pre></p>
+
+<pre><code class="language-python">from dataclasses import dataclass
 from datetime import datetime
 from typing import List, Optional
 from uuid import UUID, uuid4
 
-<h1>値オブジェクト</h1>
+<p># 値オブジェクト
 @dataclass(frozen=True)
 class Money:
     amount: float
     currency: str
     
-    def __add__(self, other: 'Money') -> 'Money':
+    def __add__(self, other: 'Money') -&gt; 'Money':
         if self.currency != other.currency:
             raise ValueError("通貨が異なります")
-        return Money(self.amount + other.amount, self.currency)
+        return Money(self.amount + other.amount, self.currency)</p>
 
 <p>@dataclass(frozen=True)
 class Address:
@@ -7510,23 +7492,23 @@ class Address:
     street: str
     building: Optional[str] = None</p>
 
-<h1>エンティティ</h1>
+<p># エンティティ
 class OrderItem:
     def __init__(self, product_id: UUID, quantity: int, unit_price: Money):
-        if quantity <= 0:
+        if quantity &lt;= 0:
             raise ValueError("数量は正の値である必要があります")
         self.id = uuid4()
         self.product_id = product_id
         self.quantity = quantity
         self.unit_price = unit_price
     
-    def total_price(self) -> Money:
+    def total_price(self) -&gt; Money:
         return Money(
-            self.unit_price.amount <em> self.quantity,
+            self.unit_price.amount * self.quantity,
             self.unit_price.currency
-        )
+        )</p>
 
-<h1>集約ルート</h1>
+<p># 集約ルート
 class Order:
     def __init__(self, customer_id: UUID):
         self.id = uuid4()
@@ -7557,7 +7539,7 @@ class Order:
         self.status = OrderStatus.PLACED
         self.events.append(OrderPlacedEvent(self.id, self.customer_id, self.total_amount()))
     
-    def total_amount(self) -> Money:
+    def total_amount(self) -&gt; Money:
         """合計金額を計算"""
         if not self.items:
             return Money(0, "JPY")
@@ -7565,15 +7547,15 @@ class Order:
         total = self.items[0].total_price()
         for item in self.items[1:]:
             total = total + item.total_price()
-        return total
-<pre><code class="language-">
-この実装は：
+        return total</code></pre></p>
+
+<pre><code class="language-">この実装は：
 - Phase 3で定義された「高速注文処理能力」を実現
 - ドメインルールをコードで表現
 - 不変条件を保護
 - イベントを発行して他サービスと連携
 
-続けて、リポジトリとサービス層も実装しましょうか？</code></pre>
+<p>続けて、リポジトリとサービス層も実装しましょうか？</code></pre></p>
 
 <h3>テスト駆動開発の実践</h3>
 
@@ -7584,7 +7566,7 @@ import pytest
 from datetime import datetime
 from uuid import uuid4
 
-class TestOrder:
+<p>class TestOrder:
     def test_新規注文の作成(self):
         # Given
         customer_id = uuid4()
@@ -7621,7 +7603,7 @@ class TestOrder:
         
         # When/Then
         with pytest.raises(ValueError, match="下書き状態"):
-            order.add_item(uuid4(), 1, Money(1000, "JPY"))</code></pre>
+            order.add_item(uuid4(), 1, Money(1000, "JPY"))</code></pre></p>
 
 <h3>実装の最適化</h3>
 
@@ -7629,14 +7611,14 @@ class TestOrder:
 
 <pre><code class="language-">あなた：このコードのパフォーマンスを改善してください。
 
-Claude Code：パフォーマンスプロファイルを分析し、最適化を提案します。
+<p>Claude Code：パフォーマンスプロファイルを分析し、最適化を提案します。</p>
 
-ボトルネック分析：
+<p>ボトルネック分析：
 1. total_amount()が毎回全商品を走査
 2. 在庫確認が商品ごとに個別API呼び出し
-3. イベント発行が同期処理
+3. イベント発行が同期処理</p>
 
-最適化案：
+<p>最適化案：
 </code></pre>python
 class OptimizedOrder(Order):
     def __init__(self, customer_id: UUID):
@@ -7681,9 +7663,9 @@ class OptimizedOrder(Order):
 改善効果：
 - total_amount(): O(n) → O(1)（キャッシュヒット時）
 - 在庫確認: n回のAPI呼び出し → 1回
-- イベント発行: ブロッキング → 非ブロッキング
+- イベント発行: ブロッキング → 非ブロッキング</p>
 
-推定改善率: 応答時間 70%削減</code></pre>
+<p>推定改善率: 応答時間 70%削減</code></pre></p>
 
 <h2>Phase 7：デプロイメント ― 本番への道</h2>
 
@@ -7829,14 +7811,14 @@ spec:
 
 <strong>アラート設定</strong>：
 
-</em>Critical（即時対応）<em>：
+<em>Critical（即時対応）</em>：
 <ul>
 <li>サービス停止</li>
 <li>エラー率 > 1%</li>
 <li>レスポンスタイム > 1秒</li>
 </ul>
 
-</em>Warning（監視強化）*：
+<em>Warning（監視強化）</em>：
 <ul>
 <li>CPU使用率 > 80%</li>
 <li>ディスク使用率 > 70%</li>
@@ -8337,24 +8319,19 @@ spec:
 
 <strong>VMS-OKR連携の構造</strong>
 
-<table>
-<thead>
-<tr>
-<th>└─ VMS（価値マイルストーン）</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>└─ OKR（測定層）</td>
-</tr>
-<tr>
-<td>├─ Objective</td>
-</tr>
-<tr>
-<td>└─ Key Results（定量指標）</td>
-</tr>
-</tbody>
-</table>
+<div class="hierarchy-diagram"><pre style="font-family: monospace; line-height: 1.4;">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+VL1（最上位価値）
+  │
+  ├─ VL2 → VL3（詳細価値）
+  │           │
+  │           └─ VMS（価値マイルストーン）
+  │                 │
+  │                 └─ OKR（測定層）
+  │                       ├─ Objective
+  │                       └─ Key Results（定量指標）
+  ↓
+VS（バリューストリーム）→ CL1 → CL2 → CL3 → 実装
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</pre></div>
 
 <strong>OKRが価値測定に最適な理由</strong>
 
@@ -8392,18 +8369,17 @@ spec:
 
 <strong>実践例：VAL-001（24時間配送）のVMS-OKR連携</strong>
 
-<table>
-<thead>
-<tr>
-<th>└─ 現在: 72% → 目標: 90%</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>└─ 現在: +15 → 目標: +30</td>
-</tr>
-</tbody>
-</table>
+<div class="hierarchy-diagram"><pre style="font-family: monospace; line-height: 1.4;">  │
+  └─ Objective: 配送体験による顧客選択の促進
+        │
+        ├─ KR1: 24時間以内配送率 90%達成
+        │       └─ 現在: 72% → 目標: 90%
+        │
+        ├─ KR2: 配送に関するNPS +30達成
+        │       └─ 現在: +15 → 目標: +30
+        │
+        └─ KR3: 配送理由での選択率 40%達成
+                └─ 現在: 25% → 目標: 40%</pre></div>
 
 <h3>戦略レビューサイクル</h3>
 
@@ -8489,20 +8465,19 @@ spec:
 
 <p>Claude Codeは、価値の逸脱を早期に検知します。</p>
 
-<pre><code class="language-">あなた：現在の実装をレビューして、価値との整合性を確認してください。
-
+<div class="architecture-diagram"><pre style="font-family: monospace, 'Courier New', Courier; line-height: 1.1; white-space: pre; overflow-x: auto; letter-spacing: -0.5px; font-size: 14px;">
 Claude Code：実装コードと価値定義を照合します。
 
-[価値定義とコードベースを分析]
+<p>[価値定義とコードベースを分析]</p>
 
-価値整合性レポート：
+<p>価値整合性レポート：</p>
 
-1. 定義された価値
+<p>1. 定義された価値
    VAL-001: 受注から出荷まで24時間以内
    
-2. 実装の分析結果
+2. 実装の分析結果</p>
 
-   ✅ 整合している実装:
+<p>✅ 整合している実装:
    - 在庫サービスのキャッシュ機構（即時確認に貢献）
    - 注文処理の並列化（処理時間短縮に貢献）
    - 配送業者API連携（自動手配に貢献）
@@ -8517,9 +8492,9 @@ Claude Code：実装コードと価値定義を照合します。
    - バッチ処理による在庫更新（6時間ごと）
      → リアルタイム性を損なう
    - 手動承認フロー（管理者承認必須）
-     → 24時間配送の阻害要因
+     → 24時間配送の阻害要因</p>
 
-3. リファクタリング提案
+<p>3. リファクタリング提案
    
    優先度高:
    - バッチ処理→イベント駆動に変更
@@ -8527,24 +8502,22 @@ Claude Code：実装コードと価値定義を照合します。
    
    優先度中:
    - レポート機能をシンプル化
-   - 権限管理を最小限に
+   - 権限管理を最小限に</p>
 
-4. 予測される改善効果
+<p>4. 予測される改善効果
    - 現状: 平均26時間
-   - 改善後: 平均18時間（目標により接近）</code></pre>
+   - 改善後: 平均18時間（目標により接近）</pre></div></p>
 
 <h3>価値の依存関係分析</h3>
 
 <p>複雑な価値の連鎖を可視化します。</p>
 
-<pre><code>```
-あなた：価値間の依存関係と影響を分析してください。
-
+<div class="architecture-diagram"><pre style="font-family: monospace, 'Courier New', Courier; line-height: 1.1; white-space: pre; overflow-x: auto; letter-spacing: -0.5px; font-size: 14px;">
 Claude Code：価値ストリームを分析し、依存関係を明らかにします。
 
-価値依存関係グラフ：
+<p>価値依存関係グラフ：</p>
 
-  [VAL-001: 24時間配送] ← 起点（最重要価値）
+[VAL-001: 24時間配送] ← 起点（最重要価値）
          │
     ┌────┴────┐
     ▼         ▼
@@ -8561,7 +8534,7 @@ Claude Code：価値ストリームを分析し、依存関係を明らかにし
          ▼
   [VAL-006: 売上成長] ← 最終目標
 
-相関分析：
+<p>相関分析：
 1. 24時間配送 → 顧客満足度
    - 相関係数: 0.72（強い正の相関）
    - 配送時間1時間短縮 → 満足度0.8%向上
@@ -8572,12 +8545,11 @@ Claude Code：価値ストリームを分析し、依存関係を明らかにし
    
 3. 複合効果
    - 24時間配送実現 → 最終的な売上15%増
-   - 投資回収期間: 8ヶ月
+   - 投資回収期間: 8ヶ月</p>
 
-推奨事項：
+<p>推奨事項：
 VAL-001（24時間配送）は価値連鎖の起点となる最重要価値。
-これを犠牲にする変更は、全体に大きな負の影響を与える。
-```</code></pre>
+これを犠牲にする変更は、全体に大きな負の影響を与える。</pre></div></p>
 
 <h4>価値依存関係グラフとは</h4>
 
@@ -8650,11 +8622,11 @@ VAL-001（24時間配送）は価値連鎖の起点となる最重要価値。
 
 <pre><code class="language-">あなた：現在の開発ペースで、目標とする価値がいつ実現できるか予測してください。
 
-Claude Code：開発速度と残作業を分析し、実現時期を予測します。
+<p>Claude Code：開発速度と残作業を分析し、実現時期を予測します。</p>
 
-価値実現予測：
+<p>価値実現予測：</p>
 
-1. 現状分析
+<p>1. 現状分析
    - 目標: 24時間配送（100%の注文で）
    - 現在: 26時間（92%達成）
    - 開始時: 72時間（3ヶ月前）
@@ -8662,15 +8634,15 @@ Claude Code：開発速度と残作業を分析し、実現時期を予測しま
 2. 改善速度
    - 過去3ヶ月: 46時間の短縮
    - 月平均: 15.3時間/月の改善
-   - 改善率は逓減傾向
+   - 改善率は逓減傾向</p>
 
-3. ボトルネック分析
+<p>3. ボトルネック分析
    主要ボトルネック:
    - 配送業者システム連携: 1.5時間
    - 倉庫ピッキング最適化: 0.3時間
-   - その他プロセス: 0.2時間
+   - その他プロセス: 0.2時間</p>
 
-4. 実現予測
+<p>4. 実現予測
    
    楽観的シナリオ:
    - 前提: 現在の改善ペース維持
@@ -8682,12 +8654,12 @@ Claude Code：開発速度と残作業を分析し、実現時期を予測しま
    
    悲観的シナリオ:
    - 前提: 技術的限界に到達
-   - 予測: 90%（25時間）が限界
+   - 予測: 90%（25時間）が限界</p>
 
-5. 推奨アクション
+<p>5. 推奨アクション
    - 配送業者との深い統合（API直結）
    - 倉庫レイアウト最適化
-   - 並行して次の価値（VAL-002）の準備開始</code></pre>
+   - 並行して次の価値（VAL-002）の準備開始</code></pre></p>
 
 <h2>トレーサビリティの実装パターン</h2>
 
@@ -8724,7 +8696,7 @@ Claude Code：開発速度と残作業を分析し、実現時期を予測しま
 from typing import Annotated
 from traceability import ValueContribution, Capability
 
-@ValueContribution(
+<p>@ValueContribution(
     value_id="VAL-001",
     contribution="在庫確認を即時化して配送時間短縮"
 )
@@ -8750,7 +8722,7 @@ class InventoryService:
     async def check_availability(self, product_id: str) -&gt; bool:
         """在庫有無を即座に確認"""
         # Redisキャッシュから高速に取得
-        return await self.cache.get(f"stock:{product_id}") &gt; 0</code></pre>
+        return await self.cache.get(f"stock:{product_id}") &gt; 0</code></pre></p>
 
 <h3>パターン3：観測型トレーサビリティ</h3>
 
@@ -9805,67 +9777,67 @@ class InventoryService:
 
 <pre><code class="language-">あなた：当社は食品製造業です。V5の適用方法を提案してください。
 
-Claude Code：食品製造業の特性を分析し、カスタマイズを提案します。
+<p>Claude Code：食品製造業の特性を分析し、カスタマイズを提案します。</p>
 
-食品製造業向けV5カスタマイゼーション：
+<p>食品製造業向けV5カスタマイゼーション：</p>
 
-1. 産業特性の認識
+<p>1. 産業特性の認識</p>
 
-   重要な制約:
+<p>重要な制約:
    - 厳格な衛生管理（HACCP）
    - トレーサビリティ要求
    - 賞味期限管理
-   - アレルゲン管理
+   - アレルゲン管理</p>
 
-   価値ドライバー:
+<p>価値ドライバー:
    - 食の安全・安心
    - 鮮度・美味しさ
    - 安定供給
-   - コスト競争力
+   - コスト競争力</p>
 
-2. 推奨する3軸選択
+<p>2. 推奨する3軸選択</p>
 
-   ① 価値軸（必須）
+<p>① 価値軸（必須）
       - 食の安全性
       - 顧客の信頼
-      - ブランド価値
+      - ブランド価値</p>
 
-   ② プラットフォーム軸
+<p>② プラットフォーム軸
       - トレーサビリティ基盤
       - 品質管理統合システム
-      - サプライチェーン可視化
+      - サプライチェーン可視化</p>
 
-   ③ ケイパビリティ軸
+<p>③ ケイパビリティ軸
       - リアルタイム品質監視
       - 予測的在庫管理
-      - 迅速なリコール対応
+      - 迅速なリコール対応</p>
 
-3. フェーズ別重点事項
+<p>3. フェーズ別重点事項</p>
 
-   Phase 0-1:
+<p>Phase 0-1:
    - HACCP要件の完全理解
    - 既存の品質管理体制調査
-   - 規制要件のマッピング
+   - 規制要件のマッピング</p>
 
-   Phase 2:
+<p>Phase 2:
    - 「安全性」を中心とした価値定義
-   - コンプライアンス価値の定量化
+   - コンプライアンス価値の定量化</p>
 
-   Phase 3:
+<p>Phase 3:
    - 原料受入→製造→出荷の能力設計
-   - 異常検知・対応能力の強化
+   - 異常検知・対応能力の強化</p>
 
-   Phase 4-7:
+<p>Phase 4-7:
    - IoTセンサーとの統合
-   - ブロックチェーンでの証跡管理
+   - ブロックチェーンでの証跡管理</p>
 
-4. アーキテクチャ提案
-   [詳細な技術アーキテクチャ]
+<p>4. アーキテクチャ提案
+   [詳細な技術アーキテクチャ]</p>
 
-5. 想定されるROI
+<p>5. 想定されるROI
    - 品質事故削減: 90%
    - リコールコスト: 1/10
-   - ブランド価値向上: 測定可能</code></pre>
+   - ブランド価値向上: 測定可能</code></pre></p>
 
 <h3>規制要件の確認</h3>
 
@@ -9873,38 +9845,38 @@ Claude Code：食品製造業の特性を分析し、カスタマイズを提案
 
 <pre><code class="language-">あなた：このシステム設計で、医療機器規制に問題ないか確認してください。
 
-Claude Code：医療機器規制との適合性を確認します。
+<p>Claude Code：医療機器規制との適合性を確認します。</p>
 
-医療機器ソフトウェア規制チェック：
+<p>医療機器ソフトウェア規制チェック：</p>
 
-1. クラス分類の確認
+<p>1. クラス分類の確認</p>
 
-   提案されたシステム:
+<p>提案されたシステム:
    - 診断支援機能 → クラスII相当
-   - 患者データ管理 → クラスI相当
+   - 患者データ管理 → クラスI相当</p>
 
-   必要な対応:
+<p>必要な対応:
    - IEC 62304準拠の開発プロセス
    - リスクマネジメント（ISO 14971）
-   - 臨床評価の実施
+   - 臨床評価の実施</p>
 
-2. 設計上の要注意点
+<p>2. 設計上の要注意点</p>
 
-   ⚠️ 要改善:
+<p>⚠️ 要改善:
    - ログ保存期間が不足（3年→10年）
    - フェイルセーフ機能が未実装
-   - 変更管理プロセスが未定義
+   - 変更管理プロセスが未定義</p>
 
-   ✅ 適合している点:
+<p>✅ 適合している点:
    - データ暗号化
    - アクセス制御
-   - 監査ログ
+   - 監査ログ</p>
 
-3. 推奨する追加対策
-   [具体的な改善提案]
+<p>3. 推奨する追加対策
+   [具体的な改善提案]</p>
 
-4. 認証取得のロードマップ
-   [ステップバイステップの計画]</code></pre>
+<p>4. 認証取得のロードマップ
+   [ステップバイステップの計画]</code></pre></p>
 
 <h2>実践演習：あなたの産業パターンを作る</h2>
 
@@ -10058,47 +10030,17 @@ Claude Code：医療機器規制との適合性を確認します。
 
 <p>共創的開発では、それぞれの強みを活かします。</p>
 
-<table>
-<thead>
-<tr>
-<th>人間の責任領域</th>
-<th></th>
-<th>協働領域</th>
-<th></th>
-<th>AIの責任領域</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>・ビジネス価値定義</td>
-<td>────→</td>
-<td>・設計検討</td>
-<td>────→</td>
-<td>・データ分析</td>
-</tr>
-<tr>
-<td>・創造的発想</td>
-<td></td>
-<td>・問題解決</td>
-<td></td>
-<td>・コード生成</td>
-</tr>
-<tr>
-<td>・倫理的判断</td>
-<td>←────</td>
-<td>・品質向上</td>
-<td>←────</td>
-<td>・パターン認識</td>
-</tr>
-<tr>
-<td>・最終意思決定</td>
-<td></td>
-<td></td>
-<td></td>
-<td>・知識提供</td>
-</tr>
-</tbody>
-</table>
+<div class="architecture-diagram wide-diagram" style="margin: 20px 0; background: #f8f8f8; padding: 15px; border-radius: 4px; overflow-x: auto;"><pre style="font-family: 'Consolas', 'Monaco', 'Courier New', monospace; line-height: 1.0; white-space: pre; letter-spacing: -0.7px; font-size: 9px; margin: 0;">
+┌─────────────────────┐     ┌─────────────────────┐     ┌─────────────────────┐
+│   人間の責任領域    │     │     協働領域        │     │   AIの責任領域     │
+├─────────────────────┤     ├─────────────────────┤     ├─────────────────────┤
+│ ・ビジネス価値定義  │────→│ ・設計検討         │────→│ ・データ分析       │
+│ ・創造的発想        │     │ ・問題解決         │     │ ・コード生成       │
+│ ・倫理的判断        │←────│ ・品質向上         │←────│ ・パターン認識     │
+│ ・最終意思決定      │     │                     │     │ ・知識提供         │
+└─────────────────────┘     └─────────────────────┘     └─────────────────────┘
+
+<p>【人間主導】              【双方向協働】             【AI主導】</pre></div></p>
 
 <strong>人間の責任領域</strong>
 
@@ -10151,7 +10093,8 @@ Claude Code：医療機器規制との適合性を確認します。
 
 <p>プロジェクトの立ち上げ時、AIは強力な調査アシスタントになります。</p>
 
-<pre><code class="language-">実践例：企業分析の自動化
+<div class="practice-example" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+<div style="font-family: monospace; white-space: pre-wrap; overflow-x: auto; margin: 0;">実践例：企業分析の自動化
 
 あなた：「製薬会社X社のビジネスモデルと課題を分析してください」
 
@@ -10183,13 +10126,15 @@ X社ビジネス分析レポート：
    - リアルワールドデータ活用
    
 推奨する次のステップ：
-[具体的なアクションプラン]</code></pre>
+[具体的なアクションプラン]</div>
+</div>
 
 <h3>Phase 2：価値定義の深化</h3>
 
 <p>AIは、人間が定義した価値を多角的に分析し、深化させます。</p>
 
-<pre><code class="language-">実践例：価値の定量化支援
+<div class="practice-example" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+<div style="font-family: monospace; white-space: pre-wrap; overflow-x: auto; margin: 0;">実践例：価値の定量化支援
 
 あなた：「『患者の待ち時間削減』という価値を深掘りしてください」
 
@@ -10224,48 +10169,87 @@ Claude Code：価値を多面的に分析します。
    - 患者フロー可視化
 
 測定方法の提案：
-[具体的KPIと測定手法]</code></pre>
+[具体的KPIと測定手法]</div>
+</div>
 
 <h3>Phase 3：ケイパビリティ設計の精緻化</h3>
 
 <p>複雑なケイパビリティの依存関係を、AIが分析します。</p>
 
-<table>
-<thead>
-<tr>
-<th></th>
-<th>↑</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>▼</td>
-<td></td>
-</tr>
-<tr>
-<td>↑</td>
-</tr>
-</tbody>
-</table>
+<div class="practice-example" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+<div style="font-family: monospace; white-space: pre-wrap; overflow-x: auto; margin: 0;">実践例：ケイパビリティ間の相乗効果分析
+
+あなた：「これらのケイパビリティの最適な実装順序を提案してください」
+
+Claude Code：依存関係と効果を分析し、最適化します。
+
+ケイパビリティ実装戦略：
+
+入力されたケイパビリティ：
+1. リアルタイム在庫管理
+2. 需要予測AI
+3. 自動発注システム
+4. サプライチェーン可視化
+
+依存関係分析：
+
+  [在庫管理] ─────┬─────→ [自動発注]
+       │         │              ↑
+       │         │              │
+       ▼         │              │
+  [SC可視化] ────┘         [需要予測]
+       │                        ↑
+       └────────────────────────┘
+
+実装順序の提案：
+
+Phase 1（基盤）：
+- リアルタイム在庫管理
+- 理由：他のすべての基礎となる
+- 期間：3ヶ月
+- 早期価値：在庫精度向上で欠品30%減
+
+Phase 2（拡張）：
+- サプライチェーン可視化
+- 理由：データ収集基盤として機能
+- 期間：2ヶ月
+- 追加価値：リードタイム20%短縮
+
+Phase 3（知能化）：
+- 需要予測AI
+- 理由：十分なデータ蓄積後に効果的
+- 期間：4ヶ月
+- 追加価値：在庫回転率40%向上
+
+Phase 4（自動化）：
+- 自動発注システム
+- 理由：予測精度確立後に実装
+- 期間：2ヶ月
+- 総合効果：人的作業90%削減
+
+ROI試算：
+- 投資額：1.5億円
+- 削減効果：年間2.8億円
+- 投資回収：7ヶ月</div>
+</div>
 
 <h3>Phase 4-7：実装とデプロイメントの加速</h3>
 
 <p>実装フェーズでは、AIとのペアプログラミングが威力を発揮します。</p>
 
-<pre><code class="language-python"># 実践例：TDD駆動開発
-
+<div class="architecture-diagram wide-diagram" style="margin: 20px 0; background: #f8f8f8; padding: 15px; border-radius: 4px; overflow-x: auto;"><pre style="font-family: 'Consolas', 'Monaco', 'Courier New', monospace; line-height: 1.0; white-space: pre; letter-spacing: -0.7px; font-size: 9px; margin: 0;">
 あなた：「在庫サービスのテストから実装を始めたい」
 
-Claude Code：テストファーストで開発を支援します。
+<p>Claude Code：テストファーストで開発を支援します。</p>
 
-# まず、テストを生成
-# tests/test_inventory_service.py
+<p># まず、テストを生成
+# tests/test_inventory_service.py</p>
 
-import pytest
+<p>import pytest
 from datetime import datetime
-from uuid import uuid4
+from uuid import uuid4</p>
 
-class TestInventoryService:
+<p>class TestInventoryService:
     """在庫サービスのテストスイート
     
     ビジネス要件：
@@ -10315,18 +10299,18 @@ class TestInventoryService:
         
         # When/Then
         with pytest.raises(InsufficientStockError):
-            inventory_service.reserve(product_id, 30)
+            inventory_service.reserve(product_id, 30)</p>
 
-# 次に、テストを満たす実装を生成
-# services/inventory.py
+<p># 次に、テストを満たす実装を生成
+# services/inventory.py</p>
 
-from typing import Dict, Optional
+<p>from typing import Dict, Optional
 from uuid import UUID, uuid4
 from datetime import datetime, timedelta
 import redis
-from dataclasses import dataclass
+from dataclasses import dataclass</p>
 
-@dataclass
+<p>@dataclass
 class StockReservation:
     id: UUID
     product_id: UUID
@@ -10335,9 +10319,9 @@ class StockReservation:
     
 class InsufficientStockError(Exception):
     """在庫不足エラー"""
-    pass
+    pass</p>
 
-class InventoryService:
+<p>class InventoryService:
     """在庫管理サービス
     
     価値貢献：
@@ -10387,13 +10371,13 @@ class InventoryService:
         )
         
         self.reservations[reservation.id] = reservation
-        return reservation.id
+        return reservation.id</p>
 
-# テスト実行
+<p># テスト実行
 $ pytest tests/test_inventory_service.py -v
-==================== 3 passed in 0.05s ====================
+==================== 3 passed in 0.05s ====================</p>
 
-次は、パフォーマンステストを追加しましょうか？</code></pre>
+<p>次は、パフォーマンステストを追加しましょうか？</pre></div></p>
 
 <h2>効果的なプロンプトエンジニアリング</h2>
 
@@ -10413,7 +10397,8 @@ $ pytest tests/test_inventory_service.py -v
 
 <p>複雑な要求は、段階的に詳細化します。</p>
 
-<pre><code class="language-">実践例：段階的な設計深化
+<div class="practice-example" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+<div style="font-family: monospace; white-space: pre-wrap; overflow-x: auto; margin: 0;">実践例：段階的な設計深化
 
 ステップ1：概要レベル
 あなた：「ECサイトの注文処理システムの全体像を設計して」
@@ -10433,7 +10418,8 @@ Claude Code：[具体的なコードを生成]
 ステップ4：最適化
 あなた：「このコードのパフォーマンスを改善して」
 
-Claude Code：[最適化されたコードを提示]</code></pre>
+Claude Code：[最適化されたコードを提示]</div>
+</div>
 
 <h3>フィードバックループの構築</h3>
 
@@ -10479,7 +10465,8 @@ Claude Code：[最適化されたコードを提示]</code></pre>
 
 <p>未知の領域を探索するとき、AIは優れたブレインストーミングパートナーです。</p>
 
-<pre><code class="language-">実践例：新技術の適用可能性探索
+<div class="practice-example" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+<div style="font-family: monospace; white-space: pre-wrap; overflow-x: auto; margin: 0;">実践例：新技術の適用可能性探索
 
 あなた：「ブロックチェーンを当社のサプライチェーンに適用できるか探索したい」
 
@@ -10519,13 +10506,15 @@ Claude Code：多角的な分析を提供します。
 4. 代替技術との比較
    [従来DB vs ブロックチェーンの比較表]
 
-推奨：限定的なPOCから開始し、効果を検証</code></pre>
+推奨：限定的なPOCから開始し、効果を検証</div>
+</div>
 
 <h3>パターン2：レビューと品質向上</h3>
 
 <p>AIは、優れたコードレビュアーとしても機能します。</p>
 
-<pre><code class="language-python">実践例：包括的なコードレビュー
+<div class="practice-example" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+<div style="font-family: monospace; white-space: pre-wrap; overflow-x: auto; margin: 0;">実践例：包括的なコードレビュー
 
 あなた：「このコードをレビューして改善点を指摘してください」
 
@@ -10534,7 +10523,7 @@ def process_order(order_data):
     # 在庫確認
     for item in order_data['items']:
         stock = get_stock(item['id'])
-        if stock &lt; item['quantity']:
+        if stock < item['quantity']:
             return False
     
     # 注文処理
@@ -10606,7 +10595,7 @@ class OrderService:
             logger.error(f"Transaction failed: {e}")
             raise
     
-    def process_order(self, customer_id: str, items: List[OrderItem]) -&gt; str:
+    def process_order(self, customer_id: str, items: List[OrderItem]) -> str:
         """注文を処理する
         
         Returns:
@@ -10648,13 +10637,15 @@ class OrderService:
 5. パフォーマンス考察
 - N+1問題の可能性
 - バッチ処理の検討
-- キャッシュ戦略</code></pre>
+- キャッシュ戦略</div>
+</div>
 
 <h3>パターン3：ドキュメント生成</h3>
 
 <p>AIは、コードから高品質なドキュメントを生成できます。</p>
 
-<pre><code class="language-">実践例：包括的なドキュメント生成
+<div class="practice-example" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+<div style="font-family: monospace; white-space: pre-wrap; overflow-x: auto; margin: 0;">実践例：包括的なドキュメント生成
 
 あなた：「このシステムのドキュメントを生成してください」
 
@@ -10675,11 +10666,10 @@ Claude Code：多層的なドキュメントを生成します。
 - **技術的価値**: ミリ秒単位の在庫確認、99.9%の可用性
 
 ## 2. アーキテクチャ
-</code></pre>
-アーキテクチャ構成図
-====================
 
-<p>┌─────────────────────────────────────────────────────────────┐
+
+<div class="architecture-diagram" style="margin: 20px 0; background: #f8f8f8; padding: 15px; border-radius: 4px; overflow-x: auto;">
+<pre style="font-family: 'Consolas', 'Monaco', 'Courier New', Courier, monospace; font-size: 10px; line-height: 1.05; letter-spacing: -0.4px; margin: 0; white-space: pre;">┌─────────────────────────────────────────────────────────────┐
 │                    フロントエンド                           │
 │              [Webアプリ]    [モバイルアプリ]                │
 └──────────────────────┬──────────────────────────────────────┘
@@ -10703,19 +10693,23 @@ Claude Code：多層的なドキュメントを生成します。
 │                    データストア                             │
 │     (PostgreSQL)      (Redis)        [Kafka]               │
 │       永続化          キャッシュ      メッセージング        │
-└─────────────────────────────────────────────────────────────┘
-<pre><code class="language-">
+└─────────────────────────────────────────────────────────────┘</pre>
+</div>
+
 ## 3. API仕様
 
 ### 在庫確認 API
 
 **エンドポイント**: `GET /api/v1/inventory/{productId}`
 
-**リクエスト例**:</code></pre>bash
+**リクエスト例**:
+```bash
 curl -X GET "https://api.example.com/api/v1/inventory/PROD-001" \
   -H "Authorization: Bearer {token}"
-<pre><code class="language-">
-**レスポンス例**:</code></pre>json
+```
+
+**レスポンス例**:
+```json
 {
   "productId": "PROD-001",
   "availableQuantity": 150,
@@ -10733,22 +10727,29 @@ curl -X GET "https://api.example.com/api/v1/inventory/PROD-001" \
   ],
   "lastUpdated": "2025-12-14T10:30:00Z"
 }
-<pre><code class="language-">
+```
+
 ## 4. 運用ガイド
 
 ### デプロイメント
 
-1. 環境変数の設定</code></pre>bash
+1. 環境変数の設定
+```bash
 export DATABASE_URL="postgresql://..."
 export REDIS_URL="redis://..."
 export KAFKA_BROKERS="broker1:9092,broker2:9092"
-<pre><code class="language-">
-2. Dockerイメージのビルド</code></pre>bash
+```
+
+2. Dockerイメージのビルド
+```bash
 docker build -t inventory-service:latest .
-<pre><code class="language-">
-3. Kubernetes適用</code></pre>bash
+```
+
+3. Kubernetes適用
+```bash
 kubectl apply -f k8s/inventory-service.yaml
-<pre><code class="language-">
+```
+
 ### モニタリング
 
 主要メトリクス：
@@ -10757,8 +10758,8 @@ kubectl apply -f k8s/inventory-service.yaml
 - **エラー率**: `inventory_error_rate`
 
 アラート設定：
-- レスポンスタイム &gt; 100ms
-- エラー率 &gt; 1%
+- レスポンスタイム > 100ms
+- エラー率 > 1%
 - 在庫不整合検出
 
 ## 5. トラブルシューティング
@@ -10773,7 +10774,8 @@ kubectl apply -f k8s/inventory-service.yaml
    - 原因：コネクションプール枯渇
    - 対処：プールサイズを増やす
 
-[以下、詳細なトラブルシューティングガイド]</code></pre></p>
+[以下、詳細なトラブルシューティングガイド]</div>
+</div>
 
 <h2>実践的なワークフロー例</h2>
 
@@ -10844,7 +10846,8 @@ kubectl apply -f k8s/inventory-service.yaml
 
 <p>予期せぬ問題が発生したとき。</p>
 
-<pre><code class="language-">実践例：本番障害の迅速な解決
+<div class="practice-example" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+<div style="font-family: monospace; white-space: pre-wrap; overflow-x: auto; margin: 0;">実践例：本番障害の迅速な解決
 
 状況：本番環境で注文処理が急激に遅延
 
@@ -10895,7 +10898,8 @@ SELECT ... FROM inventory_summary
 
 human：「一時対処を適用後、恒久対策を計画」
 
-[その後の改善計画を共同で策定]</code></pre>
+[その後の改善計画を共同で策定]</div>
+</div>
 
 <h2>まとめ：人間とAIの共創時代</h2>
 
@@ -12579,13 +12583,13 @@ human：「一時対処を適用後、恒久対策を計画」
 
 <pre><code class="language-">あなた：現在のプロジェクトの問題を診断してください。
 
-Claude Code：プロジェクトデータを分析します。
+<p>Claude Code：プロジェクトデータを分析します。</p>
 
-[コードベース、ドキュメント、メトリクスを分析]
+<p>[コードベース、ドキュメント、メトリクスを分析]</p>
 
-診断レポート：
+<p>診断レポート：</p>
 
-1. 価値トレーサビリティ分析
+<p>1. 価値トレーサビリティ分析
    
    警告レベル：高
    - 定義された価値: 5個
@@ -12595,9 +12599,9 @@ Claude Code：プロジェクトデータを分析します。
    問題のある領域：
    - 管理画面機能群（価値との関連不明）
    - レポート機能（過剰に詳細）
-   - 通知システム（要件にない）
+   - 通知システム（要件にない）</p>
 
-2. 複雑性分析
+<p>2. 複雑性分析
    
    警告レベル：中
    - 循環的複雑度: 平均15（推奨: &lt;10）
@@ -12606,9 +12610,9 @@ Claude Code：プロジェクトデータを分析します。
    
    特に複雑な部分：
    - 認証・認可システム
-   - データ変換レイヤー
+   - データ変換レイヤー</p>
 
-3. チーム健全性分析
+<p>3. チーム健全性分析
    
    コミット履歴から推測：
    - 単独作業: 70%（推奨: &lt;30%）
@@ -12621,17 +12625,17 @@ Claude Code：プロジェクトデータを分析します。
    優先度2：不要機能の削除
    優先度3：チームコラボレーション改善
    
-詳細な改善計画を作成しますか？</code></pre>
+詳細な改善計画を作成しますか？</code></pre></p>
 
 <h3>AIとのペア・プロブレムソルビング</h3>
 
 <pre><code class="language-">あなた：価値トレーサビリティを回復する計画を立ててください。
 
-Claude Code：段階的な回復計画を提案します。
+<p>Claude Code：段階的な回復計画を提案します。</p>
 
-価値トレーサビリティ回復計画：
+<p>価値トレーサビリティ回復計画：</p>
 
-Phase 1: 現状把握と整理（3日間）
+<p>Phase 1: 現状把握と整理（3日間）
   Day 1: 価値の棚卸し
     - 元の価値定義書の確認
     - ステークホルダーへのヒアリング
@@ -12645,24 +12649,24 @@ Phase 1: 現状把握と整理（3日間）
   Day 3: ギャップ分析
     - 価値に貢献しない機能の特定
     - 実装されていない価値の特定
-    - 優先順位の再評価
+    - 優先順位の再評価</p>
 
-Phase 2: 軌道修正（1週間）
+<p>Phase 2: 軌道修正（1週間）
   - 不要機能の削除/無効化
   - 欠落している価値の実装計画
-  - トレーサビリティドキュメント更新
+  - トレーサビリティドキュメント更新</p>
 
-Phase 3: 仕組み化（継続的）
+<p>Phase 3: 仕組み化（継続的）
   - 日次: 価値確認の習慣化
   - 週次: トレーサビリティレビュー
-  - 月次: ステークホルダーチェックポイント
+  - 月次: ステークホルダーチェックポイント</p>
 
-実装支援ツール：
+<p>実装支援ツール：
 1. 価値マッピングテンプレート
 2. 自動トレーサビリティチェッカー
-3. ダッシュボード設定
+3. ダッシュボード設定</p>
 
-開始しますか？</code></pre>
+<p>開始しますか？</code></pre></p>
 
 <h2>継続的改善のフレームワーク</h2>
 
@@ -13670,33 +13674,17 @@ Phase 3: 仕組み化（継続的）
 
 <strong>アーキテクチャ</strong>
 
-<table>
-<thead>
-<tr>
-<th>統合層</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>[統一価値管理] ← [融合ケイパビリティ]</td>
-</tr>
-<tr>
-<td>物理層</td>
-<td></td>
-<td>デジタル層</td>
-</tr>
-<tr>
-<td>[工場]</td>
-<td></td>
-<td>[IoT基盤] [AI分析]</td>
-</tr>
-<tr>
-<td>[製品]</td>
-<td></td>
-<td>[サービス]</td>
-</tr>
-</tbody>
-</table>
+<div class="architecture-diagram"><pre style="font-family: monospace, 'Courier New', Courier; line-height: 1.1; white-space: pre; overflow-x: auto; letter-spacing: -0.5px; font-size: 14px;">┌─────────────────────────────────────────┐
+│            統合層                       │
+│  [統一価値管理] ← [融合ケイパビリティ]  │
+└────────┬────────────────┬───────────────┘
+         │                │
+         ▼                ▼
+┌────────────────┐ ┌─────────────────────┐
+│    物理層      │ │     デジタル層      │
+│  [工場]        │ │ [IoT基盤] [AI分析]  │
+│  [製品]        │ │ [サービス]          │
+└────────────────┘ └─────────────────────┘</pre></div>
 
 <strong>成果</strong>
 
@@ -13798,17 +13786,17 @@ Phase 3: 仕組み化（継続的）
         """任意時点の状態を取得"""
         return self._reconstruct_state(timestamp)
 
-    def project_future(self,
+<p>def project_future(self,
                      duration: timedelta,
                      scenarios: List[Scenario]) -&gt; List[State]:
         """将来状態を予測"""
-        return self._run_projections(duration, scenarios)
+        return self._run_projections(duration, scenarios)</p>
 
-    def analyze_evolution(self,
+<p>def analyze_evolution(self,
                         start: datetime,
                         end: datetime) -&gt; Evolution:
         """期間内の進化を分析"""
-        return self._trace_changes(start, end)</code></pre>
+        return self._trace_changes(start, end)</code></pre></p>
 
 <strong>影響</strong>
 
@@ -13990,28 +13978,28 @@ Phase 3: 仕組み化（継続的）
 
 <pre><code class="language-">あなた：新しいパターンの開発を支援してください。IoTデバイスの大量管理で困っています。
 
-Claude Code：状況を分析し、パターン開発を支援します。
+<p>Claude Code：状況を分析し、パターン開発を支援します。</p>
 
-問題分析を開始します：
+<p>問題分析を開始します：</p>
 
-1. コンテキストの明確化
+<p>1. コンテキストの明確化
    Q: どのような種類のIoTデバイスですか？
    Q: 現在の管理規模と将来予測は？
-   Q: 主な課題は何ですか？
+   Q: 主な課題は何ですか？</p>
 
-[対話により詳細を収集]
+<p>[対話により詳細を収集]</p>
 
-理解しました。以下のパターンを提案します：
+<p>理解しました。以下のパターンを提案します：</p>
 
-パターン名：「階層型IoTケイパビリティ管理パターン」
+<p>パターン名：「階層型IoTケイパビリティ管理パターン」</p>
 
-問題の本質：
+<p>問題の本質：
 - 数百万のデバイス個別管理は非現実的
 - しかし、個別の異常は検知必要
-- グループ管理では粒度が粗すぎる
+- グループ管理では粒度が粗すぎる</p>
 
-解決の核心：
-デバイスを動的に階層化し、各階層に適切なケイパビリティを付与</code></pre>
+<p>解決の核心：
+デバイスを動的に階層化し、各階層に適切なケイパビリティを付与</code></pre></p>
 
 <strong>階層型IoTパターン実装概要</strong>
 
@@ -14065,29 +14053,29 @@ Claude Code：状況を分析し、パターン開発を支援します。
 3. ネットワーク負荷の最適化
 4. 段階的な問題検知
 
-実装を詳細化しますか？</code></pre>
+<p>実装を詳細化しますか？</code></pre></p>
 
 <h3>パターンの洗練支援</h3>
 
 <pre><code class="language-">あなた：このパターンをさらに洗練させてください。エッジケースが心配です。
 
-Claude Code：パターンの弱点を分析し、改善します。
+<p>Claude Code：パターンの弱点を分析し、改善します。</p>
 
-潜在的な問題点を特定しました：
+<p>潜在的な問題点を特定しました：</p>
 
-1. **通信障害ケース**
+<p>1. **通信障害ケース**
    問題：階層間の通信断絶
-   対策：各層に自律性を付与</code></pre>
+   対策：各層に自律性を付与</code></pre></p>
 
 <pre><code class="language-python">class AutonomousLayer:
     def __init__(self, layer_level):
         self.cache = LocalCache()
         self.fallback_mode = False
 
-    def handle_communication_failure(self):
+<p>def handle_communication_failure(self):
         self.fallback_mode = True
         self.operate_with_cached_policies()
-        self.queue_updates_for_recovery()</code></pre>
+        self.queue_updates_for_recovery()</code></pre></p>
 
 <pre><code class="language-">2. **急激なスケール変化**
    問題：デバイス数の急増
@@ -14109,23 +14097,23 @@ Claude Code：パターンの弱点を分析し、改善します。
         self.time_series_db = TSDB()  # 効率的な時系列
         self.edge_compute = EdgeNodes()  # 分散処理
 
-    def process_device_data(self, device_id, data):
+<p>def process_device_data(self, device_id, data):
         # エッジで前処理
         if self.edge_compute.can_handle(data):
-            return self.edge_compute.process(data)
+            return self.edge_compute.process(data)</p>
 
-        # 必要時のみ上位層へ
+<p># 必要時のみ上位層へ
         if self.requires_escalation(data):
-            return self.escalate_to_cluster(device_id, data)</code></pre>
+            return self.escalate_to_cluster(device_id, data)</code></pre></p>
 
 <pre><code class="language-">改善されたパターンの検証方法：
 
-1. シミュレーション環境構築
+<p>1. シミュレーション環境構築
 2. 段階的な負荷試験
 3. 故障注入テスト
-4. セキュリティ監査
+4. セキュリティ監査</p>
 
-詳細な実装ガイドを作成しますか？</code></pre>
+<p>詳細な実装ガイドを作成しますか？</code></pre></p>
 
 <h2>パターン言語の構築</h2>
 
@@ -16143,7 +16131,7 @@ Claude Code：パターンの弱点を分析し、改善します。
         </main>
         
         <footer class="footer">
-            <p>Generated with Parasol V5 Book Generator | 2025年12月18日</p>
+            <p>Generated with Parasol V5 Book Generator | 2025年12月19日</p>
         </footer>
     </div>
 </body>
