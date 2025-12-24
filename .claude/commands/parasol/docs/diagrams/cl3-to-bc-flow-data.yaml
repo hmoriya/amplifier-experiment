@@ -1,0 +1,611 @@
+# CL3→BC抽出フロー 作図用データ
+# Parasol V5 - 問題領域から解決領域への移行
+
+---
+metadata:
+  title: "Parasol V5 - 問題領域から解決領域への移行フロー"
+  version: "1.0"
+  created: "2025-12-25"
+  purpose: "CL3業務オペレーションからBounded Context抽出までの全体像を可視化"
+
+---
+# ============================================================
+# 1. 全体構造（2段階ZIGZAGモデル）
+# ============================================================
+
+overall_structure:
+  title: "2段階ZIGZAGモデル"
+
+  stage1:
+    name: "第1段階: 価値のZIGZAG"
+    phase: "Phase 2"
+    domain: "Value Domain"
+    color: "#E8F5E9"  # 薄緑
+    flow:
+      - step: "VL1"
+        role: "WHAT"
+        label: "最上位価値"
+        example: "期待を超えるおいしさ"
+      - step: "VL2"
+        role: "HOW"
+        label: "価値構造化"
+        example: "製品イノベーション価値"
+      - step: "VL3"
+        role: "WHAT'"
+        label: "構造化価値"
+        example: "発酵技術による味の革新"
+      - step: "VMS"
+        role: "HOW'"
+        label: "マイル定義"
+        example: "VMS5→VMS1バックキャスト"
+      - step: "VS"
+        role: "WHAT''"
+        label: "バリューステージ"
+        example: "VS0-VS7（顧客状態）"
+
+  stage2:
+    name: "第2段階: ビジネスと設計のZIGZAG"
+    phase: "Phase 3-6"
+
+    problem_space:
+      name: "Problem Space（問題領域）"
+      phase: "Phase 3"
+      color: "#E3F2FD"  # 薄青
+      description: "何を解決するか（ビジネス理解）"
+      responsibility: "業務担当者・ドメインエキスパート"
+      flow:
+        - step: "CL1"
+          role: "WHAT"
+          label: "活動領域識別"
+          classification: "傾向的分類（参考情報）"
+          output: "activity-identification.md"
+          responsible: "経営層"
+        - step: "CL2"
+          role: "HOW"
+          label: "ケイパビリティ設計"
+          classification: "正式分類（Core/Supporting/Generic）"
+          output: "subdomain-design.md"
+          responsible: "事業部長・PO"
+        - step: "CL3"
+          role: "WHAT'"
+          label: "業務オペレーション"
+          classification: "分類なし（網羅性重視）"
+          output: "{capability}-operations.md"
+          responsible: "業務担当者"
+
+    transition:
+      name: "問題→解決 変換"
+      label: "DDDマッピング"
+      phase: "Phase 4"
+      color: "#FFF3E0"  # 薄オレンジ
+      description: "CL3群をBC境界に対応付け"
+      key_activity: "BC境界確定"
+      output: "capability-bc-mapping.md"
+      responsible: "アーキテクト"
+
+    solution_space:
+      name: "Solution Space（解決領域）"
+      phase: "Phase 5-6"
+      color: "#F3E5F5"  # 薄紫
+      description: "どう解決するか（技術設計）"
+      responsibility: "開発チーム"
+      flow:
+        - step: "BC"
+          role: "WHAT"
+          label: "境界付きコンテキスト"
+          output: "domain-language.md"
+          responsible: "アーキテクト"
+        - step: "Service"
+          role: "HOW"
+          label: "サービス設計"
+          output: "service-definition.md"
+          responsible: "開発リード"
+        - step: "Implementation"
+          role: "WHAT'"
+          label: "実装"
+          output: "コード"
+          responsible: "開発者"
+
+---
+# ============================================================
+# 2. CL3→BC抽出プロセス詳細
+# ============================================================
+
+cl3_to_bc_extraction:
+  title: "CL3→BC抽出プロセス"
+
+  input:
+    name: "CL3 業務オペレーション群"
+    source: "Phase 3c成果物"
+    format: "{capability}-operations.md"
+    example:
+      - "OP-FER-001: 酵母株探索・収集"
+      - "OP-FER-002: 酵母株育種・改良"
+      - "OP-FER-003: 発酵条件最適化"
+      - "OP-ING-001: 素材評価・選定"
+      - "OP-ING-002: 配合設計"
+
+  steps:
+    - step_number: 1
+      name: "ユビキタス言語分析"
+      description: "同じ用語・概念を使用するCL3群を識別"
+      criteria:
+        - "同一のドメイン用語を使用しているか"
+        - "同じエンティティを操作しているか"
+        - "共通のビジネスルールがあるか"
+      output: "言語グループ"
+
+    - step_number: 2
+      name: "凝集度評価"
+      description: "CL3群の関連性を3つの観点で評価"
+      criteria:
+        - name: "データ凝集度"
+          question: "同じデータ（エンティティ）を操作するか？"
+          high: "同一Aggregate内のデータ操作"
+          low: "異なるデータセット"
+        - name: "機能凝集度"
+          question: "同じビジネス目標に貢献するか？"
+          high: "単一のビジネス能力"
+          low: "複数の独立した目標"
+        - name: "時間凝集度"
+          question: "同時に変更される可能性が高いか？"
+          high: "同じ理由で変更"
+          low: "独立して進化"
+      output: "凝集度スコア"
+
+    - step_number: 3
+      name: "トランザクション境界分析"
+      description: "強整合性が必要な範囲を特定"
+      criteria:
+        - "同一トランザクション内で完結すべきか"
+        - "結果整合性で許容できるか"
+        - "Saga/補償トランザクションが必要か"
+      output: "トランザクション境界"
+
+    - step_number: 4
+      name: "対応パターン決定"
+      description: "分析結果に基づきCL3→BC対応を決定"
+      patterns:
+        - pattern: "1:1"
+          condition: "CL3が単一責務で完結"
+          example: "fermentation-research → fermentation-research-bc"
+        - pattern: "N:1 統合"
+          condition: "高凝集のCL3群"
+          example: "quality-control + quality-assurance → quality-bc"
+        - pattern: "1:N 分割"
+          condition: "複雑・大規模なCL3"
+          example: "large-capability → cap-a-bc + cap-b-bc"
+      output: "capability-bc-mapping.md"
+
+    - step_number: 5
+      name: "BC境界確定"
+      description: "最終的なBC定義を作成"
+      deliverables:
+        - "BC名と責務"
+        - "含まれるCL3一覧"
+        - "Aggregate候補"
+        - "Domain Event候補"
+      output: "{bc-name}-boundary.md"
+
+    - step_number: 6
+      name: "Context Map作成"
+      description: "BC間の関係性を定義"
+      patterns:
+        - "Customer-Supplier（上流/下流）"
+        - "Partnership（対等連携）"
+        - "Shared Kernel（共有）"
+        - "Anti-Corruption Layer（変換層）"
+        - "Published Language（公開言語）"
+        - "Open Host Service（公開サービス）"
+        - "Separate Ways（分離）"
+        - "Conformist（準拠）"
+      output: "context-map.md"
+
+  output:
+    name: "BC定義群"
+    destination: "Phase 4成果物"
+    files:
+      - "capability-bc-mapping.md"
+      - "{service}/bounded-contexts/{bc-name}-boundary.md"
+      - "context-map.md"
+
+---
+# ============================================================
+# 3. 具体例：飲料メーカーの発酵研究領域
+# ============================================================
+
+example:
+  title: "具体例：発酵研究領域のCL3→BC抽出"
+  company: "飲料メーカー"
+  value_stream: "VS2: 製品開発・イノベーション"
+
+  phase3_input:
+    cl1:
+      name: "基盤技術研究"
+      classification: "Core傾向"
+
+    cl2:
+      - name: "fermentation-research"
+        classification: "Core"
+        investment_priority: "高"
+      - name: "ingredient-research"
+        classification: "Core"
+        investment_priority: "高"
+
+    cl3_operations:
+      fermentation_research:
+        - id: "OP-FER-001"
+          name: "酵母株探索・収集"
+          trigger: "新製品企画、品質改善要求"
+          output: "候補酵母株リスト"
+          entities: ["YeastStrain", "StrainSource"]
+        - id: "OP-FER-002"
+          name: "酵母株育種・改良"
+          trigger: "目標特性決定"
+          output: "改良酵母株"
+          entities: ["YeastStrain", "BreedingRecord"]
+        - id: "OP-FER-003"
+          name: "発酵条件最適化"
+          trigger: "酵母株確定"
+          output: "最適発酵条件"
+          entities: ["FermentationCondition", "OptimizationResult"]
+
+      ingredient_research:
+        - id: "OP-ING-001"
+          name: "素材評価・選定"
+          trigger: "製品コンセプト決定"
+          output: "素材評価レポート"
+          entities: ["Ingredient", "EvaluationResult"]
+        - id: "OP-ING-002"
+          name: "配合設計"
+          trigger: "素材確定"
+          output: "配合レシピ"
+          entities: ["Recipe", "Ingredient"]
+
+  phase4_extraction:
+    step1_language_analysis:
+      group_a:
+        name: "酵母株グループ"
+        common_terms: ["酵母株", "育種", "発酵"]
+        operations: ["OP-FER-001", "OP-FER-002", "OP-FER-003"]
+      group_b:
+        name: "素材グループ"
+        common_terms: ["素材", "配合", "レシピ"]
+        operations: ["OP-ING-001", "OP-ING-002"]
+
+    step2_cohesion_evaluation:
+      fermentation_ops:
+        data_cohesion: "高（YeastStrain中心）"
+        functional_cohesion: "高（発酵技術向上）"
+        temporal_cohesion: "高（同時に変更）"
+        result: "統合推奨"
+      ingredient_ops:
+        data_cohesion: "高（Ingredient中心）"
+        functional_cohesion: "高（素材最適化）"
+        temporal_cohesion: "高（同時に変更）"
+        result: "統合推奨"
+
+    step3_transaction_boundary:
+      within_bc:
+        - "酵母株登録→育種記録→条件最適化（強整合性）"
+        - "素材評価→配合設計（強整合性）"
+      across_bc:
+        - "発酵BC→素材BC: 結果整合性でOK"
+
+    step4_pattern_decision:
+      - cl3_group: ["OP-FER-001", "OP-FER-002", "OP-FER-003"]
+        pattern: "N:1統合"
+        bc_name: "fermentation-research-bc"
+        reason: "高凝集、同一ドメイン言語"
+      - cl3_group: ["OP-ING-001", "OP-ING-002"]
+        pattern: "N:1統合"
+        bc_name: "ingredient-research-bc"
+        reason: "高凝集、同一ドメイン言語"
+
+    step5_bc_definition:
+      - bc_name: "fermentation-research-bc"
+        responsibility: "酵母株の探索・育種・発酵条件最適化"
+        aggregates:
+          - name: "YeastStrain"
+            root: true
+            entities: ["BreedingRecord", "StrainCharacteristics"]
+            value_objects: ["StrainCode", "FermentationProfile"]
+          - name: "FermentationCondition"
+            root: true
+            value_objects: ["Temperature", "Duration", "pH"]
+        domain_events:
+          - "YeastStrainRegistered"
+          - "BreedingCompleted"
+          - "OptimizationCompleted"
+
+      - bc_name: "ingredient-research-bc"
+        responsibility: "素材の評価・選定・配合設計"
+        aggregates:
+          - name: "Ingredient"
+            root: true
+            entities: ["EvaluationRecord"]
+            value_objects: ["IngredientCode", "NutritionProfile"]
+          - name: "Recipe"
+            root: true
+            entities: ["RecipeVersion"]
+            value_objects: ["Proportion", "ProcessingMethod"]
+        domain_events:
+          - "IngredientEvaluated"
+          - "RecipeDesigned"
+
+    step6_context_map:
+      relationships:
+        - upstream: "fermentation-research-bc"
+          downstream: "ingredient-research-bc"
+          pattern: "Customer-Supplier"
+          reason: "発酵条件が素材配合に影響"
+          contract: "FermentationProfileAPI"
+        - upstream: "ingredient-research-bc"
+          downstream: "product-development-bc"
+          pattern: "Customer-Supplier"
+          reason: "配合レシピが製品開発の入力"
+          contract: "RecipeAPI + RecipeDesignedEvent"
+
+  phase5_output:
+    service:
+      name: "ResearchPlatformService"
+      bounded_contexts:
+        - "fermentation-research-bc"
+        - "ingredient-research-bc"
+      reason: "同一チームが管理、密接な連携"
+
+---
+# ============================================================
+# 4. 判断基準マトリクス
+# ============================================================
+
+decision_matrix:
+  title: "CL3→BC対応パターン判断基準"
+
+  criteria:
+    - name: "データ凝集度"
+      weight: 0.4
+      evaluation:
+        high: "同一Aggregateのデータ操作"
+        medium: "関連エンティティのデータ操作"
+        low: "独立したデータセット"
+
+    - name: "機能凝集度"
+      weight: 0.3
+      evaluation:
+        high: "単一ビジネス能力に貢献"
+        medium: "関連する複数の能力"
+        low: "独立した能力"
+
+    - name: "時間凝集度"
+      weight: 0.2
+      evaluation:
+        high: "同じ理由で同時に変更"
+        medium: "一部重複して変更"
+        low: "独立して進化"
+
+    - name: "チーム境界"
+      weight: 0.1
+      evaluation:
+        high: "同一チームが担当"
+        medium: "密接に協力するチーム"
+        low: "独立したチーム"
+
+  decision_rules:
+    - condition: "総合スコア >= 0.8"
+      pattern: "N:1統合"
+      description: "高凝集のCL3群を1つのBCに統合"
+
+    - condition: "0.5 <= 総合スコア < 0.8"
+      pattern: "1:1対応"
+      description: "CL3とBCを1対1で対応"
+
+    - condition: "総合スコア < 0.5 かつ CL3が複雑"
+      pattern: "1:N分割"
+      description: "1つのCL3を複数BCに分割"
+
+---
+# ============================================================
+# 5. 図解用レイアウト情報
+# ============================================================
+
+layout:
+  title: "作図レイアウト指定"
+
+  main_diagram:
+    name: "問題領域→解決領域フロー図"
+    orientation: "left-to-right"
+    sections:
+      - name: "Problem Space"
+        position: "left"
+        width: "40%"
+        background: "#E3F2FD"
+        elements:
+          - "CL1 → CL2 → CL3"
+          - "縦に3段"
+
+      - name: "Transition"
+        position: "center"
+        width: "20%"
+        background: "#FFF3E0"
+        elements:
+          - "BC境界確定"
+          - "DDDマッピング"
+          - "矢印（太め）"
+
+      - name: "Solution Space"
+        position: "right"
+        width: "40%"
+        background: "#F3E5F5"
+        elements:
+          - "BC → Service → 実装"
+          - "縦に3段"
+
+  detail_diagram:
+    name: "CL3→BC抽出ステップ図"
+    orientation: "top-to-bottom"
+    steps:
+      - label: "Step 1"
+        name: "言語分析"
+        shape: "rectangle"
+        color: "#BBDEFB"
+      - label: "Step 2"
+        name: "凝集度評価"
+        shape: "rectangle"
+        color: "#90CAF9"
+      - label: "Step 3"
+        name: "トランザクション境界"
+        shape: "rectangle"
+        color: "#64B5F6"
+      - label: "Step 4"
+        name: "パターン決定"
+        shape: "diamond"
+        color: "#42A5F5"
+      - label: "Step 5"
+        name: "BC定義"
+        shape: "rectangle"
+        color: "#2196F3"
+      - label: "Step 6"
+        name: "Context Map"
+        shape: "rectangle"
+        color: "#1E88E5"
+
+  example_diagram:
+    name: "発酵研究領域の例"
+    layout: "two-column"
+    left_column:
+      title: "CL3（入力）"
+      items:
+        - "OP-FER-001 酵母株探索"
+        - "OP-FER-002 酵母株育種"
+        - "OP-FER-003 発酵条件最適化"
+        - "---"
+        - "OP-ING-001 素材評価"
+        - "OP-ING-002 配合設計"
+    right_column:
+      title: "BC（出力）"
+      items:
+        - "fermentation-research-bc"
+        - "(YeastStrain, FermentationCondition)"
+        - "---"
+        - "ingredient-research-bc"
+        - "(Ingredient, Recipe)"
+    arrows:
+      - from: ["OP-FER-001", "OP-FER-002", "OP-FER-003"]
+        to: "fermentation-research-bc"
+        label: "N:1統合"
+      - from: ["OP-ING-001", "OP-ING-002"]
+        to: "ingredient-research-bc"
+        label: "N:1統合"
+
+---
+# ============================================================
+# 6. Mermaid記法サンプル
+# ============================================================
+
+mermaid_samples:
+
+  overall_flow: |
+    flowchart LR
+      subgraph PS["Problem Space (Phase 3)"]
+        direction TB
+        CL1[CL1: 活動領域]
+        CL2[CL2: ケイパビリティ]
+        CL3[CL3: 業務オペレーション]
+        CL1 --> CL2 --> CL3
+      end
+
+      subgraph TR["Transition (Phase 4)"]
+        BC_MAP[BC境界確定<br/>DDDマッピング]
+      end
+
+      subgraph SS["Solution Space (Phase 5-6)"]
+        direction TB
+        BC[BC: 境界Ctx]
+        SVC[Service設計]
+        IMPL[実装]
+        BC --> SVC --> IMPL
+      end
+
+      PS --> TR --> SS
+
+      style PS fill:#E3F2FD
+      style TR fill:#FFF3E0
+      style SS fill:#F3E5F5
+
+  extraction_steps: |
+    flowchart TB
+      INPUT[CL3業務オペレーション群]
+      S1[Step1: ユビキタス言語分析]
+      S2[Step2: 凝集度評価]
+      S3[Step3: トランザクション境界分析]
+      S4{Step4: パターン決定}
+      P1[1:1対応]
+      P2[N:1統合]
+      P3[1:N分割]
+      S5[Step5: BC定義作成]
+      S6[Step6: Context Map作成]
+      OUTPUT[BC定義群]
+
+      INPUT --> S1 --> S2 --> S3 --> S4
+      S4 -->|単一責務| P1
+      S4 -->|高凝集| P2
+      S4 -->|複雑・大規模| P3
+      P1 --> S5
+      P2 --> S5
+      P3 --> S5
+      S5 --> S6 --> OUTPUT
+
+  example_mapping: |
+    flowchart LR
+      subgraph CL3["CL3 業務オペレーション"]
+        F1[OP-FER-001<br/>酵母株探索]
+        F2[OP-FER-002<br/>酵母株育種]
+        F3[OP-FER-003<br/>発酵条件最適化]
+        I1[OP-ING-001<br/>素材評価]
+        I2[OP-ING-002<br/>配合設計]
+      end
+
+      subgraph BC["Bounded Context"]
+        FBC[fermentation-research-bc<br/>🧬 YeastStrain<br/>⚗️ FermentationCondition]
+        IBC[ingredient-research-bc<br/>🥬 Ingredient<br/>📋 Recipe]
+      end
+
+      F1 --> FBC
+      F2 --> FBC
+      F3 --> FBC
+      I1 --> IBC
+      I2 --> IBC
+
+      FBC -.->|Customer-Supplier| IBC
+
+---
+# ============================================================
+# 7. 補足情報
+# ============================================================
+
+notes:
+  key_points:
+    - "CL3は問題領域の最下層（業務の詳細理解）"
+    - "BCは解決領域の入口（技術境界の確定）"
+    - "Phase 4がこの変換の責任を持つ"
+    - "判断基準は凝集度が最重要"
+
+  anti_patterns:
+    - name: "いきなりBC設計"
+      problem: "CL3を経由せずにBC設計を始める"
+      consequence: "ビジネス価値との整合が取れない"
+
+    - name: "1:1固定"
+      problem: "全てのCL3を1:1でBCにマッピング"
+      consequence: "不必要に細かいサービス分割"
+
+    - name: "巨大BC"
+      problem: "多くのCL3を1つのBCに統合"
+      consequence: "モノリス化、変更困難"
+
+  success_criteria:
+    - "各BCが単一責務を持つ"
+    - "BC間の依存が最小化されている"
+    - "チーム境界とBC境界が整合している"
+    - "ユビキタス言語がBC内で一貫している"
