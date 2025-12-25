@@ -47,6 +47,45 @@ description: Value definition and enterprise activities (project:parasol)
 
 ## 🎯 設計哲学の適用
 
+### 🔬 Axiomatic Design原則の適用
+
+Phase 2では、MIT Suh教授のAxiomatic Design原則のうち**情報公理**を適用します。
+
+#### 情報公理（Information Axiom）
+
+> **"Minimize the information content of the design."**
+> （設計の情報量を最小化せよ）
+
+**Phase 2での適用**:
+
+| 評価項目 | 基準 | 理由 |
+|----------|------|------|
+| VL分解深度 | ≤ 3階層 | 複雑さの最小化 |
+| VS数 | 5-8程度 | 管理可能な粒度 |
+| VMS数 | 3-5程度 | 焦点の明確化 |
+
+```
+情報公理による価値設計評価:
+
+✅ 良い設計:
+   VL1（1） → VL2（3） → VL3（6）
+   情報量: 最小限で価値を表現
+
+❌ 過剰設計:
+   VL1（1） → VL2（5） → VL3（25） → VL4（100）
+   情報量: 冗長で管理困難
+```
+
+**チェックリスト**:
+- [ ] VL階層は3以下か？
+- [ ] 各VLは独立した価値を表現しているか？
+- [ ] VS数は5-8の範囲か？
+- [ ] 重複・冗長なVLがないか？
+
+> 詳細は [zigzag-foundations.md](../philosophy/zigzag-foundations.md#公理2-情報公理information-axiom) を参照
+
+---
+
 ### 価値の実証要件 - 想像から観察へ
 
 > **重要**: すべての価値主張は**測定可能な現実**に基づく必要があります

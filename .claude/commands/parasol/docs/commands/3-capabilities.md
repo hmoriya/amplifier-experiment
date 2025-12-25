@@ -40,6 +40,46 @@ description: Capability decomposition - L2 WHAT in ZIGZAG process (project:paras
 
 ## 🎯 設計哲学の適用
 
+### 🔬 Axiomatic Design原則の適用
+
+Phase 3では、MIT Suh教授のAxiomatic Design原則のうち**独立公理**を適用します。
+
+#### 独立公理（Independence Axiom）
+
+> **"Maintain the independence of the functional requirements (FRs)."**
+> （機能要件の独立性を維持せよ）
+
+**Phase 3での適用**:
+
+| 評価項目 | 基準 | 理由 |
+|----------|------|------|
+| CL3間依存度 | 最小化 | 変更影響の局所化 |
+| CL2間結合 | 疎結合 | チーム独立性確保 |
+| CL1間関係 | 明確化 | 投資判断の独立性 |
+
+```
+独立公理によるケイパビリティ設計評価:
+
+✅ 良い設計（Uncoupled）:
+   CL3-001: 見積作成 ← 営業BC のみで完結
+   CL3-002: 受注処理 ← 受注BC のみで完結
+   CL3-003: 在庫確認 ← 在庫BC のみで完結
+
+❌ 問題のある設計（Coupled）:
+   CL3-001: 見積作成 ← 営業BC + 在庫BC + 価格BC に依存
+   → 変更が複数BCに波及、独立性が失われる
+```
+
+**CL3独立性チェックリスト**:
+- [ ] 各CL3は単一のビジネス目標に対応しているか？
+- [ ] CL3間で共有データが最小限か？
+- [ ] CL3の変更が他CL3に影響しないか？
+- [ ] 各CL3は独立してテスト可能か？
+
+> 詳細は [zigzag-foundations.md](../philosophy/zigzag-foundations.md#公理1-独立公理independence-axiom) を参照
+
+---
+
 ### DDD的ボトムアップを防ぐトップダウン設計
 
 > **重要**: Phase 3は**価値ストリームから分解**する。エキスパートの意見から構築しない。
