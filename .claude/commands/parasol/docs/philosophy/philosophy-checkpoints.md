@@ -48,51 +48,20 @@
 - 統合が後付けになっている
 - 個別チーム・部門の都合優先
 
-### 4. 🔬 Axiomatic Design公理チェック（V5.2）
+### 4. 🔬 Axiomatic Design公理チェック
 
-MIT Suh教授のAxiomatic Design原則に基づく設計品質検証。
+> 📚 詳細: [zigzag-foundations.md](./zigzag-foundations.md#axiomatic-designの2つの公理)
 
-#### 独立公理（Independence Axiom）
+**独立公理チェック**:
+- [ ] Design MatrixがUncoupled/Decoupled
+- [ ] 循環依存なし
 
-> **"Maintain the independence of the functional requirements."**
+**情報公理チェック**:
+- [ ] 階層深度 ≤ 3（VL、CL）
+- [ ] 冗長要素なし
 
-**✅ 合格基準**:
-- [ ] 各機能要件（FR）が独立している
-- [ ] 1つのDPを変更しても他のFRに影響しない
-- [ ] Design MatrixがUncoupledまたはDecoupled
-
-**❌ 危険信号**:
-- 1つの変更が複数の機能に波及
-- 機能間の循環依存
-- Design MatrixがCoupled（非対角行列）
-
-#### 情報公理（Information Axiom）
-
-> **"Minimize the information content of the design."**
-
-**✅ 合格基準**:
-- [ ] 設計要素数が必要最小限
-- [ ] 階層深度が適切（VL≤3、CL≤3）
-- [ ] 冗長な要素がない
-
-**❌ 危険信号**:
-- 過剰な階層分解
-- 重複した機能定義
-- 使用されない設計要素
-
-#### FR-DP対応原則
-
-> **"Number of DPs should equal number of FRs."**
-
-**✅ 合格基準**:
-- [ ] BC数 ≒ CL3数（比率0.8-1.2）
-- [ ] 各CL3に明確なBC対応がある
-- [ ] 冗長なBCがない
-
-**❌ 危険信号**:
-- BC数がCL3数を大幅に超過
-- 1つのCL3が複数BCに分散（Coupled）
-- 対応のないCL3が存在
+**FR-DP対応チェック**:
+- [ ] BC数/CL3数比率 0.8-1.2
 
 ---
 

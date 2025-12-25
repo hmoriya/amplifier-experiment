@@ -141,73 +141,14 @@ Phase 6: Implementation が完了している必要があります：
 - **復旧性**: RPO/RTO目標の達成
 - **コスト効率**: リソース使用量の最適化
 
-### 🔬 Axiomatic Design原則の適用
+### 🔬 AD原則適用
 
-Phase 7では、AD原則をインフラ設計に適用し、堅牢なプラットフォームを構築します。
+> 📚 [zigzag-foundations.md](../philosophy/zigzag-foundations.md#axiomatic-designの2つの公理)
 
-#### 独立公理（Independence Axiom）
-
-サービスのデプロイ独立性と障害影響範囲の局所化を保証：
-
-```yaml
-infrastructure_independence:
-  deployment_isolation:
-    - 各サービスが独立してデプロイ可能
-    - 1サービスのデプロイが他サービスに影響しない
-    - ローリングアップデート/Blue-Green/Canaryが独立動作
-
-  failure_isolation:
-    - Circuit Breakerによる障害伝播防止
-    - Bulkheadパターンでリソース分離
-    - サービスメッシュによるトラフィック制御
-
-  scaling_isolation:
-    - 各サービスが独立してスケール
-    - リソース競合の回避
-    - 負荷の波及防止
-```
-
-#### 情報公理（Information Axiom）
-
-インフラ構成の複雑さを最小限に抑制：
-
-```yaml
-infrastructure_simplicity:
-  resource_optimization:
-    - 必要最小限のリソース構成
-    - 過剰なマイクロサービス分割を避ける
-    - 共通基盤の適切な共有
-
-  configuration_minimization:
-    - 設定項目の標準化と最小化
-    - デフォルト値の活用
-    - 環境差分の最小化（dev/staging/prod）
-
-  monitoring_essentials:
-    - ゴールデンシグナル（4指標）への集中
-    - アラート疲れを防ぐ適切な閾値
-    - 必要最小限のダッシュボード
-```
-
-#### AD評価チェックリスト
-
-```markdown
-## Phase 7 AD評価
-
-### 独立公理
+**Phase 7チェック**:
 - [ ] 各サービスが独立デプロイ可能
-- [ ] 障害の影響範囲が局所化されている
-- [ ] 1サービスの障害が全体停止を引き起こさない
-
-### 情報公理
-- [ ] インフラ構成要素が必要最小限
-- [ ] 設定の重複・冗長がない
-- [ ] 監視対象が過剰でない
-
-### 改善アクション
-- Coupled箇所の特定と分離計画
-- 過剰構成の簡素化計画
-```
+- [ ] 障害影響が局所化
+- [ ] インフラ構成が必要最小限
 
 ## 実行
 

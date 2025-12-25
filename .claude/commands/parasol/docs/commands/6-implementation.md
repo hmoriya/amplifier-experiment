@@ -220,55 +220,14 @@ Phase 6では以下の実装判断理由を自動出力します：
 
 **出力先**: `outputs/6-implementation/services/{service}/{bc}/implementation-story.md`
 
-### 🔬 Axiomatic Design品質チェック
+### 🔬 AD原則適用
 
-実装フェーズでもAD原則に基づく品質検証を行います。
+> 📚 [zigzag-foundations.md](../philosophy/zigzag-foundations.md#axiomatic-designの2つの公理)
 
-#### 独立公理の実装確認
-
-```yaml
-implementation_independence_check:
-  service_isolation:
-    - サービス間に循環依存がないか
-    - 共有データベースへの直接アクセスを避けているか
-    - イベント駆動で疎結合を実現しているか
-
-  module_independence:
-    - 各モジュールが独立してテスト可能か
-    - モジュール間の依存が一方向か
-    - インターフェースが安定しているか
-
-  verification:
-    - "1つのBCの変更が他BCに影響しないことを確認"
-    - "デプロイ独立性の検証"
-```
-
-#### 情報公理の実装確認
-
-```yaml
-implementation_simplicity_check:
-  code_complexity:
-    - 過剰な抽象化を避けているか
-    - 必要最小限のレイヤー構造か
-    - YAGNIの原則を守っているか
-
-  metrics:
-    aggregate_count: "Phase 5の設計と一致"
-    service_count: "BC数と同等（比率0.8-1.2）"
-    domain_event_types: "必要最小限"
-```
-
-#### FR-DP対応の実装検証
-
-Phase 5で定義したCL3↔BC対応が実装でも維持されているかを確認：
-
-```
-検証項目:
-- [ ] 各CL3に対応するUseCaseが実装されている
-- [ ] BCの責任範囲がPhase 5の設計と一致
-- [ ] 不要なBCやサービスが追加されていない
+**Phase 6チェック**:
+- [ ] サービス間に循環依存なし
+- [ ] Phase 5設計との一致（Aggregate数、BC数）
 - [ ] 設計になかった依存関係が生まれていない
-```
 
 ### ナレッジ蓄積
 

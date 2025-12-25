@@ -253,64 +253,14 @@ Parasol V5は、理論的な完璧性よりも実践的な有用性を重視し�
 
 ### 設計品質の科学的保証：Axiomatic Design
 
-Parasol V5では、MIT Suh教授が提唱した**Axiomatic Design（公理的設計）**の原則を統合し、設計品質を科学的に検証・保証しています。
+Parasol V5では、MIT Suh教授の**Axiomatic Design（公理的設計）**原則を統合し、設計品質を科学的に検証します。
 
-#### Axiomatic Designの2つの公理
+> 📚 **詳細**: [zigzag-foundations.md#axiomatic-design](../philosophy/zigzag-foundations.md#axiomatic-designの2つの公理)
 
-**公理1：独立公理（Independence Axiom）**
-
-> **「機能要件（FR: Functional Requirements）の独立性を維持せよ」**
-
-設計パラメータ（DP: Design Parameters）を選択する際、各DPの変更が対応するFRのみに影響し、他のFRには影響しないように設計すべきという原則です。
-
-Parasol V5への適用：
-- 各CL3（Business Operation）が単一の責任を持つ
-- BC（Bounded Context）間で共有データを最小限に抑える
-- サービス間に循環依存を作らない
-
-**公理2：情報公理（Information Axiom）**
-
-> **「設計の情報量（複雑さ）を最小化せよ」**
-
-複数の選択肢がある場合、より単純な（情報量が少ない）設計を選択すべきという原則です。
-
-Parasol V5への適用：
-- 価値階層（VL）深度を3以下に保つ
-- ケイパビリティ階層（CL）を3段階以内にする
-- 設計要素数を必要最小限に抑える
-
-#### Design Matrixによる設計品質評価
-
-Axiomatic Designでは、FR（機能要件）とDP（設計パラメータ）の対応関係を**Design Matrix**で評価します：
-
-| 設計タイプ | Design Matrix形状 | 品質評価 |
-|-----------|------------------|---------|
-| **Uncoupled** | 対角行列（理想） | ✅ 最高品質 |
-| **Decoupled** | 三角行列（許容） | ⚠️ 順序依存あり |
-| **Coupled** | その他（回避） | ❌ 要再設計 |
-
-V5では、CL3とBCの対応関係をDesign Matrixとして評価し、品質を定量化します。
-
-#### 具体的な評価基準
-
-V5の各フェーズで以下を確認します：
-
-**Phase 2-3での評価：**
-- VL階層深度 ≤ 3
-- VS数が5-8の範囲
-- CL3間の依存が一方向
-
-**Phase 4での評価：**
-- BC数 ≒ CL3数（比率0.8-1.2）
-- Design Matrix形状がUncoupledまたはDecoupled
-- Coupled箇所がゼロまたは文書化済み
-
-**Phase 5-6での評価：**
-- Aggregate数が最小限
-- Service間に循環依存なし
-- Domain Event種類が必要最小限
-
-この科学的アプローチにより、「なんとなく良い設計」ではなく、**測定可能で再現可能な品質基準**でシステムを構築できます。
+**V5での適用ポイント：**
+- **独立公理**: 各CL3/BCが単一責任を持ち、循環依存を避ける
+- **情報公理**: 階層深度≤3、要素数を最小限に保つ
+- **Design Matrix**: CL3↔BC対応がUncoupled/Decoupledであることを確認
 
 ## 第5章: 8フェーズプロセスの詳細
 
