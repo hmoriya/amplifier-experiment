@@ -27,6 +27,58 @@ Phase 5では、Parasolの「**保守性と変更容易性**」を実装レベ�
 
 詳細は [PHILOSOPHY.md](./PHILOSOPHY.md) を参照してください。
 
+### 🔬 Axiomatic Design（公理的設計）の適用
+
+Phase 5では、MIT Suh教授のAxiomatic Design原則を設計品質の検証に活用します。
+
+#### 独立公理（Independence Axiom）の適用
+
+各Aggregate/Entityが独立した機能要件を満たすように設計します：
+
+```yaml
+設計品質チェック:
+  aggregate_independence:
+    - 各Aggregateが単一のビジネス概念を表現
+    - Aggregate間の直接参照を避ける（IDのみで参照）
+    - 1つのAggregateの変更が他に波及しない
+
+  entity_cohesion:
+    - Entity内のプロパティが高凝集
+    - 無関係なプロパティの混在を避ける
+    - 単一責任原則の遵守
+```
+
+#### 情報公理（Information Axiom）の適用
+
+設計の複雑さを最小限に抑えます：
+
+```yaml
+複雑度チェック:
+  aggregate_count: "BCあたり3-7個が目安"
+  entity_depth: "ネスト深度3以下"
+  value_object_count: "過剰な細分化を避ける"
+  domain_event_count: "必要最小限のイベント定義"
+```
+
+#### Design Matrix評価
+
+BC設計完了時に、CL3↔BC対応を評価します：
+
+```markdown
+## Design Matrix評価
+
+| CL3（機能要件） | BC（設計パラメータ） | 対応 |
+|----------------|---------------------|------|
+| 商品カタログ管理 | ProductCatalog BC | ✓ Uncoupled |
+| 注文処理 | Order BC | ✓ Uncoupled |
+| 在庫管理 | Inventory BC | ✓ Decoupled（注文から通知） |
+
+評価結果:
+- Matrix形状: Decoupled（三角行列）
+- BC数/CL3数比率: 1.0（理想的）
+- Coupled箇所: なし
+```
+
 各サービス/Bounded Contextの詳細設計を行います。
 
 ## 使用方法
