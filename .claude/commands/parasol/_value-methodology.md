@@ -1379,10 +1379,16 @@ PM2: プロジェクトマイルストーン2（6ヶ月）
 
 ## 関連ドキュメント
 
+### 構造図
+- [Space構造図](./docs/diagrams/space-structure-diagrams.md) - 3領域（Value/Problem/Solution）の詳細ASCII図
+- [3スペースフロー図](./docs/diagrams/three-space-flow-spec.md) - 3領域間の変換フロー
+- [CL3→BCマッピング図](./docs/diagrams/cl3-to-bc-ascii-diagrams.md) - Problem→Solutionマッピング詳細
+
+### コマンド・ガイド
 - [バージョンガイド](../../../parasol/VERSION-GUIDE.md) - V4/V5の違い
-- [Phase 2コマンド](./2-value.md) - 価値定義の実行
-- [Phase 3コマンド](./3-capabilities.md) - ケーパビリティ分解
-- [Phase 4コマンド](./4-application-design.md) - アプリケーションデザイン
+- [Phase 2コマンド](./docs/commands/2-value.md) - 価値定義の実行
+- [Phase 3コマンド](./docs/commands/3-capabilities.md) - ケーパビリティ分解
+- [Phase 4コマンド](./docs/commands/4-application-design.md) - アプリケーションデザイン
 - [ケーパビリティ命名ガイド](./_capability-naming-guide.md) - 命名規則
 
 ---

@@ -119,6 +119,8 @@ Phase 3では、Parasolの「**保守性と変更容易性**」を重視して�
 
 詳細は [PHILOSOPHY.md](./PHILOSOPHY.md) を参照してください。
 
+> 📊 **構造図**: Problem Spaceの詳細構造（CL1→CL2→CL3階層、DDD対応、Core/Supporting/Generic分類）は [space-structure-diagrams.md](../diagrams/space-structure-diagrams.md#2-problem-space問題領域構造) を参照
+
 ## 🤖 サブエージェント活用について
 
 **重要**: ケイパビリティ分解は複雑な分析・設計タスクです。このコマンドは適切なサブエージェントに作業を委譲します。

@@ -94,7 +94,9 @@ description: Value definition and enterprise activities (project:parasol)
 
 **重要**: 本フェーズは**バックキャスティングアプローチ**を採用しています。
 
-詳細な方法論は [_value-methodology.md](./_value-methodology.md) を参照してください。
+詳細な方法論は [_value-methodology.md](../../_value-methodology.md) を参照してください。
+
+> 📊 **構造図**: Value Spaceの詳細構造（3軸モデル、VL階層、VS遷移）は [space-structure-diagrams.md](../diagrams/space-structure-diagrams.md#1-value-space価値領域構造) を参照
 
 ### 方法論の全体フロー（価値先行アプローチ）
 

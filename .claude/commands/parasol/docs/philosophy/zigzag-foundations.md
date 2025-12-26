@@ -930,8 +930,15 @@ WHAT': 「トークンライフサイクル管理」（創発）
 
 ## 参照
 
+### 構造図
+- [space-structure-diagrams.md](../diagrams/space-structure-diagrams.md) - 3領域（Value/Problem/Solution）の詳細構造図
+- [three-space-flow-spec.md](../diagrams/three-space-flow-spec.md) - 3領域間の変換フロー図
+- [cl3-to-bc-ascii-diagrams.md](../diagrams/cl3-to-bc-ascii-diagrams.md) - CL3→BCマッピング図
+
+### プロセス・定義
 - [zigzag-process.md](./zigzag-process.md) - ZIGZAGプロセス本体
 - [cl-hierarchy.md](./cl-hierarchy.md) - CL階層定義
+- [_value-methodology.md](../../_value-methodology.md) - 価値方法論リファレンス
 
 ---
 

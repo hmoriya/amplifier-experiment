@@ -236,6 +236,8 @@ flowchart TB
 
 ## 関連ドキュメント
 
-- [zigzag-foundations.md](../../philosophy/zigzag-foundations.md) - ZIGZAGプロセスの詳細
+- [space-structure-diagrams.md](./space-structure-diagrams.md) - **各領域の内部構造詳細図**
+- [zigzag-foundations.md](../philosophy/zigzag-foundations.md) - ZIGZAGプロセスの詳細
 - [cl3-to-bc-ascii-diagrams.md](./cl3-to-bc-ascii-diagrams.md) - CL3→BCマッピングの詳細図
+- [_value-methodology.md](../../_value-methodology.md) - 価値方法論リファレンス
 - [0-help.md](../commands/0-help.md) - Parasol V5コマンドヘルプ
