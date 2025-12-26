@@ -10,8 +10,14 @@ Parasol V5は3つの独立したスペース（領域）を通じて、価値か
 
 ```
 Value Space → Problem Space → Solution Space
-  (価値)        (問題)          (解決)
+(WHY + WHEN)     (WHAT)          (HOW)
+  (価値)          (問題)          (解決)
 ```
+
+**3軸モデル**:
+- **WHAT**: 何を解決するか（Problem Space）
+- **HOW**: どう解決するか（Solution Space）
+- **WHEN**: いつ価値を届けるか（Value Space内のバリューステージ/顧客ジャーニー時間軸）
 
 ---
 
@@ -88,9 +94,11 @@ Value Space → Problem Space → Solution Space
 
 | スペース | AD用語 | 役割 | Phase |
 |---------|--------|------|-------|
-| Value Space | - | WHY（なぜ） | 1-2 |
+| Value Space | - | WHY（なぜ）+ WHEN（いつ：顧客ジャーニー時間軸） | 1-2 |
 | Problem Space | Functional Domain | WHAT（何を） | 3 |
 | Solution Space | Physical Domain | HOW（どう） | 4-6 |
+
+**重要**: Value SpaceはWHY（なぜ価値があるか）だけでなく、WHEN（いつ価値を届けるか）を含む。バリューステージ（VS1→VS2→...）は顧客ジャーニーの時間軸を表現し、これがビジネス変更の自然な境界となる。
 
 ### 変換ポイント
 
