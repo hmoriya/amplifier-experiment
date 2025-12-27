@@ -1,6 +1,6 @@
 # ケイパビリティ・BC・テスト構造の整合性定義
 
-**Version**: V5.3 (2025-12-10) - Actor UseCase / View 用語統一
+**Version**: V5.4 (2025-12-27) - Axiomatic Design統合、設計公理チェック機能追加
 
 ---
 

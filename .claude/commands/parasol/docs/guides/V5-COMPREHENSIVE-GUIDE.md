@@ -1,8 +1,8 @@
 # Parasol V5 包括的ガイド
 ## Claude Code統合型 Value Stream駆動設計フレームワーク
 
-**Version:** 1.0  
-**Last Updated:** 2025-12-14  
+**Version:** 1.1 (V5.4対応)  
+**Last Updated:** 2025-12-27  
 **Target Audience:** 初心者〜中級者  
 
 ---
