@@ -140,11 +140,15 @@ V5の開発プロセスにおける段階。Phase 0（現状理解）からPhase
 
 **DevOps** - Development and Operations（開発と運用の統合）
 
+**DP** - Design Parameters（設計パラメータ）- Axiomatic Designの基本概念。FRを「どう実現するか」を定義。Parasol V5ではBC/サービスに相当。
+
 **DX** - Digital Transformation（デジタルトランスフォーメーション）
 
 **ERP** - Enterprise Resource Planning（企業資源計画）
 
 **ESG** - Environment, Social, Governance（環境・社会・ガバナンス）
+
+**FR** - Functional Requirements（機能要件）- Axiomatic Designの基本概念。システムが「何を実現するか」を定義。Parasol V5ではCL3（業務オペレーション）に相当。
 
 **IaC** - Infrastructure as Code（インフラストラクチャのコード化）
 

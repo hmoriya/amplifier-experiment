@@ -27,6 +27,16 @@ Phase 5では、Parasolの「**保守性と変更容易性**」を実装レベ�
 
 詳細は [PHILOSOPHY.md](./PHILOSOPHY.md) を参照してください。
 
+### 🔬 AD原則適用
+
+> 📚 [zigzag-foundations.md](../philosophy/zigzag-foundations.md#axiomatic-designの2つの公理)
+
+**Phase 5チェック**:
+- [ ] Aggregate間の直接参照なし（IDのみ）
+- [ ] BCあたりAggregate数 3-7
+- [ ] CL3↔BC対応がUncoupled/Decoupled
+- [ ] BC数/CL3数比率 0.8-1.2
+
 各サービス/Bounded Contextの詳細設計を行います。
 
 ## 使用方法

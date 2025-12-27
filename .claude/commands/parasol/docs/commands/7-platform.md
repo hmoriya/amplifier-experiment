@@ -141,6 +141,15 @@ Phase 6: Implementation が完了している必要があります：
 - **復旧性**: RPO/RTO目標の達成
 - **コスト効率**: リソース使用量の最適化
 
+### 🔬 AD原則適用
+
+> 📚 [zigzag-foundations.md](../philosophy/zigzag-foundations.md#axiomatic-designの2つの公理)
+
+**Phase 7チェック**:
+- [ ] 各サービスが独立デプロイ可能
+- [ ] 障害影響が局所化
+- [ ] インフラ構成が必要最小限
+
 ## 実行
 
 ユーザーからのパラメータを確認し、以下のいずれかを実行：

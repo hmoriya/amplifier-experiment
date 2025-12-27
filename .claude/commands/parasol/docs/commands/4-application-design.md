@@ -36,6 +36,74 @@ Phase 3で定義したビジネス能力（CL1/CL2/CL3）を基に、技術的�
 - 統合パターンの定義
 - アーキテクチャ決定の文書化（ADR）
 
+## 🔬 Axiomatic Design評価（V5.2新機能）
+
+Phase 4では、MIT Suh教授のAxiomatic Design原則を適用してCL3↔BCマッピングの品質を評価します。
+
+### 2つの公理による設計検証
+
+| 公理 | 検証内容 | 合格基準 |
+|------|----------|----------|
+| **独立公理** | CL3間・BC間の独立性 | Coupled設計がゼロ |
+| **情報公理** | 設計の複雑度最小化 | BC数 ≤ CL3数 × 1.2 |
+
+### Design Matrix評価
+
+CL3とBCの対応関係をマトリクスで評価します：
+
+```
+CL3↔BC Design Matrix
+═══════════════════════════════════════════════════════════════
+
+【理想】Uncoupled（対角）     【許容】Decoupled（三角）    【要改善】Coupled（非対角）
+        │ BC-A │ BC-B │ BC-C │         │ BC-A │ BC-B │ BC-C │         │ BC-A │ BC-B │ BC-C │
+CL3-001 │  X   │      │      │ CL3-001 │  X   │      │      │ CL3-001 │  X   │  X   │      │
+CL3-002 │      │  X   │      │ CL3-002 │  X   │  X   │      │ CL3-002 │  X   │  X   │  X   │
+CL3-003 │      │      │  X   │ CL3-003 │  X   │  X   │  X   │ CL3-003 │      │  X   │  X   │
+
+評価: ✅ 独立公理を満たす     評価: △ 順序依存で許容      評価: ❌ 再設計が必要
+```
+
+### 評価プロセス
+
+1. **CL3↔BCマッピングテーブル作成**
+   - 各CL3がどのBCに対応するかを記録
+   - 複数BCにまたがるCL3を特定
+
+2. **Design Matrixの形状判定**
+   - Uncoupled: 各CL3が単一BCに対応 → ✅理想
+   - Decoupled: 順序依存あり → △許容（文書化必要）
+   - Coupled: 複雑な依存 → ❌再設計
+
+3. **FR=DP検証**
+   - BC数とCL3数の比率を計算
+   - 目標: 0.8 ≤ (BC数/CL3数) ≤ 1.2
+
+### 評価結果テンプレート
+
+```markdown
+## Axiomatic Design評価結果
+
+### Design Matrix形状: [Uncoupled/Decoupled/Coupled]
+
+### 独立公理検証
+- CL3間独立性: [OK/NG]
+- BC間独立性: [OK/NG]
+- Coupled箇所: [該当CL3-BC組み合わせ]
+
+### 情報公理検証
+- CL3数: [N]
+- BC数: [M]
+- 比率: [M/N] （目標: 0.8-1.2）
+
+### 改善アクション（Coupledの場合）
+- [ ] CL3の再分解を検討
+- [ ] BC境界の見直し
+- [ ] 統合パターンの変更
+```
+
+> 詳細は [zigzag-foundations.md](../philosophy/zigzag-foundations.md#axiomatic-designの2つの公理) を参照
+
 ## 🎯 V5.1 デフォルト統合パターン
 
 Parasol V5.1では、シンプルさと実用性を重視した標準統合パターンを提供しています：

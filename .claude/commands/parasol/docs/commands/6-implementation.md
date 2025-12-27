@@ -220,6 +220,15 @@ Phase 6では以下の実装判断理由を自動出力します：
 
 **出力先**: `outputs/6-implementation/services/{service}/{bc}/implementation-story.md`
 
+### 🔬 AD原則適用
+
+> 📚 [zigzag-foundations.md](../philosophy/zigzag-foundations.md#axiomatic-designの2つの公理)
+
+**Phase 6チェック**:
+- [ ] サービス間に循環依存なし
+- [ ] Phase 5設計との一致（Aggregate数、BC数）
+- [ ] 設計になかった依存関係が生まれていない
+
 ### ナレッジ蓄積
 
 実装パターンと学習をナレッジベースに蓄積：
