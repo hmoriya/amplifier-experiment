@@ -1,0 +1,82 @@
+---
+title: {{ title }}
+chapter: {{ number }}
+part: {{ part_title }}
+keywords: {{ keywords | join(', ') }}
+---
+
+# 第{{ number }}章：{{ title }}
+
+{{ breadcrumb }}
+
+## 本章の概要
+
+{{ overview }}
+
+## 学習目標
+
+本章を読み終えると、以下のことが理解できるようになります：
+
+{% for objective in learning_objectives %}
+- {{ objective }}
+{% endfor %}
+
+{% if prerequisites %}
+## 前提知識
+
+本章を理解するために、以下の章を先に読むことをお勧めします：
+
+{% for prereq in prerequisites %}
+- {{ prereq }}
+{% endfor %}
+{% endif %}
+
+---
+
+{{ content }}
+
+---
+
+## まとめ
+
+{{ summary }}
+
+## 重要なポイント
+
+{% for point in key_points %}
+- **{{ point.title }}**: {{ point.description }}
+{% endfor %}
+
+{% if exercises %}
+## 演習問題
+
+{% for exercise in exercises %}
+### 演習 {{ loop.index }}
+
+{{ exercise.question }}
+
+{% if exercise.hint %}
+<details>
+<summary>ヒント</summary>
+
+{{ exercise.hint }}
+</details>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+## 次のステップ
+
+{{ next_steps }}
+
+{% if references %}
+## 関連する章
+
+{% for ref in references %}
+- {{ ref }}
+{% endfor %}
+{% endif %}
+
+---
+
+[← 前の章]({{ prev_chapter }}) | [目次](../index.md) | [次の章 →]({{ next_chapter }})
