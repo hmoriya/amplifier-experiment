@@ -1,0 +1,73 @@
+@startuml parasol-overview
+!theme plain
+title Parasol V5.4 全体構造
+
+skinparam backgroundColor #FEFEFE
+skinparam packageBackgroundColor #F5F5F5
+skinparam packageBorderColor #9E9E9E
+
+' Phase 0-1: Foundation
+package "Foundation" #FFEBEE {
+  rectangle "Phase 0: 組織評価" as P0 #FFCDD2
+  rectangle "Phase 1: 組織コンテキスト" as P1 #EF9A9A
+}
+
+' Phase 2: Value
+package "Value Space" #F3E5F5 {
+  rectangle "Phase 2: 価値ストリーム" as P2 #E1BEE7
+}
+
+' Phase 3: Problem Space (ZIGZAG)
+package "Problem Space" #E3F2FD {
+  rectangle "Phase 3: ZIGZAG/ケイパビリティ" as P3 #90CAF9
+  note right of P3
+    <b>ZIGZAG プロセス</b>
+    問題(WHAT) ⇄ 解決(HOW)
+    Design Matrix進化
+  end note
+}
+
+' Phase 4-5: Solution Space
+package "Solution Space" #E8F5E9 {
+  rectangle "Phase 4: アーキテクチャ" as P4 #A5D6A7
+  rectangle "Phase 5: ソフトウェア設計" as P5 #81C784
+}
+
+' Phase 6-7: Implementation
+package "Implementation" #FFF3E0 {
+  rectangle "Phase 6: 実装" as P6 #FFCC80
+  rectangle "Phase 7: プラットフォーム" as P7 #FFB74D
+}
+
+' Flow
+P0 -[#9C27B0,bold]-> P1 : 組織理解
+P1 -[#9C27B0,bold]-> P2 : コンテキスト確立
+P2 -[#2196F3,bold]-> P3 : 価値定義
+P3 -[#2196F3,bold]-> P4 : ケイパビリティ
+P4 -[#4CAF50,bold]-> P5 : サービス境界
+P5 -[#4CAF50,bold]-> P6 : 設計仕様
+P6 -[#FF9800,bold]-> P7 : 実装成果
+
+' Feedback loops
+P7 .[#E91E63,dashed].> P2 : 継続的改善
+P4 .[#E91E63,dashed].> P3 : 設計フィードバック
+
+' Key concepts
+note bottom
+  <b>核心概念</b>
+  ・ZIGZAG: 理論と実践の往復
+  ・Axiomatic Design: 科学的設計
+  ・Design Matrix: 独立性の追求
+  ・価値駆動: すべては価値から
+end note
+
+legend right
+  |= フェーズ進行 |
+  |<#9C27B0> 基盤構築 |
+  |<#2196F3> 問題定義 |
+  |<#4CAF50> 解決設計 |
+  |<#FF9800> 実装展開 |
+  |<#E91E63> フィードバック |
+endlegend
+
+@enduml

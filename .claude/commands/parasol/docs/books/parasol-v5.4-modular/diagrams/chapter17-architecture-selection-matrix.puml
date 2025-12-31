@@ -1,0 +1,70 @@
+@startuml architecture-selection-matrix
+!theme plain
+title アーキテクチャ選択マトリクス - Etsyの例
+
+skinparam backgroundColor #FEFEFE
+
+' 評価軸の定義
+note top
+  <b>3次元評価フレームワーク</b>
+  1. 技術的適合性
+  2. 組織的適合性  
+  3. 経済的実現可能性
+end note
+
+' アーキテクチャオプション
+package "アーキテクチャオプション" {
+  rectangle "モノリス継続" as A1 #FFE8E8 {
+    note bottom
+      ・既存システム維持
+      ・段階的改善
+      ・低リスク
+    end note
+  }
+  
+  rectangle "マイクロサービス移行" as A2 #E8F4FD {
+    note bottom
+      ・サービス分割
+      ・独立デプロイ
+      ・高柔軟性
+    end note
+  }
+  
+  rectangle "モジュラーモノリス" as A3 #E8F5E9 {
+    note bottom
+      ・内部モジュール化
+      ・段階的分離可能
+      ・中間アプローチ
+    end note
+  }
+}
+
+' 評価マトリクス
+note right of A3
+  <b>評価スコア（5点満点）</b>
+  ----
+  |          | 技術 | 組織 | 経済 | 合計 |
+  |----------|------|------|------|------|
+  | モノリス | 2.0  | 3.5  | 4.5  | 3.3  |
+  | マイクロ | 4.5  | 2.0  | 2.0  | 2.8  |
+  | <b>モジュラ</b> | <b>4.0</b>  | <b>4.0</b>  | <b>3.5</b>  | <b>3.8</b>  |
+  ----
+  
+  <b>Etsyの選択：モジュラーモノリス</b>
+  理由：
+  ・組織の現状に適合
+  ・段階的移行が可能
+  ・リスクとメリットのバランス
+end note
+
+' 決定プロセス
+note bottom
+  <b>意思決定プロセス</b>
+  1. 各軸での評価基準定義
+  2. ステークホルダー重み付け
+  3. スコアリング実施
+  4. 感度分析
+  5. 最終決定
+end note
+
+@enduml

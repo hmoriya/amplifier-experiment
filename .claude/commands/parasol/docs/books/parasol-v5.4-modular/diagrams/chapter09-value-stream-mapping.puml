@@ -1,0 +1,71 @@
+@startuml value-stream-mapping
+!theme plain
+title 価値ストリームマッピング (VSM) - Amazon配送の例
+
+skinparam backgroundColor #FEFEFE
+skinparam activityBackgroundColor #E3F2FD
+skinparam activityBorderColor #2196F3
+
+|顧客|
+start
+:注文する;
+note right: リードタイム開始
+
+|倉庫システム|
+:注文受付;
+:在庫確認;
+note right
+  処理時間: 2分
+  待機時間: 5分
+end note
+
+|倉庫作業|
+:ピッキング指示;
+:商品ピッキング;
+note right
+  <b>付加価値時間</b>
+  処理時間: 15分
+  移動時間: 10分
+end note
+
+|品質管理|
+:梱包・検品;
+note right
+  <b>付加価値時間</b>
+  処理時間: 5分
+  待機時間: 20分
+end note
+
+|配送準備|
+:配送仕分け;
+:トラック積込;
+note right
+  処理時間: 30分
+  待機時間: 60分
+end note
+
+|配送|
+:配送中;
+note right
+  <b>価値提供時間</b>
+  移動時間: 2-24時間
+  (プライム会員優先)
+end note
+
+|顧客|
+:商品受取;
+stop
+note right: リードタイム終了
+
+legend right
+  |= 価値分析 |
+  |<#4CAF50> 付加価値活動 |
+  |<#FFC107> 必要だが非付加価値 |
+  |<#F44336> ムダ（待機時間） |
+  |= メトリクス |
+  | 総リードタイム: 26時間 |
+  | 付加価値時間: 20分 |
+  | 効率: 1.3% |
+endlegend
+
+@enduml

@@ -1,0 +1,79 @@
+@startuml capability-decomposition
+!theme plain
+title ケイパビリティ分解階層 - 支払い処理の例
+
+skinparam backgroundColor #FEFEFE
+skinparam rectangleBackgroundColor #F5F5F5
+skinparam rectangleBorderColor #424242
+
+' CL1: Activity Areas
+package "CL1: アクティビティエリア" #FFE0B2 {
+  rectangle "支払い処理" as CL1 {
+    note right: 最上位の業務領域
+  }
+}
+
+' CL2: Capabilities
+package "CL2: ケイパビリティ" #E1BEE7 {
+  rectangle "payment-authorization" as CL2_1
+  rectangle "payment-execution" as CL2_2
+  rectangle "payment-reconciliation" as CL2_3
+}
+
+' CL3: Business Operations
+package "CL3: ビジネスオペレーション" #BBDEFB {
+  rectangle "validate-payment-method" as CL3_1
+  rectangle "check-credit-limit" as CL3_2
+  rectangle "fraud-detection" as CL3_3
+  rectangle "process-transaction" as CL3_4
+  rectangle "update-ledger" as CL3_5
+  rectangle "match-transactions" as CL3_6
+  rectangle "generate-reports" as CL3_7
+}
+
+' BC: Business Components
+package "BC: ビジネスコンポーネント" #C8E6C9 {
+  rectangle "PaymentValidator" as BC1
+  rectangle "FraudDetector" as BC2
+  rectangle "TransactionProcessor" as BC3
+  rectangle "LedgerService" as BC4
+  rectangle "ReconciliationEngine" as BC5
+}
+
+' Relationships
+CL1 --> CL2_1
+CL1 --> CL2_2
+CL1 --> CL2_3
+
+CL2_1 --> CL3_1
+CL2_1 --> CL3_2
+CL2_1 --> CL3_3
+
+CL2_2 --> CL3_4
+CL2_2 --> CL3_5
+
+CL2_3 --> CL3_6
+CL2_3 --> CL3_7
+
+' ZIGZAG mapping
+CL3_1 .[#4CAF50,dashed].> BC1 : ZIGZAG\nマッピング
+CL3_2 .[#4CAF50,dashed].> BC1
+CL3_3 .[#4CAF50,dashed].> BC2
+CL3_4 .[#4CAF50,dashed].> BC3
+CL3_5 .[#4CAF50,dashed].> BC4
+CL3_6 .[#4CAF50,dashed].> BC5
+CL3_7 .[#4CAF50,dashed].> BC5
+
+' Design Matrix note
+note bottom
+  <b>ZIGZAG分解原則</b>
+  1. CL1→CL2: ビジネス視点での分割
+  2. CL2→CL3: オペレーション詳細化
+  3. CL3→BC: 技術実装への橋渡し
+  
+  <b>Design Matrix活用</b>
+  各レベルでFR-DP独立性を検証
+  結合を発見したら分解を再検討
+end note
+
+@enduml

@@ -1,0 +1,48 @@
+@startuml zigzag-process
+!theme plain
+title ZIGZAGプロセス：問題空間と解決空間の往復
+
+skinparam backgroundColor #FEFEFE
+skinparam rectangleBackgroundColor #E8F4FD
+skinparam rectangleBorderColor #2196F3
+skinparam arrowColor #1976D2
+skinparam arrowThickness 2
+
+rectangle "問題空間 (WHAT)" as PROB {
+  rectangle "ビジネスニーズ" as BN #FFE0B2
+  rectangle "要求の拡張" as RE #FFE0B2
+  rectangle "新たな要求" as NR #FFE0B2
+}
+
+rectangle "解決空間 (HOW)" as SOLU {
+  rectangle "技術的可能性" as TP #E8F5E9
+  rectangle "制約の発見" as CD #E8F5E9
+  rectangle "新たな選択肢" as NO #E8F5E9
+}
+
+' Phase 1: 探索 (Exploration)
+BN -[#FF5722,bold]-> TP : <b>ZIG 1</b>\n初期探索
+TP -[#3F51B5,bold]-> RE : <b>ZAG 1</b>\nフィードバック
+RE -[#FF5722,bold]-> NO : <b>ZIG 2</b>\n可能性拡大
+
+' Phase 2: 洗練 (Refinement)
+note right of PROB
+  <b>Design Matrix更新</b>
+  各イテレーションで
+  FR-DPマッピングを
+  洗練し独立性を追求
+end note
+
+' Phase 3: 収束 (Convergence)
+NO -[#3F51B5,bold]-> NR : <b>ZAG 2</b>\n要求明確化
+NR -[#4CAF50,bold]..> CD : <b>収束</b>\n合意形成
+
+legend right
+  |<#FFE0B2> 問題空間要素 |
+  |<#E8F5E9> 解決空間要素 |
+  |<#FF5722> ZIG (問題→解決) |
+  |<#3F51B5> ZAG (解決→問題) |
+  |<#4CAF50> 収束 |
+endlegend
+
+@enduml

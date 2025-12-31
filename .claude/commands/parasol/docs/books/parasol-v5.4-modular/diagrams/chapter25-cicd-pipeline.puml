@@ -1,0 +1,108 @@
+@startuml cicd-pipeline
+!theme plain
+title CI/CDパイプライン - Stack Overflowの実装例
+
+skinparam backgroundColor #FEFEFE
+skinparam activityBackgroundColor #E3F2FD
+skinparam activityBorderColor #2196F3
+
+|開発者|
+start
+:コードコミット;
+note right: feature/xxx ブランチ
+
+|CI Pipeline|
+:自動ビルド開始;
+
+:静的解析;
+note right
+  ・Linting
+  ・セキュリティスキャン
+  ・コード品質チェック
+end note
+
+:単体テスト実行;
+note right
+  <b>Stack Overflowの基準</b>
+  ・カバレッジ 80%以上
+  ・全テスト < 5分
+end note
+
+:統合テスト;
+note right
+  ・API契約テスト
+  ・DB接続テスト
+  ・外部依存モック
+end note
+
+if (テスト成功？) then (はい)
+  :アーティファクト作成;
+  :Dockerイメージビルド;
+else (いいえ)
+  :開発者に通知;
+  stop
+endif
+
+|CD Pipeline|
+:ステージング環境デプロイ;
+note right
+  <b>Blue-Green デプロイメント</b>
+  ・新バージョンを並行起動
+  ・ヘルスチェック実施
+end note
+
+:E2Eテスト実行;
+note right
+  ・ユーザーシナリオテスト
+  ・パフォーマンステスト
+  ・負荷テスト
+end note
+
+:品質ゲートチェック;
+note left
+  <b>品質基準</b>
+  ✓ 全テストパス
+  ✓ パフォーマンス基準達成
+  ✓ セキュリティスキャンOK
+  ✓ カバレッジ基準達成
+end note
+
+if (承認？) then (自動/手動)
+  |本番環境|
+  :カナリアデプロイ;
+  note right
+    5% → 25% → 50% → 100%
+    各段階でメトリクス監視
+  end note
+  
+  :メトリクス監視;
+  note right
+    ・エラー率
+    ・レスポンスタイム
+    ・リソース使用率
+  end note
+  
+  if (異常検知？) then (はい)
+    :自動ロールバック;
+    :インシデント作成;
+  else (いいえ)
+    :デプロイ完了;
+    :成功通知;
+  endif
+else (却下)
+  :フィードバック;
+  stop
+endif
+
+stop
+
+legend right
+  |= パイプライン設計原則 |
+  | ・高速フィードバック (< 10分) |
+  | ・自動化の最大化 |
+  | ・品質の可視化 |
+  | ・安全なロールバック |
+  | ・継続的な改善 |
+endlegend
+
+@enduml

@@ -1,0 +1,100 @@
+@startuml pomm-maturity-model
+!theme plain
+title POMM (Parasol Organization Maturity Model) - 5段階成熟度モデル
+
+skinparam backgroundColor #FEFEFE
+skinparam rectangleBackgroundColor #F5F5F5
+
+' Level 1: Initial
+rectangle "Level 1: Initial (場当たり的)" as L1 #FFCDD2 {
+  note bottom
+    ・プロセスが未定義
+    ・個人の英雄的努力に依存
+    ・予測不可能な結果
+    ・危機対応モード
+  end note
+}
+
+' Level 2: Managed
+rectangle "Level 2: Managed (管理された)" as L2 #FFE0B2 {
+  note bottom
+    ・基本的なプロジェクト管理
+    ・要求管理の確立
+    ・計画と追跡
+    ・反復可能なプロセス
+  end note
+}
+
+' Level 3: Defined
+rectangle "Level 3: Defined (定義された)" as L3 #FFF9C4 {
+  note bottom
+    ・標準プロセスの確立
+    ・組織全体での実践
+    ・プロセス改善の仕組み
+    ・<b>Targetの失敗レベル</b>
+  end note
+}
+
+' Level 4: Quantitatively Managed
+rectangle "Level 4: Quantitatively Managed (定量的管理)" as L4 #C8E6C9 {
+  note bottom
+    ・メトリクスによる管理
+    ・統計的プロセス制御
+    ・予測可能な品質
+    ・データ駆動の意思決定
+  end note
+}
+
+' Level 5: Optimizing
+rectangle "Level 5: Optimizing (最適化)" as L5 #BBDEFB {
+  note bottom
+    ・継続的改善文化
+    ・イノベーションの促進
+    ・欠陥予防
+    ・<b>Parasol V5.4の目標</b>
+  end note
+}
+
+' Progression
+L1 -[#4CAF50,bold]-> L2 : 基本管理の\n導入
+L2 -[#4CAF50,bold]-> L3 : 標準化
+L3 -[#4CAF50,bold]-> L4 : 定量化
+L4 -[#4CAF50,bold]-> L5 : 継続的\n最適化
+
+' Assessment areas
+note right of L3
+  <b>評価領域（7つ）</b>
+  1. 組織文化とリーダーシップ
+  2. プロセスと標準
+  3. 技術とツール
+  4. スキルと能力
+  5. ガバナンスとコンプライアンス
+  6. 変更管理
+  7. 継続的改善
+  
+  各領域を1-5で評価
+  レーダーチャートで可視化
+end note
+
+' Target case study
+note left of L3
+  <b>Targetの失敗（2013年）</b>
+  ・Level 3で停滞
+  ・カナダ進出で20億ドル損失
+  ・原因：
+    - 定量的管理の欠如
+    - 文化適応の失敗
+    - 技術統合の軽視
+end note
+
+' Implementation approach
+note bottom
+  <b>成熟度向上アプローチ</b>
+  1. 現状評価（POMMアセスメント）
+  2. ギャップ分析
+  3. 改善ロードマップ策定
+  4. 段階的実装
+  5. 継続的測定と調整
+end note
+
+@enduml

@@ -1,0 +1,110 @@
+# Parasol書籍エージェント設定
+# バージョン管理対応版
+
+# エージェントのバージョン認識設定
+agent_version_awareness:
+  enabled: true
+  version_context_file: "../VERSION_CONFIG.yml"
+  base_version_reference: true
+
+# 各エージェントの設定
+agents:
+  # メインアーキテクトエージェント
+  parasol-book-architect:
+    description: "Parasol書籍の執筆・変換を担当"
+    capabilities:
+      - version_aware: true  # バージョン構造を認識
+      - multi_version_support: true  # 複数バージョン対応
+      - base_inheritance: true  # ベースバージョンからの継承
+    version_behavior:
+      - read_version_config: true
+      - adapt_to_version_changes: true
+      - maintain_version_consistency: true
+
+  # 実行ドキュメンターエージェント  
+  parasol-execution-documenter:
+    description: "Parasolプロジェクト実行のドキュメント化"
+    capabilities:
+      - version_tracking: true
+      - cross_version_reference: true
+    version_behavior:
+      - document_version_decisions: true
+      - track_version_evolution: true
+
+  # 新規：バージョン管理エージェント
+  parasol-version-manager:
+    description: "書籍のバージョン管理専門エージェント"
+    capabilities:
+      - create_new_version: true
+      - compare_versions: true
+      - migrate_content: true
+      - quality_check_across_versions: true
+    responsibilities:
+      - version_planning: "新バージョンの企画支援"
+      - diff_analysis: "バージョン間差分の分析"
+      - migration_guide: "移行ガイドの作成"
+      - compatibility_check: "互換性の確認"
+
+# バージョン認識のための共通コンテキスト
+version_context:
+  # 現在作業中のバージョン
+  current_version: "${VERSION}"  # VERSION_CONFIG.ymlから読み込み
+  
+  # バージョン構造の理解
+  structure_pattern: |
+    books/
+    ├── BOOK_TEMPLATE/         # テンプレート（全エージェント参照可能）
+    ├── parasol-v${VERSION}-${VARIANT}/  # 各バージョンディレクトリ
+    └── VERSION_MANAGEMENT.md  # バージョン管理ガイド
+  
+  # バージョン間の関係性
+  version_relationships:
+    inheritance: "base_version -> current_version"
+    compatibility: "backward_compatible flag in VERSION_CONFIG.yml"
+    migration: "MIGRATION_GUIDE_v${BASE}_to_v${CURRENT}.md"
+
+# エージェント間の連携設定
+agent_coordination:
+  # バージョン作成時の連携
+  new_version_workflow:
+    1: "parasol-version-manager: 企画と初期化"
+    2: "parasol-book-architect: 章構成の設計"
+    3: "parasol-execution-documenter: プロセスの記録"
+  
+  # バージョン更新時の連携
+  update_workflow:
+    1: "parasol-version-manager: 差分分析"
+    2: "parasol-book-architect: 内容の更新"
+    3: "quality agents: 品質チェック"
+
+# エージェントへの指示テンプレート
+agent_prompts:
+  version_aware_prompt: |
+    あなたは現在、Parasol ${VERSION}-${VARIANT}バージョンで作業しています。
+    VERSION_CONFIG.ymlの設定に従い、以下を考慮してください：
+    - ベースバージョン: ${BASE_VERSION}
+    - 変更内容: ${CHANGES_FROM_BASE}
+    - 互換性要件: ${COMPATIBILITY}
+    
+  multi_version_prompt: |
+    複数のバージョンが存在する場合：
+    1. 明示的にバージョンを確認
+    2. バージョン固有の要件を適用
+    3. クロスバージョン参照時は明記
+
+# 品質保証設定
+quality_assurance:
+  version_consistency:
+    - check: "バージョン番号の一貫性"
+    - check: "ベースからの継承の正確性"
+    - check: "変更履歴の完全性"
+  
+  cross_version_validation:
+    - check: "用語の一貫性"
+    - check: "参照の整合性"
+    - check: "移行パスの妥当性"
+
+---
+# 設定ファイルのバージョン
+config_version: "1.0"
+last_updated: "2025-12-29"

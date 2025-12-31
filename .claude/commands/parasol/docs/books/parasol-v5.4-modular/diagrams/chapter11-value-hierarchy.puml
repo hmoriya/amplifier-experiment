@@ -1,0 +1,97 @@
+@startuml value-hierarchy
+!theme plain
+title 価値レベル階層 - 多層的価値の定義
+
+skinparam backgroundColor #FEFEFE
+skinparam packageBackgroundColor #F5F5F5
+
+' Strategic Level
+package "戦略レベル" #FFE0B2 {
+  rectangle "ビジョン価値" as V1 {
+    note right
+      長期的方向性
+      市場ポジション
+      競争優位性
+    end note
+  }
+}
+
+' Tactical Level
+package "戦術レベル" #E1BEE7 {
+  rectangle "ケイパビリティ価値" as V2 {
+    note right
+      組織能力
+      差別化要因
+      実行力
+    end note
+  }
+}
+
+' Operational Level
+package "運用レベル" #BBDEFB {
+  rectangle "プロセス価値" as V3 {
+    note right
+      効率性
+      品質向上
+      コスト削減
+    end note
+  }
+}
+
+' Technical Level
+package "技術レベル" #C8E6C9 {
+  rectangle "システム価値" as V4 {
+    note right
+      自動化
+      スケーラビリティ
+      保守性
+    end note
+  }
+}
+
+' Customer Level (横断的)
+package "顧客価値（横断的）" #FFF9C4 {
+  rectangle "エンドユーザー価値" as CV
+}
+
+' Relationships
+V1 --> V2 : 戦略を能力へ
+V2 --> V3 : 能力をプロセスへ
+V3 --> V4 : プロセスをシステムへ
+
+CV -[#E91E63,dashed]-> V1 : 価値提供
+CV -[#E91E63,dashed]-> V2 : 価値実現
+CV -[#E91E63,dashed]-> V3 : 価値体験
+CV -[#E91E63,dashed]-> V4 : 価値支援
+
+' Value Stream Connection
+note bottom
+  <b>価値ストリームとの関係</b>
+  ----
+  | レベル | 価値の形態 | 測定指標 | 時間軸 |
+  |--------|-----------|----------|--------|
+  | 戦略 | 市場価値 | 市場シェア、収益成長 | 3-5年 |
+  | 戦術 | 競争価値 | NPS、顧客獲得コスト | 1-3年 |
+  | 運用 | 効率価値 | サイクルタイム、品質 | 3-12ヶ月 |
+  | 技術 | 基盤価値 | 可用性、パフォーマンス | 継続的 |
+  ----
+  
+  <b>設計原則</b>
+  ・上位価値が下位価値を導く
+  ・各レベルで独立した価値定義
+  ・顧客価値が全レベルを貫通
+  ・測定可能な指標を設定
+end note
+
+' Examples
+note right of CV
+  <b>Amazon配送の例</b>
+  戦略: 即日配送で差別化
+  戦術: 物流網の構築
+  運用: 倉庫自動化
+  技術: AIによる最適化
+  
+  →顧客: 便利で速い体験
+end note
+
+@enduml

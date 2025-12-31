@@ -1,4 +1,4 @@
-# Appendix: Chapter 26 Implementation - Performance Optimization Techniques
+# Appendix 26: Performance Optimization Implementation Details
 
 ## Performance Measurement and Instrumentation
 

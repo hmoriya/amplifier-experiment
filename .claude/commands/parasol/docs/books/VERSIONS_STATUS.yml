@@ -1,0 +1,103 @@
+# Parasol書籍バージョン状態管理
+# 全バージョンの現在の状態を追跡
+
+last_updated: "2025-12-29"
+total_versions: 1
+active_versions: 1
+
+versions:
+  # 現在の安定版
+  - version: "5.4-modular"
+    status: "stable"
+    location: "parasol-v5.4-modular/"
+    created_date: "2025-12-28"
+    last_modified: "2025-12-29"
+    support_until: "2026-12-31"
+    
+    statistics:
+      total_chapters: 38
+      completed_chapters: 38
+      quality_score: 4.5  # ★★★★☆
+      code_ratio_avg: 30
+      
+    features:
+      - "Complete 38-chapter structure"
+      - "70:30 concept-to-code ratio"
+      - "12 PlantUML diagrams"
+      - "Comprehensive appendices"
+      - "Quality management system"
+      
+    documentation:
+      - "README.md"
+      - "BOOK_INDEX.md"
+      - "GLOSSARY.md"
+      - "QUICK_START_GUIDE.md"
+      - "EXECUTIVE_SUMMARY.md"
+      
+    known_issues: []
+    
+  # 将来のバージョン例（まだ存在しない）
+  # - version: "5.5-modular"
+  #   status: "planned"
+  #   expected_start: "2025-06-01"
+  #   planned_features:
+  #     - "AI/ML integration chapter"
+  #     - "Cloud-native patterns"
+  #     - "Updated case studies"
+
+# バージョンライフサイクル定義
+lifecycle_stages:
+  planned:
+    description: "計画中・未着手"
+    next_stage: "development"
+    
+  development:
+    description: "開発中・執筆作業"
+    next_stage: "beta"
+    
+  beta:
+    description: "ベータ版・レビュー中"
+    next_stage: "stable"
+    
+  stable:
+    description: "安定版・本番利用可能"
+    next_stage: "maintenance"
+    
+  maintenance:
+    description: "保守モード・更新は限定的"
+    next_stage: "deprecated"
+    
+  deprecated:
+    description: "非推奨・移行推奨"
+    next_stage: "archived"
+    
+  archived:
+    description: "アーカイブ済み・参照のみ"
+    next_stage: null
+
+# バージョン管理ポリシー
+policies:
+  support_duration:
+    stable: "2 years"
+    maintenance: "1 year"
+    deprecated: "6 months"
+    
+  version_numbering:
+    major_criteria: "Fundamental methodology changes"
+    minor_criteria: "New phases or significant features"
+    patch_criteria: "Bug fixes and minor improvements"
+    
+  parallel_versions:
+    max_stable: 2
+    max_beta: 1
+    max_development: 2
+
+# 次のアクション
+next_actions:
+  - action: "Plan v5.5 features"
+    due_date: "2025-03-01"
+    responsible: "Product Owner"
+    
+  - action: "Create v5.4-compact variant"
+    due_date: "2025-02-01"
+    responsible: "Version Manager"

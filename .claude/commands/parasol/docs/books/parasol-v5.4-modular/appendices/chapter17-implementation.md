@@ -1,774 +1,659 @@
-# 付録：第17章　アーキテクチャパターンの実装詳細
+# Appendix 17: Architecture Patterns Implementation Details
 
-## パターンの体系的定義
+## Appendix 17.1: Architecture Pattern Comparison Matrix
 
-```typescript
-export enum ArchitecturePatternCategory {
-  // 構造パターン
-  MONOLITHIC = "モノリシック",
-  LAYERED = "レイヤード",
-  MICROSERVICES = "マイクロサービス",
-  SERVICE_ORIENTED = "サービス指向",
-  
-  // データパターン
-  SHARED_DATABASE = "共有データベース",
-  DATABASE_PER_SERVICE = "サービス毎データベース",
-  EVENT_SOURCING = "イベントソーシング",
-  CQRS = "コマンドクエリ責任分離",
-  
-  // 通信パターン
-  REQUEST_RESPONSE = "要求応答",
-  MESSAGING = "メッセージング",
-  EVENT_DRIVEN = "イベント駆動",
-  STREAMING = "ストリーミング",
-  
-  // デプロイメントパターン
-  SINGLE_DEPLOYMENT = "単一デプロイメント",
-  DISTRIBUTED = "分散デプロイメント",
-  SERVERLESS = "サーバーレス",
-  EDGE_COMPUTING = "エッジコンピューティング"
-}
+### Comprehensive Pattern Analysis
 
-export interface ArchitecturePattern {
-  name: string;
-  category: ArchitecturePatternCategory;
-  
-  // パターンの特性
-  characteristics: {
-    scalability: ScalabilityProfile;
-    complexity: ComplexityLevel;
-    maintainability: MaintainabilityScore;
-    testability: TestabilityScore;
-    performance: PerformanceProfile;
-  };
-  
-  // 適用条件
-  applicability: {
-    problemTypes: ProblemType[];
-    teamSize: TeamSizeRange;
-    systemScale: SystemScale;
-    domainComplexity: ComplexityLevel;
-  };
-  
-  // トレードオフ
-  tradeoffs: {
-    benefits: string[];
-    liabilities: string[];
-    risks: Risk[];
-  };
-}
-```
+| Pattern | Complexity | Scalability | Maintainability | Testability | Performance | Best For |
+|---------|------------|-------------|-----------------|-------------|-------------|----------|
+| **Monolithic** | Low | Limited | High (initially) | High | Excellent | Small teams, clear domains, rapid prototyping |
+| **Layered** | Low-Medium | Vertical only | Good | Good | Good | Enterprise applications, clear hierarchies |
+| **Microservices** | High | Excellent | High (per service) | Excellent | Variable | Large organizations, independent teams |
+| **Service-Oriented** | Medium | Good | Medium | Good | Good | Enterprise integration, shared services |
+| **Event-Driven** | Medium-High | Excellent | Good | Medium | Good | Async workflows, loose coupling |
+| **Serverless** | Medium | Infinite | High | High | Variable | Variable workloads, event processing |
+| **CQRS** | Medium | Excellent | Good | High | Excellent | Read/write optimization, complex domains |
+| **Event Sourcing** | High | Good | Medium | Excellent | Good | Audit requirements, temporal queries |
+| **Hexagonal** | Medium | Good | Excellent | Excellent | Good | Domain isolation, multiple adapters |
+| **Pipes & Filters** | Low | Good | High | High | Good | Data processing, ETL workflows |
+| **Microkernel** | Medium | Good | Good | Good | Good | Plugin architectures, extensible systems |
+| **Space-Based** | High | Excellent | Medium | Medium | Excellent | High-volume processing, cloud-native |
+| **Orchestration** | Medium | Good | Medium | Good | Good | Complex workflows, business processes |
+| **Choreography** | High | Excellent | Low | Low | Good | Distributed workflows, autonomy |
+| **Lambda** | Low | Excellent | High | High | Variable | Stateless processing, cost optimization |
 
-## パターン選択基準の実装
+### Quality Attribute Impact Analysis
 
 ```typescript
-export class PatternSelectionCriteria {
-  evaluatePattern(
-    pattern: ArchitecturePattern,
-    context: ProjectContext
-  ): PatternFitScore {
-    const scores = {
-      // 価値への適合性
-      valueAlignment: this.assessValueAlignment(
-        pattern,
-        context.valueStreams
-      ),
-      
-      // ケイパビリティとの整合性
-      capabilityFit: this.assessCapabilityFit(
-        pattern,
-        context.capabilities
-      ),
-      
-      // 制約との適合性
-      constraintCompliance: this.assessConstraintCompliance(
-        pattern,
-        context.constraints
-      ),
-      
-      // 組織との適合性
-      organizationalFit: this.assessOrganizationalFit(
-        pattern,
-        context.organization
-      ),
-      
-      // 技術的適合性
-      technicalFit: this.assessTechnicalFit(
-        pattern,
-        context.technology
-      )
-    };
-    
-    const weightedScore = this.calculateWeightedScore(scores, context);
-    const risks = this.identifyRisks(pattern, context);
-    
-    return {
-      pattern,
-      scores,
-      totalScore: weightedScore,
-      risks,
-      recommendation: this.generateRecommendation(weightedScore, risks)
-    };
-  }
+interface QualityAttributeImpact {
+  pattern: string;
+  impacts: {
+    availability: -2 | -1 | 0 | 1 | 2;
+    modifiability: -2 | -1 | 0 | 1 | 2;
+    performance: -2 | -1 | 0 | 1 | 2;
+    security: -2 | -1 | 0 | 1 | 2;
+    testability: -2 | -1 | 0 | 1 | 2;
+    usability: -2 | -1 | 0 | 1 | 2;
+  };
 }
-```
 
-## マイクロサービスパターンの詳細実装
-
-```typescript
-export class MicroservicesPattern implements ArchitecturePattern {
-  name = "Microservices Architecture";
-  category = ArchitecturePatternCategory.MICROSERVICES;
-  
-  characteristics = {
-    scalability: {
-      horizontal: "excellent",
-      vertical: "good",
-      elasticity: "excellent"
-    },
-    complexity: ComplexityLevel.HIGH,
-    maintainability: 0.8,
-    testability: 0.9,
-    performance: {
-      latency: "variable",
-      throughput: "high",
-      overhead: "significant"
+const patternImpacts: QualityAttributeImpact[] = [
+  {
+    pattern: "Microservices",
+    impacts: {
+      availability: 2,    // Service isolation
+      modifiability: 2,   // Independent changes
+      performance: -1,    // Network overhead
+      security: -1,       // Increased attack surface
+      testability: 2,     // Isolated testing
+      usability: 0        // No direct impact
     }
-  };
-  
-  // 実装ガイドライン
-  implementationGuidelines = {
-    serviceDesign: {
-      principles: [
-        "Single Responsibility",
-        "Autonomous Teams",
-        "Decentralized Data Management",
-        "Design for Failure"
-      ],
-      
-      serviceBoundaries: (capabilities: BusinessCapability[]) => {
-        return capabilities.map(cap => ({
-          serviceName: this.deriveServiceName(cap),
-          responsibilities: cap.operations,
-          dataOwnership: this.identifyOwnedData(cap),
-          apis: this.designServiceAPI(cap)
-        }));
-      },
-      
-      communicationPatterns: {
-        synchronous: {
-          when: ["Low latency required", "Simple request-response"],
-          implementation: ["REST", "gRPC"]
-        },
-        asynchronous: {
-          when: ["Decoupling required", "Event-driven flow"],
-          implementation: ["Message Queue", "Event Streaming"]
-        }
-      }
-    },
-    
-    dataManagement: {
-      strategy: "Database per Service",
-      consistency: "Eventual Consistency",
-      
-      patterns: {
-        saga: {
-          when: "Distributed transactions needed",
-          implementation: "Choreography or Orchestration"
-        },
-        cqrs: {
-          when: "Read/Write workloads differ significantly",
-          implementation: "Separate read and write models"
-        },
-        eventSourcing: {
-          when: "Audit trail required",
-          implementation: "Event store with projections"
-        }
-      }
+  },
+  {
+    pattern: "Monolithic",
+    impacts: {
+      availability: -1,   // Single point of failure
+      modifiability: -1,  // Tight coupling
+      performance: 2,     // No network calls
+      security: 1,        // Smaller attack surface
+      testability: 1,     // Integrated testing
+      usability: 0        // No direct impact
     }
-  };
-  
-  // ECサイトへの適用例
-  applyToECommerce(context: ECommerceContext): ServiceArchitecture {
-    return {
-      services: [
-        {
-          name: "ProductCatalog",
-          responsibilities: ["Product management", "Search", "Categories"],
-          technology: ["Node.js", "Elasticsearch", "PostgreSQL"],
-          api: {
-            rest: ["/products", "/categories", "/search"],
-            events: ["ProductCreated", "ProductUpdated", "PriceChanged"]
-          }
-        },
-        {
-          name: "ShoppingCart",
-          responsibilities: ["Cart management", "Session handling"],
-          technology: ["Go", "Redis"],
-          api: {
-            rest: ["/cart", "/cart/items"],
-            events: ["ItemAdded", "ItemRemoved", "CartCheckedOut"]
-          }
-        },
-        {
-          name: "OrderManagement",
-          responsibilities: ["Order processing", "Order tracking"],
-          technology: ["Java Spring", "PostgreSQL"],
-          api: {
-            rest: ["/orders", "/orders/{id}/status"],
-            events: ["OrderPlaced", "OrderShipped", "OrderDelivered"]
-          }
-        },
-        {
-          name: "PaymentService",
-          responsibilities: ["Payment processing", "Refunds"],
-          technology: ["Java Spring", "Oracle DB"],
-          api: {
-            rest: ["/payments", "/refunds"],
-            events: ["PaymentProcessed", "PaymentFailed", "RefundIssued"]
-          }
-        }
-      ],
-      
-      infrastructure: {
-        apiGateway: "Kong",
-        serviceMesh: "Istio",
-        messageQueue: "RabbitMQ",
-        monitoring: ["Prometheus", "Grafana", "Jaeger"]
-      }
-    };
+  },
+  {
+    pattern: "Event-Driven",
+    impacts: {
+      availability: 2,    // Async decoupling
+      modifiability: 2,   // Loose coupling
+      performance: 1,     // Async processing
+      security: 0,        // Depends on implementation
+      testability: -1,    // Complex event flows
+      usability: 0        // No direct impact
+    }
+  },
+  {
+    pattern: "Serverless",
+    impacts: {
+      availability: 2,    // Platform managed
+      modifiability: 2,   // Function independence
+      performance: -1,    // Cold starts
+      security: 1,        // Platform security
+      testability: 2,     // Function isolation
+      usability: 0        // No direct impact
+    }
   }
-}
+];
 ```
 
-## イベント駆動アーキテクチャの実装
+### Migration Effort Estimation
 
 ```typescript
-export class EventDrivenPattern implements ArchitecturePattern {
-  name = "Event-Driven Architecture";
-  category = ArchitecturePatternCategory.EVENT_DRIVEN;
-  
-  // イベントの設計
-  designEvents(capabilities: BusinessCapability[]): EventCatalog {
-    const events: DomainEvent[] = [];
-    
-    for (const capability of capabilities) {
-      const capabilityEvents = this.identifyEvents(capability);
-      events.push(...capabilityEvents);
-    }
-    
-    return {
-      events,
-      eventFlows: this.designEventFlows(events),
-      eventStore: this.designEventStore(events),
-      projections: this.designProjections(events)
-    };
-  }
-  
-  private identifyEvents(
-    capability: BusinessCapability
-  ): DomainEvent[] {
-    const events: DomainEvent[] = [];
-    
-    // 状態変化からイベントを導出
-    for (const operation of capability.operations) {
-      const stateChanges = this.analyzeStateChanges(operation);
-      
-      for (const change of stateChanges) {
-        events.push({
-          name: this.deriveEventName(change),
-          source: capability.name,
-          payload: this.definePayload(change),
-          metadata: {
-            version: "1.0",
-            schema: this.generateSchema(change)
-          }
-        });
-      }
-    }
-    
-    return events;
-  }
-  
-  // イベントストアの実装
-  implementEventStore(): EventStoreImplementation {
-    return {
-      storage: {
-        engine: "EventStore DB",
-        partitioning: "By aggregate ID",
-        retention: "Infinite for event sourcing"
-      },
-      
-      api: {
-        append: async (streamId: string, events: Event[]) => {
-          // イベントの検証
-          for (const event of events) {
-            await this.validateEvent(event);
-          }
-          
-          // 楽観的並行性制御
-          const expectedVersion = await this.getStreamVersion(streamId);
-          
-          // イベントの永続化
-          await this.persistEvents(streamId, events, expectedVersion);
-          
-          // プロジェクションの更新
-          await this.updateProjections(streamId, events);
-          
-          // イベントの発行
-          await this.publishEvents(events);
-        },
-        
-        read: async (streamId: string, fromVersion?: number) => {
-          return this.readEventStream(streamId, fromVersion);
-        }
-      },
-      
-      projections: {
-        continuous: [
-          {
-            name: "CurrentState",
-            query: "SELECT * FROM events WHERE ...",
-            destination: "ReadModel"
-          }
-        ],
-        
-        oneTime: [
-          {
-            name: "DataMigration",
-            query: "SELECT * FROM events WHERE timestamp < ...",
-            destination: "MigrationTable"
-          }
-        ]
-      }
-    };
-  }
-}
-```
-
-## サーバーレスパターンの実装
-
-```typescript
-export class ServerlessPattern implements ArchitecturePattern {
-  name = "Serverless Architecture";
-  category = ArchitecturePatternCategory.SERVERLESS;
-  
-  // 関数の設計
-  designFunctions(
-    capabilities: BusinessCapability[]
-  ): ServerlessDesign {
-    const functions: ServerlessFunction[] = [];
-    
-    for (const capability of capabilities) {
-      const capabilityFunctions = this.decomposeToFunctions(capability);
-      functions.push(...capabilityFunctions);
-    }
-    
-    return {
-      functions,
-      triggers: this.designTriggers(functions),
-      orchestration: this.designOrchestration(functions),
-      dataFlow: this.designDataFlow(functions)
-    };
-  }
-  
-  // 実装例：注文処理
-  implementOrderProcessing(): ServerlessFunctions {
-    return {
-      functions: [
-        {
-          name: "validateOrder",
-          runtime: "nodejs18.x",
-          memory: 256,
-          timeout: 30,
-          trigger: "API Gateway POST /orders",
-          handler: async (event: APIGatewayEvent) => {
-            const order = JSON.parse(event.body);
-            
-            // 検証ロジック
-            const validation = await this.validateOrder(order);
-            
-            if (validation.isValid) {
-              // 次の関数をトリガー
-              await this.invokeFunction("processPayment", order);
-              
-              return {
-                statusCode: 202,
-                body: JSON.stringify({ orderId: order.id })
-              };
-            } else {
-              return {
-                statusCode: 400,
-                body: JSON.stringify({ errors: validation.errors })
-              };
-            }
-          }
-        },
-        
-        {
-          name: "processPayment",
-          runtime: "nodejs18.x",
-          memory: 512,
-          timeout: 60,
-          trigger: "Invocation from validateOrder",
-          handler: async (order: Order) => {
-            try {
-              const payment = await this.processPayment(order);
-              
-              // イベントの発行
-              await this.publishEvent("PaymentProcessed", {
-                orderId: order.id,
-                amount: payment.amount,
-                transactionId: payment.transactionId
-              });
-              
-            } catch (error) {
-              await this.publishEvent("PaymentFailed", {
-                orderId: order.id,
-                reason: error.message
-              });
-              
-              throw error;
-            }
-          }
-        }
-      ],
-      
-      orchestration: {
-        type: "StepFunctions",
-        definition: {
-          startAt: "ValidateOrder",
-          states: {
-            ValidateOrder: {
-              type: "Task",
-              resource: "arn:aws:lambda:validateOrder",
-              next: "ProcessPayment"
-            },
-            ProcessPayment: {
-              type: "Task",
-              resource: "arn:aws:lambda:processPayment",
-              next: "UpdateInventory",
-              catch: [{
-                errorEquals: ["PaymentError"],
-                next: "HandlePaymentFailure"
-              }]
-            }
-          }
-        }
-      }
-    };
-  }
-}
-```
-
-## ハイブリッドアーキテクチャの設計
-
-```typescript
-export class HybridArchitectureDesigner {
-  combinePatterns(
-    patterns: ArchitecturePattern[],
-    context: ProjectContext
-  ): HybridArchitecture {
-    // パターンの相性分析
-    const compatibility = this.analyzeCompatibility(patterns);
-    
-    // 統合ポイントの設計
-    const integrationPoints = this.designIntegrationPoints(
-      patterns,
-      context
-    );
-    
-    // 境界の定義
-    const boundaries = this.defineBoundaries(patterns, context);
-    
-    return {
-      patterns,
-      compatibility,
-      integrationPoints,
-      boundaries,
-      implementation: this.createImplementationPlan(patterns, boundaries)
-    };
-  }
-  
-  // 実例：マイクロサービス + イベント駆動 + サーバーレス
-  createModernECommerceArchitecture(): HybridArchitecture {
-    const patterns = [
-      new MicroservicesPattern(),
-      new EventDrivenPattern(),
-      new ServerlessPattern()
-    ];
-    
-    return {
-      zones: [
-        {
-          name: "Core Services",
-          pattern: "Microservices",
-          services: ["Product", "Order", "Customer", "Inventory"],
-          rationale: "Complex business logic requiring team autonomy"
-        },
-        {
-          name: "Integration Layer",
-          pattern: "Event-Driven",
-          components: ["Event Bus", "Event Store", "Projections"],
-          rationale: "Loose coupling between services"
-        },
-        {
-          name: "Edge Functions",
-          pattern: "Serverless",
-          functions: ["ImageResize", "EmailNotification", "DataExport"],
-          rationale: "Variable load, stateless operations"
-        }
-      ],
-      
-      interactions: [
-        {
-          from: "Core Services",
-          to: "Integration Layer",
-          mechanism: "Publish domain events"
-        },
-        {
-          from: "Integration Layer",
-          to: "Edge Functions",
-          mechanism: "Trigger on specific events"
-        }
-      ]
-    };
-  }
-}
-```
-
-## アーキテクチャ決定記録（ADR）
-
-```typescript
-export interface ArchitectureDecisionRecord {
-  id: string;
-  title: string;
-  status: "proposed" | "accepted" | "deprecated" | "superseded";
-  context: string;
-  decision: string;
-  consequences: {
-    positive: string[];
-    negative: string[];
-    neutral: string[];
-  };
-  alternatives: {
-    option: string;
-    prosAndCons: string;
-    rejectionReason: string;
-  }[];
+interface MigrationEffort {
+  fromPattern: string;
+  toPattern: string;
+  effortScore: 1 | 2 | 3 | 4 | 5; // 1=minimal, 5=massive
+  riskLevel: "Low" | "Medium" | "High" | "Very High";
+  timeEstimate: string;
+  prerequisites: string[];
 }
 
-// ADR例：マイクロサービス採用
-const adr001: ArchitectureDecisionRecord = {
-  id: "ADR-001",
-  title: "マイクロサービスアーキテクチャの採用",
-  status: "accepted",
-  context: `
-    - 複数の開発チームが並行して作業
-    - 異なるビジネスドメインの統合
-    - スケーラビリティ要求の多様性
-    - 技術スタックの自由度の必要性
-  `,
-  decision: `
-    コアビジネスロジックにマイクロサービスアーキテクチャを採用する。
-    各サービスは単一のビジネスケイパビリティを担当し、
-    独自のデータストアを持つ。通信は非同期メッセージングを基本とする。
-  `,
-  consequences: {
-    positive: [
-      "チームの独立性向上",
-      "技術選択の自由度",
-      "個別スケーリング可能",
-      "障害の局所化"
-    ],
-    negative: [
-      "運用の複雑性増大",
-      "分散トランザクションの課題",
-      "ネットワーク遅延",
-      "開発環境の複雑化"
-    ],
-    neutral: [
-      "監視・ロギングインフラの刷新が必要",
-      "DevOps文化の醸成が必須"
+const migrationPaths: MigrationEffort[] = [
+  {
+    fromPattern: "Monolithic",
+    toPattern: "Microservices",
+    effortScore: 5,
+    riskLevel: "Very High",
+    timeEstimate: "12-24 months",
+    prerequisites: [
+      "Strong DevOps culture",
+      "CI/CD pipeline",
+      "Monitoring infrastructure",
+      "Team reorganization"
     ]
   },
-  alternatives: [
-    {
-      option: "モジュラーモノリス",
-      prosAndCons: "シンプルだが、スケーラビリティに限界",
-      rejectionReason: "チーム間の依存性が高くなりすぎる"
+  {
+    fromPattern: "Monolithic",
+    toPattern: "Modular Monolith",
+    effortScore: 2,
+    riskLevel: "Low",
+    timeEstimate: "3-6 months",
+    prerequisites: [
+      "Clear module boundaries",
+      "Dependency inversion"
+    ]
+  },
+  {
+    fromPattern: "Modular Monolith",
+    toPattern: "Microservices",
+    effortScore: 3,
+    riskLevel: "Medium",
+    timeEstimate: "6-12 months",
+    prerequisites: [
+      "Module stability",
+      "API definitions",
+      "Service infrastructure"
+    ]
+  },
+  {
+    fromPattern: "Microservices",
+    toPattern: "Serverless",
+    effortScore: 3,
+    riskLevel: "Medium",
+    timeEstimate: "6-9 months per service",
+    prerequisites: [
+      "Stateless design",
+      "Cloud platform expertise",
+      "Cost monitoring"
+    ]
+  }
+];
+```
+
+## Appendix 17.2: Architecture Decision Records (ADR) Templates and Examples
+
+### Standard ADR Template
+
+```markdown
+# ADR-[number]: [Short title]
+
+## Status
+[Proposed | Accepted | Deprecated | Superseded by ADR-[number]]
+
+## Context
+[What is the issue that we're seeing that is motivating this decision or change?]
+
+## Decision
+[What is the change that we're proposing and/or doing?]
+
+## Consequences
+
+### Positive
+- [Positive consequence 1]
+- [Positive consequence 2]
+
+### Negative
+- [Negative consequence 1]
+- [Negative consequence 2]
+
+### Neutral
+- [Neutral consequence 1]
+- [Neutral consequence 2]
+
+## Alternatives Considered
+
+### Alternative 1: [Name]
+- **Pros**: [List of advantages]
+- **Cons**: [List of disadvantages]
+- **Reason for rejection**: [Why this wasn't chosen]
+
+### Alternative 2: [Name]
+- **Pros**: [List of advantages]
+- **Cons**: [List of disadvantages]
+- **Reason for rejection**: [Why this wasn't chosen]
+
+## Related Decisions
+- [ADR-X]: [Related decision 1]
+- [ADR-Y]: [Related decision 2]
+
+## References
+- [Link to relevant documentation]
+- [Link to design documents]
+- [Link to discussions]
+```
+
+### Example ADR 1: Microservices Adoption
+
+```markdown
+# ADR-001: Adopt Microservices for Customer-Facing Services
+
+## Status
+Accepted (2024-01-15)
+
+## Context
+Our monolithic e-commerce platform is struggling with:
+- Multiple teams stepping on each other during deployments
+- 4-hour deployment windows causing business disruption
+- Unable to scale checkout independently during flash sales
+- Different components requiring different technology stacks
+
+## Decision
+Adopt microservices architecture for customer-facing services while keeping back-office operations monolithic. Services will be organized around business capabilities as identified in our DDD event storming sessions.
+
+Initial services:
+- Product Catalog Service
+- Shopping Cart Service
+- Order Management Service
+- Customer Service
+- Payment Service
+
+## Consequences
+
+### Positive
+- Independent deployment per team (target: < 30 minutes)
+- Horizontal scaling of critical services during peak load
+- Technology diversity where it makes sense
+- Fault isolation (one service failure doesn't bring down everything)
+
+### Negative
+- Increased operational complexity (monitoring, tracing, debugging)
+- Network latency between services (estimated +50ms per hop)
+- Data consistency challenges (eventual consistency required)
+- Higher infrastructure costs (estimated +40% initially)
+
+### Neutral
+- Requires investment in DevOps tooling and training
+- Need to establish service governance and standards
+
+## Alternatives Considered
+
+### Alternative 1: Modular Monolith
+- **Pros**: Simpler operations, no network overhead, easier debugging
+- **Cons**: Still coupled deployments, limited scaling options
+- **Reason for rejection**: Doesn't solve our core team autonomy problem
+
+### Alternative 2: Service-Oriented Architecture (SOA) with ESB
+- **Pros**: Centralized governance, established patterns
+- **Cons**: ESB becomes bottleneck, still centralized coordination
+- **Reason for rejection**: Goes against our goal of team autonomy
+
+## Related Decisions
+- ADR-002: Use gRPC for synchronous service communication
+- ADR-003: Adopt event streaming for asynchronous communication
+- ADR-004: Implement distributed tracing from day one
+
+## References
+- [DDD Event Storming Results](link)
+- [Microservices Trade-offs by Martin Fowler](link)
+- [Team Topology Analysis](link)
+```
+
+### Example ADR 2: Event Sourcing for Order Management
+
+```markdown
+# ADR-007: Implement Event Sourcing for Order Management
+
+## Status
+Accepted (2024-03-20)
+
+## Context
+Order management requires:
+- Complete audit trail for compliance (SOX requirements)
+- Ability to replay order history for dispute resolution
+- Complex state machines with many transitions
+- Integration with 12+ downstream systems
+- Temporal queries ("what was the order state on date X?")
+
+## Decision
+Implement Event Sourcing pattern for the Order Management service. All state changes will be captured as immutable events in an event store. Current state will be derived from event projection.
+
+## Consequences
+
+### Positive
+- Complete audit trail by design
+- Time-travel queries for any point in history
+- Natural integration with event-driven architecture
+- Easier debugging through event replay
+- Supports complex compensating transactions
+
+### Negative
+- Increased storage requirements (~3x traditional approach)
+- Learning curve for development team
+- Complex event versioning over time
+- Eventual consistency in projections
+
+### Neutral
+- Requires CQRS pattern for query optimization
+- Need to build event projection infrastructure
+
+## Alternatives Considered
+
+### Alternative 1: State-based with Audit Tables
+- **Pros**: Familiar pattern, simpler queries
+- **Cons**: Audit tables often incomplete, hard to replay
+- **Reason for rejection**: Doesn't meet temporal query requirements
+
+### Alternative 2: Change Data Capture (CDC)
+- **Pros**: Can retrofit existing systems, automatic capture
+- **Cons**: Only captures final state, not business intent
+- **Reason for rejection**: Loses business context of changes
+
+## Related Decisions
+- ADR-008: Use EventStore for event persistence
+- ADR-009: Implement CQRS for order queries
+- ADR-010: Event versioning strategy
+
+## References
+- [Event Sourcing Pattern by Martin Fowler](link)
+- [SOX Compliance Requirements Document](link)
+- [Order State Machine Specification](link)
+```
+
+### Example ADR 3: Serverless for Variable Workloads
+
+```markdown
+# ADR-015: Adopt Serverless for Image Processing Pipeline
+
+## Status
+Accepted (2024-06-10)
+
+## Context
+Our image processing needs are highly variable:
+- 100 images/hour during normal operations
+- 50,000 images/hour during product launches
+- Current EC2-based solution either wastes resources or can't scale
+- Processing is stateless and event-driven
+
+## Decision
+Migrate image processing pipeline to serverless architecture using AWS Lambda. Images uploaded to S3 will trigger Lambda functions for resize, optimize, and CDN distribution.
+
+## Consequences
+
+### Positive
+- Pay only for actual usage (estimated 70% cost reduction)
+- Automatic scaling to handle peaks
+- No infrastructure management
+- Built-in fault tolerance
+
+### Negative
+- Cold start latency (2-5 seconds for first invocation)
+- 15-minute execution limit may affect video processing
+- Vendor lock-in to AWS services
+- Limited runtime customization
+
+### Neutral
+- Requires rearchitecting for stateless operation
+- Need new monitoring and debugging approaches
+
+## Alternatives Considered
+
+### Alternative 1: Kubernetes with KEDA
+- **Pros**: More control, can handle long-running tasks
+- **Cons**: Still need to manage infrastructure, complex scaling rules
+- **Reason for rejection**: Operational overhead not justified
+
+### Alternative 2: Managed Container Service (Fargate)
+- **Pros**: Container flexibility, no cold starts
+- **Cons**: Higher baseline cost, slower scaling
+- **Reason for rejection**: Cost model doesn't fit our usage pattern
+
+## Related Decisions
+- ADR-016: Use S3 events for triggering
+- ADR-017: Implement step functions for complex workflows
+- ADR-018: CloudWatch for serverless monitoring
+
+## References
+- [AWS Lambda Best Practices](link)
+- [Cost Analysis Spreadsheet](link)
+- [Image Processing Requirements](link)
+```
+
+## Appendix 17.3: Architecture Migration Readiness Assessment
+
+### Microservices Readiness Checklist
+
+```yaml
+organizational_readiness:
+  team_structure:
+    - [ ] Teams organized around business capabilities
+    - [ ] Each team can deploy independently
+    - [ ] Clear ownership boundaries established
+    - [ ] Cross-functional teams (dev, ops, QA)
+    
+  culture:
+    - [ ] DevOps mindset adopted
+    - [ ] Comfortable with distributed systems
+    - [ ] Embrace "you build it, you run it"
+    - [ ] Failure tolerance and learning culture
+
+technical_readiness:
+  infrastructure:
+    - [ ] CI/CD pipeline per service
+    - [ ] Container orchestration platform
+    - [ ] Service discovery mechanism
+    - [ ] API gateway implemented
+    
+  monitoring:
+    - [ ] Distributed tracing
+    - [ ] Centralized logging
+    - [ ] Service mesh (optional but recommended)
+    - [ ] Alerting and incident response
+    
+  data:
+    - [ ] Strategy for distributed data
+    - [ ] Approach to consistency
+    - [ ] Event streaming platform
+    - [ ] Data synchronization patterns
+
+operational_readiness:
+  processes:
+    - [ ] Service versioning strategy
+    - [ ] Backward compatibility approach
+    - [ ] Rollback procedures
+    - [ ] Chaos engineering practices
+    
+  skills:
+    - [ ] Distributed systems knowledge
+    - [ ] Container expertise
+    - [ ] Cloud platform familiarity
+    - [ ] Debugging distributed systems
+```
+
+### Migration Risk Assessment Matrix
+
+```typescript
+interface MigrationRisk {
+  category: string;
+  risk: string;
+  probability: "Low" | "Medium" | "High";
+  impact: "Low" | "Medium" | "High";
+  mitigation: string;
+}
+
+const migrationRisks: MigrationRisk[] = [
+  {
+    category: "Technical",
+    risk: "Distributed transaction failures",
+    probability: "High",
+    impact: "High",
+    mitigation: "Implement saga pattern, extensive testing"
+  },
+  {
+    category: "Organizational",
+    risk: "Team resistance to change",
+    probability: "Medium",
+    impact: "High",
+    mitigation: "Training, gradual rollout, clear benefits communication"
+  },
+  {
+    category: "Operational",
+    risk: "Monitoring gaps in distributed system",
+    probability: "High",
+    impact: "Medium",
+    mitigation: "Implement comprehensive observability from day 1"
+  },
+  {
+    category: "Financial",
+    risk: "Higher than expected cloud costs",
+    probability: "Medium",
+    impact: "Medium",
+    mitigation: "Regular cost monitoring, optimization sprints"
+  },
+  {
+    category: "Timeline",
+    risk: "Migration takes longer than planned",
+    probability: "High",
+    impact: "Medium",
+    mitigation: "Incremental approach, regular reassessment"
+  }
+];
+```
+
+### Strangler Fig Implementation Guide
+
+```typescript
+interface StranglerFigPhase {
+  phase: number;
+  name: string;
+  duration: string;
+  components: string[];
+  routing: {
+    legacy: number;  // percentage
+    new: number;     // percentage
+  };
+  rollback: string;
+  success_criteria: string[];
+}
+
+const stranglerPlan: StranglerFigPhase[] = [
+  {
+    phase: 1,
+    name: "Proxy Setup",
+    duration: "2 weeks",
+    components: ["API Gateway", "Routing Rules"],
+    routing: { legacy: 100, new: 0 },
+    rollback: "Remove proxy",
+    success_criteria: [
+      "All traffic flows through proxy",
+      "No performance degradation",
+      "Monitoring in place"
+    ]
+  },
+  {
+    phase: 2,
+    name: "First Service Extraction",
+    duration: "4 weeks",
+    components: ["User Authentication"],
+    routing: { legacy: 90, new: 10 },
+    rollback: "Route all traffic to legacy",
+    success_criteria: [
+      "New service handles 10% traffic",
+      "Error rate < 0.1%",
+      "Performance SLA met"
+    ]
+  },
+  {
+    phase: 3,
+    name: "Gradual Migration",
+    duration: "3 months",
+    components: ["User Auth", "Product Catalog"],
+    routing: { legacy: 50, new: 50 },
+    rollback: "Reduce new service traffic",
+    success_criteria: [
+      "50/50 traffic split stable",
+      "Both services meeting SLAs",
+      "Sync mechanisms working"
+    ]
+  },
+  {
+    phase: 4,
+    name: "Full Cutover",
+    duration: "2 weeks",
+    components: ["All migrated components"],
+    routing: { legacy: 0, new: 100 },
+    rollback: "Route back to legacy if needed",
+    success_criteria: [
+      "All traffic on new services",
+      "Legacy can be decommissioned",
+      "All integrations updated"
+    ]
+  }
+];
+```
+
+### Cost Comparison Calculator
+
+```typescript
+interface ArchitectureCost {
+  pattern: string;
+  costs: {
+    infrastructure: {
+      compute: number;
+      storage: number;
+      networking: number;
+    };
+    operational: {
+      personnel: number;
+      tooling: number;
+      training: number;
+    };
+    development: {
+      velocity_impact: number;  // percentage
+      time_to_market: number;  // days
+    };
+  };
+  monthly_total: number;
+  three_year_tco: number;
+}
+
+function calculateArchitectureCosts(
+  requirements: SystemRequirements
+): ArchitectureCost[] {
+  // Monolithic calculation
+  const monolithic: ArchitectureCost = {
+    pattern: "Monolithic",
+    costs: {
+      infrastructure: {
+        compute: requirements.users * 0.02,      // $/user/month
+        storage: requirements.dataGB * 0.10,     // $/GB/month
+        networking: requirements.requests * 0.0001 // $/1K requests
+      },
+      operational: {
+        personnel: 2 * 10000,    // 2 ops engineers
+        tooling: 500,            // Basic monitoring
+        training: 1000           // Minimal
+      },
+      development: {
+        velocity_impact: 0,      // Baseline
+        time_to_market: 90      // 3 months
+      }
     },
-    {
-      option: "サービス指向アーキテクチャ（SOA）",
-      prosAndCons: "実績はあるが、ESBがボトルネックになる",
-      rejectionReason: "中央集権的な統合レイヤーを避けたい"
-    }
-  ]
-};
-```
+    monthly_total: 0, // Calculated
+    three_year_tco: 0 // Calculated
+  };
 
-## アーキテクチャ進化戦略の実装
-
-```typescript
-export class ArchitectureEvolution {
-  planEvolution(
-    current: ArchitecturePattern,
-    target: ArchitecturePattern,
-    constraints: Constraint[]
-  ): EvolutionRoadmap {
-    // 現状分析
-    const currentState = this.analyzeCurrentArchitecture(current);
-    
-    // ギャップ分析
-    const gaps = this.identifyGaps(currentState, target);
-    
-    // 移行ステップの設計
-    const steps = this.designMigrationSteps(gaps, constraints);
-    
-    // リスク評価
-    const risks = this.assessMigrationRisks(steps);
-    
-    return {
-      phases: [
-        {
-          name: "Foundation",
-          duration: "3 months",
-          activities: [
-            "Set up CI/CD pipeline",
-            "Establish monitoring",
-            "Create first microservice"
-          ],
-          successCriteria: ["Pipeline operational", "Monitoring coverage > 80%"]
-        },
-        {
-          name: "Decomposition",
-          duration: "6 months",
-          activities: [
-            "Extract core services",
-            "Implement service mesh",
-            "Migrate critical features"
-          ],
-          successCriteria: ["3+ services in production", "< 2% error rate"]
-        },
-        {
-          name: "Optimization",
-          duration: "3 months",
-          activities: [
-            "Performance tuning",
-            "Cost optimization",
-            "Complete migration"
-          ],
-          successCriteria: ["All services migrated", "Cost targets met"]
-        }
-      ],
-      
-      rollbackPlan: this.createRollbackPlan(steps),
-      communicationPlan: this.createCommunicationPlan(steps)
-    };
-  }
-  
-  // Strangler Figパターンの実装
-  implementStranglerFig(
-    legacySystem: System,
-    newArchitecture: ArchitecturePattern
-  ): StranglerImplementation {
-    return {
-      facade: {
-        description: "API Gateway routing to legacy and new services",
-        implementation: {
-          tool: "Kong/Nginx",
-          rules: [
-            {
-              path: "/api/v2/*",
-              target: "new-services",
-              percentage: 100
-            },
-            {
-              path: "/api/v1/*",
-              target: "legacy",
-              percentage: 100,
-              deprecation: "2024-12-31"
-            }
-          ]
-        }
+  // Microservices calculation
+  const microservices: ArchitectureCost = {
+    pattern: "Microservices",
+    costs: {
+      infrastructure: {
+        compute: requirements.users * 0.03,      // +50% overhead
+        storage: requirements.dataGB * 0.15,     // +50% duplication
+        networking: requirements.requests * 0.0003 // 3x internal traffic
       },
-      
-      migrationOrder: [
-        {
-          component: "User Authentication",
-          reason: "Stateless and well-defined boundaries",
-          effort: "2 sprints"
-        },
-        {
-          component: "Product Catalog",
-          reason: "Read-heavy, easy to replicate",
-          effort: "3 sprints"
-        },
-        {
-          component: "Order Processing",
-          reason: "Core business logic, requires careful migration",
-          effort: "5 sprints"
-        }
-      ],
-      
-      dataSync: {
-        strategy: "Event-based sync",
-        implementation: "CDC (Change Data Capture) with Debezium"
+      operational: {
+        personnel: 4 * 10000,    // 4 ops engineers
+        tooling: 3000,           // Advanced monitoring
+        training: 5000           // Significant
+      },
+      development: {
+        velocity_impact: 30,     // +30% after stabilization
+        time_to_market: 120     // 4 months initial
       }
-    };
-  }
+    },
+    monthly_total: 0, // Calculated
+    three_year_tco: 0 // Calculated
+  };
+
+  // Calculate totals
+  [monolithic, microservices].forEach(arch => {
+    const infra = Object.values(arch.costs.infrastructure).reduce((a,b) => a+b, 0);
+    const ops = Object.values(arch.costs.operational).reduce((a,b) => a+b, 0);
+    arch.monthly_total = infra + ops;
+    arch.three_year_tco = (arch.monthly_total * 36) + 
+                         (arch.costs.development.time_to_market * 1000);
+  });
+
+  return [monolithic, microservices];
 }
 ```
 
-## 金融サービスのアーキテクチャ選択例
+### Complete Implementation Examples
 
-```typescript
-class FinancialServicesArchitecture {
-  selectArchitecture(context: FinancialContext): ArchitectureDecision {
-    const requirements = {
-      regulatory: ["PCI-DSS", "SOX", "GDPR"],
-      performance: {
-        transactionLatency: "<100ms",
-        throughput: "10K TPS",
-        availability: "99.99%"
-      },
-      security: {
-        encryption: "end-to-end",
-        auditTrail: "complete",
-        accessControl: "role-based"
-      }
-    };
-    
-    // パターン評価
-    const evaluation = {
-      microservices: {
-        score: 0.85,
-        fit: "High for service isolation and compliance",
-        concerns: ["Distributed transaction complexity"]
-      },
-      eventSourcing: {
-        score: 0.90,
-        fit: "Excellent for audit trail and compliance",
-        concerns: ["Learning curve", "Storage costs"]
-      },
-      cqrs: {
-        score: 0.80,
-        fit: "Good for read/write optimization",
-        concerns: ["Eventual consistency handling"]
-      }
-    };
-    
-    // 推奨アーキテクチャ
-    return {
-      primary: "Event Sourcing + CQRS",
-      secondary: "Microservices for service boundaries",
-      rationale: `
-        Event Sourcing provides immutable audit trail required for compliance.
-        CQRS optimizes for different read/write patterns in trading vs reporting.
-        Microservices provide necessary isolation for regulatory boundaries.
-      `,
-      implementation: this.createImplementationPlan(evaluation)
-    };
-  }
-}
-```
+For complete implementation examples of each pattern including:
+- Full TypeScript/Java/Go code implementations
+- Docker configurations
+- Kubernetes manifests
+- CI/CD pipelines
+- Monitoring setups
+
+Please refer to the companion code repository at: [github.com/parasol-framework/architecture-patterns](https://github.com/parasol-framework/architecture-patterns)

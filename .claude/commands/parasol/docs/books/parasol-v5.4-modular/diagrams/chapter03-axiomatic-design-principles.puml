@@ -1,0 +1,78 @@
+@startuml axiomatic-design-principles
+!theme plain
+title Axiomatic Designの2つの公理と設計領域
+
+skinparam backgroundColor #FEFEFE
+
+' The Four Domains
+package "4つの設計領域" {
+  rectangle "顧客領域\n(Customer Domain)" as CD #FFE0B2 {
+    note bottom: 顧客ニーズ (CA)
+  }
+  
+  rectangle "機能領域\n(Functional Domain)" as FD #E8F4FD {
+    note bottom: 機能要求 (FR)
+  }
+  
+  rectangle "物理領域\n(Physical Domain)" as PD #E8F5E9 {
+    note bottom: 設計パラメータ (DP)
+  }
+  
+  rectangle "プロセス領域\n(Process Domain)" as PRD #F3E5F5 {
+    note bottom: プロセス変数 (PV)
+  }
+}
+
+' Domain mappings
+CD -[#4CAF50,bold]-> FD : マッピング
+FD -[#4CAF50,bold]-> PD : マッピング
+PD -[#4CAF50,bold]-> PRD : マッピング
+
+' The Two Axioms
+note top
+  <b>公理1: 独立性の公理 (Independence Axiom)</b>
+  機能要求の独立性を維持せよ
+  ・各FRは独立したDPで満たされるべき
+  ・Design Matrixで検証
+  
+  <b>公理2: 情報の公理 (Information Axiom)</b>
+  情報量を最小化せよ
+  ・設計の複雑さを最小に
+  ・成功確率を最大化
+end note
+
+' Design Types
+note right
+  <b>設計の3分類</b>
+  
+  <b>1. 非結合設計 (Uncoupled)</b>
+  [X 0 0]
+  [0 X 0]  理想的
+  [0 0 X]
+  
+  <b>2. 準結合設計 (Decoupled)</b>
+  [X 0 0]
+  [X X 0]  順序依存
+  [X X X]
+  
+  <b>3. 結合設計 (Coupled)</b>
+  [X 0 X]
+  [0 X X]  避けるべき
+  [X X X]
+end note
+
+' ZIGZAG Process
+note bottom
+  <b>ZIGZAG分解プロセス</b>
+  1. 最上位のFR-DPペアを定義
+  2. FRを下位FRに分解
+  3. 対応するDPを定義（ZIG）
+  4. DPの実現可能性を検証
+  5. FRの調整（ZAG）
+  6. 最下位レベルまで繰り返し
+  
+  各ステップでDesign Matrixを更新し
+  独立性を維持
+end note
+
+@enduml

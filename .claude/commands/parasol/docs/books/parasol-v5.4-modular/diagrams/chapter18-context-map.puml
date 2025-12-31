@@ -1,0 +1,54 @@
+@startuml context-map
+!theme plain
+title Context Mapパターン - 境界づけられたコンテキスト間の関係
+
+skinparam backgroundColor #FEFEFE
+skinparam componentBackgroundColor #E8F4FD
+skinparam componentBorderColor #2196F3
+
+' Bounded Contexts
+component "注文管理\nコンテキスト" as Order #FFE0B2
+component "在庫管理\nコンテキスト" as Inventory #E8F5E9
+component "配送管理\nコンテキスト" as Shipping #E1BEE7
+component "決済処理\nコンテキスト" as Payment #FFEBEE
+component "顧客管理\nコンテキスト" as Customer #F3E5F5
+
+' Relationships with patterns
+Order -[#4CAF50,bold]-> Inventory : <b>Customer-Supplier</b>\n顧客として在庫を確認
+note on link: Order(顧客)が\nInventory(供給者)に依存
+
+Order -[#2196F3,bold]-> Payment : <b>Partnership</b>\n密な協調が必要
+note on link: 相互に依存\n同期的な変更
+
+Order -[#FF5722,bold]-> Customer : <b>Shared Kernel</b>\n共有モデル
+note on link: 顧客エンティティを\n共有
+
+Shipping -[#9C27B0,bold]-> Order : <b>Conformist</b>\n注文に従属
+note on link: Orderの変更に\n従う必要
+
+Payment -[#607D8B,dashed]-> Customer : <b>Anti-corruption Layer</b>\n腐敗防止層
+note on link: 変換層で\n独立性維持
+
+' Legend
+legend right
+  |= Context Mapパターン |
+  |<#4CAF50> Customer-Supplier: 顧客・供給者関係 |
+  |<#2196F3> Partnership: 協調関係 |
+  |<#FF5722> Shared Kernel: 共有カーネル |
+  |<#9C27B0> Conformist: 順応者 |
+  |<#607D8B> Anti-corruption Layer: 腐敗防止層 |
+  |= 設計原則 |
+  | ・明示的な境界定義 |
+  | ・関係性の可視化 |
+  | ・依存方向の管理 |
+endlegend
+
+note bottom
+  <b>Context Map活用方法</b>
+  1. 各コンテキストの責任範囲を明確化
+  2. コンテキスト間の関係パターンを選択
+  3. インターフェース設計に反映
+  4. チーム間のコミュニケーション指針として活用
+end note
+
+@enduml

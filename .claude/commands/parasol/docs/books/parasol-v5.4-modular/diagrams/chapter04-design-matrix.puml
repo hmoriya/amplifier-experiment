@@ -1,0 +1,52 @@
+@startuml design-matrix
+!theme plain
+title Axiomatic Design - Design Matrix概念
+
+skinparam backgroundColor #FEFEFE
+
+' 機能要求 (FR)
+package "機能要求 (FR)" #FFE8E8 {
+  rectangle "FR1: 迅速な決済" as FR1
+  rectangle "FR2: 高いセキュリティ" as FR2
+  rectangle "FR3: 低い手数料" as FR3
+}
+
+' 設計パラメータ (DP)
+package "設計パラメータ (DP)" #E8E8FF {
+  rectangle "DP1: バッチ処理" as DP1
+  rectangle "DP2: 暗号化プロトコル" as DP2
+  rectangle "DP3: 直接銀行連携" as DP3
+}
+
+' Design Matrix表現
+note bottom
+  <b>Design Matrix</b>
+  ----
+  |     | DP1 | DP2 | DP3 |
+  |-----|-----|-----|-----|
+  | FR1 | <b>X</b>   |     |     |
+  | FR2 |     | <b>X</b>   |     |
+  | FR3 |     |     | <b>X</b>   |
+  ----
+  <b>非結合設計</b> (Uncoupled Design)
+  各FRが独立したDPで実現
+end note
+
+' マッピング（理想的な非結合）
+FR1 -[#4CAF50,bold]-> DP1
+FR2 -[#4CAF50,bold]-> DP2
+FR3 -[#4CAF50,bold]-> DP3
+
+' 結合の例（避けるべき）
+FR1 .[#F44336,dashed].> DP2 : 避けるべき\n結合
+note on link: セキュリティ処理が\n決済速度に影響
+
+legend right
+  |<#4CAF50> 理想的なマッピング |
+  |<#F44336> 避けるべき結合 |
+  |= 独立性の原則 |
+  | 各機能要求は独立した |
+  | 設計パラメータで実現 |
+endlegend
+
+@enduml

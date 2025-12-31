@@ -1,0 +1,86 @@
+# Parasol書籍バージョン設定
+# このファイルを新バージョンに合わせて編集してください
+
+version: "X.Y"
+variant: "modular"  # modular, compact, executive, academic
+base_version: "5.4"  # 継承元バージョン（nullも可）
+status: "development"  # development, beta, stable, deprecated
+
+# メタデータ
+metadata:
+  release_date: "YYYY-MM-DD"
+  authors:
+    - "Primary Author"
+    - "Contributors"
+  language: "ja"
+  target_audience:
+    - "エグゼクティブ (25%)"
+    - "アーキテクト (50%)"
+    - "開発者 (25%)"
+
+# 書籍構成
+structure:
+  parts: 8
+  chapters: 38
+  appendices: 6
+  total_pages_estimate: 800
+
+# 品質基準
+quality_standards:
+  code_ratio_max: 30  # コードの最大比率（%）
+  concept_ratio_min: 70  # 概念説明の最小比率（%）
+  examples_per_chapter: 3  # 章あたりの例の数
+  diagrams_required: true
+
+# ベースバージョンからの変更
+changes_from_base:
+  added:
+    chapters: []
+    appendices: []
+    features: []
+  
+  modified:
+    chapters: []
+    major_updates: []
+  
+  removed:
+    chapters: []
+    deprecated_features: []
+
+# 互換性情報
+compatibility:
+  backward_compatible: true
+  migration_required: false
+  breaking_changes: []
+  minimum_knowledge_version: "5.0"
+
+# 生成設定
+generation:
+  use_ai_agent: "parasol-book-architect"
+  chapter_template: "CHAPTER_TEMPLATE.md"
+  style_guide: "STYLE_GUIDE.md"
+  auto_generate_index: true
+  auto_generate_glossary: true
+
+# 検証ルール
+validation:
+  enforce_structure: true
+  check_cross_references: true
+  validate_code_examples: true
+  check_terminology_consistency: true
+
+# 出力設定
+output:
+  formats:
+    - "markdown"
+    - "pdf"
+    - "epub"
+  languages:
+    - "ja"
+    - "en" # 将来対応
+  
+# カスタム設定（バージョン固有）
+custom:
+  # ここにバージョン固有の設定を追加
+  special_features: []
+  experimental_chapters: []

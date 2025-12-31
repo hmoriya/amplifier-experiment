@@ -1,0 +1,75 @@
+@startuml ddd-integration
+!theme plain
+title DDDとParasolの統合 - Zapposの例
+
+skinparam backgroundColor #FEFEFE
+skinparam packageBackgroundColor #F0F4F8
+
+' DDD Layers
+package "DDDレイヤー" #E8F4FD {
+  rectangle "ユビキタス言語" as UL #BBDEFB {
+    note right
+      ビジネスと開発の
+      共通語彙
+    end note
+  }
+  
+  rectangle "境界づけられたコンテキスト" as BC #90CAF9 {
+    note right
+      モデルの適用範囲
+      明確な境界
+    end note
+  }
+  
+  rectangle "集約" as AGG #64B5F6 {
+    note right
+      一貫性の境界
+      トランザクション単位
+    end note
+  }
+  
+  rectangle "エンティティ/値オブジェクト" as EVO #42A5F5
+}
+
+' Parasol Integration Points
+package "Parasol統合ポイント" #E8F5E9 {
+  rectangle "価値ストリーム\n(Phase 2)" as VS #C8E6C9
+  rectangle "ケイパビリティ\n(Phase 3)" as CAP #A5D6A7
+  rectangle "サービス境界\n(Phase 4)" as SB #81C784
+  rectangle "実装仕様\n(Phase 5)" as IS #66BB6A
+}
+
+' Mappings
+VS .[#FF5722,dashed].> UL : 価値の言語化
+CAP .[#FF5722,dashed].> BC : ケイパビリティ=\nコンテキスト
+SB .[#FF5722,dashed].> AGG : サービス=\n集約境界
+IS .[#FF5722,dashed].> EVO : 詳細設計
+
+' Zappos Example
+note bottom
+  <b>Zapposの実例</b>
+  ----
+  | Parasol | DDD | Zappos実装 |
+  |---------|-----|-----------|
+  | 価値: 顧客サービス | ユビキタス言語: WOW体験 | "Deliver WOW" |
+  | ケイパビリティ: 返品処理 | コンテキスト: Returns | 365日返品保証 |
+  | サービス: return-service | 集約: ReturnRequest | 返品要求管理 |
+  | 実装: ReturnAPI | エンティティ: Return | 返品処理実装 |
+  ----
+  
+  <b>統合の利点</b>
+  ・ビジネス価値から実装まで一貫性
+  ・境界の明確な定義
+  ・変更影響の局所化
+end note
+
+' Design Principles
+note right of CAP
+  <b>設計原則</b>
+  1. 価値駆動で境界定義
+  2. ビジネス言語の保持
+  3. 技術的境界との整合
+  4. 進化可能な設計
+end note
+
+@enduml
