@@ -391,7 +391,7 @@ Profiles configure your Amplifier environment with providers, tools, agents, and
 
 Agents are specialized AI personas for focused tasks.
 
-**→ [Agent Authoring Guide](https://github.com/microsoft/amplifier-profiles/blob/main/docs/AGENT_AUTHORING.md)** - Complete guide to creating agents
+**→ [Agent Authoring Guide](https://github.com/microsoft/amplifier-foundation/blob/main/docs/AGENT_AUTHORING.md)** - Complete guide to creating agents
 
 ---
 
@@ -463,6 +463,8 @@ This is an **early preview release**:
 - ⚠️ Some error messages could be clearer
 - ⚠️ Documentation is incomplete in places
 - ⚠️ Installation experience will improve
+
+**Having issues?** See [Troubleshooting](docs/USER_ONBOARDING.md#troubleshooting) including [Clean Reinstall](docs/USER_ONBOARDING.md#clean-reinstall-recovery) for recovery steps.
 
 **Join us on this journey!** Fork, experiment, build modules, share feedback. This is the ground floor.
 
