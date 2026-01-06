@@ -34,7 +34,7 @@ Parasol V5における価値の階層構造。VL1（最上位価値）→VL2（�
 Parasol V5における能力分解の3段階構造。
 
 - **CL1（活動領域識別）**: バリューストリームにおける活動の傾向を把握する段階。**傾向的分類**であり参考情報のみ。CL2に継承されない。
-- **CL2（ケイパビリティ設計）**: 組織が持つべき能力を正式に設計する段階。**正式分類**として投資判断の根拠となる。
+- **CL2（ケイパビリティ設計）**: 組織が持つべき能力を正式に設計する段階。**TVDC 4分類（Core/VCI/Supporting/Generic）** として投資判断の根拠となる。V5.5では差別化度（Phase 3で評価）と価値必然性（Phase 2 VL3から継承）の2軸で分類する。
 - **CL3（オペレーション定義）**: 具体的な業務操作を定義する段階。分類は行わず**網羅性**を重視。Phase 4-5でのBounded Context境界確定への入力となる。
 
 **ケイパビリティ軸（Capability-axis）**
@@ -49,7 +49,7 @@ Parasol V5における能力分解の3段階構造。
 ### さ行
 
 **サブドメイン（Subdomain）**
-大きな問題領域（ドメイン）を、管理可能な単位に分割したもの。Core（中核）、Supporting（支援）、Generic（汎用）に分類される。
+大きな問題領域（ドメイン）を、管理可能な単位に分割したもの。V5.5ではTVDC 4分類（Core/VCI/Supporting/Generic）で分類される。従来の3分類にVCI（価値必然インフラ）を追加し、「差別化しないが価値提供に不可欠」なケイパビリティを明確に識別できる。
 
 **システム思考（Systems Thinking）**
 個別の要素ではなく、全体の相互作用や創発的性質に着目する思考法。V5では複雑なビジネスシステムを理解し、最適化するための基本的なアプローチ。
@@ -64,6 +64,9 @@ Parasol V5における能力分解の3段階構造。
 
 **トレードオフ（Trade-off）**
 ある目標を達成するために、別の目標をある程度犠牲にすること。V5では明示的にトレードオフを管理し、意思決定の根拠を明確にする。
+
+**TVDC（Three-Dimensional Value-Driven Classification）**
+V5.5で導入された3次元価値駆動分類フレームワーク。差別化度と価値必然性の2軸で、ケイパビリティを4つに分類する：Core（差別化★★★/価値必然性★★★）、VCI（差別化★/価値必然性★★★）、Supporting（差別化★★/価値必然性★★）、Generic（差別化★/価値必然性★）。従来の3分類では曖昧だった「差別化しないが価値提供に不可欠」なケイパビリティをVCIとして明確に識別できる。
 
 ### な行
 
@@ -144,6 +147,8 @@ V5の開発プロセスにおける段階。Phase 0（現状理解）からPhase
 
 **DX** - Digital Transformation（デジタルトランスフォーメーション）
 
+**TVDC** - Three-Dimensional Value-Driven Classification（3次元価値駆動分類）- V5.5で導入。差別化度×価値必然性の2軸で4分類（Core/VCI/Supporting/Generic）
+
 **ERP** - Enterprise Resource Planning（企業資源計画）
 
 **ESG** - Environment, Social, Governance（環境・社会・ガバナンス）
@@ -173,6 +178,8 @@ V5の開発プロセスにおける段階。Phase 0（現状理解）からPhase
 **SOA** - Service-Oriented Architecture（サービス指向アーキテクチャ）
 
 **UI/UX** - User Interface / User Experience（ユーザーインターフェース/ユーザー体験）
+
+**VCI** - Value-Critical Infrastructure（価値必然インフラ）- V5.5で導入。差別化度は低いが価値提供に不可欠なケイパビリティ（例：決済処理、認証基盤）
 
 **V5** - Parasol Version 5（パラソル第5版）
 
