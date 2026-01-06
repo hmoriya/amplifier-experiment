@@ -352,6 +352,110 @@ HOW = バリューストリーム    WHEN = バリューステージ
 
 **参照**: 業種別の設計ストーリー例は `parasol/patterns/value/industry-value-stream-patterns.md` を確認してください。
 
+### 🎯 V5.1特有機能: VL3価値必然性評価（TVDC連動）
+
+**重要**: Parasol V5.1では、VL3（価値要素）定義時に**価値必然性**を評価し、Phase 3のTVDC分類に継承します。
+
+> 📚 詳細は [TVDC-FRAMEWORK.md](../../concepts/TVDC-FRAMEWORK.md#8-phase-2との連動価値分解からの価値必然性継承) を参照
+
+#### なぜPhase 2で価値必然性を評価するか
+
+```
+従来（連動なし）:
+Phase 2: 価値分解     Phase 3: TVDC分類
+   VL3定義 ─────?─────→ 価値必然性★★★を再評価
+                       差別化★★★を評価
+                       → 評価が重複、根拠が曖昧
+
+V5.1（連動あり）:
+Phase 2: 価値分解     Phase 3: TVDC分類
+   VL3定義            差別化★★★のみ評価
+     └─ 価値必然性★★★ ─継承→ 価値必然性は継承
+     └─ VCI候補フラグ  ─継承→ VCI候補として認識
+                       → 効率的、根拠が明確
+```
+
+#### VL3価値必然性評価テンプレート
+
+VL3定義時に以下を追加：
+
+```yaml
+VL3-X-Y:
+  name: "{価値要素名}"
+  description: "{価値要素の説明}"
+  parent: VL2-X
+
+  # === 価値必然性評価（TVDC連動） ===
+  value_necessity:
+    score: "★★★"  # ★（低）/ ★★（中）/ ★★★（高）
+
+    evaluation:
+      # Q1: この価値要素がないと顧客価値は？
+      value_impact: "完全毀損"  # 完全毀損 / 部分低下 / 影響小
+      value_impact_reason: "この能力がないと商品を届けられない"
+
+      # Q2: VSTR状態遷移に必須か？
+      state_transition_required: true
+      related_stages: ["VS3", "VS4"]
+      transition_reason: "VS3→VS4の購入完了に絶対必須"
+
+      # Q3: 失敗時の影響は？
+      failure_impact: "致命的"  # 致命的 / 重大 / 軽微
+      failure_reason: "配送失敗は返金・信頼喪失に直結"
+
+    # VCI候補識別
+    vci_candidate: true  # 価値必然性★★★ かつ 差別化しにくい場合
+    vci_reason: "失敗は致命的だが、他社も同等サービスを提供"
+
+  # === Phase 3への引継ぎ情報 ===
+  phase3_handoff:
+    target_capability: "delivery-fulfillment"
+    inherited_necessity: "★★★"  # CL2に継承される
+    differentiation_hints: |
+      - 翌日配送で差別化可能か検討
+      - 配送追跡UXで差別化可能か検討
+      - 時間指定精度で差別化可能か検討
+```
+
+#### 価値必然性スコアの判定基準
+
+| スコア | 価値影響 | 状態遷移 | 失敗影響 | 典型例 |
+|--------|---------|---------|---------|--------|
+| **★★★** | 完全毀損 | 必須 | 致命的 | 決済、配送、認証 |
+| **★★** | 部分低下 | 関連 | 重大 | 在庫管理、通知 |
+| **★** | 影響小 | 無関係 | 軽微 | 会計、HR |
+
+#### VCI候補の自動識別
+
+VSTR状態遷移マップから、遷移に必須な価値要素を自動識別：
+
+```
+VS2 → VS3 → VS4 → VS5
+理解   購入   獲得   利用
+        │      │
+   【遷移必須】【遷移必須】
+        │      │
+    ┌───┴──────┴───┐
+    │ 決済処理      │ → VCI候補（価値必然★★★）
+    │ 在庫引当      │ → VCI候補（価値必然★★★）
+    │ 配送手配      │ → VCI候補（価値必然★★★）
+    └──────────────┘
+```
+
+#### 出力構造への追加
+
+```
+outputs/2-value/
+├── value-definition.md
+├── value-streams-mapping.md
+├── value-hierarchy.md           # VL1→VL2→VL3階層
+├── value-necessity-assessment.md # 【新規】価値必然性評価結果
+│   ├── VL3ごとの価値必然性スコア
+│   ├── VCI候補リスト
+│   └── Phase 3引継ぎ情報
+└── design-story.md
+```
+
 ## 🏗️ ステージ・ケーパビリティ・セグメント構造
 
 ### 構造的原則

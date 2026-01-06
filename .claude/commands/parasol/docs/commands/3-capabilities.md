@@ -168,7 +168,7 @@ Phase 3では、Parasolの「**保守性と変更容易性**」を重視して�
 
 **CL1: 活動領域識別**
 - `zen-architect` (ANALYZE mode)
-- 戦略的分析により Core/Supporting/Generic の傾向を識別（参考情報）
+- 戦略的分析により Core/VCI/Supporting/Generic の傾向を識別（参考情報）
 - 投資方向性の初期判断を支援
 
 **CL2: ケイパビリティ設計（正式分類）**
@@ -191,10 +191,25 @@ Phase 3では、Parasolの「**保守性と変更容易性**」を重視して�
 
 ケイパビリティの階層的分解により、ビジネス価値からソフトウェア設計への橋渡しを行います：
 
-- **CL1 活動領域**: 傾向的分類（Core/Supporting/Generic傾向）- 経営層向け（参考情報）
-- **CL2 ケイパビリティ**: サービス境界の定義 + **正式分類**（Core/Supporting/Generic）- 事業部長向け
+- **CL1 活動領域**: 傾向的分類（Core/VCI/Supporting/Generic傾向）- 経営層向け（参考情報）
+- **CL2 ケイパビリティ**: サービス境界の定義 + **正式分類**（TVDC 4分類）- 事業部長向け
 - **CL3 業務オペレーション**: 具体的な業務活動の定義 - 業務担当者向け
 - **BC 実装設計**: Phase 4-5で定義（集約/イベント/API）- 開発者向け ※Phase 3には含まれない
+
+### TVDC 4分類体系
+
+> 📚 詳細は [TVDC-FRAMEWORK.md](../../concepts/TVDC-FRAMEWORK.md) を参照
+
+Parasol V5では、従来のDDD 3分類に**VCI（Value-Critical Infrastructure）**を追加した4分類体系を採用：
+
+| 分類 | 定義 | 価値必然性 | 差別化 | 投資優先度 |
+|------|------|-----------|--------|-----------|
+| **Core** | 競争優位の源泉かつ価値実現に必須 | ★★★ | ★★★ | 最高 |
+| **VCI** | 価値実現に必須だが差別化にならない | ★★★ | ★ | 高（品質重視） |
+| **Supporting** | ビジネス支援機能 | ★★ | ★〜★★ | 中 |
+| **Generic** | 汎用的な基盤機能 | ★ | ★ | 低（SaaS活用） |
+
+**VCI（Value-Critical Infrastructure）の例**: 配送、決済、認証など「失敗は致命的だが差別化にならない」能力
 
 ## 🎯 V5特有機能: ケーパビリティ設計ストーリー出力
 
@@ -210,7 +225,7 @@ Phase 3では、Parasolの「**保守性と変更容易性**」を重視して�
 
 | フェーズ | 出力内容 |
 |----------|----------|
-| **CL1活動領域識別** | なぜこのVSをCore/Supporting/Generic傾向と識別したか（参考情報） |
+| **CL1活動領域識別** | なぜこのVSをCore/VCI/Supporting/Generic傾向と識別したか（参考情報） |
 | **CL2ケイパビリティ設計** | なぜこの粒度で分解したか、Phase 2からの継承関係、正式分類の根拠 |
 | **CL3業務オペレーション定義** | なぜこの業務活動を特定したか、ケイパビリティとの対応 |
 
@@ -493,7 +508,7 @@ Value Stream (価値創造の流れ)
 │ 【WHAT領域】何の活動領域か？                                       │
 │ • 対象: 経営層・事業企画                                          │
 │ • 目的: 投資方向性の初期判断                                      │
-│ • 傾向: Core/Supporting/Generic（参考情報、CL2で正式分類）         │
+│ • 傾向: Core/VCI/Supporting/Generic（参考情報、CL2で正式分類）     │
 │ • 例: A1基盤技術研究, A2原料調達, A3酒類製品開発                   │
 │                                                                 │
 │ DDD対応: Problem Space（傾向的分類のみ）                          │
@@ -506,12 +521,12 @@ Value Stream (価値創造の流れ)
 │ 【HOW構造】どう組織するか？                                        │
 │ • 対象: 事業部長・プロダクトオーナー                               │
 │ • 目的: チーム境界・システム境界・データ所有権の定義                │
-│ • 分類: Core/Supporting/Generic（★正式な投資判断はここで行う）     │
+│ • 分類: Core/VCI/Supporting/Generic（★TVDC 4分類で正式投資判断）  │
 │ • 粒度: 5-9名のチームで担当可能な範囲（≈マイクロサービス候補）      │
 │ • 例: fermentation-research, premium-beer-development           │
 │                                                                 │
 │ 【重要】CL1の分類は継承しない。各Capabilityを独立評価する          │
-│ DDD対応: Subdomain（Core/Supporting/Generic分類の正式な場所）     │
+│ DDD対応: Subdomain（TVDC 4分類の正式な場所）                      │
 └─────────────────────────────────────────────────────────────────┘
      │
      ▼
@@ -659,7 +674,7 @@ outputs/3-capabilities/
 ```
 # Phase 3: ビジネス観点（担当者：事業部長・PO・業務担当者）
 outputs/3-capabilities/{vs}/
-├── cl1-activity-identification.md    # Core/Supporting/Generic 傾向識別
+├── cl1-activity-identification.md    # Core/VCI/Supporting/Generic 傾向識別
 ├── cl2-subdomain-design.md           # ケイパビリティ（サービス境界候補）
 └── cl3-business-operations/          # 具体的業務活動
     └── {capability}-operations.md
@@ -781,28 +796,36 @@ outputs/2-value/ の成果物を分析し、活動領域のCore/Supporting/Gener
 - enterprise-activities.md: エンタープライズ活動
 - organization-analysis.md: 組織の戦略方向性
 
-## 分析観点
+## 分析観点（TVDC 4分類）
 
-### Core Domain（競争優位の源泉）
-- 戦略的重要性: 高
-- 競争優位性: 高
-- 複雑度: 高
-- カスタマイズ必要性: 高
-- 推奨投資配分: 70%
+### Core Domain（競争優位の源泉 かつ 価値必然）
+- 価値必然性: ★★★
+- 差別化: ★★★
+- 戦略的重要性: 最高
+- 推奨投資配分: 40-50%
+- 投資戦略: 独自技術開発、専門人材確保
+
+### VCI Domain（Value-Critical Infrastructure）
+- 価値必然性: ★★★
+- 差別化: ★
+- 戦略的重要性: 高（品質・信頼性重視）
+- 推奨投資配分: 20-25%
+- 投資戦略: 信頼性投資、SLA保証、冗長化
+- 例: 配送、決済、認証（失敗は致命的だが差別化にならない）
 
 ### Supporting Domain（ビジネス支援）
+- 価値必然性: ★★
+- 差別化: ★〜★★
 - 戦略的重要性: 中
-- 競争優位性: 低
-- 複雑度: 中
-- カスタマイズ必要性: 中
-- 推奨投資配分: 20%
+- 推奨投資配分: 15-25%
+- 投資戦略: 効率化、部分的SaaS活用
 
 ### Generic Domain（汎用機能）
+- 価値必然性: ★
+- 差別化: ★
 - 戦略的重要性: 低
-- 競争優位性: なし
-- 複雑度: 低
-- カスタマイズ必要性: 低
-- 推奨投資配分: 10%（外部サービス購入推奨）
+- 推奨投資配分: 10-15%（外部サービス購入推奨）
+- 投資戦略: SaaS利用、最小限のカスタマイズ
 
 ## 出力形式
 outputs/3-capabilities/{vs-dir}/cl1-activity-identification.md
@@ -846,22 +869,27 @@ outputs/3-capabilities/{vs-dir}/cl1-activity-identification.md
 プロジェクト: {プロジェクト名}
 作成日: {日付}
 
-## ドメイン分類サマリー
+## ドメイン分類サマリー（TVDC 4分類）
 
-### Core Domains（競争優位の源泉）
+### Core Domains（競争優位の源泉 かつ 価値必然）
 1. **product-catalog**: 製品情報キュレーションの中核
 2. **order-orchestration**: 注文処理の中核
 3. **customer-insights**: 顧客理解と体験最適化
 
+### VCI Domains（Value-Critical Infrastructure）
+1. **payment-processing**: 決済処理（取引完了に必須、失敗は致命的）
+2. **delivery-fulfillment**: 配送（商品を届ける価値に本質的）
+3. **authentication**: 認証・認可（セキュリティに必須）
+
 ### Supporting Domains（ビジネス支援）
 1. **inventory-optimization**: 在庫最適化
-2. **payment-processing**: 決済処理
-3. **customer-service**: カスタマーサービス
-4. **analytics**: 分析とレポーティング
+2. **customer-service**: カスタマーサービス
+3. **analytics**: 分析とレポーティング
 
 ### Generic Domains（汎用機能）
 1. **notification**: 通知配信
-2. **authentication**: 認証・認可
+2. **hr-management**: HR管理
+3. **accounting**: 会計処理
 
 ## 詳細分析
 
@@ -944,20 +972,27 @@ outputs/3-capabilities/{vs-dir}/cl1-activity-identification.md
 
 **推奨アプローチ**: 外部SaaS利用（SendGrid、Twilio等）
 
-## 投資配分推奨
+## 投資配分推奨（TVDC 4分類）
 
 ```
-Core Domains (3個):      70% の投資
-Supporting Domains (4個): 20% の投資
-Generic Domains (2個):    10% の投資（主に統合コスト）
+Core Domains (3個):      40-50% の投資（独自技術開発、専門人材）
+VCI Domains (3個):       20-25% の投資（品質・信頼性重視）
+Supporting Domains (3個): 15-25% の投資（効率化、部分SaaS）
+Generic Domains (3個):    10-15% の投資（主にSaaS利用料）
 
 推奨配分:
-- product-catalog: 30%
-- order-management: 25%
-- customer-insights: 15%
+- product-catalog: 20%
+- order-orchestration: 15%
+- customer-insights: 10%
+- VCI全体（決済・配送・認証）: 25%（品質投資）
 - Supporting全体: 20%
 - Generic全体: 10%
 ```
+
+**VCI投資の原則**:
+- 「安さ」より「信頼性」を優先
+- 冗長化・フェイルオーバー設計必須
+- SLA監視の徹底
 
 ## 戦略的推奨事項
 
@@ -1670,8 +1705,8 @@ Phase 3 完了後、検証を実行：
 ```
 
 検証項目:
-- ✅ CL1: 全VS（VS0-VS7）の活動領域識別済み（傾向的分類）
-- ✅ CL2: 詳細化済みVSのケイパビリティ設計完了（正式分類）
+- ✅ CL1: 全VS（VS0-VS7）の活動領域識別済み（TVDC 4分類傾向）
+- ✅ CL2: 詳細化済みVSのケイパビリティ設計完了（TVDC 4分類正式適用）
 - ✅ CL3: 全ケイパビリティの業務オペレーション定義完了
 - ✅ 命名規則: vs{N}-{name} 形式、kebab-case遵守
 - ✅ トレーサビリティ: VS詳細 → Capability → Operation の紐付き確認
