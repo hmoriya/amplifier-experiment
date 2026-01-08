@@ -159,21 +159,46 @@ VS7: 推奨状態（Advocate）    - 他者に価値を推奨
 > - 十分な品質基準を必要とするケイパビリティを特定
 > - コアバリューストリームに貢献しないケイパビリティを特定（排除候補）
 
-### 【重要】TOGAFのケイパビリティ重複許容（G178原文より）
+### 【重要】ケイパビリティマッピングの概念系譜
 
-**注: TOGAFの表現形式**
+**注: バリューストリームとケイパビリティマッピングの出典は異なる**
 
-TOGAF G178では、ケイパビリティマッピングを**UMLや正式な図面ではなく、テキスト・テーブル形式**で表現しています。これは「運用詳細に入らない」という指導原則に沿った簡潔な表現です。
+| 概念 | James Martin (1995) | BizBOK | TOGAF G178 |
+|------|---------------------|--------|------------|
+| **バリューストリーム** | ✅ 原典 | 引用 | 引用 |
+| **ステージ分解** | △ 曖昧な記述 | 体系化 | 体系化 |
+| **ケイパビリティ** | ❌ 記述なし | 独自定義 | BizBOKと協力 |
+| **マッピング手法** | ❌ 記述なし | 独自定義 | BizBOKと協力 |
+| **重複許容** | ❌ 記述なし | **独自追加** | 例示のみ |
+
+**重要**: James Martin『The Great Transition』(1995) はバリューストリーム概念の原典ですが、ケイパビリティマッピングについては記述がありません。ケイパビリティとの関係性は**BizBOKが独自に追加した概念**であり、TOGAFはBizBOKと協力してG178を作成しています。
+
+> 参考: Tech Monitorの書評では「value streams are **not clearly defined**」と指摘されており、James Martinの原典は厳密な設計手順を含んでいません。
+
+---
+
+**TOGAFの表現形式**
+
+TOGAF G178では、ケイパビリティマッピングを**UMLや正式な図面ではなく、テキスト・テーブル形式**で表現しています。
 
 | 形式 | 用途 | 特徴 |
 |------|------|------|
-| **テーブル** | ケイパビリティマッピング | 列=ステージ、セル=関連Capability（重複許容） |
+| **テーブル** | ケイパビリティマッピング | 列=ステージ、セル=関連Capability |
 | **ASCIIボックス図** | ステージの流れ | 左→右の時間軸を表現 |
 | **概念関係図** | 要素間の関係 | UMLではない簡易図 |
 
 ---
 
-TOGAF G178の「Recruit Employee」マッピング例では、**同一ケイパビリティが複数ステージに重複して出現することを許容**しています:
+### ケイパビリティ重複の根拠
+
+**BizBOKの明示的記述**（TOGAF G178には明示なし）:
+
+> "A capability can be reused many times **within** and **across** value streams."
+> （ケイパビリティはバリューストリーム**内**および**複数のバリューストリームにまたがって**何度も再利用できる）
+>
+> — [Biz Arch Mastery](https://bizarchmastery.com/straighttalk/value-mindset-demystifying-business-architecture-value-stream)（BizBOK Section 2.4参照）
+
+TOGAF G178の「Recruit Employee」マッピング例では、この概念に基づき**同一ケイパビリティが複数ステージに出現**しています:
 
 ```
 | Define Position | Communicate Position | Assess Responses | Interview Candidates | Onboard Employee |
@@ -423,9 +448,17 @@ Phase 6-7: 実装・運用
 ### 二次参考文献
 
 - *A Guide to Business Architecture Body of Knowledge® (BIZBOK® Guide)*, Business Architecture Guild
-- *The Great Transition*, James Martin, American Management Association, 1995（バリューストリーム概念の由来）
+  - ケイパビリティマッピング、重複許容（within/across）の出典
+- *The Great Transition: Using the Seven Disciplines of Enterprise Engineering to Align People, Technology, and Strategy*, James Martin, American Management Association, 1995
+  - **バリューストリーム概念の原典**（ケイパビリティマッピングの記述なし）
 - *Competitive Advantage*, Michael E. Porter, Free Press, 1985（バリューチェーン概念）
 - *The Future of Knowledge*, Verna Allee, Butterworth-Heinemann, 2003（バリューネットワーク概念）
+
+### オンライン参考文献
+
+- [Biz Arch Mastery - The Value Mindset](https://bizarchmastery.com/straighttalk/value-mindset-demystifying-business-architecture-value-stream) - BizBOK Section 2.4の解説
+- [Tech Monitor - James Martin and the Great Cybercorp Transition](https://techmonitor.ai/technology/james_martin_and_the_great_cybercorp_transition) - 原典の書評
+- [Biz Arch Mastery - Framework Alignment](https://bizarchmastery.com/straighttalk/stars-are-aligning-business-architecture-and-enterprise-architecture-framework) - TOGAF/BizBOK協力関係
 
 ---
 
