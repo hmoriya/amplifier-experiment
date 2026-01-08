@@ -446,10 +446,14 @@ Phase 6-7: 実装・運用
   - [TOGAF-G178-VALUE-STREAMS-JA.md](./TOGAF-G178-VALUE-STREAMS-JA.md) - 日本語訳
 
 - **A Guide to the Business Architecture Body of Knowledge® (BIZBOK® Guide)**, Business Architecture Guild
-  - 現行バージョン: v13
+  - 現行バージョン: v14
   - **ケイパビリティマッピング、重複許容（within/across）の出典**
   - Section 2.4: Value Streams（ケイパビリティ再利用の明示的記述）
   - [Business Architecture Guild](https://www.businessarchitectureguild.org/)
+  - **関連公開ホワイトペーパー（無料ダウンロード可能）:**
+    - [The Real Tie that Binds](https://cdn.ymaws.com/www.businessarchitectureguild.org/resource/resmgr/public_resources/TiethatBinds.pdf) - William Ulrich & Jim Rhyne著、Value Stream / Capability Cross-mapping Blueprint を含む
+    - [Similar Yet Different: Value Streams and Business Processes](https://cdn.ymaws.com/www.businessarchitectureguild.org/resource/resmgr/public_resources/bpm_paper_final_dec2019.pdf) - クロスマッピングの解説
+    - [Business Architecture Metamodel](https://cdn.ymaws.com/www.businessarchitectureguild.org/resource/resmgr/whitepapers/business_architecture_metamo.pdf) - 4コアドメインの関係定義
 
 ### 二次参考文献
 - *The Great Transition: Using the Seven Disciplines of Enterprise Engineering to Align People, Technology, and Strategy*, James Martin, American Management Association, 1995
