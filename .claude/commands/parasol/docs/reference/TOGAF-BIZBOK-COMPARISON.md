@@ -445,10 +445,13 @@ Phase 6-7: 実装・運用
   - [TOGAF-G178-VALUE-STREAMS.md](./TOGAF-G178-VALUE-STREAMS.md) - 原文
   - [TOGAF-G178-VALUE-STREAMS-JA.md](./TOGAF-G178-VALUE-STREAMS-JA.md) - 日本語訳
 
-### 二次参考文献
+- **A Guide to the Business Architecture Body of Knowledge® (BIZBOK® Guide)**, Business Architecture Guild
+  - 現行バージョン: v13
+  - **ケイパビリティマッピング、重複許容（within/across）の出典**
+  - Section 2.4: Value Streams（ケイパビリティ再利用の明示的記述）
+  - [Business Architecture Guild](https://www.businessarchitectureguild.org/)
 
-- *A Guide to Business Architecture Body of Knowledge® (BIZBOK® Guide)*, Business Architecture Guild
-  - ケイパビリティマッピング、重複許容（within/across）の出典
+### 二次参考文献
 - *The Great Transition: Using the Seven Disciplines of Enterprise Engineering to Align People, Technology, and Strategy*, James Martin, American Management Association, 1995
   - **バリューストリーム概念の原典**（ケイパビリティマッピングの記述なし）
 - *Competitive Advantage*, Michael E. Porter, Free Press, 1985（バリューチェーン概念）
