@@ -373,7 +373,7 @@ BO:
 operation:
   attributes:
     - name: "操作名（動詞+目的語）"
-    - uses_capabilities: "使用するCL3一覧"  # ★新規: CL3との関係
+    - uses_capabilities: "使用するCL3一覧"  # ★CL3との関係
     - primary_actor: "主アクター"
     - collaborating_actors: "協調アクター"
     - trigger: "開始条件"
@@ -384,7 +384,52 @@ operation:
     - business_rules: "適用されるビジネスルール"
     - frequency: "実行頻度"
     - exceptions: "例外・エラーケース"
+    - activity_flow:  # ★アクティビティ間の遷移フロー（結合テストの基盤）
+        description: "Actor UseCase間の遷移を定義"
+        sequence:
+          - activity: "アクティビティ名（Actor UseCase）"
+            actor: "実行アクター"
+            next: "次のアクティビティ | 分岐先"
+            condition: "遷移条件"
 ```
+
+### activity_flow（アクティビティ遷移フロー）
+
+**activity_flowは結合テストの基盤となる重要な設計要素です。**
+
+```yaml
+# 例: 酵母株スクリーニングBOのactivity_flow
+operation:
+  name: "酵母株スクリーニング"
+  activity_flow:
+    sequence:
+      - activity: "酵母株を登録"
+        actor: "研究員"
+        next: "株を評価"
+        condition: "登録完了時"
+
+      - activity: "株を評価"
+        actor: "品質管理者"
+        next: "レポート出力 | 再評価依頼"
+        condition: "評価完了時 | 不合格時"
+
+      - activity: "再評価依頼"
+        actor: "品質管理者"
+        next: "株を評価"
+        condition: "研究員による修正完了時"
+
+      - activity: "レポート出力"
+        actor: "管理者"
+        next: null  # 終了
+        condition: "最終承認時"
+```
+
+**activity_flowの用途**:
+- **結合テスト設計**: アクター間の遷移をテストケースに変換
+- **E2Eテスト設計**: 業務フロー全体のテストシナリオ作成
+- **画面遷移設計**: View間の遷移ロジックの基盤
+- **メニュー構成設計**: アクターの作業の切れ目からナビゲーション構造を導出
+- **状態管理設計**: 業務状態の遷移管理
 
 ### 成果物
 
