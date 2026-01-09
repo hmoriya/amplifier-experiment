@@ -281,9 +281,9 @@ Value Stream: VS2 - スキル開発・キャリア支援
 
 ## 次のステップ
 
-CL3: Bounded Context 定義
+CL3: 詳細能力定義 + BO対応
 
-このVSのサブドメインのBounded Contextを定義：
+このVSのサブドメインの詳細能力を定義：
 
 ```bash
 # VS2のサブドメインから優先順に

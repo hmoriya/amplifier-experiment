@@ -268,12 +268,14 @@
 │           │                                                                 │
 │           ▼                                                                 │
 │      ┌───────────────────────────────────────────────────────────────────┐ │
-│      │  CL2: Capability = Subdomain = BC                                  │ │
-│      │       WHAT（何の能力が必要か）+ 境界                               │ │
+│      │  CL2: Capability = Subdomain = BC境界 【WHAT】                     │ │
+│      │       何の能力が必要か（境界定義）                                 │ │
+│      │       → HOW対応: BC実装設計（Phase 4-5）                           │ │
 │      │                                                                    │ │
 │      │    ┌───────────────────────────────────────────────────────────┐  │ │
-│      │    │  CL3: Business Operation（複数）                           │  │ │
-│      │    │       HOW（具体的にどう実行するか）                        │  │ │
+│      │    │  CL3: Sub-capability（詳細能力）【WHAT】                   │  │ │
+│      │    │       何の詳細能力か                                       │  │ │
+│      │    │       → HOW対応: BO（Business Operation）                  │  │ │
 │      │    └───────────────────────────────────────────────────────────┘  │ │
 │      │                                                                    │ │
 │      └───────────────────────────────────────────────────────────────────┘ │
@@ -288,10 +290,10 @@
 │      │Database │ ← BC（CL2）単位でDB                                      │
 │      └─────────┘                                                           │
 │                                                                              │
-│      Stage → CL2（Subdomain = BC）→ [CL3群] → Service → Database          │
+│      Stage → CL2（BC境界）→ CL3（詳細能力）→ BO → Service → Database     │
 │                                                                              │
-│      ・BC（CL2）がCL3群（Business Operations）を束ねる                     │
-│      ・CL2 = WHAT（境界）、CL3 = HOW（実行）                               │
+│      ・CL1/CL2/CL3 = すべてWHAT（能力階層）                                │
+│      ・CL2のHOW = BC実装設計、CL3のHOW = BO（業務オペレーション）          │
 │      ・1 Service = 1つまたは複数のBC                                        │
 │      ・1 Service = 1 Database（通常）                                       │
 │                                                                              │

@@ -100,7 +100,7 @@ Parasol V5はこの学術的基盤の上に、東洋思想・弁証法・認知�
 ```
 
 **Parasol V5での適用**:
-- CL3（業務オペレーション）間の独立性
+- CL3（詳細能力）間の独立性
 - BC（Bounded Context）間の独立性
 - DDDのBounded Context概念 = 独立公理の実践的実装
 

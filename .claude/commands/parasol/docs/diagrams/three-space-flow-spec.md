@@ -167,7 +167,7 @@ Value Spaceは内部に3つの軸を持ちます：
 |-----|------|------|-----|
 | CL1 | 活動領域識別 | 経営層 | 食事管理 |
 | CL2 | ケイパビリティ分類 | 事業部長/PO | 栄養管理ケイパビリティ |
-| CL3 | 業務オペレーション | 業務担当者 | 食事記録オペレーション |
+| CL3 | 詳細能力 + BO対応 | 業務担当者 | 食事記録能力 → BO |
 
 ### 3. Solution Space（解決領域）= HOW
 
@@ -218,7 +218,7 @@ flowchart TB
 
     subgraph PS["【PROBLEM SPACE = WHAT】問題領域 (Phase 3)"]
         CL1["CL1: 活動領域"] --> CL2["CL2: ケイパビリティ"]
-        CL2 --> CL3["CL3: 業務オペレーション"]
+        CL2 --> CL3["CL3: 詳細能力+BO"]
     end
 
     subgraph SS["【SOLUTION SPACE = HOW】解決領域 (Phase 4-6)"]

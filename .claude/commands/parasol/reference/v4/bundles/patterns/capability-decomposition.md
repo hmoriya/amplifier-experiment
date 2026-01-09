@@ -50,7 +50,7 @@ CL1: Activity Areas (活動領域)
     ↓ [詳細化] 
 CL2: Business Capabilities (ビジネスケイパビリティ)
     ↓ [実装化]
-CL3: Business Operations (ビジネスオペレーション)
+CL3: Sub-capability + BO (詳細能力 + 業務オペレーション対応)
     ↓ [技術化]
 BC Implementation Design
 ```

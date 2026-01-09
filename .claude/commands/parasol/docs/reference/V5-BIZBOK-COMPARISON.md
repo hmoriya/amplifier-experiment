@@ -97,7 +97,7 @@ Capability → decomposes into → Capability (L2/L3)
 │      │       │  └─ ★正式分類（TVDC）: Core / VCI / Supporting / Generic   │
 │      │       │  └─ ★CL1の分類はCL2に継承されない                          │
 │      │       │                                                               │
-│      │       └─→ CL3: Business Operation（業務オペレーション）             │
+│      │       └─→ CL3: Sub-capability + BO（詳細能力+業務オペレーション）    │
 │      │           └─ 例: "酵母株スクリーニング", "発酵条件最適化"           │
 │      │               └─ 分類なし（網羅性が目的）                           │
 │      │               └─ 複数アクターの協調作業                             │

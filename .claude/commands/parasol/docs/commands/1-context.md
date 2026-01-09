@@ -693,7 +693,7 @@ VStr対象外だが、設計上考慮が必要なアクター。
 
 ### 参照パターン
 
-`parasol/patterns/value/industry-value-stream-patterns.md` の [該当業種] を参照
+`_patterns/industry-value-stream-patterns.md` の [該当業種] を参照
 
 ---
 

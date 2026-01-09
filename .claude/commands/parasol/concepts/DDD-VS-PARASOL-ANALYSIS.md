@@ -145,8 +145,8 @@ CL2: ケイパビリティ（Capability）
     - 正式分類（★Core/Supporting/Genericはここで適用）
     - 事業部長向けの中分類
     ↓
-CL3: 業務オペレーション（Business Operation）
-    - 網羅的定義
+CL3: 詳細能力 + BO対応（Sub-capability + Business Operation）
+    - 詳細能力（WHAT）と業務オペレーション（HOW対応）
     - 業務担当者向けの詳細定義
     ↓ Phase 4
 BC（Bounded Context）: サービス境界確定
@@ -171,7 +171,7 @@ Parasolの問い: 「どんなケイパビリティが必要か？」
 例:
 VS3-CL1: 初期実践ケイパビリティ（WHAT）
   VS3-CL2-1: プロジェクト設定（HOW）
-    VS3-CL3-1: 環境構築オペレーション（HOW）
+    VS3-CL3-1: 環境構築能力 → BO:環境構築オペレーション（HOW対応）
 ```
 
 ---

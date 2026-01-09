@@ -35,9 +35,9 @@
 │              │                                                       │
 │              │ 1:N                                                   │
 │              ▼                                                       │
-│   CL3: Business Operation（業務オペレーション）                       │
+│   CL3: Sub-capability + BO（詳細能力 + 業務オペレーション）           │
 │   ├── 対象: 業務担当者                                               │
-│   ├── 役割: 具体的業務活動（1日〜1週間単位）                         │
+│   ├── 役割: 詳細能力（WHAT）+ 業務活動（HOW: 1日〜1週間単位）        │
 │   └── 出力: cl3-business-operations/{capability}-operations.md      │
 │                                                                      │
 └───────────────────────────────┬─────────────────────────────────────┘
@@ -120,7 +120,7 @@ projects/{project}/outputs/
 │   └── {vs-slug}/
 │       ├── cl1-domain-classification.md    # CL1: Core/Supporting/Generic
 │       ├── cl2-subdomain-design.md         # CL2: サービス境界候補
-│       └── cl3-business-operations/        # CL3: 業務オペレーション
+│       └── cl3-business-operations/        # CL3: 詳細能力 + BO対応
 │           └── {capability}-operations.md
 │
 ├── 4-architecture/                         # Phase 4

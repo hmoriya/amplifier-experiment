@@ -377,8 +377,8 @@ V5能力階層
 │   └── 経営層向け、投資判断単位（Core/Supporting/Generic）
 ├── CL2: ケイパビリティ（Capabilities）
 │   └── 事業部長向け、チーム境界・サービス境界（★正式分類）
-└── CL3: ビジネスオペレーション（Business Operations）
-    └── 業務担当者向け、トリガー→活動→成果物
+└── CL3: 詳細能力 + BO対応（Sub-capability + Business Operation）
+    └── 業務担当者向け、詳細能力（WHAT）→BO（HOW対応）
 ```
 
 ### V5の4階層ZIGZAGパターン
@@ -567,7 +567,7 @@ V5ではPhase 4で明示的にBC境界を確定：
 graph TD
     subgraph "Phase 3: CL分解"
         CL1[CL1 活動領域] --> CL2[CL2 ケイパビリティ]
-        CL2 --> CL3[CL3 業務オペレーション]
+        CL2 --> CL3[CL3 詳細能力+BO]
     end
 
     subgraph "Phase 4: BC境界確定"
@@ -685,7 +685,7 @@ flowchart TD
 |--------|--------|------|
 | L1 戦略的能力 | CL1 活動領域 | より上位にCL0を追加 |
 | L2 戦術的能力 | CL2 ケイパビリティ | ほぼ同等、正式分類の位置付け |
-| L3 運用的能力 | CL3 ビジネスオペレーション | BC境界確定を追加 |
+| L3 運用的能力 | CL3 詳細能力 + BO対応 | BC境界確定を追加 |
 | Nine Dimensions | VS0-VS7 + VL + VMS | 価値ストリーム概念に進化 |
 | Phase 1-6 | Phase 0-7 | 初期化・プラットフォーム追加 |
 | なし | VMS（価値マイルストーン） | 顧客価値状態の時間軸管理 |

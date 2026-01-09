@@ -197,7 +197,7 @@ Phase 3の段階的進捗を表示：
 
 合計: 8 ケイパビリティ定義済み
 
-3c. Operation Definition (CL3) - 業務オペレーション
+3c. Sub-capability Definition (CL3) - 詳細能力+BO対応
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ✅ product-catalog-operations.md (Core)
 ✅ order-management-operations.md (Core)

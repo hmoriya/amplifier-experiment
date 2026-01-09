@@ -7,7 +7,7 @@
 **成果物**:
 - CL1: ドメイン分類（Core/Supporting/Generic）
 - CL2: サブドメイン（ビジネスオペレーション群）
-- CL3: ビジネスオペレーション（業務活動）
+- CL3: 詳細能力（Sub-capability）→ BO: 業務オペレーション
 
 ### Phase 4: アプリケーションアーキテクチャ設計
 **視点**: 技術的境界の定義
@@ -44,7 +44,7 @@
    - Phase 4の焦点を「技術境界」→「アプリケーションアーキテクチャ」
 
 2. **3-capabilities.md**
-   - 「CL3: Bounded Context定義」→「CL3: ビジネスオペレーション定義」
+   - 「CL3: Bounded Context定義」→「CL3: 詳細能力定義 + BO対応」
 
 3. **4-application-design.md**
    - 「Phase 3で定義したBounded Contexts」→「Phase 3で定義したビジネス能力（CL1/CL2/CL3）を基に」

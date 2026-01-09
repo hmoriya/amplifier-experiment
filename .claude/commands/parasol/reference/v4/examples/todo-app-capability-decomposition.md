@@ -90,7 +90,7 @@ capabilities:
       target: 3   # 週次/月次レポート自動生成
 ```
 
-### CL3: Business Operations（ビジネスオペレーション）
+### CL3: Sub-capability + BO（詳細能力 + 業務オペレーション対応）
 
 ```yaml
 operations:

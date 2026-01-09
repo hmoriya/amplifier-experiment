@@ -69,7 +69,7 @@ Phase 2: Value Streams（価値の流れ）
 Phase 3: Capabilities（ケーパビリティ）
     ├── CL1: 活動領域識別（傾向的分類・参考情報）
     ├── CL2: ケイパビリティ設計（正式分類・投資判断根拠）
-    └── CL3: 業務オペレーション定義（分類なし・網羅性重視）
+    └── CL3: 詳細能力定義 + BO対応（分類なし・網羅性重視）
     ↓
 Phase 4: Application Design（アプリケーション設計）
     ├── capability-bc-mapping.md（CL2-BC対応表）
@@ -272,7 +272,7 @@ projects/{project-name}/outputs/
 │   └── {vs-slug}/
 │       ├── cl1-domain-classification.md        # CL1: Core/Supporting/Generic分類
 │       ├── cl2-subdomain-design.md             # CL2: サービス境界候補
-│       └── cl3-business-operations/            # CL3: 業務オペレーション
+│       └── cl3-business-operations/            # CL3: 詳細能力 + BO対応
 │           └── {capability}-operations.md
 │
 ├── 4-architecture/                             # Phase 4: 技術設計

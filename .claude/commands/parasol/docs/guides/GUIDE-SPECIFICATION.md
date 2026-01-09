@@ -114,7 +114,7 @@ Phase 1では、ステークホルダー分析と制約条件の整理を行い�
 **構成内容**:
 ケイパビリティフェーズでは、Value Streamを技術実装可能な単位に分解します。Activity Area（CL1）では、活動領域を識別しCore/Supporting/Genericの**傾向**を把握します（参考情報）。
 
-Capability Design（CL2）では、各活動領域内のケイパビリティを特定し、**正式な**Core/Supporting/Generic分類を行います。この分類が投資判断の根拠です。Operation Definition（CL3）では、業務オペレーションを詳細化し網羅性を確保します。
+Capability Design（CL2）では、各活動領域内のケイパビリティを特定し、**正式な**Core/Supporting/Generic分類を行います。この分類が投資判断の根拠です。Sub-capability Definition（CL3）では、詳細能力を定義し、対応するBO（業務オペレーション）で網羅性を確保します。
 
 **実践要素**:
 - 活動領域識別（傾向的分類）
