@@ -1,13 +1,15 @@
 # Parasol V5.5 - CL階層定義（Capability Level Hierarchy）
 
 **バージョン**: V5.5
-**最終更新**: 2025-01-07
+**最終更新**: 2025-01-09
 
 ## 概要
 
 本ドキュメントは、Parasol V5.5におけるCL（Capability Level）階層の正式定義です。DDDの標準的解釈との整合性を確保しつつ、Parasol独自の価値駆動アプローチを明確化しています。
 
-**V5.5の主要変更**: TVDC（Three-Dimensional Value-Driven Classification）4分類フレームワークを導入し、従来の3分類（Core/Supporting/Generic）に**VCI（Value-Critical Infrastructure）**を追加しました。
+**V5.5の主要変更**:
+- TVDC（Three-Dimensional Value-Driven Classification）4分類フレームワークを導入し、従来の3分類（Core/Supporting/Generic）に**VCI（Value-Critical Infrastructure）**を追加しました。
+- **WHAT/HOW軸の分離**: CL3（詳細能力）とBO（業務オペレーション）を別軸として明確化。BIZBOKのCapability/Process分離に準拠。
 
 ### DDDとの対応（Problem Space → Solution Space）
 
@@ -16,6 +18,7 @@
 │                      DDD概念との対応                             │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
+│  【WHAT軸: ケイパビリティ階層】                                  │
 │   CL1 ≈ Problem Space（問題領域）                               │
 │         └─ 「何を解決すべきか」の全体像                         │
 │         └─ 傾向的分類は"どの領域が重要そうか"の初期仮説         │
@@ -24,8 +27,15 @@
 │         └─ 「どう分割して取り組むか」                           │
 │         └─ 正式分類＝投資配分の意思決定                         │
 │                                                                  │
-│   CL3 ≈ Domain Model詳細（Business Operation）                  │
-│         └─ 「具体的に何をするか」（複数アクター協調）           │
+│   CL3 = Sub-capability（詳細能力）                              │
+│         └─ 「何ができるか」の最小単位（WHAT）                   │
+│         └─ ※BOとは別概念（BOはCL3を「使用」する）              │
+│                                                                  │
+│  【HOW軸: プロセス階層】（CL3を使用して実行）                    │
+│   BO  = Business Operation（業務オペレーション）                │
+│         └─ 「どう実行するか」（複数アクター協調）               │
+│         └─ BIZBOK Process Activityに対応                        │
+│         └─ CL3とはN:M関係（1つのBOが複数CL3を使用可能）         │
 │                                                                  │
 │   Actor UseCase ≈ UseCase（アプリケーション層）                 │
 │         └─ 「誰が何をするか」（★シングルアクター）             │
@@ -45,6 +55,8 @@
 
 ```
                            【Phase 2-3: ビジネス設計】
+
+【WHAT軸: ケイパビリティ階層】
 CL1 (Value Stream Level) ──┬── Core/Supporting/Generic: 傾向的分類（参考情報）
         │                  └── 経営判断：どのVSに投資するか     【Initiative】
         ↓ 1:N
@@ -53,9 +65,16 @@ CL2 (Capability Level) ────┬── TVDC 4分類: Core/VCI/Supporting/G
         │                  ├── 価値必然性: Phase 2 VL3から継承
         │                  └── 事業判断：どの能力を内製/外注か   【Theme】
         ↓ 1:N
-CL3 (≈Business Operation) ─┬── 分類なし（網羅性が目的）
+CL3 (Sub-capability) ──────┬── 分類なし（網羅性が目的）
+                           └── 「何ができるか」の最小単位（WHAT）
+                                    │
+                                    │ uses (N:M)
+                                    ▼
+【HOW軸: プロセス階層】
+BO (Business Operation) ───┬── CL3を使用して業務を実行
                            └── 運用判断：業務をどう実行するか   【Epic/Feature】
-
+                                    │
+                                    ▼
                            【Phase 4: アプリケーション設計】
 Service Boundary ──────────┬── サービス境界分析（CL2→Service対応）
         │                  └── Context Map（BC間関係、統合パターン）
@@ -74,16 +93,17 @@ View ──────────────────────┬──
 
 ## DDD対応表
 
-| Parasol | DDD概念 | Phase | Agile対応 | TVDC 4分類（V5.5） | 責任者 |
-|---------|---------|-------|-----------|-------------------|--------|
-| CL1 (Value Stream) | ≈ Problem Space全体 | 2-3 | Initiative | 傾向的（参考） | 経営層 |
-| CL2 (Capability) | ≈ **Subdomain** | 3 | Theme | **正式分類（Core/VCI/Supporting/Generic）** | 事業部長 |
-| CL3 (Business Operation) | ≈ Domain Model詳細 | 3 | **Epic/Feature** | なし | 業務担当者 |
-| Service Boundary | ≈ Service分割 | **4** | - | - | アーキテクト |
-| Context Map | = Context Map | **4** | - | - | アーキテクト |
-| BC | = Bounded Context | 5 | - | 継承（CL2から） | 開発チーム |
-| Actor UseCase | ≈ UseCase | 5 | **User Story** | なし | 開発チーム |
-| View | ≈ Presentation | 5-6 | **Task** | なし | 開発者 |
+| Parasol | 軸 | DDD概念 | BIZBOK対応 | Phase | Agile対応 | TVDC 4分類 | 責任者 |
+|---------|-----|---------|-----------|-------|-----------|-----------|--------|
+| CL1 (Value Stream) | WHAT | ≈ Problem Space全体 | ≈ Domain | 2-3 | Initiative | 傾向的（参考） | 経営層 |
+| CL2 (Capability) | WHAT | ≈ **Subdomain** | = Capability L2 | 3 | Theme | **正式分類** | 事業部長 |
+| CL3 (Sub-capability) | WHAT | ≈ Domain Concept | = Capability L3 | 3 | - | なし | 業務担当者 |
+| BO (Business Operation) | HOW | ≈ Process Activity | = Process Activity | 3 | **Epic/Feature** | なし | 業務担当者 |
+| Service Boundary | - | ≈ Service分割 | - | **4** | - | - | アーキテクト |
+| Context Map | - | = Context Map | - | **4** | - | - | アーキテクト |
+| BC | - | = Bounded Context | - | 5 | - | 継承（CL2から） | 開発チーム |
+| Actor UseCase | HOW | ≈ UseCase | ≈ Subprocess | 5 | **User Story** | なし | 開発チーム |
+| View | HOW | ≈ Presentation | - | 5-6 | **Task** | なし | 開発者 |
 
 ---
 
@@ -260,19 +280,43 @@ independence:
 
 ---
 
-## CL3: ケイパビリティ分解 Level 3（≈Business Operation）
+## CL3: Sub-capability（詳細能力）
 
 ### 定義
 
 ```yaml
 CL3:
-  name: "Capability Level 3"
-  japanese: "ケイパビリティ分解 Level 3"
-  purpose: "各Capabilityの具体的な業務を詳細化する"
+  name: "Sub-capability"
+  japanese: "詳細能力"
+  axis: "WHAT（何ができるか）"
+  purpose: "各Capabilityの詳細な能力を識別する"
   granularity: "1つのCapabilityを3-10個に分解"
-  owner: "業務担当者 / プロセスオーナー"
-  ddd_mapping: "≈Business Operation（Domain Model詳細）"
-  note: "CL3はケイパビリティ分解の第3レベル。DDDのBusiness Operationと概念レベルが同等"
+  owner: "業務担当者 / ドメインエキスパート"
+  ddd_mapping: "≈Domain Concept（ドメイン概念）"
+  bizbok_mapping: "= Capability L3"
+  note: "CL3はWHAT軸の最小単位。BOとは別概念（BOはCL3を使用する）"
+```
+
+### CL3とBOの関係
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  WHAT軸とHOW軸の分離（BIZBOKのCapability/Process分離に準拠）    │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  CL3（詳細能力）= 「何ができるか」の定義                        │
+│       │                                                          │
+│       │ uses (N:M関係)                                          │
+│       ▼                                                          │
+│  BO（業務オペレーション）= 「どう実行するか」の定義             │
+│                                                                  │
+│  例:                                                             │
+│  ・CL3「酵母株培養能力」→ BO「酵母株スクリーニング」が使用      │
+│  ・CL3「発酵条件制御能力」→ BO「発酵最適化」が使用              │
+│  ・1つのBOが複数のCL3を使用することがある                       │
+│  ・1つのCL3が複数のBOで使用されることがある（再利用）           │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ### 分類
@@ -282,7 +326,45 @@ CL3:
 ```yaml
 classification:
   enabled: false
-  reason: "CL3は詳細化のための層であり、分類ではなく網羅性が重要"
+  reason: "CL3は能力の詳細化のための層であり、分類ではなく網羅性が重要"
+```
+
+### 構造
+
+```yaml
+sub_capability:
+  attributes:
+    - name: "能力名（名詞形）"
+    - description: "この能力で何ができるか"
+    - required_knowledge: "必要な知識・スキル"
+    - related_entities: "関連するドメインエンティティ"
+    - constraints: "制約条件"
+```
+
+### 成果物
+
+- Sub-capability一覧（Capability毎）
+- 能力間の依存関係図
+- 関連エンティティ一覧
+
+---
+
+## BO: Business Operation（業務オペレーション）
+
+### 定義
+
+```yaml
+BO:
+  name: "Business Operation"
+  japanese: "業務オペレーション"
+  axis: "HOW（どう実行するか）"
+  purpose: "CL3を使用して業務をどう実行するかを定義する"
+  granularity: "1日〜1週間程度の業務単位"
+  owner: "業務担当者 / プロセスオーナー"
+  ddd_mapping: "≈Process Activity"
+  bizbok_mapping: "= Process Activity"
+  relationship: "CL3とはN:M関係（BOはCL3を使用する）"
+  note: "複数アクターが協調して実行する業務単位"
 ```
 
 ### 構造
@@ -291,11 +373,15 @@ classification:
 operation:
   attributes:
     - name: "操作名（動詞+目的語）"
+    - uses_capabilities: "使用するCL3一覧"  # ★新規: CL3との関係
+    - primary_actor: "主アクター"
+    - collaborating_actors: "協調アクター"
     - trigger: "開始条件"
+    - initial_state: "開始状態"
+    - final_state: "終了状態"
     - inputs: "必要な入力データ"
     - outputs: "生成される出力"
     - business_rules: "適用されるビジネスルール"
-    - actors: "実行者（人/システム）"
     - frequency: "実行頻度"
     - exceptions: "例外・エラーケース"
 ```
@@ -303,7 +389,8 @@ operation:
 ### 成果物
 
 - Business Operation一覧（Capability毎）
-- 業務フロー図
+- 業務フロー図（状態遷移含む）
+- CL3→BO対応表
 - ビジネスルール一覧
 - データ要件
 
@@ -379,7 +466,7 @@ agile_correspondence:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  CL3: Business Operation（複数アクター協調）≈ Epic/Feature                  │
+│  BO: Business Operation（複数アクター協調）≈ Epic/Feature                   │
 │  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
 │                                                                              │
 │  例: 「酵母株スクリーニング」Business Operation                              │
@@ -581,7 +668,8 @@ bc_contents:
                                     │
                                     ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  CL3: Business Operation ≈ Domain Model詳細          【Agile: Epic/Feature】│
+│  CL3: Sub-capability（詳細能力）→ BO uses CL3         【Phase 3】           │
+│  BO: Business Operation ≈ Process Activity           【Agile: Epic/Feature】│
 │  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
 │  目的: 「具体的に何をするか」の詳細化・業務担当者向け     【Phase 3】        │
 │  分類: なし（網羅性が目的）                                                  │
@@ -834,7 +922,8 @@ bc_contents:
 作成物:
   - VS → Capability対応表
   - 各Capabilityの正式分類（Core/Supporting/Generic）
-  - CL3 Business Operation一覧
+  - CL3 Sub-capability一覧
+  - BO Business Operation一覧（CL3→BO対応表含む）
 
 チェックポイント:
   - 全VSがCapabilityに分解されているか
@@ -916,7 +1005,8 @@ bc_contents:
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  CL1 (Value Stream)   →   Initiative         戦略的方向性                    │
 │  CL2 (Capability)     →   Theme              投資判断の単位                  │
-│  CL3 (Business Op.)   →   Epic/Feature       複数アクター協調                │
+│  CL3 (Sub-capability) →   -                  WHATの最小単位                  │
+│  BO (Business Op.)    →   Epic/Feature       複数アクター協調（HOW）          │
 │  Actor UseCase        →   User Story ★      シングルアクター（INVEST）       │
 │  View                 →   Task               実装タスク                       │
 │                                                                              │

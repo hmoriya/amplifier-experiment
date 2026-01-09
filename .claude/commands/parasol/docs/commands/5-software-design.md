@@ -938,7 +938,26 @@ $$ LANGUAGE plpgsql;
 
 **Phase 3で定義されたBO（業務オペレーション）** を基に、Actor UseCaseとView定義を作成します。
 
-> **入力**: Phase 3の `3-capabilities/cl3-bo-definitions/{capability}/bo-*.md`
+#### WHAT/HOW軸の確認
+
+```
+【WHAT軸: Capability階層】         【HOW軸: Process階層】
+CL3（詳細能力）                    BO（業務オペレーション）
+  │                                 │
+  │ uses (N:M)                      │ decomposes
+  └─────────────────────────────────┘
+                                    ↓
+                              Actor UseCase（単一アクター）
+                                    ↓
+                                  View
+```
+
+**重要**:
+- CL3（WHAT）とBO（HOW）は**並列な2軸**（BIZBOK Capability/Process分離に準拠）
+- BOはCL3を「使用」して業務を実行（N:M関係）
+- Actor UseCaseはBOをさらに単一アクター操作に分解
+
+> **入力**: Phase 3の `3-capabilities/cl3-bo-definitions/{capability}/bo-*.md`（使用するCL3含む）
 > **出力**: Actor UseCase定義とView定義
 
 **成果物**: `operations/{operation-name}/actor-usecases/{auc-name}/actor-usecase.md`, `views/{view}.md`
