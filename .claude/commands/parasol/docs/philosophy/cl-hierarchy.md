@@ -384,11 +384,25 @@ operation:
     - business_rules: "適用されるビジネスルール"
     - frequency: "実行頻度"
     - exceptions: "例外・エラーケース"
-    - activity_flow:  # ★アクティビティ間の遷移フロー（結合テストの基盤）
+
+    # ★ パターン認識（テスト戦略・見積もり・実装パターン選択）
+    - operation_pattern:
+        type: "enum"
+        values: [CRUD, Workflow, Batch, Analytics, Communication, Administration]
+
+    # ★ 関連ドメイン概念（Phase 3粒度、詳細はPhase 5で定義）
+    - related_domain_concepts:
+        primary_entity: "主操作対象エンティティ"
+        secondary_entities: "関連エンティティ"
+        key_value_objects: "重要な値オブジェクト"
+
+    # ★ アクティビティ遷移フロー（結合テスト・メニュー構成の基盤）
+    - activity_flow:
         description: "Actor UseCase間の遷移を定義"
         sequence:
-          - activity: "アクティビティ名（Actor UseCase）"
+          - activity: "アクティビティ名"
             actor: "実行アクター"
+            usecase_ref: "actor.usecase_name"  # ★Actor UseCaseへの明示的参照
             next: "次のアクティビティ | 分岐先"
             condition: "遷移条件"
 ```
@@ -401,27 +415,59 @@ operation:
 # 例: 酵母株スクリーニングBOのactivity_flow
 operation:
   name: "酵母株スクリーニング"
+  operation_pattern: Workflow
+  related_domain_concepts:
+    primary_entity: "YeastStrain"
+    secondary_entities: ["QualityResult", "ScreeningReport"]
+    key_value_objects: ["ScreeningCriteria", "EvaluationScore"]
   activity_flow:
     sequence:
       - activity: "酵母株を登録"
         actor: "研究員"
+        usecase_ref: "researcher.register_strain"  # ★Actor UseCase参照
         next: "株を評価"
         condition: "登録完了時"
 
       - activity: "株を評価"
         actor: "品質管理者"
+        usecase_ref: "qa_manager.evaluate_strain"
         next: "レポート出力 | 再評価依頼"
         condition: "評価完了時 | 不合格時"
 
       - activity: "再評価依頼"
         actor: "品質管理者"
+        usecase_ref: "qa_manager.request_reevaluation"
         next: "株を評価"
         condition: "研究員による修正完了時"
 
       - activity: "レポート出力"
         actor: "管理者"
+        usecase_ref: "admin.export_report"
         next: null  # 終了
         condition: "最終承認時"
+```
+
+### トレーサビリティチェーン
+
+```
+BO (Business Operation)
+  │
+  ├── operation_pattern: Workflow
+  ├── related_domain_concepts → Phase 5 PDL詳細へ
+  │
+  └── activity_flow
+        │
+        └── activity: "酵母株を登録"
+              │
+              └── usecase_ref: "researcher.register_strain"
+                    │
+                    ▼
+              Actor UseCase (Phase 5で定義)
+                    │
+                    └── api_operations: [POST /strains]  ★必須
+                          │
+                          ▼
+                    API Specification (Phase 5)
 ```
 
 **activity_flowの用途**:

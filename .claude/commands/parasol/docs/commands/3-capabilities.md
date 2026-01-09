@@ -637,7 +637,9 @@ Value Stream (価値創造の流れ)
 │ • 関係: CL3とN:M関係（1つのBOが複数CL3を使用可能）                 │
 │ • 構造: トリガー → 活動内容 → 成果物                              │
 │ • 粒度: 1日〜1週間で完結する業務単位                              │
-│ • activity_flow: Actor UseCase間の遷移定義（結合テストの基盤）★   │
+│ • operation_pattern: CRUD/Workflow/Batch/Analytics等 ★パターン   │
+│ • related_domain_concepts: 関連ドメイン概念（Phase 5 PDLへ）★    │
+│ • activity_flow: Actor UseCase間の遷移定義（usecase_ref必須）★   │
 │ • 例: 酵母株探索・収集、酵母株育種・改良、発酵パラメータ調整       │
 │                                                                 │
 │ DDD対応: Process Activity                                        │
@@ -786,24 +788,30 @@ BC実装 = 集約 / イベント / API契約 / ユビキタス言語
 
 【BO】業務オペレーション（CL3のHOW対応）
 ├── BO-FER-001: 酵母株探索・収集 ← 酵母株管理能力のHOW
+│   ├── pattern: Workflow
+│   ├── domain_concepts: YeastStrain, ScreeningCriteria
 │   ├── トリガー: 研究計画確定 → 成果物: 酵母サンプル
 │   └── activity_flow:
-│       研究員[株登録] → 品質管理者[株評価] → 管理者[レポート]
+│       researcher.register_strain → qa.evaluate_strain → admin.export_report
 ├── BO-FER-002: 酵母株育種・改良 ← 酵母株管理能力のHOW
+│   ├── pattern: Workflow
+│   ├── domain_concepts: YeastStrain, BreedingRecord
 │   ├── トリガー: 製品要件受領 → 成果物: 改良酵母株
 │   └── activity_flow:
-│       研究員[育種開始] → 研究員[培養実施] → 品質管理者[評価]
+│       researcher.start_breeding → researcher.cultivate → qa.evaluate
 ├── BO-FER-003: 発酵パラメータ調整 ← 発酵条件最適化能力のHOW
+│   ├── pattern: Analytics
+│   ├── domain_concepts: FermentationCondition, OptimizationResult
 │   ├── トリガー: 品質要件 → 成果物: 最適条件データ
 │   └── activity_flow:
-│       研究員[条件設定] → 研究員[発酵実行] → 品質管理者[検証]
+│       researcher.set_conditions → researcher.execute → qa.verify
 └── ...
 
-★ activity_flow: Actor UseCase間の遷移を定義
-   - 結合テスト設計の基盤（アクター間連携テスト）
-   - E2Eテストシナリオの源泉
-   - 画面遷移設計への入力
-   - メニュー構成設計（アクター作業の切れ目からナビ構造を導出）
+★ BO属性サマリー:
+   - operation_pattern: テスト戦略・見積もり・実装パターン選択
+   - related_domain_concepts: Phase 5 PDLへのブリッジ
+   - activity_flow: Actor UseCase間の遷移（usecase_ref必須）
+     └→ 結合テスト、E2E、画面遷移、メニュー構成の設計基盤
 
 【BC】実装設計（fermentation-research-bc）
 ├── Aggregate: YeastStrain（酵母株）
