@@ -268,20 +268,25 @@
 │           │                                                                 │
 │           ▼                                                                 │
 │      ┌─────────┐                                                           │
-│      │Subdomain│ ← ステージ = サブドメイン                                │
+│      │  CL2    │ ← Subdomain（問題領域：何の能力が必要か）                │
+│      │Subdomain│                                                           │
 │      └────┬────┘                                                           │
 │           │                                                                 │
 │           ▼                                                                 │
 │      ┌─────────┐                                                           │
-│      │   BC    │ ← サブドメイン = Bounded Context                         │
+│      │  CL3    │ ← Bounded Context（実装境界：どう実装するか）            │
+│      │   BC    │                                                           │
 │      └────┬────┘                                                           │
 │           │                                                                 │
 │           ▼                                                                 │
 │      ┌─────────┐                                                           │
-│      │ Service │ ← BC = マイクロサービス                                  │
+│      │ Service │ ← BC = マイクロサービス = Database                       │
 │      └─────────┘                                                           │
 │                                                                              │
-│      Stage = Subdomain = BC = Microservice                                  │
+│      Stage → CL2（Subdomain）→ CL3（BC）→ Service → Database             │
+│                                                                              │
+│      ・CL2 : CL3 = 1 : 1（シンプルな場合）                                 │
+│      ・CL2 : CL3 = 1 : N（複雑な場合）                                     │
 │                                                                              │
 │      → この一貫した対応関係が、変更に強いアーキテクチャを生む              │
 │                                                                              │
