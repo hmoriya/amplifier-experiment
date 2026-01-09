@@ -447,10 +447,10 @@ operation:
         condition: "最終承認時"
 ```
 
-### トレーサビリティチェーン
+### トレーサビリティチェーン（完全版）
 
 ```
-BO (Business Operation)
+BO (Business Operation) [Phase 3]
   │
   ├── operation_pattern: Workflow
   ├── related_domain_concepts → Phase 5 PDL詳細へ
@@ -462,12 +462,27 @@ BO (Business Operation)
               └── usecase_ref: "researcher.register_strain"
                     │
                     ▼
-              Actor UseCase (Phase 5で定義)
+              Actor UseCase [Phase 5]
                     │
-                    └── api_operations: [POST /strains]  ★必須
-                          │
-                          ▼
-                    API Specification (Phase 5)
+                    ├── api_operations: ★必須
+                    │     └── POST /api/v1/strains
+                    │           │
+                    │           ▼
+                    │     API Specification (api-specification.md)
+                    │
+                    └── db_operations: ★必須
+                          ├── type: CRUD
+                          ├── tables: [yeast_strains, strain_origins]
+                          └── transaction: REQUIRED
+                                │
+                                ▼
+                          Database Design (database-design.md)
+```
+
+**完全なトレーサビリティ**:
+```
+BO → activity_flow → usecase_ref → Actor UseCase → api_operations → API
+                                                 → db_operations  → DB
 ```
 
 **activity_flowの用途**:
@@ -640,6 +655,72 @@ agile_correspondence:
       - "株コードが自動生成される"
       - "必須項目が入力されている"
       - "登録完了メッセージが表示される"
+```
+
+### Actor UseCase構造
+
+**Actor UseCaseは`api_operations`と`db_operations`を必須属性として持つ**
+
+```yaml
+actor_usecase:
+  # 識別情報
+  id: "researcher.register_strain"
+  name: "研究員が酵母株を登録する"
+  actor: "研究員"
+
+  # ★ API操作（必須）- Phase 5 API仕様へのトレーサビリティ
+  api_operations:
+    - method: POST
+      endpoint: /api/v1/strains
+      operationId: createStrain
+      request_schema: CreateStrainRequest
+      response_schema: Strain
+
+  # ★ DB操作（必須）- トランザクション境界の定義
+  db_operations:
+    type: CRUD  # CRUD | Workflow | Analytics | Batch
+    aggregate: YeastStrain
+    tables:
+      - yeast_strains (INSERT)
+      - strain_origins (INSERT)
+    transaction: REQUIRED
+    isolation: READ_COMMITTED
+
+  # View定義への参照
+  views:
+    - strain-registration-form
+
+  # フロー定義（オプション）
+  basic_flow:
+    - step: 1
+      action: "登録フォーム表示"
+    - step: 2
+      action: "情報入力"
+    - step: 3
+      action: "API呼び出し"
+      api_ref: "POST /api/v1/strains"
+```
+
+### db_operationsパターン別テンプレート
+
+| パターン | 特性 | トランザクション |
+|----------|------|-----------------|
+| **CRUD** | 単純テーブル操作 | REQUIRED, READ_COMMITTED |
+| **Workflow** | 複数テーブル、状態遷移 | REQUIRED, SERIALIZABLE |
+| **Analytics** | 読み取り専用、集計 | NOT_REQUIRED |
+| **Batch** | チャンク単位処理 | BATCH_CHUNKED |
+
+```yaml
+# Workflow パターン例
+db_operations:
+  type: Workflow
+  aggregates: [FermentationProcess, ProcessMeasurement]
+  tables:
+    - fermentation_processes (UPDATE status)
+    - process_measurements (INSERT)
+    - domain_events (INSERT ProcessCompleted)
+  transaction: REQUIRED
+  isolation: SERIALIZABLE
 ```
 
 ### Business OperationとActor UseCaseの関係
