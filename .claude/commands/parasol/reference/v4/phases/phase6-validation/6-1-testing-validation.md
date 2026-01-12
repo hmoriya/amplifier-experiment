@@ -16,12 +16,287 @@
 
 ---
 
+## V5.5対応: トレーサビリティベースのテスト設計
+
+### テスト導出の原則
+
+V5.5では、**BO → activity_flow → Actor UseCase → api_operations/db_operations** の完全なトレーサビリティチェーンからテストを自動導出します。
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  テスト導出フロー                                                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  BO (operation_pattern) ──────────────────┐                                │
+│       │                                    │                                │
+│       │ activity_flow                      │ テスト戦略決定                 │
+│       ▼                                    ▼                                │
+│  ┌─────────────────┐               ┌─────────────────┐                     │
+│  │ Actor UseCase   │               │ パターン別       │                     │
+│  │ (usecase_ref)   │               │ テスト戦略      │                     │
+│  └────────┬────────┘               └─────────────────┘                     │
+│           │                                                                 │
+│     ┌─────┴─────┐                                                          │
+│     ▼           ▼                                                          │
+│  api_operations   db_operations                                            │
+│     │               │                                                      │
+│     ▼               ▼                                                      │
+│  Contract Test   Transaction Test                                          │
+│  Integration Test  Repository Test                                         │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### operation_pattern別テスト戦略
+
+| パターン | 単体テスト重点 | 統合テスト重点 | E2Eテスト重点 |
+|----------|---------------|---------------|---------------|
+| **CRUD** | バリデーション | API契約 | フォーム操作 |
+| **Workflow** | 状態遷移ロジック | イベント発行 | 業務フロー完走 |
+| **Batch** | チャンク処理 | 再開可能性 | 大量データ処理 |
+| **Analytics** | 集計ロジック | クエリ性能 | ダッシュボード表示 |
+| **Communication** | メッセージ形式 | 配信確認 | 通知受信 |
+| **Administration** | 権限チェック | 監査ログ | 管理操作 |
+
+#### CRUDパターン テスト設計テンプレート
+
+```python
+# operation_pattern: CRUD の場合
+# Actor UseCase: 研究員が酵母株を登録する
+
+class TestCRUDPattern:
+    """CRUD操作の標準テストパターン"""
+
+    # 1. バリデーションテスト（単体）
+    def test_required_fields_validation(self):
+        """必須フィールドのバリデーション"""
+        pass
+
+    def test_format_validation(self):
+        """形式バリデーション（メール、日付等）"""
+        pass
+
+    # 2. API契約テスト（統合）
+    def test_create_returns_201(self):
+        """作成成功時に201を返す"""
+        pass
+
+    def test_create_returns_400_on_invalid_input(self):
+        """不正入力時に400を返す"""
+        pass
+
+    # 3. DB操作テスト（統合）
+    def test_insert_creates_record(self):
+        """INSERTでレコードが作成される"""
+        pass
+
+    def test_transaction_rollback_on_error(self):
+        """エラー時にトランザクションがロールバックされる"""
+        pass
+```
+
+#### Workflowパターン テスト設計テンプレート
+
+```python
+# operation_pattern: Workflow の場合
+# BO: 酵母株スクリーニング（activity_flow定義あり）
+
+class TestWorkflowPattern:
+    """Workflow操作の標準テストパターン"""
+
+    # 1. 状態遷移テスト（単体）
+    def test_valid_state_transition(self):
+        """有効な状態遷移が成功する"""
+        pass
+
+    def test_invalid_state_transition_rejected(self):
+        """無効な状態遷移が拒否される"""
+        pass
+
+    # 2. activity_flow遷移テスト（統合）
+    def test_activity_sequence_execution(self):
+        """activity_flowの順序通りに実行される"""
+        # activity_flow.sequenceから自動生成
+        pass
+
+    def test_branch_condition_evaluation(self):
+        """分岐条件が正しく評価される"""
+        pass
+
+    # 3. ドメインイベントテスト（統合）
+    def test_domain_event_published_on_completion(self):
+        """完了時にドメインイベントが発行される"""
+        pass
+
+    # 4. E2Eフローテスト
+    def test_complete_workflow_execution(self):
+        """ワークフロー全体が正常完了する"""
+        # BOのactivity_flow全体をテスト
+        pass
+```
+
+#### Batchパターン テスト設計テンプレート
+
+```python
+# operation_pattern: Batch の場合
+
+class TestBatchPattern:
+    """Batch操作の標準テストパターン"""
+
+    # 1. チャンク処理テスト（単体）
+    def test_chunk_size_respected(self):
+        """チャンクサイズが守られる"""
+        pass
+
+    def test_partial_failure_handling(self):
+        """部分失敗時の処理"""
+        pass
+
+    # 2. 再開可能性テスト（統合）
+    def test_resume_from_checkpoint(self):
+        """チェックポイントから再開可能"""
+        pass
+
+    # 3. 性能テスト
+    def test_large_dataset_processing(self):
+        """大量データ処理性能"""
+        pass
+```
+
+#### Analyticsパターン テスト設計テンプレート
+
+```python
+# operation_pattern: Analytics の場合
+
+class TestAnalyticsPattern:
+    """Analytics操作の標準テストパターン"""
+
+    # 1. 集計ロジックテスト（単体）
+    def test_aggregation_logic(self):
+        """集計ロジックの正確性"""
+        pass
+
+    # 2. クエリ性能テスト（統合）
+    def test_query_performance_under_load(self):
+        """負荷時のクエリ性能"""
+        pass
+
+    # 3. 読み取り専用確認
+    def test_no_data_modification(self):
+        """データが変更されないこと"""
+        pass
+```
+
+### activity_flowからの統合テスト導出
+
+```yaml
+# BO定義からの自動テスト生成
+operation:
+  name: "酵母株スクリーニング"
+  operation_pattern: Workflow
+  activity_flow:
+    sequence:
+      - activity: "酵母株を登録"
+        usecase_ref: "researcher.register_strain"
+        next: "株を評価"
+      - activity: "株を評価"
+        usecase_ref: "qa_manager.evaluate_strain"
+        next: "レポート出力 | 再評価依頼"
+        condition: "評価完了時 | 不合格時"
+```
+
+↓ 自動生成されるテストケース
+
+```python
+class TestYeastStrainScreeningFlow:
+    """activity_flowから導出された統合テスト"""
+
+    def test_flow_step1_register_to_evaluate(self):
+        """登録→評価への遷移"""
+        # usecase_ref: researcher.register_strain 実行
+        # 次のusecase_ref: qa_manager.evaluate_strain へ遷移確認
+        pass
+
+    def test_flow_branch_pass_to_report(self):
+        """評価合格→レポート出力への分岐"""
+        # condition: "評価完了時"
+        pass
+
+    def test_flow_branch_fail_to_reevaluation(self):
+        """評価不合格→再評価依頼への分岐"""
+        # condition: "不合格時"
+        pass
+
+    def test_complete_happy_path(self):
+        """正常系の完全フロー"""
+        # activity_flow.sequence全体の実行
+        pass
+```
+
+### api_operations/db_operationsからのテスト導出
+
+```yaml
+# Actor UseCase定義
+actor_usecase:
+  id: "researcher.register_strain"
+
+  api_operations:
+    - method: POST
+      endpoint: /api/v1/strains
+      operationId: createStrain
+      request_schema: CreateStrainRequest
+      response_schema: Strain
+
+  db_operations:
+    type: CRUD
+    tables:
+      - yeast_strains (INSERT)
+      - strain_origins (INSERT)
+    transaction: REQUIRED
+```
+
+↓ 自動生成されるテストケース
+
+```python
+# api_operationsから導出
+class TestRegisterStrainAPI:
+    """api_operationsから導出されたAPIテスト"""
+
+    def test_post_strains_success(self):
+        """POST /api/v1/strains が成功する"""
+        response = client.post("/api/v1/strains", json=valid_request)
+        assert response.status_code == 200
+        assert_matches_schema(response.json(), "Strain")
+
+    def test_post_strains_validates_request(self):
+        """CreateStrainRequestスキーマでバリデーション"""
+        pass
+
+# db_operationsから導出
+class TestRegisterStrainDB:
+    """db_operationsから導出されたDBテスト"""
+
+    def test_inserts_to_yeast_strains(self):
+        """yeast_strainsテーブルにINSERT"""
+        pass
+
+    def test_inserts_to_strain_origins(self):
+        """strain_originsテーブルにINSERT"""
+        pass
+
+    def test_transaction_atomicity(self):
+        """トランザクションの原子性（全INSERT or 全ロールバック）"""
+        pass
+```
+
+---
+
 ## 入力：テスト要件
 
 ### テスト範囲
 1. **単体テスト**: 個別コンポーネント
 2. **統合テスト**: API・データベース連携
-3. **E2Eテスト**: ユーザーシナリオ
+3. **E2Eテスト**: ユーザーシナリオ（activity_flowベース）
 4. **性能テスト**: 負荷・スケーラビリティ
 5. **セキュリティテスト**: 脆弱性診断
 

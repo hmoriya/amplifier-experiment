@@ -114,12 +114,23 @@ Task tool を使用して test-coverage を起動：
 - 過剰テストの回避」
 ```
 
-### テスト自動生成（パラソルドメイン言語連携）
+### テスト自動生成（V5.5 トレーサビリティベース）
 
-パラソルドメイン言語からテストスケルトンを自動生成：
+V5.5では **BO → activity_flow → Actor UseCase → api_operations/db_operations** のトレーサビリティチェーンからテストを導出します。
+
+#### operation_pattern別テスト戦略
+
+| パターン | 単体テスト重点 | 統合テスト重点 | E2Eテスト重点 |
+|----------|---------------|---------------|---------------|
+| **CRUD** | バリデーション | API契約 | フォーム操作 |
+| **Workflow** | 状態遷移ロジック | イベント発行 | 業務フロー完走 |
+| **Batch** | チャンク処理 | 再開可能性 | 大量データ処理 |
+| **Analytics** | 集計ロジック | クエリ性能 | ダッシュボード表示 |
+
+#### テスト生成フロー
 
 ```
-テスト生成フロー:
+テスト生成フロー（V5.5）:
 
 1. ドメインモデルテスト（Unit）
    入力: @parasol:value_objects, @parasol:aggregates
@@ -130,17 +141,26 @@ Task tool を使用して test-coverage を起動：
    - Aggregate: 不変条件テスト、振る舞いテスト
    - Domain Service: ロジックテスト
 
-2. APIテスト（Contract）
-   入力: api-specification.md
+2. APIテスト（Contract）- api_operationsから導出
+   入力: Actor UseCase.api_operations
    出力: tests/contract/api/*.py
 
    生成内容:
-   - エンドポイント契約テスト
+   - エンドポイント契約テスト（method, endpoint, schemas）
    - リクエスト/レスポンス検証
    - 認証・認可テスト
 
-3. Actor UseCaseテスト（Integration）
-   入力: @parasol:actor_usecase_flow
+3. DBテスト（Repository）- db_operationsから導出
+   入力: Actor UseCase.db_operations
+   出力: tests/integration/db/*.py
+
+   生成内容:
+   - テーブル操作テスト（INSERT/UPDATE/DELETE）
+   - トランザクション原子性テスト
+   - 分離レベル適切性テスト
+
+4. Actor UseCaseテスト（Integration）
+   入力: Actor UseCase定義
    出力: tests/integration/actor-usecases/*.py
 
    生成内容:
@@ -148,7 +168,16 @@ Task tool を使用して test-coverage を起動：
    - 代替フローテスト
    - 例外フローテスト
 
-4. UIテスト（Component）
+5. activity_flowテスト（E2E）- activity_flowから導出
+   入力: BO.activity_flow
+   出力: tests/e2e/workflows/*.py
+
+   生成内容:
+   - 遷移シーケンステスト
+   - 分岐条件テスト
+   - 完全フロー実行テスト
+
+6. UIテスト（Component）
    入力: views/*.md, robustness.md
    出力: tests/component/views/*.spec.ts
 
@@ -157,6 +186,31 @@ Task tool を使用して test-coverage を起動：
    - 操作テスト
    - BCE連携テスト
 ```
+
+#### テスト導出例
+
+```yaml
+# Actor UseCase定義からのテスト自動導出
+actor_usecase:
+  id: "researcher.register_strain"
+  api_operations:
+    - method: POST
+      endpoint: /api/v1/strains
+  db_operations:
+    type: CRUD
+    tables: [yeast_strains, strain_origins]
+    transaction: REQUIRED
+
+# ↓ 自動生成されるテスト
+# tests/contract/api/test_strains_api.py
+#   - test_post_strains_success()
+#   - test_post_strains_validates_request()
+# tests/integration/db/test_strain_repository.py
+#   - test_inserts_to_yeast_strains()
+#   - test_transaction_atomicity()
+```
+
+**詳細テスト設計**: `reference/v4/phases/phase6-validation/6-1-testing-validation.md`
 
 **テスト定義形式**: `.claude/commands/parasol/_software-design-reference/_templates/test-definition-format.md`
 
