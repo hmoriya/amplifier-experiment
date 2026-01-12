@@ -60,131 +60,317 @@ V5.5では、**BO → activity_flow → Actor UseCase → api_operations/db_oper
 
 #### CRUDパターン テスト設計テンプレート
 
-```python
-# operation_pattern: CRUD の場合
-# Actor UseCase: 研究員が酵母株を登録する
+**TypeScript (Jest/Vitest)**
+```typescript
+// operation_pattern: CRUD の場合
+// Actor UseCase: 研究員が酵母株を登録する
 
-class TestCRUDPattern:
-    """CRUD操作の標準テストパターン"""
+describe('CRUDPattern - RegisterStrain', () => {
+  // 1. バリデーションテスト（単体）
+  it('必須フィールドのバリデーション', () => {
+    const result = validateStrain({ name: '' });
+    expect(result.isValid).toBe(false);
+    expect(result.errors).toContain('name is required');
+  });
 
-    # 1. バリデーションテスト（単体）
-    def test_required_fields_validation(self):
-        """必須フィールドのバリデーション"""
-        pass
+  it('形式バリデーション（メール、日付等）', () => {
+    const result = validateStrain({ registrationDate: 'invalid' });
+    expect(result.errors).toContain('invalid date format');
+  });
 
-    def test_format_validation(self):
-        """形式バリデーション（メール、日付等）"""
-        pass
+  // 2. API契約テスト（統合）
+  it('作成成功時に201を返す', async () => {
+    const response = await request(app).post('/api/v1/strains').send(validStrain);
+    expect(response.status).toBe(201);
+  });
 
-    # 2. API契約テスト（統合）
-    def test_create_returns_201(self):
-        """作成成功時に201を返す"""
-        pass
+  it('不正入力時に400を返す', async () => {
+    const response = await request(app).post('/api/v1/strains').send({});
+    expect(response.status).toBe(400);
+  });
 
-    def test_create_returns_400_on_invalid_input(self):
-        """不正入力時に400を返す"""
-        pass
+  // 3. DB操作テスト（統合）
+  it('INSERTでレコードが作成される', async () => {
+    await strainRepository.save(strain);
+    const found = await strainRepository.findById(strain.id);
+    expect(found).not.toBeNull();
+  });
 
-    # 3. DB操作テスト（統合）
-    def test_insert_creates_record(self):
-        """INSERTでレコードが作成される"""
-        pass
+  it('エラー時にトランザクションがロールバックされる', async () => {
+    await expect(strainRepository.saveWithError(strain)).rejects.toThrow();
+    const found = await strainRepository.findById(strain.id);
+    expect(found).toBeNull();
+  });
+});
+```
 
-    def test_transaction_rollback_on_error(self):
-        """エラー時にトランザクションがロールバックされる"""
-        pass
+**C# (.NET xUnit)**
+```csharp
+// operation_pattern: CRUD の場合
+public class CrudPatternTests
+{
+    // 1. バリデーションテスト（単体）
+    [Fact]
+    public void RequiredFieldsValidation()
+    {
+        var strain = new Strain { Name = "" };
+        var result = _validator.Validate(strain);
+        Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, e => e.PropertyName == "Name");
+    }
+
+    // 2. API契約テスト（統合）
+    [Fact]
+    public async Task CreateReturns201OnSuccess()
+    {
+        var response = await _client.PostAsJsonAsync("/api/v1/strains", validStrain);
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+    }
+
+    // 3. DB操作テスト（統合）
+    [Fact]
+    public async Task InsertCreatesRecord()
+    {
+        await _repository.SaveAsync(strain);
+        var found = await _repository.FindByIdAsync(strain.Id);
+        Assert.NotNull(found);
+    }
+
+    [Fact]
+    public async Task TransactionRollbackOnError()
+    {
+        await Assert.ThrowsAsync<DbUpdateException>(
+            () => _repository.SaveWithErrorAsync(strain));
+        var found = await _repository.FindByIdAsync(strain.Id);
+        Assert.Null(found);
+    }
+}
+```
+
+**Java (JUnit 5)**
+```java
+// operation_pattern: CRUD の場合
+@SpringBootTest
+class CrudPatternTest {
+    // 1. バリデーションテスト（単体）
+    @Test
+    void requiredFieldsValidation() {
+        var strain = new Strain();
+        strain.setName("");
+        var violations = validator.validate(strain);
+        assertFalse(violations.isEmpty());
+    }
+
+    // 2. API契約テスト（統合）
+    @Test
+    void createReturns201OnSuccess() throws Exception {
+        mockMvc.perform(post("/api/v1/strains")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(validStrain)))
+            .andExpect(status().isCreated());
+    }
+
+    // 3. DB操作テスト（統合）
+    @Test
+    @Transactional
+    void insertCreatesRecord() {
+        repository.save(strain);
+        var found = repository.findById(strain.getId());
+        assertTrue(found.isPresent());
+    }
+
+    @Test
+    void transactionRollbackOnError() {
+        assertThrows(DataIntegrityViolationException.class,
+            () -> repository.saveWithError(strain));
+        var found = repository.findById(strain.getId());
+        assertTrue(found.isEmpty());
+    }
+}
 ```
 
 #### Workflowパターン テスト設計テンプレート
 
-```python
-# operation_pattern: Workflow の場合
-# BO: 酵母株スクリーニング（activity_flow定義あり）
+**TypeScript (Jest/Vitest)**
+```typescript
+// operation_pattern: Workflow の場合
+// BO: 酵母株スクリーニング（activity_flow定義あり）
 
-class TestWorkflowPattern:
-    """Workflow操作の標準テストパターン"""
+describe('WorkflowPattern - YeastStrainScreening', () => {
+  // 1. 状態遷移テスト（単体）
+  it('有効な状態遷移が成功する', () => {
+    const workflow = new ScreeningWorkflow('REGISTERED');
+    workflow.transition('EVALUATE');
+    expect(workflow.state).toBe('EVALUATING');
+  });
 
-    # 1. 状態遷移テスト（単体）
-    def test_valid_state_transition(self):
-        """有効な状態遷移が成功する"""
-        pass
+  it('無効な状態遷移が拒否される', () => {
+    const workflow = new ScreeningWorkflow('REGISTERED');
+    expect(() => workflow.transition('COMPLETE')).toThrow(InvalidTransitionError);
+  });
 
-    def test_invalid_state_transition_rejected(self):
-        """無効な状態遷移が拒否される"""
-        pass
+  // 2. activity_flow遷移テスト（統合）
+  it('activity_flowの順序通りに実行される', async () => {
+    // activity_flow.sequenceから自動生成
+    await executeActivity('researcher.register_strain');
+    await executeActivity('qa_manager.evaluate_strain');
+    expect(workflowState).toBe('EVALUATED');
+  });
 
-    # 2. activity_flow遷移テスト（統合）
-    def test_activity_sequence_execution(self):
-        """activity_flowの順序通りに実行される"""
-        # activity_flow.sequenceから自動生成
-        pass
+  // 3. ドメインイベントテスト（統合）
+  it('完了時にドメインイベントが発行される', async () => {
+    const events: DomainEvent[] = [];
+    eventBus.subscribe('ScreeningCompleted', e => events.push(e));
+    await workflow.complete();
+    expect(events).toHaveLength(1);
+  });
 
-    def test_branch_condition_evaluation(self):
-        """分岐条件が正しく評価される"""
-        pass
+  // 4. E2Eフローテスト
+  it('ワークフロー全体が正常完了する', async () => {
+    // BOのactivity_flow全体をテスト
+    const result = await executeFullWorkflow(screeningWorkflowId);
+    expect(result.status).toBe('COMPLETED');
+  });
+});
+```
 
-    # 3. ドメインイベントテスト（統合）
-    def test_domain_event_published_on_completion(self):
-        """完了時にドメインイベントが発行される"""
-        pass
+**C# (.NET xUnit)**
+```csharp
+// operation_pattern: Workflow の場合
+public class WorkflowPatternTests
+{
+    [Fact]
+    public void ValidStateTransitionSucceeds()
+    {
+        var workflow = new ScreeningWorkflow(WorkflowState.Registered);
+        workflow.Transition(WorkflowAction.Evaluate);
+        Assert.Equal(WorkflowState.Evaluating, workflow.State);
+    }
 
-    # 4. E2Eフローテスト
-    def test_complete_workflow_execution(self):
-        """ワークフロー全体が正常完了する"""
-        # BOのactivity_flow全体をテスト
-        pass
+    [Fact]
+    public void InvalidStateTransitionIsRejected()
+    {
+        var workflow = new ScreeningWorkflow(WorkflowState.Registered);
+        Assert.Throws<InvalidTransitionException>(
+            () => workflow.Transition(WorkflowAction.Complete));
+    }
+
+    [Fact]
+    public async Task DomainEventPublishedOnCompletion()
+    {
+        var events = new List<IDomainEvent>();
+        _eventBus.Subscribe<ScreeningCompletedEvent>(e => events.Add(e));
+        await _workflow.CompleteAsync();
+        Assert.Single(events);
+    }
+}
 ```
 
 #### Batchパターン テスト設計テンプレート
 
-```python
-# operation_pattern: Batch の場合
+**TypeScript (Jest/Vitest)**
+```typescript
+// operation_pattern: Batch の場合
+describe('BatchPattern', () => {
+  // 1. チャンク処理テスト（単体）
+  it('チャンクサイズが守られる', async () => {
+    const processor = new BatchProcessor({ chunkSize: 100 });
+    const chunks = await processor.process(items);
+    chunks.forEach(chunk => expect(chunk.length).toBeLessThanOrEqual(100));
+  });
 
-class TestBatchPattern:
-    """Batch操作の標準テストパターン"""
+  it('部分失敗時の処理', async () => {
+    const result = await processor.processWithPartialFailure(items);
+    expect(result.succeeded).toBeGreaterThan(0);
+    expect(result.failed).toBeGreaterThan(0);
+    expect(result.failedItems).toBeDefined();
+  });
 
-    # 1. チャンク処理テスト（単体）
-    def test_chunk_size_respected(self):
-        """チャンクサイズが守られる"""
-        pass
+  // 2. 再開可能性テスト（統合）
+  it('チェックポイントから再開可能', async () => {
+    const checkpoint = await processor.getCheckpoint(jobId);
+    const result = await processor.resumeFrom(checkpoint);
+    expect(result.processedCount).toBe(totalItems - checkpoint.processedCount);
+  });
+});
+```
 
-    def test_partial_failure_handling(self):
-        """部分失敗時の処理"""
-        pass
+**C# (.NET xUnit)**
+```csharp
+// operation_pattern: Batch の場合
+public class BatchPatternTests
+{
+    [Fact]
+    public async Task ChunkSizeRespected()
+    {
+        var processor = new BatchProcessor(chunkSize: 100);
+        var chunks = await processor.ProcessAsync(items);
+        Assert.All(chunks, chunk => Assert.True(chunk.Count <= 100));
+    }
 
-    # 2. 再開可能性テスト（統合）
-    def test_resume_from_checkpoint(self):
-        """チェックポイントから再開可能"""
-        pass
-
-    # 3. 性能テスト
-    def test_large_dataset_processing(self):
-        """大量データ処理性能"""
-        pass
+    [Fact]
+    public async Task ResumeFromCheckpoint()
+    {
+        var checkpoint = await _processor.GetCheckpointAsync(jobId);
+        var result = await _processor.ResumeFromAsync(checkpoint);
+        Assert.Equal(totalItems - checkpoint.ProcessedCount, result.ProcessedCount);
+    }
+}
 ```
 
 #### Analyticsパターン テスト設計テンプレート
 
-```python
-# operation_pattern: Analytics の場合
+**TypeScript (Jest/Vitest)**
+```typescript
+// operation_pattern: Analytics の場合
+describe('AnalyticsPattern', () => {
+  // 1. 集計ロジックテスト（単体）
+  it('集計ロジックの正確性', () => {
+    const result = aggregateStrainData(testData);
+    expect(result.totalCount).toBe(100);
+    expect(result.averageYield).toBeCloseTo(85.5, 2);
+  });
 
-class TestAnalyticsPattern:
-    """Analytics操作の標準テストパターン"""
+  // 2. クエリ性能テスト（統合）
+  it('負荷時のクエリ性能', async () => {
+    const start = performance.now();
+    await analyticsService.generateReport(largeDataset);
+    const duration = performance.now() - start;
+    expect(duration).toBeLessThan(3000); // 3秒以内
+  });
 
-    # 1. 集計ロジックテスト（単体）
-    def test_aggregation_logic(self):
-        """集計ロジックの正確性"""
-        pass
+  // 3. 読み取り専用確認
+  it('データが変更されないこと', async () => {
+    const before = await getRecordCount();
+    await analyticsService.generateReport(dataset);
+    const after = await getRecordCount();
+    expect(after).toBe(before);
+  });
+});
+```
 
-    # 2. クエリ性能テスト（統合）
-    def test_query_performance_under_load(self):
-        """負荷時のクエリ性能"""
-        pass
+**C# (.NET xUnit)**
+```csharp
+// operation_pattern: Analytics の場合
+public class AnalyticsPatternTests
+{
+    [Fact]
+    public void AggregationLogicAccuracy()
+    {
+        var result = _aggregator.Aggregate(testData);
+        Assert.Equal(100, result.TotalCount);
+        Assert.Equal(85.5m, result.AverageYield, 2);
+    }
 
-    # 3. 読み取り専用確認
-    def test_no_data_modification(self):
-        """データが変更されないこと"""
-        pass
+    [Fact]
+    public async Task NoDataModification()
+    {
+        var before = await _repository.CountAsync();
+        await _analyticsService.GenerateReportAsync(dataset);
+        var after = await _repository.CountAsync();
+        Assert.Equal(before, after);
+    }
+}
 ```
 
 ### activity_flowからの統合テスト導出
@@ -207,30 +393,68 @@ operation:
 
 ↓ 自動生成されるテストケース
 
-```python
-class TestYeastStrainScreeningFlow:
-    """activity_flowから導出された統合テスト"""
+**TypeScript (Jest/Vitest)**
+```typescript
+describe('YeastStrainScreeningFlow', () => {
+  // activity_flowから導出された統合テスト
 
-    def test_flow_step1_register_to_evaluate(self):
-        """登録→評価への遷移"""
-        # usecase_ref: researcher.register_strain 実行
-        # 次のusecase_ref: qa_manager.evaluate_strain へ遷移確認
-        pass
+  it('登録→評価への遷移', async () => {
+    // usecase_ref: researcher.register_strain 実行
+    const strain = await executeUseCase('researcher.register_strain', strainData);
+    // 次のusecase_ref: qa_manager.evaluate_strain へ遷移確認
+    const evaluation = await executeUseCase('qa_manager.evaluate_strain', { strainId: strain.id });
+    expect(evaluation.status).toBe('EVALUATED');
+  });
 
-    def test_flow_branch_pass_to_report(self):
-        """評価合格→レポート出力への分岐"""
-        # condition: "評価完了時"
-        pass
+  it('評価合格→レポート出力への分岐', async () => {
+    // condition: "評価完了時"
+    const evaluation = await completeEvaluation(strainId, { result: 'PASS' });
+    expect(evaluation.nextActivity).toBe('admin.export_report');
+  });
 
-    def test_flow_branch_fail_to_reevaluation(self):
-        """評価不合格→再評価依頼への分岐"""
-        # condition: "不合格時"
-        pass
+  it('評価不合格→再評価依頼への分岐', async () => {
+    // condition: "不合格時"
+    const evaluation = await completeEvaluation(strainId, { result: 'FAIL' });
+    expect(evaluation.nextActivity).toBe('qa_manager.request_reevaluation');
+  });
 
-    def test_complete_happy_path(self):
-        """正常系の完全フロー"""
-        # activity_flow.sequence全体の実行
-        pass
+  it('正常系の完全フロー', async () => {
+    // activity_flow.sequence全体の実行
+    const result = await executeFullWorkflow('yeast_strain_screening', initialData);
+    expect(result.status).toBe('COMPLETED');
+    expect(result.activities).toHaveLength(4);
+  });
+});
+```
+
+**C# (.NET xUnit)**
+```csharp
+public class YeastStrainScreeningFlowTests
+{
+    [Fact]
+    public async Task FlowStep1_RegisterToEvaluate()
+    {
+        var strain = await ExecuteUseCaseAsync("researcher.register_strain", strainData);
+        var evaluation = await ExecuteUseCaseAsync("qa_manager.evaluate_strain",
+            new { StrainId = strain.Id });
+        Assert.Equal("EVALUATED", evaluation.Status);
+    }
+
+    [Fact]
+    public async Task FlowBranch_PassToReport()
+    {
+        var evaluation = await CompleteEvaluationAsync(strainId, EvaluationResult.Pass);
+        Assert.Equal("admin.export_report", evaluation.NextActivity);
+    }
+
+    [Fact]
+    public async Task CompleteHappyPath()
+    {
+        var result = await ExecuteFullWorkflowAsync("yeast_strain_screening", initialData);
+        Assert.Equal("COMPLETED", result.Status);
+        Assert.Equal(4, result.Activities.Count);
+    }
+}
 ```
 
 ### api_operations/db_operationsからのテスト導出
@@ -257,36 +481,132 @@ actor_usecase:
 
 ↓ 自動生成されるテストケース
 
-```python
-# api_operationsから導出
-class TestRegisterStrainAPI:
-    """api_operationsから導出されたAPIテスト"""
+**TypeScript (Jest/Vitest)**
+```typescript
+// api_operationsから導出
+describe('RegisterStrainAPI', () => {
+  it('POST /api/v1/strains が成功する', async () => {
+    const response = await request(app)
+      .post('/api/v1/strains')
+      .send(validRequest);
+    expect(response.status).toBe(201);
+    expect(response.body).toMatchSchema(StrainSchema);
+  });
 
-    def test_post_strains_success(self):
-        """POST /api/v1/strains が成功する"""
-        response = client.post("/api/v1/strains", json=valid_request)
-        assert response.status_code == 200
-        assert_matches_schema(response.json(), "Strain")
+  it('CreateStrainRequestスキーマでバリデーション', async () => {
+    const response = await request(app)
+      .post('/api/v1/strains')
+      .send({ invalid: 'data' });
+    expect(response.status).toBe(400);
+    expect(response.body.errors).toBeDefined();
+  });
+});
 
-    def test_post_strains_validates_request(self):
-        """CreateStrainRequestスキーマでバリデーション"""
-        pass
+// db_operationsから導出
+describe('RegisterStrainDB', () => {
+  it('yeast_strainsテーブルにINSERT', async () => {
+    await strainRepository.save(strain);
+    const result = await db.query('SELECT * FROM yeast_strains WHERE id = $1', [strain.id]);
+    expect(result.rows).toHaveLength(1);
+  });
 
-# db_operationsから導出
-class TestRegisterStrainDB:
-    """db_operationsから導出されたDBテスト"""
+  it('strain_originsテーブルにINSERT', async () => {
+    await strainRepository.save(strainWithOrigin);
+    const result = await db.query('SELECT * FROM strain_origins WHERE strain_id = $1', [strain.id]);
+    expect(result.rows).toHaveLength(1);
+  });
 
-    def test_inserts_to_yeast_strains(self):
-        """yeast_strainsテーブルにINSERT"""
-        pass
+  it('トランザクションの原子性（全INSERT or 全ロールバック）', async () => {
+    await expect(strainRepository.saveWithError(strain)).rejects.toThrow();
+    const strains = await db.query('SELECT * FROM yeast_strains WHERE id = $1', [strain.id]);
+    const origins = await db.query('SELECT * FROM strain_origins WHERE strain_id = $1', [strain.id]);
+    expect(strains.rows).toHaveLength(0);
+    expect(origins.rows).toHaveLength(0);
+  });
+});
+```
 
-    def test_inserts_to_strain_origins(self):
-        """strain_originsテーブルにINSERT"""
-        pass
+**C# (.NET xUnit)**
+```csharp
+// api_operationsから導出
+public class RegisterStrainApiTests
+{
+    [Fact]
+    public async Task PostStrains_ReturnsCreated()
+    {
+        var response = await _client.PostAsJsonAsync("/api/v1/strains", validRequest);
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        var strain = await response.Content.ReadFromJsonAsync<Strain>();
+        Assert.NotNull(strain);
+    }
 
-    def test_transaction_atomicity(self):
-        """トランザクションの原子性（全INSERT or 全ロールバック）"""
-        pass
+    [Fact]
+    public async Task PostStrains_ValidatesRequest()
+    {
+        var response = await _client.PostAsJsonAsync("/api/v1/strains", new { Invalid = "data" });
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+}
+
+// db_operationsから導出
+public class RegisterStrainDbTests
+{
+    [Fact]
+    public async Task InsertsToYeastStrains()
+    {
+        await _repository.SaveAsync(strain);
+        var result = await _context.YeastStrains.FindAsync(strain.Id);
+        Assert.NotNull(result);
+    }
+
+    [Fact]
+    public async Task TransactionAtomicity()
+    {
+        await Assert.ThrowsAsync<DbUpdateException>(
+            () => _repository.SaveWithErrorAsync(strain));
+        var strains = await _context.YeastStrains.FindAsync(strain.Id);
+        var origins = await _context.StrainOrigins
+            .Where(o => o.StrainId == strain.Id).ToListAsync();
+        Assert.Null(strains);
+        Assert.Empty(origins);
+    }
+}
+```
+
+**Java (JUnit 5)**
+```java
+// api_operationsから導出
+@SpringBootTest
+@AutoConfigureMockMvc
+class RegisterStrainApiTest {
+    @Test
+    void postStrains_returnsCreated() throws Exception {
+        mockMvc.perform(post("/api/v1/strains")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(validRequest)))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.id").exists());
+    }
+}
+
+// db_operationsから導出
+@DataJpaTest
+class RegisterStrainDbTest {
+    @Test
+    void insertsToYeastStrains() {
+        repository.save(strain);
+        var found = entityManager.find(YeastStrain.class, strain.getId());
+        assertNotNull(found);
+    }
+
+    @Test
+    void transactionAtomicity() {
+        assertThrows(DataIntegrityViolationException.class,
+            () -> repository.saveWithError(strain));
+        var strains = entityManager.find(YeastStrain.class, strain.getId());
+        assertNull(strains);
+    }
+}
 ```
 
 ---
