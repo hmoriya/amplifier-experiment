@@ -1,0 +1,209 @@
+# Phase 3: Stage依存TVDC設定（V5.6新機能）
+# 同一Capabilityが異なるValue Stageで異なるTVDC分類を持つケース
+
+# ============================================================
+# Stage依存TVDC定義
+# ============================================================
+stage_dependent_tvdc:
+
+  # ─────────────────────────────────────────────────────────
+  # ケース1: ブランドコミュニケーション
+  # 認知段階ではCore、継続段階ではSupporting
+  # ─────────────────────────────────────────────────────────
+  - capability_id: "CL2-1-1"
+    capability_name: "ブランドコミュニケーション"
+
+    stage_settings:
+      - value_stage: "VS0_VS1"
+        tvdc: "Core"
+        rationale: |
+          認知獲得段階では、ブランドメッセージの発信が
+          顧客獲得に直接貢献する最重要活動
+        priority: "High"
+
+      - value_stage: "VS1_VS2"
+        tvdc: "Core"
+        rationale: |
+          選好形成段階でも、100年ブランドストーリーと
+          健康価値の訴求が選択決定に直接影響
+        priority: "High"
+
+      - value_stage: "VS4_VS7"
+        tvdc: "Supporting"
+        rationale: |
+          定着・推奨段階では、製品体験と関係構築が
+          主役となり、ブランドコミュニケーションは補助的
+        priority: "Medium"
+
+  # ─────────────────────────────────────────────────────────
+  # ケース2: 健康エビデンス管理
+  # 認知段階ではVCI、継続段階ではCore
+  # ─────────────────────────────────────────────────────────
+  - capability_id: "CL2-1-2"
+    capability_name: "健康エビデンス管理"
+
+    stage_settings:
+      - value_stage: "VS0_VS1"
+        tvdc: "Supporting"
+        rationale: |
+          認知段階では「カルピス＝健康」の大枠認知が主
+          詳細なエビデンスはまだ重要度低
+        priority: "Low"
+
+      - value_stage: "VS1_VS2"
+        tvdc: "VCI"
+        rationale: |
+          選好形成段階で健康効果の科学的根拠が
+          購入決定を後押しする差別化要因に
+        priority: "High"
+
+      - value_stage: "VS3_VS6"
+        tvdc: "Core"
+        rationale: |
+          継続利用段階では、実感できる健康効果が
+          リピート購入の直接的動機となる
+        priority: "Critical"
+
+  # ─────────────────────────────────────────────────────────
+  # ケース3: 体験価値設計
+  # 初回体験ではSupporting、継続段階ではCore
+  # ─────────────────────────────────────────────────────────
+  - capability_id: "CL2-3-2"
+    capability_name: "体験価値設計"
+
+    stage_settings:
+      - value_stage: "VS2_VS3"
+        tvdc: "Supporting"
+        rationale: |
+          初回体験では製品品質（味）が主役
+          希釈体験などは補助的な付加価値
+        priority: "Medium"
+
+      - value_stage: "VS3_VS4"
+        tvdc: "VCI"
+        rationale: |
+          継続利用開始時に、バリエーション体験が
+          飽きを防ぎ継続を促す差別化要因
+        priority: "High"
+
+      - value_stage: "VS4_VS6"
+        tvdc: "Core"
+        rationale: |
+          定着段階では、親子での希釈体験や季節企画が
+          情緒的絆を深め、ロイヤルティ形成の中核に
+        priority: "Critical"
+
+  # ─────────────────────────────────────────────────────────
+  # ケース4: サプライチェーン管理
+  # 初回体験ではCore（入手性）、継続段階ではSupporting
+  # ─────────────────────────────────────────────────────────
+  - capability_id: "CL2-2-2"
+    capability_name: "サプライチェーン管理"
+
+    stage_settings:
+      - value_stage: "VS2_VS3"
+        tvdc: "Core"
+        rationale: |
+          初回購入時は「買える」ことが最重要
+          配荷率と鮮度が初回体験の質を決定
+        priority: "Critical"
+
+      - value_stage: "VS3_VS6"
+        tvdc: "Supporting"
+        rationale: |
+          継続段階では購入習慣が形成され
+          入手性は当然の前提条件に移行
+        priority: "Medium"
+
+# ============================================================
+# Stage依存TVDC変化マトリクス
+# ============================================================
+tvdc_transition_matrix:
+  description: |
+    同一Capabilityが顧客ジャーニーの進行に伴い
+    異なる戦略的重要度を持つことを可視化
+
+  matrix: |
+    Capability              | VS0-1   | VS1-2   | VS2-3   | VS3-4   | VS4-6   | VS5-7
+    ----------------------- | ------- | ------- | ------- | ------- | ------- | -------
+    ブランドコミュニケーション | Core    | Core    | Supp    | Supp    | Supp    | -
+    健康エビデンス管理        | Supp    | VCI     | VCI     | Core    | Core    | Supp
+    体験価値設計              | -       | -       | Supp    | VCI     | Core    | Core
+    サプライチェーン管理       | -       | -       | Core    | Supp    | Supp    | -
+
+  legend:
+    Core: "価値創出の中核・必須投資"
+    VCI: "競争優位の源泉・差別化投資"
+    Supp: "基盤維持・効率化投資"
+    "-": "当該ステージでは非活性"
+
+# ============================================================
+# V5.6 Stage依存TVDCの効果
+# ============================================================
+stage_tvdc_benefits:
+
+  strategic_benefits:
+    - benefit: "投資優先度の動的最適化"
+      description: |
+        顧客ステージに応じて同一Capabilityへの投資配分を
+        動的に変更し、ROIを最大化
+      example: |
+        認知獲得フェーズ：ブランドコミュニケーションに重点投資
+        継続定着フェーズ：体験価値設計に重点投資
+
+    - benefit: "リソース配分の根拠明確化"
+      description: |
+        なぜ今このCapabilityに投資すべきかの論理的根拠を
+        Value Stageとの関係で説明可能に
+      example: |
+        「現在VS1→VS2の顧客が多いため、健康エビデンス管理に
+        投資してVCIからCoreへの移行を促進」
+
+    - benefit: "組織間連携の指針"
+      description: |
+        マーケティング、製造、CRMなど異なる部門が
+        同じStage-TVDC視点で優先度を共有
+      example: |
+        「VS4-6の顧客維持のため、体験価値設計チームと
+        製品開発チームが協働強化」
+
+  comparison_with_v55:
+    v55_limitation: |
+      V5.5では1つのCapabilityに1つのTVDC分類のみ。
+      結果として、投資判断が顧客ステージを考慮せず
+      一律になりがちだった。
+
+    v56_improvement: |
+      Stage依存TVDCにより、同一Capabilityでも
+      「誰に対して」「いつ」重要かを区別し、
+      よりきめ細かい戦略実行が可能に。
+
+# ============================================================
+# 実装時の考慮事項
+# ============================================================
+implementation_notes:
+
+  default_tvdc_usage:
+    description: |
+      各Capability定義にはdefault_tvdcを設定し、
+      Stage依存設定がない場合のフォールバックとする
+    recommendation: |
+      - 大半のStageで同じTVDCなら、それをdefaultに
+      - 特定Stageのみ異なる場合だけoverrideを定義
+
+  stage_overlap_handling:
+    description: |
+      Value Streamが重複するStage（例：VS3-6とVS5-7）では
+      複数の設定が該当する可能性がある
+    recommendation: |
+      - より具体的なStage範囲の設定を優先
+      - 競合する場合は高い方のTVDCを採用
+
+  granularity_guidance:
+    description: |
+      全Capabilityに対してStage依存設定を定義する
+      必要はない
+    recommendation: |
+      - 戦略的に重要なCapabilityのみを対象
+      - 実際にStageで重要度が変化するものだけを定義
+      - 過度な詳細化は管理コストを増大させる

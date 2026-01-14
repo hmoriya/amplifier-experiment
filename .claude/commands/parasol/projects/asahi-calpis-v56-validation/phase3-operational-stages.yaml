@@ -1,0 +1,253 @@
+# Phase 3: Operational Stage定義（V5.6新機能）
+# 各バリューストリーム内の運用段階とCapability 1:1対応
+
+# ============================================================
+# VStr-1: ブランド認知・選好ストリームのOS
+# ============================================================
+vstr1_operational_stages:
+  value_stream:
+    id: "VStr-1"
+    name: "ブランド認知・選好ストリーム"
+    value_stage: "VS0_VS2"
+
+  stages:
+    - id: "OS-1-1"
+      name: "ブランドメッセージ発信"
+      description: |
+        100年ブランドのストーリーと「カラダにピース。」の
+        メッセージを消費者に届ける運用段階
+      value_stage: "VS0_VS1"
+
+      capability:
+        id: "CL2-1-1"
+        name: "ブランドコミュニケーション"
+        tvdc_default: "Core"
+
+      value_accumulation:
+        - "ブランド認知度向上"
+        - "情緒的連想の形成"
+      inputs: ["マーケティング戦略", "クリエイティブ素材"]
+      outputs: ["認知率", "ブランドイメージスコア"]
+
+    - id: "OS-1-2"
+      name: "健康価値訴求"
+      description: |
+        乳酸菌・腸活などの健康機能価値を
+        科学的根拠とともに伝える運用段階
+      value_stage: "VS1_VS2"
+
+      capability:
+        id: "CL2-1-2"
+        name: "健康エビデンス管理"
+        tvdc_default: "VCI"
+
+      value_accumulation:
+        - "機能的価値の理解"
+        - "購入動機の形成"
+      inputs: ["研究データ", "機能性表示"]
+      outputs: ["機能認知率", "購入意向スコア"]
+
+    - id: "OS-1-3"
+      name: "購買接点最適化"
+      description: |
+        店頭・ECなど購買接点での訴求を最適化し
+        選好から購入決定への転換を促す運用段階
+      value_stage: "VS1_VS2"
+
+      capability:
+        id: "CL2-1-3"
+        name: "購買接点管理"
+        tvdc_default: "Supporting"
+
+      value_accumulation:
+        - "購入検討リストへの追加"
+        - "競合との差別化認識"
+      inputs: ["棚割戦略", "POP素材"]
+      outputs: ["店頭視認率", "購入転換率"]
+
+# ============================================================
+# VStr-2: 初回体験ストリームのOS
+# ============================================================
+vstr2_operational_stages:
+  value_stream:
+    id: "VStr-2"
+    name: "初回体験ストリーム"
+    value_stage: "VS2_VS3"
+
+  stages:
+    - id: "OS-2-1"
+      name: "製品品質確保"
+      description: |
+        カルピス菌発酵による独自の風味と品質を
+        安定的に製造・供給する運用段階
+      value_stage: "VS2_VS3"
+
+      capability:
+        id: "CL2-2-1"
+        name: "発酵プロセス管理"
+        tvdc_default: "Core"
+
+      value_accumulation:
+        - "独自風味の実現"
+        - "品質の一貫性"
+      inputs: ["原材料", "カルピス菌"]
+      outputs: ["製品", "品質検査結果"]
+
+    - id: "OS-2-2"
+      name: "流通・配荷"
+      description: |
+        新鮮な製品を消費者に届けるための
+        流通・在庫管理の運用段階
+      value_stage: "VS2_VS3"
+
+      capability:
+        id: "CL2-2-2"
+        name: "サプライチェーン管理"
+        tvdc_default: "Supporting"
+
+      value_accumulation:
+        - "製品鮮度の維持"
+        - "購入機会の確保"
+      inputs: ["製品", "需要予測"]
+      outputs: ["店頭在庫", "配荷率"]
+
+# ============================================================
+# VStr-3: 継続・定着ストリームのOS
+# ============================================================
+vstr3_operational_stages:
+  value_stream:
+    id: "VStr-3"
+    name: "継続・定着ストリーム"
+    value_stage: "VS3_VS6"
+
+  stages:
+    - id: "OS-3-1"
+      name: "商品バリエーション展開"
+      description: |
+        濃いめ、ソーダ、機能性など多様なニーズに
+        応える商品展開の運用段階
+      value_stage: "VS3_VS4"
+
+      capability:
+        id: "CL2-3-1"
+        name: "製品ポートフォリオ管理"
+        tvdc_default: "VCI"
+
+      value_accumulation:
+        - "利用シーンの拡大"
+        - "飽きの防止"
+      inputs: ["消費者インサイト", "市場トレンド"]
+      outputs: ["新SKU", "ポートフォリオ売上"]
+
+    - id: "OS-3-2"
+      name: "顧客体験強化"
+      description: |
+        希釈体験、季節限定など付加価値体験を
+        提供する運用段階
+      value_stage: "VS4_VS5"
+
+      capability:
+        id: "CL2-3-2"
+        name: "体験価値設計"
+        tvdc_default: "Core"
+
+      value_accumulation:
+        - "情緒的価値の蓄積"
+        - "思い出の創出"
+      inputs: ["体験コンセプト", "季節企画"]
+      outputs: ["体験満足度", "SNS投稿数"]
+
+    - id: "OS-3-3"
+      name: "リピート促進"
+      description: |
+        継続購入を促す施策とCRM活動の運用段階
+      value_stage: "VS4_VS6"
+
+      capability:
+        id: "CL2-3-3"
+        name: "顧客維持管理"
+        tvdc_default: "Supporting"
+
+      value_accumulation:
+        - "購入習慣の形成"
+        - "LTV向上"
+      inputs: ["購買データ", "キャンペーン"]
+      outputs: ["リピート率", "購入頻度"]
+
+# ============================================================
+# VStr-4: ロイヤルティ・推奨ストリームのOS
+# ============================================================
+vstr4_operational_stages:
+  value_stream:
+    id: "VStr-4"
+    name: "ロイヤルティ・推奨ストリーム"
+    value_stage: "VS5_VS7"
+
+  stages:
+    - id: "OS-4-1"
+      name: "ファンコミュニティ育成"
+      description: |
+        カルピスファンのコミュニティを形成し
+        エンゲージメントを高める運用段階
+      value_stage: "VS5_VS6"
+
+      capability:
+        id: "CL2-4-1"
+        name: "コミュニティ管理"
+        tvdc_default: "VCI"
+
+      value_accumulation:
+        - "帰属意識の醸成"
+        - "ファン同士の交流"
+      inputs: ["ファンデータ", "コンテンツ"]
+      outputs: ["コミュニティ規模", "エンゲージメント率"]
+
+    - id: "OS-4-2"
+      name: "推奨促進"
+      description: |
+        口コミ、ギフト利用など他者への推奨を
+        促進する運用段階
+      value_stage: "VS6_VS7"
+
+      capability:
+        id: "CL2-4-2"
+        name: "アドボカシー促進"
+        tvdc_default: "Core"
+
+      value_accumulation:
+        - "NPS向上"
+        - "新規顧客獲得"
+      inputs: ["ロイヤル顧客", "推奨施策"]
+      outputs: ["NPS", "推奨経由獲得数"]
+
+# ============================================================
+# OS-Capability対応サマリー
+# ============================================================
+os_capability_summary:
+  total_os: 10
+  total_capabilities: 10
+
+  mapping: |
+    VStr-1 (VS0→VS2):
+      OS-1-1 → CL2-1-1 ブランドコミュニケーション (Core)
+      OS-1-2 → CL2-1-2 健康エビデンス管理 (VCI)
+      OS-1-3 → CL2-1-3 購買接点管理 (Supporting)
+
+    VStr-2 (VS2→VS3):
+      OS-2-1 → CL2-2-1 発酵プロセス管理 (Core)
+      OS-2-2 → CL2-2-2 サプライチェーン管理 (Supporting)
+
+    VStr-3 (VS3→VS6):
+      OS-3-1 → CL2-3-1 製品ポートフォリオ管理 (VCI)
+      OS-3-2 → CL2-3-2 体験価値設計 (Core)
+      OS-3-3 → CL2-3-3 顧客維持管理 (Supporting)
+
+    VStr-4 (VS5→VS7):
+      OS-4-1 → CL2-4-1 コミュニティ管理 (VCI)
+      OS-4-2 → CL2-4-2 アドボカシー促進 (Core)
+
+  tvdc_distribution:
+    Core: 4
+    VCI: 3
+    Supporting: 3
+    Generic: 0

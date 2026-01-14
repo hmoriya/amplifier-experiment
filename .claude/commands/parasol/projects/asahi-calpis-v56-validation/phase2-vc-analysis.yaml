@@ -1,0 +1,318 @@
+# Phase 2.3: VC分析（V5.6新機能）
+# 各VL3のValue Component（VC1-VC5）構成を分析
+
+# ============================================================
+# Value Component定義（参照）
+# ============================================================
+# VC1: 製品価値（何を買うのか）- 機能/品質/多様性
+# VC2: サービス価値（どう手に入るか）- アクセス/価格/安定性
+# VC3: 体験価値（どう感じるか）- 購買/利用/所有
+# VC4: 関係価値（なぜ選び続けるか）- 信頼/帰属/継続
+# VC5: 情報価値（何を知れるか）- 知識/発見/共有
+
+# ============================================================
+# VL3別VC構成分析
+# ============================================================
+vl3_vc_analysis:
+
+  # ─────────────────────────────────────────────────────────
+  # VL3-1-1-1: カルピス菌による発酵
+  # ─────────────────────────────────────────────────────────
+  - vl3_id: "VL3-1-1-1"
+    name: "カルピス菌による発酵"
+
+    value_components:
+      VC1_product:
+        importance: "★★★"
+        sub_component: "VC1-2"  # 品質
+        description: "独自発酵技術が製品の本質的価値を決定"
+
+      VC2_service:
+        importance: "★"
+        sub_component: null
+        description: ""
+
+      VC3_experience:
+        importance: "★★"
+        sub_component: "VC3-2"  # 利用体験
+        description: "発酵由来の独特な風味が飲む瞬間の体験を創出"
+
+      VC4_relationship:
+        importance: "★"
+        sub_component: null
+        description: ""
+
+      VC5_information:
+        importance: "★★"
+        sub_component: "VC5-1"  # 知識
+        description: "100年の発酵技術というストーリーが知識価値に"
+
+    vc_pattern:
+      type: "製品主導型"
+      primary_vc: ["VC1"]
+      secondary_vc: ["VC3", "VC5"]
+      rationale: "発酵技術は製品品質を直接決定する核心技術"
+
+  # ─────────────────────────────────────────────────────────
+  # VL3-1-1-2: 腸内環境への好影響
+  # ─────────────────────────────────────────────────────────
+  - vl3_id: "VL3-1-1-2"
+    name: "腸内環境への好影響"
+
+    value_components:
+      VC1_product:
+        importance: "★★★"
+        sub_component: "VC1-1"  # 機能
+        description: "腸活効果という機能的価値"
+
+      VC2_service:
+        importance: "★"
+        sub_component: null
+        description: ""
+
+      VC3_experience:
+        importance: "★"
+        sub_component: null
+        description: ""
+
+      VC4_relationship:
+        importance: "★★"
+        sub_component: "VC4-1"  # 信頼
+        description: "健康効果への継続的信頼"
+
+      VC5_information:
+        importance: "★★★"
+        sub_component: "VC5-1"  # 知識
+        description: "腸活・乳酸菌の健康知識"
+
+    vc_pattern:
+      type: "情報主導型"
+      primary_vc: ["VC5"]
+      secondary_vc: ["VC1", "VC4"]
+      rationale: "健康効果は情報として認知され、製品機能と信頼に変換"
+
+  # ─────────────────────────────────────────────────────────
+  # VL3-2-1-1: 伝統の甘酸っぱい味わい
+  # ─────────────────────────────────────────────────────────
+  - vl3_id: "VL3-2-1-1"
+    name: "伝統の甘酸っぱい味わい"
+
+    value_components:
+      VC1_product:
+        importance: "★★★"
+        sub_component: "VC1-2"  # 品質
+        description: "独特の風味という製品品質"
+
+      VC2_service:
+        importance: "★"
+        sub_component: null
+        description: ""
+
+      VC3_experience:
+        importance: "★★★"
+        sub_component: "VC3-2"  # 利用体験
+        description: "飲む瞬間の味覚体験と懐かしさ"
+
+      VC4_relationship:
+        importance: "★★"
+        sub_component: "VC4-3"  # 継続
+        description: "幼少期からの味の記憶による継続選択"
+
+      VC5_information:
+        importance: "★"
+        sub_component: null
+        description: ""
+
+    vc_pattern:
+      type: "体験主導型"
+      primary_vc: ["VC3"]
+      secondary_vc: ["VC1", "VC4"]
+      rationale: "味わいは体験として認知され、製品品質と継続関係に"
+
+  # ─────────────────────────────────────────────────────────
+  # VL3-2-2-1: 一緒に作る・割る体験
+  # ─────────────────────────────────────────────────────────
+  - vl3_id: "VL3-2-2-1"
+    name: "一緒に作る・割る体験"
+
+    value_components:
+      VC1_product:
+        importance: "★★"
+        sub_component: "VC1-3"  # 多様性
+        description: "希釈タイプという製品バリエーション"
+
+      VC2_service:
+        importance: "★"
+        sub_component: null
+        description: ""
+
+      VC3_experience:
+        importance: "★★★"
+        sub_component: "VC3-2"  # 利用体験
+        description: "親子で作る楽しさ、自分好みに調整する体験"
+
+      VC4_relationship:
+        importance: "★★★"
+        sub_component: "VC4-2"  # 帰属
+        description: "家族との絆、思い出の共有"
+
+      VC5_information:
+        importance: "★"
+        sub_component: null
+        description: ""
+
+    vc_pattern:
+      type: "関係主導型"
+      primary_vc: ["VC4"]
+      secondary_vc: ["VC3", "VC1"]
+      rationale: "希釈体験は家族関係を深める手段"
+
+# ============================================================
+# 3軸価値分解（V5.6新機能）
+# ============================================================
+value_decomposition_3axis:
+
+  # 1. ステークホルダー軸
+  stakeholder_axis:
+    customers:
+      weight: 0.50
+      values:
+        - ref: "VL3-1-1-1"
+          contribution: "直接的"
+        - ref: "VL3-2-1-1"
+          contribution: "直接的"
+        - ref: "VL3-2-2-1"
+          contribution: "直接的"
+
+    shareholders:
+      weight: 0.20
+      values:
+        - ref: "VL3-1-2-2"
+          contribution: "間接的（ブランド価値）"
+
+    employees:
+      weight: 0.10
+      values:
+        - ref: "VL3-1-1-1"
+          contribution: "間接的（技術誇り）"
+
+    partners:
+      weight: 0.10
+      values:
+        - ref: "VL3-1-2-1"
+          contribution: "間接的（取引信頼）"
+
+    society:
+      weight: 0.10
+      values:
+        - ref: "VL3-1-1-2"
+          contribution: "間接的（健康寿命）"
+
+  # 2. 時間軸
+  time_axis:
+    current:  # 現在価値（0-1年）
+      weight: 0.45
+      values:
+        - "VL3-2-1-1"  # 伝統の味わい
+        - "VL3-1-2-1"  # 品質管理
+
+    future:  # 将来価値（1-3年）
+      weight: 0.35
+      values:
+        - "VL3-1-1-3"  # 機能性成分
+        - "VL3-2-1-2"  # 新商品展開
+
+    sustained:  # 持続価値（3年以上）
+      weight: 0.20
+      values:
+        - "VL3-1-1-1"  # 発酵技術
+        - "VL3-1-2-2"  # 100年ブランド
+
+  # 3. 性質軸
+  nature_axis:
+    functional:  # 機能的価値
+      weight: 0.35
+      values:
+        - "VL3-1-1-1"  # 発酵
+        - "VL3-1-1-2"  # 腸内環境
+        - "VL3-1-1-3"  # 機能性
+
+    emotional:  # 情緒的価値
+      weight: 0.45
+      values:
+        - "VL3-2-1-1"  # 味わい
+        - "VL3-2-2-1"  # 作る体験
+        - "VL3-2-2-2"  # 季節イベント
+
+    social:  # 社会的価値
+      weight: 0.20
+      values:
+        - "VL3-1-2-2"  # ブランド信頼
+        - "VL3-2-2-1"  # 家族コミュニケーション
+
+# ============================================================
+# VS-VC優先度マトリクス（V5.6新機能）
+# ============================================================
+vs_vc_priority_matrix:
+  VS0_VS1:  # 認知段階
+    priority_vcs: ["VC5", "VC3"]
+    rationale: "100年ブランドストーリー(VC5)と懐かしさ体験(VC3)で認知"
+    focus_vl3:
+      - "VL3-1-2-2"  # 100年ブランド
+      - "VL3-2-1-1"  # 伝統の味わい
+
+  VS1_VS2:  # 選好形成段階
+    priority_vcs: ["VC1", "VC5", "VC3"]
+    rationale: "健康機能(VC1)、知識(VC5)、味体験(VC3)で選好形成"
+    focus_vl3:
+      - "VL3-1-1-2"  # 腸内環境
+      - "VL3-1-1-3"  # 機能性
+      - "VL3-2-1-1"  # 味わい
+
+  VS2_VS3:  # 初回体験段階
+    priority_vcs: ["VC3", "VC1"]
+    rationale: "実際の味体験(VC3)と品質実感(VC1)が初回を決定"
+    focus_vl3:
+      - "VL3-2-1-1"  # 味わい
+      - "VL3-1-1-1"  # 発酵品質
+
+  VS3_VS4:  # 継続利用段階
+    priority_vcs: ["VC1", "VC2"]
+    rationale: "安定した品質(VC1)と入手性(VC2)が継続を支える"
+    focus_vl3:
+      - "VL3-1-2-1"  # 品質管理
+      - "VL3-2-1-2"  # 商品展開（飽きさせない）
+
+  VS4_VS7:  # 定着〜推奨段階
+    priority_vcs: ["VC4", "VC3"]
+    rationale: "家族との絆(VC4)、思い出体験(VC3)がロイヤルティ形成"
+    focus_vl3:
+      - "VL3-2-2-1"  # 作る体験
+      - "VL3-2-2-2"  # 季節イベント
+
+# ============================================================
+# VC分析サマリー
+# ============================================================
+vc_analysis_summary:
+  total_vl3_analyzed: 4
+  vc_pattern_distribution:
+    製品主導型: 1
+    情報主導型: 1
+    体験主導型: 1
+    関係主導型: 1
+
+  primary_vc_distribution:
+    VC1_product: 1
+    VC3_experience: 1
+    VC4_relationship: 1
+    VC5_information: 1
+
+  insight: |
+    カルピスは「バランス型」に近い価値構成。
+    - 製品価値（発酵技術）が基盤
+    - 体験価値（味わい、作る楽しさ）が差別化
+    - 関係価値（家族の絆）がロイヤルティ形成
+    - 情報価値（健康知識）が現代的訴求
+
+    各Value Stageで重視すべきVCが異なり、
+    ステージ依存TVDCの設計に活用可能。
