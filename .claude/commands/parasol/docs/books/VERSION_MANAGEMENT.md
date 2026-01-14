@@ -16,8 +16,9 @@
 │   ├── design/                 # 設計書テンプレート
 │   ├── part-structure/         # パート構成テンプレート
 │   └── tools/                  # 共通ツール
-├── parasol-v5.4-modular/       # 現在のバージョン
-├── parasol-v5.5/               # 将来のバージョン例
+├── parasol-v5.4-modular/       # V5.4バージョン
+├── parasol-v5.5/               # V5.5バージョン
+├── parasol-v5.6/               # 現在のバージョン
 └── parasol-v6.0/               # メジャーバージョン例
 ```
 
@@ -36,9 +37,9 @@ variant = バリアント（modular, compact, executive等）
 
 ### バージョン例
 
-- `v5.4-modular`: モジュラー設計版（現在）
-- `v5.4-compact`: 簡略版
-- `v5.5-modular`: 新機能追加版
+- `v5.4-modular`: モジュラー設計版
+- `v5.5-modular`: CL階層明確化版
+- `v5.6-modular`: VC/OS/ステージTVDC版（現在）
 - `v6.0-modular`: 次世代版
 
 ## 新バージョン作成プロセス
