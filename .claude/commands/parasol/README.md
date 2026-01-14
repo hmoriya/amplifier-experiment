@@ -18,12 +18,14 @@ parasol/
 │
 ├── 📋 ルートファイル
 │   ├── VERSION                    # 現在のバージョン（V5.7）
-│   ├── CHANGELOG-V5.7.md          # バージョン変更履歴（最新）
-│   ├── CHANGELOG-V5.6.md          # バージョン変更履歴（V5.6）
-│   ├── CHANGELOG-V5.5.md          # バージョン変更履歴（V5.5）
-│   ├── CHANGELOG-V5.4.md          # バージョン変更履歴（V5.4）
 │   ├── PARASOL_SHARED_CONTEXT.md  # 共有コンテキスト定義
 │   └── README.md                  # このファイル
+│
+├── 📁 versions/                   # バージョン別ドキュメント
+│   ├── v5.4/                      # V5.4 設計ドキュメント
+│   ├── v5.5/                      # V5.5 設計ドキュメント
+│   ├── v5.6/                      # V5.6 設計ドキュメント
+│   └── v5.7/                      # V5.7 設計ドキュメント（現在）
 │
 ├── 🎯 commands/                   # スラッシュコマンド定義
 ├── 💡 concepts/                   # 概念・哲学文書
@@ -47,12 +49,35 @@ parasol/
 | ファイル | 目的 | 更新頻度 |
 |---------|------|---------|
 | `VERSION` | 現在のParasolバージョン | リリース時 |
-| `CHANGELOG-V5.7.md` | 変更履歴・リリースノート（最新） | 機能追加時 |
-| `CHANGELOG-V5.6.md` | 変更履歴・リリースノート（V5.6） | アーカイブ |
-| `CHANGELOG-V5.5.md` | 変更履歴・リリースノート（V5.5） | アーカイブ |
-| `CHANGELOG-V5.4.md` | 変更履歴・リリースノート（V5.4） | アーカイブ |
 | `PARASOL_SHARED_CONTEXT.md` | エージェント間共有コンテキスト | 必要時 |
 | `README.md` | 構成ガイド（このファイル） | 構造変更時 |
+
+---
+
+### 📁 versions/ - バージョン別ドキュメント
+
+各バージョンの設計ドキュメントを整理。
+
+```
+versions/
+├── v5.4/
+│   └── CHANGELOG.md              # V5.4 リリースノート
+├── v5.5/
+│   └── CHANGELOG.md              # V5.5 リリースノート
+├── v5.6/
+│   ├── CHANGELOG.md              # V5.6 リリースノート
+│   └── SPECIFICATION.md          # V5.6 仕様書
+└── v5.7/
+    ├── CHANGELOG.md              # V5.7 リリースノート
+    └── DESIGN-PRINCIPLES.md      # V5.7 設計原則
+```
+
+| バージョン | コードネーム | 主な特徴 |
+|-----------|-------------|---------|
+| V5.4 | - | Axiomatic Design統合 |
+| V5.5 | - | TVDC 4分類、VCI導入 |
+| V5.6 | 5W1H Value Architecture | BizBOKベース5W1H |
+| **V5.7** | Context-Driven Value Architecture | **価値継承構造=VStream構成** |
 
 ---
 
