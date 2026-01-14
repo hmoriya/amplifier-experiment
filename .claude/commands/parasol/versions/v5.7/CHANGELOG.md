@@ -24,11 +24,11 @@ Parasol V5.7では、**価値継承構造 = VStream構成**という核心原則
 ```
 価値は継承される → VStreamも継承される
 
-例：カルピス（HD → OpCo → Brand の3階層構造）の場合
+例：カルピス（HD → 事業会社 → Brand の3階層構造）の場合
 
   HD価値定義        →   HD VStream（概要）
       ↓ 継承
-  OpCo価値定義      →   OpCo VStream（中間）
+  事業会社価値定義      →   事業会社 VStream（中間）
       ↓ 継承
   Brand価値定義     →   Brand VStream（詳細）★ターゲット
 
@@ -75,9 +75,9 @@ Parasol V5.7では、**価値継承構造 = VStream構成**という核心原則
 継承構造                      VStream構成
 ────────────                  ────────────
 HD のみ                   →   1本のVStream
-HD → OpCo                 →   2本のVStream
-HD → OpCo → Brand         →   3本のVStream
-HD → OpCo → Brand → Product → 4本のVStream
+HD → 事業会社                 →   2本のVStream
+HD → 事業会社 → Brand         →   3本のVStream
+HD → 事業会社 → Brand → Product → 4本のVStream
 ```
 
 #### 3.2 各VStreamの役割
@@ -85,14 +85,14 @@ HD → OpCo → Brand → Product → 4本のVStream
 | VStream | 顧客 | 詳細度 |
 |---------|------|--------|
 | HD VStream | 全消費者 | 概要 |
-| OpCo VStream | 事業領域消費者 | 中間 |
+| 事業会社 VStream | 事業領域消費者 | 中間 |
 | Brand VStream | ブランドターゲット | **詳細★** |
 | Product VStream | 製品ユーザー | 最詳細 |
 
 #### 3.3 顧客包含関係
 
 ```
-HD顧客 ⊇ OpCo顧客 ⊇ Brand顧客 ⊇ Product顧客
+HD顧客 ⊇ 事業会社顧客 ⊇ Brand顧客 ⊇ Product顧客
 
 例：
 「全消費者」⊇「清涼飲料消費者」⊇「乳酸菌飲料価値層」
@@ -106,7 +106,7 @@ HD顧客 ⊇ OpCo顧客 ⊇ Brand顧客 ⊇ Product顧客
 
 **従来**: 「カルピスの価値は健康と家族の絆」（根拠不明確）
 
-**V5.7**: 「HDの『健康への貢献』がOpCoで『飲料による健康サポート』に特殊化され、カルピスで『乳酸菌による健やかさ』にセグメント化された」（継承チェーンで説明）
+**V5.7**: 「HDの『健康への貢献』が事業会社で『飲料による健康サポート』に特殊化され、カルピスで『乳酸菌による健やかさ』にセグメント化された」（継承チェーンで説明）
 
 ### 2. 戦略的整合性の担保
 
@@ -210,7 +210,7 @@ Capabilityアーキテクチャ
 
 ### 統一アーキテクチャによる価値統制
 
-V5.7では、各レベル（HD/OpCo/Brand/Product）で**同じアーキテクチャ（価値定義 + VStream）**を採用することで、コングロマリット/ホールディングの価値統制が可能になります。
+V5.7では、各レベル（HD/事業会社/Brand/Product）で**同じアーキテクチャ（価値定義 + VStream）**を採用することで、コングロマリット/ホールディングの価値統制が可能になります。
 
 ```
 各レベルで同じアーキテクチャ

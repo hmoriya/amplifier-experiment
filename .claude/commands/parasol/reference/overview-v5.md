@@ -180,7 +180,7 @@ V5.7では、**価値定義の継承構造を基盤として、VStreamも構造�
 
   HD価値定義        →   HD VStream
       ↓ 継承
-  OpCo価値定義      →   OpCo VStream
+  事業会社価値定義      →   事業会社 VStream
       ↓ 継承
   Brand価値定義     →   Brand VStream
       ↓ 継承
