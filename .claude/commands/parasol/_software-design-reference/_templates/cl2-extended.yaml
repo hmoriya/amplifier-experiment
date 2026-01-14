@@ -1,0 +1,193 @@
+# CL2 Capability定義テンプレート（V5.6拡張版）
+# CL2 Capability Definition with Stage-dependent TVDC
+#
+# 用途: Phase 3でCL2ケイパビリティを定義（ステージ依存TVDC付き）
+# バージョン: V5.6
+# 作成日: 2026-01-14
+
+# ============================================================
+# V5.6拡張ポイント
+# ============================================================
+# 1. value_component: 対応するVCを明示
+# 2. operational_stage: 対応するOSを明示
+# 3. stage_overrides: ステージ依存TVDCを設定
+# ============================================================
+
+# テンプレート開始
+---
+capability:
+  # 基本情報
+  id: "CL2-{X}-{Y}"                      # 例: CL2-1-1
+  name: "{ケイパビリティ名}"              # 例: レシピ開発
+  parent: "CL1-{X}"                      # 親Activity Area
+  description: |
+    {ケイパビリティの詳細説明}
+
+# ============================================================
+# V5.6追加: Value Component対応
+# ============================================================
+  value_component:
+    primary: "VC{N}"                     # 主に貢献するVC（1つ）
+    secondary: ["VC{M}"]                 # 副次的に貢献するVC（複数可）
+    contribution: |
+      {このCapabilityがVCにどう貢献するかの説明}
+
+# ============================================================
+# V5.6追加: Operational Stage対応
+# ============================================================
+  operational_stage:
+    id: "OS-{N}"                         # 対応するOS（1:1）
+    value_stream: "VStr-{X}"             # 所属するVStr
+    value_stage: "VS{N}_VS{M}"           # 所属するVS
+
+# ============================================================
+# TVDC分類
+# ============================================================
+  # デフォルトTVDC分類
+  tvdc_default: "{Core | VCI | Supporting | Generic}"
+  tvdc_rationale: |
+    {この分類の理由を説明}
+
+# ============================================================
+# V5.6追加: ステージ依存TVDC
+# ============================================================
+# 同一Capabilityでも、Value Stageによって競争優位への
+# 貢献度が変化する場合にオーバーライドを設定
+  stage_overrides:
+    # 認知〜選好形成段階
+    VS0_VS2:
+      enabled: false                     # オーバーライドするか
+      tvdc: ""
+      rationale: ""
+
+    # 選好〜初回体験段階
+    VS1_VS3:
+      enabled: false
+      tvdc: ""
+      rationale: ""
+
+    # 初回〜継続段階
+    VS2_VS4:
+      enabled: false
+      tvdc: ""
+      rationale: ""
+
+    # 継続〜定着段階
+    VS3_VS5:
+      enabled: false
+      tvdc: ""
+      rationale: ""
+
+    # 定着〜推奨段階
+    VS4_VS7:
+      enabled: false
+      tvdc: ""
+      rationale: ""
+
+# ============================================================
+# VL3価値必然性からの継承
+# ============================================================
+  value_traceability:
+    source_vl3:
+      id: "VL3-{X}-{Y}"
+      name: "{VL3名}"
+      necessity: "{Core | VCI | Supporting | Generic}"
+
+    inheritance:
+      type: "{direct | derived | supporting}"
+      rationale: |
+        {VL3からこのCapabilityへの継承理由}
+
+# ============================================================
+# Business Operations
+# ============================================================
+  business_operations:
+    - id: "BO-{X}-{Y}-1"
+      name: "{BO名}"
+      description: "{BO説明}"
+      actors:
+        - "{Actor1}"
+      state_transitions:
+        - from: "{開始状態}"
+          to: "{終了状態}"
+
+    - id: "BO-{X}-{Y}-2"
+      name: "{BO名}"
+      # ...
+
+# ============================================================
+# Sub-capabilities (CL3)
+# ============================================================
+  sub_capabilities:
+    - id: "CL3-{X}-{Y}-1"
+      name: "{Sub-capability名}"
+      description: "{説明}"
+      tvdc_inherited: true               # 親から継承するか
+
+    - id: "CL3-{X}-{Y}-2"
+      name: "{Sub-capability名}"
+      # ...
+
+# ============================================================
+# メタデータ
+# ============================================================
+metadata:
+  created_at: "{YYYY-MM-DD}"
+  updated_at: "{YYYY-MM-DD}"
+  version: "1.0"
+  author: "{作成者}"
+  status: "{draft | review | approved}"
+
+# ============================================================
+# 記入例（飲料メーカー・店頭陳列設計）
+# ============================================================
+# capability:
+#   id: "CL2-3-1"
+#   name: "店頭陳列設計"
+#   parent: "CL1-3"
+#   description: |
+#     小売店頭における製品陳列の設計・実行能力。
+#     棚割り、POP、販促物を通じて購買を促進する。
+#
+#   value_component:
+#     primary: "VC3"
+#     secondary: ["VC5"]
+#     contribution: |
+#       店頭での視覚体験を通じて体験価値(VC3)を創出。
+#       製品情報の訴求で情報価値(VC5)にも貢献。
+#
+#   operational_stage:
+#     id: "OS-1"
+#     value_stream: "VStr-1"
+#     value_stage: "VS2_VS3"
+#
+#   tvdc_default: "VCI"
+#   tvdc_rationale: |
+#     通常は品質投資領域。効果的な陳列は重要だが
+#     それ自体が競争優位の源泉ではない。
+#
+#   stage_overrides:
+#     VS1_VS3:
+#       enabled: true
+#       tvdc: "Core"
+#       rationale: |
+#         初回体験段階では、店頭での第一印象が
+#         購買決定を左右する差別化要因となる。
+#
+#     VS4_VS7:
+#       enabled: true
+#       tvdc: "Supporting"
+#       rationale: |
+#         定着段階では、顧客は既に製品を認知しており
+#         店頭陳列の差別化効果は低下する。
+#
+#   value_traceability:
+#     source_vl3:
+#       id: "VL3-2-1"
+#       name: "いつでもどこでも手に入る"
+#       necessity: "VCI"
+#     inheritance:
+#       type: "derived"
+#       rationale: |
+#         入手容易性価値を店頭での視認性で支援
+# ============================================================

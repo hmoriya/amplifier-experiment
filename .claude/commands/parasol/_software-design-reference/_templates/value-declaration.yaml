@@ -1,0 +1,315 @@
+# 価値宣言テンプレート（V5.6版）
+# Value Declaration Template with VC Analysis
+#
+# 用途: Phase 2で企業の価値体系を包括的に定義
+# バージョン: V5.6
+# 作成日: 2026-01-14
+
+# ============================================================
+# 概要
+# ============================================================
+# このテンプレートは、Phase 2で企業の価値体系を定義するための
+# 包括的なフレームワークです。V5.6では以下を追加：
+#   - Value Component（VC）による価値構成分析
+#   - 3軸価値分解（ステークホルダー/時間/性質）
+#   - VS-VC優先度マッピング
+#   - Value Portfolio（投資配分）
+# ============================================================
+
+# テンプレート開始
+---
+# 基本情報
+value_declaration:
+  enterprise:
+    name: "{企業名}"
+    industry: "{業種}"
+    segment: "{主要セグメント}"
+    description: |
+      {企業の概要説明}
+
+# ============================================================
+# VL1: 戦略的価値（Strategic Value）
+# ============================================================
+# 企業が提供する最上位の価値命題
+  value_levels:
+    VL1:
+      - id: "VL1-1"
+        name: "{戦略的価値名}"
+        description: |
+          {戦略的価値の詳細説明}
+
+        # 価値必然性（TVDC分類）
+        necessity:
+          tvdc: "{Core | VCI | Supporting | Generic}"
+          rationale: "{この分類の理由}"
+
+        # ============================================================
+        # VL2: 戦術的価値（Tactical Value）
+        # ============================================================
+        VL2:
+          - id: "VL2-1-1"
+            name: "{戦術的価値名}"
+            description: |
+              {戦術的価値の詳細説明}
+
+            necessity:
+              tvdc: "{Core | VCI | Supporting | Generic}"
+              rationale: "{この分類の理由}"
+
+            # ============================================================
+            # VL3: 詳細価値（Detailed Value）+ VC分析
+            # ============================================================
+            VL3:
+              - id: "VL3-1-1-1"
+                name: "{詳細価値名}"
+                description: |
+                  {詳細価値の詳細説明}
+
+                necessity:
+                  tvdc: "{Core | VCI | Supporting | Generic}"
+                  rationale: "{この分類の理由}"
+
+                # ========================================
+                # V5.6追加: Value Component構成
+                # ========================================
+                value_components:
+                  # 主要VC（★★★）
+                  primary:
+                    - id: "VC1"  # VC1-VC5から選択
+                      importance: "★★★"
+                      sub_component: "VC1-1"  # 該当するサブ要素
+                      description: "{このVCへの貢献説明}"
+
+                  # 副次VC（★★）
+                  secondary:
+                    - id: "VC3"
+                      importance: "★★"
+                      sub_component: "VC3-2"
+                      description: "{このVCへの貢献説明}"
+
+                  # 補助VC（★）
+                  supporting:
+                    - id: "VC5"
+                      importance: "★"
+                      sub_component: "VC5-1"
+                      description: "{このVCへの貢献説明}"
+
+                # VC構成パターン
+                vc_pattern:
+                  type: "{製品主導型 | サービス主導型 | 体験主導型 | 関係主導型 | 情報主導型 | バランス型}"
+                  rationale: "{このパターンになる理由}"
+
+              # 追加のVL3...
+              - id: "VL3-1-1-2"
+                name: "{詳細価値名}"
+                # ...
+
+          # 追加のVL2...
+          - id: "VL2-1-2"
+            name: "{戦術的価値名}"
+            # ...
+
+      # 追加のVL1...
+      - id: "VL1-2"
+        name: "{戦略的価値名}"
+        # ...
+
+# ============================================================
+# V5.6追加: 3軸価値分解
+# ============================================================
+  value_decomposition:
+    # ステークホルダー軸
+    stakeholder_axis:
+      customers:
+        weight: 0.40
+        values:
+          - ref: "VL3-1-1-1"
+          - ref: "VL3-1-1-2"
+
+      shareholders:
+        weight: 0.25
+        values: []
+
+      employees:
+        weight: 0.15
+        values: []
+
+      partners:
+        weight: 0.10
+        values: []
+
+      society:
+        weight: 0.10
+        values: []
+
+    # 時間軸
+    time_axis:
+      current:  # 現在価値（0-1年）
+        weight: 0.50
+        values: []
+
+      future:   # 将来価値（1-3年）
+        weight: 0.30
+        values: []
+
+      sustained:  # 持続価値（3年以上）
+        weight: 0.20
+        values: []
+
+    # 性質軸
+    nature_axis:
+      functional:  # 機能的価値
+        weight: 0.40
+        values: []
+
+      emotional:   # 情緒的価値
+        weight: 0.35
+        values: []
+
+      social:      # 社会的価値
+        weight: 0.25
+        values: []
+
+# ============================================================
+# V5.6追加: VS-VC優先度マッピング
+# ============================================================
+  vs_vc_priority:
+    # 各Value Stageで重要なVCを定義
+    VS0_VS1:  # 認知段階
+      priority_vcs: ["VC5", "VC3"]
+      rationale: "認知段階では情報と体験が重要"
+
+    VS1_VS2:  # 選好形成段階
+      priority_vcs: ["VC1", "VC3", "VC5"]
+      rationale: "選好形成には製品・体験・情報"
+
+    VS2_VS3:  # 初回体験段階
+      priority_vcs: ["VC1", "VC2", "VC3"]
+      rationale: "初回は製品・サービス・体験"
+
+    VS3_VS4:  # 継続利用段階
+      priority_vcs: ["VC1", "VC2"]
+      rationale: "継続には製品品質とサービス"
+
+    VS4_VS7:  # 定着〜推奨段階
+      priority_vcs: ["VC4", "VC3"]
+      rationale: "定着以降は関係と体験"
+
+# ============================================================
+# V5.6追加: Value Portfolio（価値投資配分）
+# ============================================================
+  value_portfolio:
+    # VC別投資配分
+    vc_investment:
+      VC1_product:
+        current_allocation: 0.30
+        target_allocation: 0.35
+        gap_action: "{ギャップを埋めるアクション}"
+
+      VC2_service:
+        current_allocation: 0.25
+        target_allocation: 0.20
+        gap_action: ""
+
+      VC3_experience:
+        current_allocation: 0.20
+        target_allocation: 0.25
+        gap_action: "{ギャップを埋めるアクション}"
+
+      VC4_relationship:
+        current_allocation: 0.15
+        target_allocation: 0.15
+        gap_action: ""
+
+      VC5_information:
+        current_allocation: 0.10
+        target_allocation: 0.05
+        gap_action: ""
+
+    # TVDC別投資配分
+    tvdc_investment:
+      Core:
+        current: 0.30
+        target: 0.40
+      VCI:
+        current: 0.35
+        target: 0.35
+      Supporting:
+        current: 0.25
+        target: 0.20
+      Generic:
+        current: 0.10
+        target: 0.05
+
+# ============================================================
+# Phase 3への引継ぎ情報
+# ============================================================
+  phase3_handoff:
+    # VC-Capability対応の準備
+    vc_capability_mapping:
+      VC1:
+        expected_capabilities:
+          - "{想定されるCapability名}"
+      VC2:
+        expected_capabilities: []
+      VC3:
+        expected_capabilities: []
+      VC4:
+        expected_capabilities: []
+      VC5:
+        expected_capabilities: []
+
+    # 優先度の高いVL3
+    priority_vl3:
+      - ref: "VL3-1-1-1"
+        priority: "high"
+        rationale: "{優先度が高い理由}"
+
+# ============================================================
+# メタデータ
+# ============================================================
+metadata:
+  created_at: "{YYYY-MM-DD}"
+  updated_at: "{YYYY-MM-DD}"
+  version: "1.0"
+  author: "{作成者}"
+  status: "{draft | review | approved}"
+
+# ============================================================
+# 記入例（飲料メーカー）
+# ============================================================
+# value_declaration:
+#   enterprise:
+#     name: "サントリー"
+#     industry: "飲料製造"
+#     segment: "B2C消費者向け飲料"
+#
+#   value_levels:
+#     VL1:
+#       - id: "VL1-1"
+#         name: "本格的な味わいの提供"
+#         necessity:
+#           tvdc: "Core"
+#           rationale: "ブランドの核心的差別化要因"
+#
+#         VL2:
+#           - id: "VL2-1-1"
+#             name: "発酵技術による味の革新"
+#             VL3:
+#               - id: "VL3-1-1-1"
+#                 name: "独自発酵による風味"
+#                 value_components:
+#                   primary:
+#                     - id: "VC1"
+#                       importance: "★★★"
+#                       sub_component: "VC1-1"
+#                       description: "発酵技術は製品の味を直接決定"
+#                   secondary:
+#                     - id: "VC3"
+#                       importance: "★★"
+#                       sub_component: "VC3-2"
+#                       description: "飲む瞬間の感動体験"
+#                 vc_pattern:
+#                   type: "製品主導型"
+#                   rationale: "味が競争優位の源泉"
+# ============================================================

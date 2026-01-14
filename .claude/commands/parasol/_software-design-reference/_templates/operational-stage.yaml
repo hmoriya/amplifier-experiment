@@ -1,0 +1,223 @@
+# Operational Stage（運用段階）定義テンプレート（V5.6版）
+# Operational Stage Definition Template
+#
+# 用途: Phase 3でバリューストリーム内の運用段階を定義
+# バージョン: V5.6
+# 作成日: 2026-01-14
+
+# ============================================================
+# 概念説明
+# ============================================================
+# Operational Stage (OS) は、Value Stream内の価値蓄積区切り。
+# 組織視点で「いつ価値が蓄積されるか」を記述するWHEN要素。
+#
+# VS (Value Stage) との違い:
+#   - VS: 顧客の状態遷移（顧客視点）
+#   - OS: 組織の活動段階（組織視点）
+#
+# 階層関係:
+#   VS → VStr → OS → Capability（1:1対応）
+# ============================================================
+
+# ============================================================
+# 使用方法
+# ============================================================
+# 1. 対象のValue StreamとValue Stageを指定
+# 2. そのVSを支援する運用段階(OS)を列挙
+# 3. 各OSに対応するCapabilityを指定（1:1原則）
+# 4. 設計原則への適合を検証
+# ============================================================
+
+# テンプレート開始
+---
+# 基本情報
+operational_stage_definition:
+  # 対象のバリューストリーム
+  value_stream:
+    id: "VStr-{N}"                      # 例: VStr-1
+    name: "{バリューストリーム名}"        # 例: B2C消費者VStr
+    segment: "{顧客セグメント}"          # 例: B2C一般消費者
+
+  # 対象のValue Stage
+  value_stage:
+    id: "VS{N}_VS{M}"                   # 例: VS2_VS3
+    name: "{ステージ名}"                 # 例: 初回体験
+    customer_state:
+      from: "{遷移前の顧客状態}"         # 例: 選好形成
+      to: "{遷移後の顧客状態}"           # 例: 初回体験完了
+
+# ============================================================
+# 運用段階（Operational Stages）定義
+# ============================================================
+# 設計原則:
+#   1. 価値蓄積単位: 各段階で価値が蓄積される
+#   2. ケイパビリティ境界: 1 Cap = 1 OS（ステージを跨がない）
+#   3. 判断ポイント: 意思決定や承認を明確にする
+#   4. 測定ポイント: 進捗や品質を測定できる
+#
+# 良いOS:
+#   - 価値が蓄積される区切り
+#   - 判断・意思決定ポイント
+#   - ステークホルダーとの接点
+#
+# 悪いOS:
+#   - 単なるタスク（「システム入力」「書類作成」）
+#   - 担当者の切り替え（組織都合）
+# ============================================================
+
+  stages:
+    # OS-1
+    - id: "OS-1"
+      name: "{運用段階名}"               # 例: 店頭誘導
+      sequence: 1                        # 順序
+
+      # 設計原則への適合
+      design_principles:
+        # 価値蓄積: この段階で蓄積される価値
+        value_accumulation:
+          description: "{蓄積される価値の説明}"
+          measurable: true               # 測定可能か
+
+        # 判断ポイント: この段階での意思決定
+        decision_point:
+          has_decision: true
+          description: "{判断ポイントの説明}"
+          decision_maker: "{判断者}"
+
+        # ステークホルダー接点
+        stakeholder_contact:
+          has_contact: true
+          stakeholders:
+            - type: "{顧客 | パートナー | 内部}"
+              description: "{接点の説明}"
+
+      # 入出力
+      input:
+        description: "{入力の説明}"
+        artifacts:
+          - "{入力成果物1}"
+
+      output:
+        description: "{出力の説明}"
+        artifacts:
+          - "{出力成果物1}"
+
+      # Capability対応（1:1）
+      capability:
+        id: "CL2-{X}-{Y}"
+        name: "{Capability名}"
+        tvdc: "{Core | VCI | Supporting | Generic}"
+
+      # ステージ依存TVDC（オプション）
+      stage_tvdc_override:
+        enabled: false
+        tvdc: ""
+        rationale: ""
+
+    # OS-2
+    - id: "OS-2"
+      name: "{運用段階名}"
+      sequence: 2
+      # ... 以下同様
+
+    # OS-3, OS-4, ... 必要に応じて追加
+
+# ============================================================
+# 検証ルール
+# ============================================================
+  validation:
+    # 1ケイパビリティが複数OSを跨いでいないか
+    cap_stage_crossing:
+      passed: true                       # true: 違反なし
+      violations: []                     # 違反がある場合はここに記載
+
+    # 各OSで価値蓄積が定義されているか
+    value_accumulation_each:
+      passed: true
+      missing_stages: []
+
+    # OSに判断ポイントがあるか（警告レベル）
+    decision_points_coverage:
+      percentage: 100                    # 判断ポイントがあるOSの割合
+      stages_without_decision: []
+
+    # 連続性: OS間の入出力が連結しているか
+    continuity:
+      passed: true
+      gaps: []
+
+# ============================================================
+# メタデータ
+# ============================================================
+metadata:
+  created_at: "{YYYY-MM-DD}"
+  updated_at: "{YYYY-MM-DD}"
+  version: "1.0"
+  author: "{作成者}"
+  status: "{draft | review | approved}"
+
+# ============================================================
+# 記入例（飲料メーカー・初回体験段階）
+# ============================================================
+# operational_stage_definition:
+#   value_stream:
+#     id: "VStr-1"
+#     name: "B2C消費者VStr"
+#     segment: "B2C一般消費者"
+#
+#   value_stage:
+#     id: "VS2_VS3"
+#     name: "初回体験"
+#     customer_state:
+#       from: "選好形成"
+#       to: "初回体験完了"
+#
+#   stages:
+#     - id: "OS-1"
+#       name: "店頭誘導"
+#       sequence: 1
+#       design_principles:
+#         value_accumulation:
+#           description: "顧客が製品を手に取る動機形成"
+#           measurable: true
+#         decision_point:
+#           has_decision: true
+#           description: "顧客が製品を手に取るかどうか"
+#           decision_maker: "顧客"
+#         stakeholder_contact:
+#           has_contact: true
+#           stakeholders:
+#             - type: "顧客"
+#               description: "店頭での視覚的・空間的接触"
+#       input:
+#         description: "選好が形成された顧客"
+#         artifacts:
+#           - "顧客の製品認知"
+#       output:
+#         description: "製品を手に取った顧客"
+#         artifacts:
+#           - "購入意図"
+#       capability:
+#         id: "CL2-3-1"
+#         name: "店頭陳列設計"
+#         tvdc: "VCI"
+#       stage_tvdc_override:
+#         enabled: true
+#         tvdc: "Core"
+#         rationale: "初回体験段階では差別化要因"
+#
+#     - id: "OS-2"
+#       name: "購入処理"
+#       sequence: 2
+#       # ...
+#
+#     - id: "OS-3"
+#       name: "製品提供"
+#       sequence: 3
+#       # ...
+#
+#     - id: "OS-4"
+#       name: "初回体験支援"
+#       sequence: 4
+#       # ...
+# ============================================================

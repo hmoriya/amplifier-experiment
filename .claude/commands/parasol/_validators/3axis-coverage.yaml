@@ -1,0 +1,211 @@
+# 3軸カバレッジバリデータ（V5.6）
+# 3-Axis Coverage Validator
+#
+# 用途: 価値分解の3軸（ステークホルダー/時間/性質）が適切にカバーされているか検証
+# バージョン: V5.6
+# 作成日: 2026-01-14
+
+# ============================================================
+# 検証ルール
+# ============================================================
+validator:
+  name: "3-Axis Coverage Validator"
+  version: "1.0"
+  target: "value-declaration.yaml"
+
+  rules:
+    # ============================================================
+    # Rule 1: ステークホルダー軸の網羅性
+    # ============================================================
+    - id: "3AXIS-001"
+      name: "Stakeholder Axis Coverage"
+      severity: "error"
+      description: "ステークホルダー軸が5種類すべて定義されていること"
+      check: |
+        value_decomposition.stakeholder_axis に対して:
+        - customers セクションが存在する
+        - shareholders セクションが存在する
+        - employees セクションが存在する
+        - partners セクションが存在する
+        - society セクションが存在する
+      fix: "未定義のステークホルダーセクションを追加する"
+
+    # ============================================================
+    # Rule 2: ステークホルダー軸のウェイト合計
+    # ============================================================
+    - id: "3AXIS-002"
+      name: "Stakeholder Weight Sum"
+      severity: "error"
+      description: "ステークホルダー軸のweightが合計1.0であること"
+      check: |
+        stakeholder_axis の全weightを合計:
+        - 合計値が 1.0 であること（許容誤差: ±0.01）
+      fix: "weightを調整して合計1.0にする"
+
+    # ============================================================
+    # Rule 3: 時間軸の網羅性
+    # ============================================================
+    - id: "3AXIS-003"
+      name: "Time Axis Coverage"
+      severity: "error"
+      description: "時間軸が3種類すべて定義されていること"
+      check: |
+        value_decomposition.time_axis に対して:
+        - current（現在価値: 0-1年）が存在する
+        - future（将来価値: 1-3年）が存在する
+        - sustained（持続価値: 3年以上）が存在する
+      fix: "未定義の時間軸セクションを追加する"
+
+    # ============================================================
+    # Rule 4: 時間軸のウェイト合計
+    # ============================================================
+    - id: "3AXIS-004"
+      name: "Time Weight Sum"
+      severity: "error"
+      description: "時間軸のweightが合計1.0であること"
+      check: |
+        time_axis の全weightを合計:
+        - 合計値が 1.0 であること（許容誤差: ±0.01）
+      fix: "weightを調整して合計1.0にする"
+
+    # ============================================================
+    # Rule 5: 性質軸の網羅性
+    # ============================================================
+    - id: "3AXIS-005"
+      name: "Nature Axis Coverage"
+      severity: "error"
+      description: "性質軸が3種類すべて定義されていること"
+      check: |
+        value_decomposition.nature_axis に対して:
+        - functional（機能的価値）が存在する
+        - emotional（情緒的価値）が存在する
+        - social（社会的価値）が存在する
+      fix: "未定義の性質軸セクションを追加する"
+
+    # ============================================================
+    # Rule 6: 性質軸のウェイト合計
+    # ============================================================
+    - id: "3AXIS-006"
+      name: "Nature Weight Sum"
+      severity: "error"
+      description: "性質軸のweightが合計1.0であること"
+      check: |
+        nature_axis の全weightを合計:
+        - 合計値が 1.0 であること（許容誤差: ±0.01）
+      fix: "weightを調整して合計1.0にする"
+
+    # ============================================================
+    # Rule 7: VL3参照の有効性
+    # ============================================================
+    - id: "3AXIS-007"
+      name: "VL3 Reference Validity"
+      severity: "error"
+      description: "各軸のvaluesに含まれるVL3参照が実在すること"
+      check: |
+        各軸の values 配列に対して:
+        - ref で参照されるVL3 IDが value_levels 内に存在する
+      fix: "存在しないVL3参照を削除するか、正しいIDに修正する"
+
+    # ============================================================
+    # Rule 8: VL3の重複割り当て警告
+    # ============================================================
+    - id: "3AXIS-008"
+      name: "VL3 Duplicate Assignment Warning"
+      severity: "warning"
+      description: "同一VL3が同一軸内で重複して参照されていないこと"
+      check: |
+        各軸の各カテゴリ values に対して:
+        - 同一VL3 IDが複数回出現しないこと
+      fix: "重複するVL3参照を削除する"
+
+    # ============================================================
+    # Rule 9: 顧客ステークホルダーの優先度
+    # ============================================================
+    - id: "3AXIS-009"
+      name: "Customer Stakeholder Priority"
+      severity: "warning"
+      description: "顧客ステークホルダーのweightが最も高いか確認"
+      check: |
+        stakeholder_axis に対して:
+        - customers.weight が他のすべてのステークホルダーより高いこと
+        - または明確な理由（rationale）が記載されていること
+      fix: "顧客優先でない場合は理由を記載する"
+
+    # ============================================================
+    # Rule 10: 現在価値の優先度
+    # ============================================================
+    - id: "3AXIS-010"
+      name: "Current Value Priority"
+      severity: "warning"
+      description: "現在価値のweightが適切に設定されているか確認"
+      check: |
+        time_axis に対して:
+        - current.weight >= 0.3 であること
+        - または長期投資戦略の明確な理由があること
+      fix: "現在価値が低い場合は戦略的意図を明記する"
+
+    # ============================================================
+    # Rule 11: 機能的価値の存在
+    # ============================================================
+    - id: "3AXIS-011"
+      name: "Functional Value Exists"
+      severity: "warning"
+      description: "機能的価値にVL3が割り当てられていること"
+      check: |
+        nature_axis.functional に対して:
+        - values 配列に1つ以上のVL3参照があること
+      fix: "機能的価値にVL3を割り当てる"
+
+    # ============================================================
+    # Rule 12: バランスチェック
+    # ============================================================
+    - id: "3AXIS-012"
+      name: "Axis Balance Check"
+      severity: "info"
+      description: "各軸のバランスが極端に偏っていないか情報提供"
+      check: |
+        各軸に対して:
+        - 最大weightと最小weightの差が0.5以上の場合に情報表示
+        - 特定カテゴリに80%以上のVL3が集中している場合に情報表示
+      fix: "情報として認識し、意図的な偏りであれば問題なし"
+
+# ============================================================
+# 検証結果テンプレート
+# ============================================================
+result_template:
+  summary:
+    total_axes: 3
+    stakeholder_axis:
+      coverage: "5/5"
+      weight_sum: 0.00
+      valid: false
+    time_axis:
+      coverage: "3/3"
+      weight_sum: 0.00
+      valid: false
+    nature_axis:
+      coverage: "3/3"
+      weight_sum: 0.00
+      valid: false
+    passed: 0
+    failed: 0
+    warnings: 0
+
+  details:
+    - rule_id: ""
+      status: "pass | fail | warning | info"
+      message: ""
+      affected_items: []
+
+# ============================================================
+# 使用方法
+# ============================================================
+# 1. value-declaration.yaml を読み込む
+# 2. value_decomposition セクションを抽出
+# 3. 各ルールを順に適用
+# 4. 結果をresult_templateに記録
+# 5. サマリーを出力
+#
+# 実行コマンド（予定）:
+# /parasol:validate 3axis-coverage
+# ============================================================

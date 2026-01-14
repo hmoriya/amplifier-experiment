@@ -1,0 +1,224 @@
+# VL3 価値要素定義テンプレート（V5.6版）
+# Value Level 3 with Value Component Analysis
+#
+# 用途: Phase 2で各VL3のVC（価値構成要素）構成を定義
+# バージョン: V5.6
+# 作成日: 2026-01-14
+
+# ============================================================
+# 使用方法
+# ============================================================
+# 1. 各VL3（詳細価値）に対してこのテンプレートを作成
+# 2. 5つのVCそれぞれの重要度と説明を記入
+# 3. VS別のVC優先度を設定
+# 4. Capability対応を記入（Phase 3への引継ぎ）
+# ============================================================
+
+# テンプレート開始
+---
+# VL3基本情報
+value_element:
+  id: "VL3-{X}-{Y}"                    # 例: VL3-1-1
+  name: "{価値要素名}"                  # 例: 発酵技術による味の革新
+  parent: "VL2-{X}"                    # 親VL2のID
+  description: |
+    {詳細な説明を記載}
+
+  # 価値必然性（VL3レベル）
+  necessity:
+    tvdc_base: "{Core | VCI | Supporting | Generic}"
+    rationale: "{この価値がなぜその分類なのか}"
+
+# ============================================================
+# Value Component構成（V5.6追加）
+# ============================================================
+# 各VCの重要度を★〜★★★で評価
+# ★: 低い（補助的）
+# ★★: 中程度（重要だが核心ではない）
+# ★★★: 高い（この価値の核心）
+# ============================================================
+
+  value_components:
+
+    # VC1: 製品価値 (Product Value)
+    VC1_product:
+      importance: "{★ | ★★ | ★★★}"
+      description: "{この価値における製品価値の説明}"
+      sub_components:
+        VC1-1_functional:
+          applicable: true              # 該当する場合true
+          description: "{機能的価値の詳細}"
+        VC1-2_quality:
+          applicable: false
+          description: ""
+        VC1-3_variety:
+          applicable: false
+          description: ""
+
+    # VC2: サービス価値 (Service Value)
+    VC2_service:
+      importance: "{★ | ★★ | ★★★}"
+      description: "{この価値におけるサービス価値の説明}"
+      sub_components:
+        VC2-1_access:
+          applicable: false
+          description: ""
+        VC2-2_price:
+          applicable: false
+          description: ""
+        VC2-3_stability:
+          applicable: false
+          description: ""
+
+    # VC3: 体験価値 (Experience Value)
+    VC3_experience:
+      importance: "{★ | ★★ | ★★★}"
+      description: "{この価値における体験価値の説明}"
+      sub_components:
+        VC3-1_purchase:
+          applicable: false
+          description: ""
+        VC3-2_usage:
+          applicable: false
+          description: ""
+        VC3-3_ownership:
+          applicable: false
+          description: ""
+
+    # VC4: 関係価値 (Relationship Value)
+    VC4_relationship:
+      importance: "{★ | ★★ | ★★★}"
+      description: "{この価値における関係価値の説明}"
+      sub_components:
+        VC4-1_trust:
+          applicable: false
+          description: ""
+        VC4-2_belonging:
+          applicable: false
+          description: ""
+        VC4-3_continuity:
+          applicable: false
+          description: ""
+
+    # VC5: 情報価値 (Information Value)
+    VC5_information:
+      importance: "{★ | ★★ | ★★★}"
+      description: "{この価値における情報価値の説明}"
+      sub_components:
+        VC5-1_knowledge:
+          applicable: false
+          description: ""
+        VC5-2_discovery:
+          applicable: false
+          description: ""
+        VC5-3_sharing:
+          applicable: false
+          description: ""
+
+# ============================================================
+# VC構成パターン
+# ============================================================
+  vc_pattern:
+    type: "{製品主導型 | サービス主導型 | 体験主導型 | 関係主導型 | 情報主導型 | バランス型}"
+    primary_vc: ["VC1"]                 # 主要VC（★★★のもの）
+    secondary_vc: ["VC3"]               # 副次VC（★★のもの）
+    rationale: "{このパターンになる理由}"
+
+# ============================================================
+# VS別VC優先度（オプション）
+# ============================================================
+# 各VSステージで特に重要なVCを指定
+  vs_vc_priority:
+    VS0_VS1:                            # 認知段階
+      priority: ["VC5", "VC3"]
+      rationale: "認知段階では情報と体験が重要"
+
+    VS1_VS2:                            # 選好形成段階
+      priority: ["VC1", "VC3", "VC5"]
+      rationale: "選好形成には製品・体験・情報"
+
+    VS2_VS3:                            # 初回体験段階
+      priority: ["VC1", "VC2", "VC3"]
+      rationale: "初回は製品・サービス・体験"
+
+    VS3_VS4:                            # 継続利用段階
+      priority: ["VC1", "VC2"]
+      rationale: "継続には製品品質とサービス"
+
+    VS4_VS7:                            # 定着〜推奨段階
+      priority: ["VC4", "VC3"]
+      rationale: "定着以降は関係と体験"
+
+# ============================================================
+# Phase 3への引継ぎ：VC-Capability対応
+# ============================================================
+  capability_mapping:
+    VC1:
+      capabilities:
+        - id: "CL2-{X}-{Y}"
+          name: "{Capability名}"
+          contribution: "{VCへの貢献説明}"
+
+    VC2:
+      capabilities: []
+
+    VC3:
+      capabilities: []
+
+    VC4:
+      capabilities: []
+
+    VC5:
+      capabilities: []
+
+# ============================================================
+# メタデータ
+# ============================================================
+metadata:
+  created_at: "{YYYY-MM-DD}"
+  updated_at: "{YYYY-MM-DD}"
+  version: "1.0"
+  author: "{作成者}"
+  status: "{draft | review | approved}"
+
+# ============================================================
+# 記入例（飲料メーカー）
+# ============================================================
+# value_element:
+#   id: "VL3-1-1"
+#   name: "発酵技術による味の革新"
+#   parent: "VL2-1"
+#   description: |
+#     独自の発酵技術により、他社では実現できない
+#     本格的な味わいを提供する
+#
+#   value_components:
+#     VC1_product:
+#       importance: "★★★"
+#       description: "発酵技術は製品の味を直接決定"
+#       sub_components:
+#         VC1-1_functional:
+#           applicable: true
+#           description: "独自の風味プロファイル"
+#
+#     VC2_service:
+#       importance: "★"
+#       description: "流通は標準的"
+#
+#     VC3_experience:
+#       importance: "★★"
+#       description: "飲む瞬間の感動"
+#
+#     VC4_relationship:
+#       importance: "★"
+#       description: "ブランド価値への間接貢献"
+#
+#     VC5_information:
+#       importance: "★"
+#       description: "技術訴求は補助的"
+#
+#   vc_pattern:
+#     type: "製品主導型"
+#     primary_vc: ["VC1"]
+#     secondary_vc: ["VC3"]
+# ============================================================

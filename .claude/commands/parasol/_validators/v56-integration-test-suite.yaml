@@ -1,0 +1,366 @@
+# V5.6 統合テストスイート
+# V5.6 Integration Test Suite
+#
+# 用途: V5.6の新機能（OS, VC-Capability, ステージ依存TVDC）の統合テスト
+# バージョン: V5.6
+# 作成日: 2026-01-14
+
+# ============================================================
+# テストスイート定義
+# ============================================================
+test_suite:
+  name: "Parasol V5.6 Integration Test Suite"
+  version: "1.0"
+  description: |
+    V5.6で導入された以下の機能の統合テストを実行:
+    - Operational Stage (OS) 定義
+    - VC-Capability マッピング
+    - ステージ依存TVDC
+    - OS-BC 整合性
+    - ステージ依存アーキテクチャ判断
+
+  # ============================================================
+  # テストカテゴリ
+  # ============================================================
+  categories:
+    - id: "CAT-OS"
+      name: "Operational Stage Tests"
+      description: "OS定義とCapability対応のテスト"
+      validators:
+        - os-capability-mapping
+
+    - id: "CAT-VC"
+      name: "Value Component Tests"
+      description: "VC-Capability整合性のテスト"
+      validators:
+        - vc-capability-consistency
+
+    - id: "CAT-STVDC"
+      name: "Stage-dependent TVDC Tests"
+      description: "ステージ依存TVDC設定のテスト"
+      validators:
+        - stage-tvdc-consistency
+
+    - id: "CAT-OSBC"
+      name: "OS-BC Alignment Tests"
+      description: "OS-BC整合性のテスト"
+      validators:
+        - os-bc-alignment
+
+    - id: "CAT-STARCH"
+      name: "Stage Architecture Tests"
+      description: "ステージ依存アーキテクチャ判断のテスト"
+      validators:
+        - stage-architecture-consistency
+
+  # ============================================================
+  # 統合テストシナリオ
+  # ============================================================
+  integration_scenarios:
+
+    # ============================================================
+    # Scenario 1: Phase 3 OS-Capability フロー
+    # ============================================================
+    - id: "INT-001"
+      name: "Phase 3 OS-Capability Flow"
+      description: "Phase 3でのOS定義からCapability対応までのフロー検証"
+      phases: ["Phase 3.4"]
+      steps:
+        - step: 1
+          action: "Value Stream内のOperational Stage定義"
+          input: "Value Stream定義 (vs{N}.yaml)"
+          output: "vs{N}-operational-stages.yaml"
+          validation: "各Stageにvalue_stage範囲が設定されていること"
+
+        - step: 2
+          action: "OS-Capability 1:1マッピング"
+          input: "OS定義、CL2定義"
+          output: "os-capability-mapping.yaml"
+          validation: "各OSに正確に1つのCapabilityが対応すること"
+
+        - step: 3
+          action: "VC-Capabilityマッピング"
+          input: "CL2定義、VL3定義"
+          output: "vc-capability-mapping.yaml"
+          validation: "各CL2にprimary_vcが設定されていること"
+
+      expected_artifacts:
+        - vs{N}-operational-stages.yaml
+        - os-capability-mapping.yaml
+        - vc-capability-mapping.yaml
+
+      validators_to_run:
+        - os-capability-mapping
+        - vc-capability-consistency
+
+    # ============================================================
+    # Scenario 2: ステージ依存TVDC設定フロー
+    # ============================================================
+    - id: "INT-002"
+      name: "Stage-dependent TVDC Configuration Flow"
+      description: "ステージに応じたTVDC変動の設定と検証"
+      phases: ["Phase 3.4"]
+      steps:
+        - step: 1
+          action: "CL2のデフォルトTVDC確認"
+          input: "CL2定義 (capability-level2.yaml)"
+          output: "なし"
+          validation: "全CL2にtvdc_defaultが設定されていること"
+
+        - step: 2
+          action: "ステージ依存オーバーライド設定"
+          input: "CL2定義、OS定義"
+          output: "stage-tvdc-overrides.yaml"
+          validation: |
+            - オーバーライドのValue Stage範囲が有効であること
+            - 理由が記載されていること
+
+        - step: 3
+          action: "整合性検証"
+          input: "stage-tvdc-overrides.yaml"
+          output: "検証レポート"
+          validation: "全ルールがパスすること"
+
+      expected_artifacts:
+        - capability-level2.yaml (updated with tvdc_default)
+        - stage-tvdc-overrides.yaml
+
+      validators_to_run:
+        - stage-tvdc-consistency
+
+    # ============================================================
+    # Scenario 3: Phase 4 OS-BC整合フロー
+    # ============================================================
+    - id: "INT-003"
+      name: "Phase 4 OS-BC Alignment Flow"
+      description: "OSとBCの責務整合性確保フロー"
+      phases: ["Phase 4.1"]
+      steps:
+        - step: 1
+          action: "OS-BCマッピング作成"
+          input: "OS定義、BC定義"
+          output: "os-bc-mapping.yaml"
+          validation: "全OSにBCが対応していること"
+
+        - step: 2
+          action: "整合性ステータス設定"
+          input: "os-bc-mapping.yaml"
+          output: "os-bc-mapping.yaml (updated)"
+          validation: |
+            - 各マッピングにalignment.statusがあること
+            - misaligned時には対応アクションがあること
+
+        - step: 3
+          action: "Capability-BC一貫性確認"
+          input: "os-bc-mapping.yaml、CL2定義"
+          output: "検証レポート"
+          validation: "Capability責務とBC責務が一致すること"
+
+      expected_artifacts:
+        - os-bc-mapping.yaml
+
+      validators_to_run:
+        - os-bc-alignment
+
+    # ============================================================
+    # Scenario 4: ステージ依存アーキテクチャ判断フロー
+    # ============================================================
+    - id: "INT-004"
+      name: "Stage-dependent Architecture Decision Flow"
+      description: "TVDCに基づくBuild/Buy判断フロー"
+      phases: ["Phase 4.1"]
+      steps:
+        - step: 1
+          action: "ステージ別TVDC確認"
+          input: "stage-tvdc-overrides.yaml"
+          output: "なし"
+          validation: "各ステージでのTVDCが決定可能であること"
+
+        - step: 2
+          action: "Build/Buy判断設定"
+          input: "BC定義、ステージTVDC"
+          output: "stage-architecture-decisions.yaml"
+          validation: |
+            - 各ステージにbuild_buy判断があること
+            - 値が有効であること (Build/Buy/Buy+Customize/Partner/SaaS)
+
+        - step: 3
+          action: "TVDC-Build/Buy整合性確認"
+          input: "stage-architecture-decisions.yaml"
+          output: "検証レポート"
+          validation: |
+            - Core → Build推奨
+            - VCI → Buy+Customize推奨
+            - Supporting → Buy/Partner推奨
+            - Generic → SaaS推奨
+
+      expected_artifacts:
+        - stage-architecture-decisions.yaml
+
+      validators_to_run:
+        - stage-architecture-consistency
+
+    # ============================================================
+    # Scenario 5: End-to-End V5.6 フロー
+    # ============================================================
+    - id: "INT-005"
+      name: "End-to-End V5.6 Flow"
+      description: "Phase 3.4からPhase 4.1までの完全フロー"
+      phases: ["Phase 3.4", "Phase 4.1"]
+      steps:
+        - step: 1
+          action: "Phase 3.4実行"
+          description: "OS定義、VC-Capabilityマッピング、ステージ依存TVDC"
+          sub_scenarios:
+            - INT-001
+            - INT-002
+
+        - step: 2
+          action: "Phase 4.1実行"
+          description: "OS-BC整合、ステージ依存アーキテクチャ判断"
+          sub_scenarios:
+            - INT-003
+            - INT-004
+
+        - step: 3
+          action: "完全整合性検証"
+          description: "全バリデータを実行"
+          validators:
+            - os-capability-mapping
+            - vc-capability-consistency
+            - stage-tvdc-consistency
+            - os-bc-alignment
+            - stage-architecture-consistency
+
+      expected_artifacts:
+        - vs{N}-operational-stages.yaml
+        - os-capability-mapping.yaml
+        - vc-capability-mapping.yaml
+        - stage-tvdc-overrides.yaml
+        - os-bc-mapping.yaml
+        - stage-architecture-decisions.yaml
+
+      validators_to_run:
+        - all
+
+  # ============================================================
+  # テストデータ要件
+  # ============================================================
+  test_data_requirements:
+    minimum_structure:
+      value_streams: 1
+      operational_stages_per_vs: 3
+      capabilities_cl2: 5
+      bounded_contexts: 3
+
+    recommended_structure:
+      value_streams: 2
+      operational_stages_per_vs: 5
+      capabilities_cl2: 10
+      bounded_contexts: 6
+
+    example_projects:
+      - name: "飲料メーカー"
+        description: "製造業向けValue Stream例"
+        value_streams:
+          - "顧客価値創造"
+          - "製品提供"
+        recommended_for:
+          - INT-001
+          - INT-002
+
+      - name: "金融サービス"
+        description: "サービス業向けValue Stream例"
+        value_streams:
+          - "顧客獲得"
+          - "契約管理"
+          - "クレーム対応"
+        recommended_for:
+          - INT-003
+          - INT-004
+          - INT-005
+
+  # ============================================================
+  # 実行手順
+  # ============================================================
+  execution:
+    commands:
+      # 個別カテゴリテスト
+      run_category: |
+        /parasol:validate {category_validator}
+        例: /parasol:validate os-capability-mapping
+
+      # シナリオ実行
+      run_scenario: |
+        1. テストデータ準備
+        2. シナリオ内の各stepを順に実行
+        3. 各stepの出力ファイルを生成
+        4. validators_to_runを実行
+        5. 結果をレポート
+
+      # 完全テスト
+      run_all: |
+        /parasol:validate v56-integration
+        - 全5シナリオを順に実行
+        - 全バリデータを実行
+        - 総合レポートを生成
+
+    success_criteria:
+      - all_validators_pass: true
+      - no_error_severity_failures: true
+      - warning_count_threshold: 5
+      - coverage:
+          os_mapped: 100%
+          vc_mapped: 100%
+          tvdc_defined: 100%
+          bc_aligned: 100%
+
+  # ============================================================
+  # レポートテンプレート
+  # ============================================================
+  report_template:
+    summary:
+      test_suite_version: "1.0"
+      execution_date: ""
+      project_name: ""
+      total_scenarios: 5
+      passed_scenarios: 0
+      failed_scenarios: 0
+      total_validators: 5
+      passed_validators: 0
+      failed_validators: 0
+
+    scenario_results:
+      - scenario_id: ""
+        name: ""
+        status: "pass | fail | partial"
+        steps_completed: 0
+        steps_total: 0
+        validator_results:
+          - validator: ""
+            passed: 0
+            failed: 0
+            warnings: 0
+
+    recommendations:
+      - priority: "high | medium | low"
+        category: ""
+        issue: ""
+        action: ""
+
+# ============================================================
+# 使用方法
+# ============================================================
+# 1. プロジェクトのPhase 3.4成果物を準備
+# 2. /parasol:validate v56-integration を実行
+# 3. シナリオごとの結果を確認
+# 4. 失敗したルールに対応
+# 5. 全テストがパスするまで繰り返し
+#
+# または個別シナリオ:
+# /parasol:validate os-capability-mapping
+# /parasol:validate vc-capability-consistency
+# /parasol:validate stage-tvdc-consistency
+# /parasol:validate os-bc-alignment
+# /parasol:validate stage-architecture-consistency
+# ============================================================

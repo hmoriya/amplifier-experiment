@@ -27,6 +27,12 @@ description: Value definition and enterprise activities (project:parasol)
 /parasol:2-strategic map      # VL1→L1→VS価値マッピング
 /parasol:2-strategic maturity # 戦略ケイパビリティ成熟度評価
 /parasol:2-strategic vms2      # VMS2マイルストーン設定
+
+# Phase 2.3: Value Component Analysis（V5.6）
+/parasol:2-vc                 # Value Component分析
+/parasol:2-vc decompose       # 3軸価値分解（ステークホルダー/時間/性質）
+/parasol:2-vc vs-matrix       # VS-VC優先度マトリクス生成
+/parasol:2-vc portfolio       # Value Portfolio（投資配分）設計
 ```
 
 ## 目的
@@ -44,6 +50,13 @@ description: Value definition and enterprise activities (project:parasol)
 - **価値成熟度評価システムを構築する** - 各戦略能力の現在・目標・ギャップを測定
 - **VMS2マイルストーンを設定する** - 戦略能力構築の成功基準と測定指標
 - **Phase 3 Capabilitiesへの価値トレーサビリティを確立する** - L1→CL1→CL2→CL3の価値追跡可能性
+
+**Phase 2.3: Value Component Analysis（V5.6）**
+- **VL3をValue Componentで分析する** - 各詳細価値の5VC構成（製品/サービス/体験/関係/情報）を定義
+- **3軸価値分解を実行する** - ステークホルダー軸/時間軸/性質軸による多角的価値分析
+- **VS-VC優先度マトリクスを作成する** - 各Value Stageで重要なVCを特定
+- **Value Portfolioを設計する** - VC別・TVDC別の投資配分を決定
+- **Phase 3への価値引継ぎを準備する** - VC-Capability対応の基盤情報
 
 ## 🎯 設計哲学の適用
 
@@ -1318,6 +1331,15 @@ Value_Traceability_Implementation:
 - **value-traceability-report.md** - VL→L1→VS価値追跡レポート
 - **vms2-completion-report.md** - VMS2マイルストーン達成状況
 
+### Phase 2.3: Value Component Analysis成果物（V5.6）
+
+#### VC分析成果物
+- **vl3-vc-analysis.yaml** - 各VL3のVC構成分析（5VC重要度、VCパターン）
+- **value-decomposition-3axis.yaml** - 3軸価値分解（ステークホルダー/時間/性質）
+- **vs-vc-priority-matrix.yaml** - VS別VC優先度マトリクス
+- **value-portfolio.yaml** - VC別・TVDC別投資配分計画
+- **phase3-vc-handoff.md** - Phase 3へのVC-Cap対応準備情報
+
 ### VS個別成果物（パターンにより構成が異なる）
 
 **標準型の場合:**
@@ -1848,6 +1870,313 @@ CL1候補ドメイン:
 
 ## 8. Notes（備考）
 [標準テンプレートと同様]
+```
+
+---
+
+## Phase 2.3: Value Component Analysis（V5.6）
+
+V5.6で導入された価値構成要素（VC）分析を実行し、VL3の価値構造を多角的に分析します。
+
+### Step 3: VL3のVC構成分析
+
+```bash
+/parasol:2-vc
+```
+
+各VL3に対して5つのValue Component構成を分析します。
+
+```yaml
+# vl3-vc-analysis.yaml の構造
+vl3_vc_analysis:
+  - vl3_id: "VL3-1-1"
+    name: "{VL3名}"
+
+    # VC構成（重要度: ★〜★★★）
+    value_components:
+      VC1_product:
+        importance: "★★★"
+        sub_component: "VC1-1"  # 機能/品質/多様性
+        description: "{製品価値への貢献}"
+
+      VC2_service:
+        importance: "★"
+        sub_component: null
+        description: ""
+
+      VC3_experience:
+        importance: "★★"
+        sub_component: "VC3-2"  # 購買/利用/所有
+        description: "{体験価値への貢献}"
+
+      VC4_relationship:
+        importance: "★"
+        sub_component: null
+        description: ""
+
+      VC5_information:
+        importance: "★"
+        sub_component: null
+        description: ""
+
+    # VCパターン判定
+    vc_pattern:
+      type: "製品主導型"  # 製品/サービス/体験/関係/情報主導型、バランス型
+      primary_vc: ["VC1"]
+      secondary_vc: ["VC3"]
+      rationale: "{パターン判定理由}"
+```
+
+**VC重要度ガイドライン**:
+
+| 重要度 | 意味 | 判定基準 |
+|--------|------|----------|
+| ★★★ | 核心的 | この価値の本質、なければ価値が成立しない |
+| ★★ | 重要 | 価値を強化するが核心ではない |
+| ★ | 補助的 | あれば良いが必須ではない |
+
+**VCパターン6種類**:
+
+| パターン | 主要VC | 典型業種 |
+|---------|--------|----------|
+| 製品主導型 | VC1 | 製造、食品、消費財 |
+| サービス主導型 | VC2 | 物流、金融、インフラ |
+| 体験主導型 | VC3 | 小売、飲食、エンタメ |
+| 関係主導型 | VC4 | 会員制、サブスク、コミュニティ |
+| 情報主導型 | VC5 | メディア、教育、コンサル |
+| バランス型 | 複合 | プラットフォーム、総合サービス |
+
+---
+
+### Step 4: 3軸価値分解
+
+```bash
+/parasol:2-vc decompose
+```
+
+VL3を3つの軸で多角的に分析します。
+
+```yaml
+# value-decomposition-3axis.yaml の構造
+value_decomposition:
+  # 1. ステークホルダー軸
+  stakeholder_axis:
+    customers:
+      weight: 0.40  # 重要度ウェイト
+      values:
+        - ref: "VL3-1-1"
+          contribution: "直接的"
+        - ref: "VL3-1-2"
+          contribution: "直接的"
+
+    shareholders:
+      weight: 0.25
+      values:
+        - ref: "VL3-2-1"
+          contribution: "間接的"
+
+    employees:
+      weight: 0.15
+      values: []
+
+    partners:
+      weight: 0.10
+      values: []
+
+    society:
+      weight: 0.10
+      values: []
+
+  # 2. 時間軸
+  time_axis:
+    current:      # 現在価値（0-1年）
+      weight: 0.50
+      values: []
+
+    future:       # 将来価値（1-3年）
+      weight: 0.30
+      values: []
+
+    sustained:    # 持続価値（3年以上）
+      weight: 0.20
+      values: []
+
+  # 3. 性質軸
+  nature_axis:
+    functional:   # 機能的価値
+      weight: 0.40
+      values: []
+
+    emotional:    # 情緒的価値
+      weight: 0.35
+      values: []
+
+    social:       # 社会的価値
+      weight: 0.25
+      values: []
+```
+
+**軸別チェックポイント**:
+
+| 軸 | チェック項目 |
+|----|-------------|
+| ステークホルダー | 顧客以外のステークホルダーへの価値が明示されているか |
+| 時間 | 短期価値に偏りすぎていないか |
+| 性質 | 機能的価値だけでなく情緒・社会的価値があるか |
+
+---
+
+### Step 5: VS-VC優先度マトリクス
+
+```bash
+/parasol:2-vc vs-matrix
+```
+
+各Value Stageで重要なVCを特定します。
+
+```yaml
+# vs-vc-priority-matrix.yaml の構造
+vs_vc_matrix:
+  VS0_VS1:  # 認知段階
+    priority_vcs: ["VC5", "VC3"]
+    rationale: "認知段階では情報(VC5)と体験(VC3)が顧客の注意を引く"
+    focus_activities:
+      - "ブランド認知向上キャンペーン"
+      - "体験型マーケティング"
+
+  VS1_VS2:  # 選好形成段階
+    priority_vcs: ["VC1", "VC3", "VC5"]
+    rationale: "選好形成には製品特性(VC1)、体験(VC3)、情報(VC5)が重要"
+    focus_activities:
+      - "製品差別化訴求"
+      - "比較検討支援"
+
+  VS2_VS3:  # 初回体験段階
+    priority_vcs: ["VC1", "VC2", "VC3"]
+    rationale: "初回体験では製品(VC1)、サービス(VC2)、体験(VC3)が決定的"
+    focus_activities:
+      - "オンボーディング"
+      - "初回購入体験最適化"
+
+  VS3_VS4:  # 継続利用段階
+    priority_vcs: ["VC1", "VC2"]
+    rationale: "継続には製品品質(VC1)とサービス安定性(VC2)が不可欠"
+    focus_activities:
+      - "品質維持"
+      - "サービスレベル管理"
+
+  VS4_VS7:  # 定着〜推奨段階
+    priority_vcs: ["VC4", "VC3"]
+    rationale: "定着以降は関係性(VC4)と体験記憶(VC3)がロイヤルティを形成"
+    focus_activities:
+      - "ロイヤルティプログラム"
+      - "コミュニティ構築"
+```
+
+**VS-VCマトリクス可視化**:
+
+```
+        VS0_VS1  VS1_VS2  VS2_VS3  VS3_VS4  VS4_VS7
+VC1製品    ○        ●        ●        ●        ○
+VC2サービス ○        ○        ●        ●        ○
+VC3体験    ●        ●        ●        ○        ●
+VC4関係    ○        ○        ○        ○        ●
+VC5情報    ●        ●        ○        ○        ○
+
+● = 高優先度、○ = 標準
+```
+
+---
+
+### Step 6: Value Portfolio設計
+
+```bash
+/parasol:2-vc portfolio
+```
+
+VC別・TVDC別の投資配分を設計します。
+
+```yaml
+# value-portfolio.yaml の構造
+value_portfolio:
+  # VC別投資配分
+  vc_investment:
+    VC1_product:
+      current_allocation: 0.30
+      target_allocation: 0.35
+      gap: +0.05
+      gap_action: "製品開発投資の強化"
+
+    VC2_service:
+      current_allocation: 0.25
+      target_allocation: 0.20
+      gap: -0.05
+      gap_action: "効率化による適正化"
+
+    VC3_experience:
+      current_allocation: 0.20
+      target_allocation: 0.25
+      gap: +0.05
+      gap_action: "UX投資の拡大"
+
+    VC4_relationship:
+      current_allocation: 0.15
+      target_allocation: 0.15
+      gap: 0
+      gap_action: null
+
+    VC5_information:
+      current_allocation: 0.10
+      target_allocation: 0.05
+      gap: -0.05
+      gap_action: "情報発信の効率化"
+
+  # TVDC別投資配分
+  tvdc_investment:
+    Core:
+      current: 0.30
+      target: 0.40
+      rationale: "競争優位の源泉への集中投資"
+
+    VCI:
+      current: 0.35
+      target: 0.35
+      rationale: "品質投資の維持"
+
+    Supporting:
+      current: 0.25
+      target: 0.20
+      rationale: "効率化による削減"
+
+    Generic:
+      current: 0.10
+      target: 0.05
+      rationale: "アウトソース/自動化"
+
+  # バランススコア
+  balance_score:
+    vc_balance: 0.85  # VC配分の適切さ（0-1）
+    tvdc_balance: 0.80  # TVDC配分の適切さ（0-1）
+    overall: 0.82
+    warnings:
+      - "VC3(体験)への投資が目標に達していません"
+```
+
+**Value Portfolio可視化**:
+
+```
+VC投資配分:
+VC1 製品    ████████████████░░░░ 35% (現30%→目標35%)
+VC2 サービス ████████████░░░░░░░░ 20% (現25%→目標20%)
+VC3 体験    █████████████████░░░ 25% (現20%→目標25%)
+VC4 関係    ████████░░░░░░░░░░░░ 15% (維持)
+VC5 情報    ███░░░░░░░░░░░░░░░░░  5% (現10%→目標5%)
+
+TVDC投資配分:
+Core       ████████████████████ 40% (競争優位)
+VCI        ██████████████████░░ 35% (品質投資)
+Supporting ████████████░░░░░░░░ 20% (支援)
+Generic    ███░░░░░░░░░░░░░░░░░  5% (汎用)
 ```
 
 ---
