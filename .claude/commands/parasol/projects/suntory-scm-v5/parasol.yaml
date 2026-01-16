@@ -1,0 +1,96 @@
+project:
+  name: suntory-scm-v5
+  display_name: サントリー SCMバリューストリーム
+  company: "サントリーホールディングス株式会社"
+  company_url: "https://www.suntory.co.jp/"
+  context: "SCM（サプライチェーンマネジメント）"
+  industry: beverage-manufacturing
+  created: "2025-01-15T11:00:00Z"
+  updated: "2025-01-15T11:00:00Z"
+
+phases:
+  phase0:
+    name: "Initialize from URL"
+    status: pending
+    completed: null
+
+  phase1:
+    name: "Context"
+    status: pending
+    completed: null
+    artifacts:
+      - organization-analysis.md
+      - market-assessment.md
+      - constraints.md
+      - stakeholder-map.md
+
+  phase2:
+    name: "Value Definition"
+    status: pending
+    completed: null
+    artifacts:
+      - value-definition.md
+      - value-streams-mapping.md
+      - enterprise-activities.md
+
+  phase3:
+    name: "Capabilities"
+    status: pending
+    completed: null
+    sub_phases:
+      cl1:
+        name: "Domain Classification"
+        status: pending
+      cl2:
+        name: "Subdomain Design"
+        status: pending
+      cl3:
+        name: "Bounded Context Definition"
+        status: pending
+
+  phase4:
+    name: "Architecture"
+    status: pending
+    completed: null
+
+  phase5:
+    name: "Software Design"
+    status: pending
+    completed: null
+
+  phase6:
+    name: "Implementation"
+    status: pending
+    completed: null
+
+  phase7:
+    name: "Platform"
+    status: pending
+    completed: null
+
+settings:
+  output_dir: ./outputs
+  auto_backup: true
+  validation_strict: false
+
+# Parasol V5 特有の設定
+v5_features:
+  structural_necessity_threshold: 3.0
+  imagination_detection: enabled
+  value_traceability: enabled
+  milestone_tracking: enabled
+
+# SCMコンテキスト固有の設定
+scm_context:
+  scope:
+    - 原材料調達
+    - 製造・生産
+    - 物流・配送
+    - 在庫管理
+    - 需要予測
+    - サプライヤー管理
+  focus_areas:
+    - サプライチェーン可視化
+    - 需給バランス最適化
+    - サステナブル調達
+    - デジタルツイン
