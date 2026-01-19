@@ -370,6 +370,36 @@ CL3分布:
 
 ---
 
+## 8. 詳細マッピング図（Detailed Diagrams）
+
+本エグゼクティブサマリーの詳細な視覚化資料として、以下の図を参照してください：
+
+### 8.1 VS×CLマッピング図
+
+**ファイル**: [`diagrams/vs-cl-mapping.md`](./diagrams/vs-cl-mapping.md)
+
+バリューストリーム（VS0-VS7）とケイパビリティレベル（CL1-CL3）の関係を詳細に可視化：
+
+- VS×CL1 マッピングマトリクス
+- Critical ステージ（VS2, VS4, VS5, VS7）の CL3 詳細マッピング
+- CL1 貢献フロー（demand-management, logistics-optimization）
+- TVDC×VS 分布パターン
+- 投資優先度マトリクス
+
+### 8.2 VL×VS×CL 全体トレーサビリティ図
+
+**ファイル**: [`diagrams/value-traceability-full.md`](./diagrams/value-traceability-full.md)
+
+グループパーパス（L0）からBounded Context（BC）までの完全なトレーサビリティ：
+
+- L0 → L1 → VL1 → VL2 → VL3 → CL1 → CL2 → CL3 → BC 垂直トレース
+- VS×VL×CL 三次元マッピング
+- 4つの差別化要素（スマートロジスティクス、天然水の森、日立協創、異業種共同配送）の完全トレース
+- VS×BC マッピングマトリクス
+- トレーサビリティ検証結果
+
+---
+
 ## 付録: 価値トレーサビリティ全体図
 
 ```
