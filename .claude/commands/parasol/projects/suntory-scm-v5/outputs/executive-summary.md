@@ -372,45 +372,122 @@ CL3分布:
 
 ## 8. 詳細マッピング図（Detailed Diagrams）
 
-本エグゼクティブサマリーの詳細な視覚化資料として、以下の図を参照してください：
+### 8.0 図の目的と活用方法
+
+本プロジェクトでは、Parasol V5.7の「価値駆動アーキテクチャ」を実践するため、**3つの補完的な視覚化資料**を作成しました。これらの図は以下の目的で活用できます：
+
+| 図 | 主な利用者 | 主な活用シーン |
+|----|-----------|---------------|
+| VS×CLマッピング図 | プロダクトマネージャー、ビジネスアナリスト | 顧客価値とシステム機能の関係確認 |
+| 全体トレーサビリティ図 | エグゼクティブ、アーキテクト | 投資判断、設計根拠の説明 |
+| BCドメインモデル図 | 開発リード、ドメインエキスパート | 実装計画、チーム分割の検討 |
+
+**3図の関係性**:
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                        3つの図の関係性                                           │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                  │
+│   VS×CLマッピング図                                                              │
+│   「どの顧客状態にどの機能が貢献するか」                                         │
+│         │                                                                        │
+│         │ 顧客視点から見た機能の必要性を明確化                                   │
+│         ▼                                                                        │
+│   全体トレーサビリティ図                                                          │
+│   「なぜその機能が存在するのか（価値→機能の継承）」                              │
+│         │                                                                        │
+│         │ 機能の存在理由と投資優先度を正当化                                     │
+│         ▼                                                                        │
+│   BCドメインモデル図                                                              │
+│   「その機能をどう実装するか（ドメイン構造）」                                   │
+│                                                                                  │
+│   ═══════════════════════════════════════════════════════════════════════════   │
+│   Why（なぜ）→ What（何を）→ How（どのように）の一貫性を確保                    │
+│   ═══════════════════════════════════════════════════════════════════════════   │
+│                                                                                  │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
 
 ### 8.1 VS×CLマッピング図
 
 **ファイル**: [`diagrams/vs-cl-mapping.md`](./diagrams/vs-cl-mapping.md)
 
-バリューストリーム（VS0-VS7）とケイパビリティレベル（CL1-CL3）の関係を詳細に可視化：
+#### 目的
+顧客状態遷移（VS0-VS7）の各ステージで、どのケイパビリティ（CL1-CL3）が価値提供に貢献するかを可視化します。これにより、**顧客体験の各段階で必要な機能**を明確にし、開発優先度の判断根拠を提供します。
 
-- VS×CL1 マッピングマトリクス
-- Critical ステージ（VS2, VS4, VS5, VS7）の CL3 詳細マッピング
-- CL1 貢献フロー（demand-management, logistics-optimization）
-- TVDC×VS 分布パターン
-- 投資優先度マトリクス
+#### 主要コンテンツ
+- **VS×CL1 マッピングマトリクス**: 8つの顧客ステージと5つのドメインの関係
+- **Critical ステージ詳細**: VS2（選好形成）、VS4（価値獲得）、VS5（価値実感）、VS7（価値共創）における具体的CL3
+- **CL1 貢献フロー**: demand-management、logistics-optimizationの価値創出経路
+- **TVDC×VS 分布パターン**: Core/VCI/Supporting/Genericの各ステージへの貢献度
+- **投資優先度マトリクス**: Critical ステージへの集中投資の根拠
+
+#### 活用シーン
+- **MVP策定**: VS4（価値獲得）に必要最小限のCL3を特定
+- **リリース計画**: 各ステージのCL3実装順序を決定
+- **ステークホルダー説明**: 機能と顧客価値の関係を説明
 
 ### 8.2 VL×VS×CL 全体トレーサビリティ図
 
 **ファイル**: [`diagrams/value-traceability-full.md`](./diagrams/value-traceability-full.md)
 
-グループパーパス（L0）からBounded Context（BC）までの完全なトレーサビリティ：
+#### 目的
+グループパーパス（L0）から具体的なBounded Context（BC）まで、**価値の継承関係を完全にトレース**します。これにより、すべての設計決定が「なぜ存在するか」を説明可能になります。
 
-- L0 → L1 → VL1 → VL2 → VL3 → CL1 → CL2 → CL3 → BC 垂直トレース
-- VS×VL×CL 三次元マッピング
-- 4つの差別化要素（スマートロジスティクス、天然水の森、日立協創、異業種共同配送）の完全トレース
-- VS×BC マッピングマトリクス
-- トレーサビリティ検証結果
+#### 主要コンテンツ
+- **垂直トレース**: L0 → L1 → VL1 → VL2 → VL3 → CL1 → CL2 → CL3 → BC の9階層
+- **三次元マッピング**: VS（顧客状態）× VL（価値レベル）× CL（ケイパビリティ）
+- **差別化要素トレース**: 4つの差別化要素がどの価値から導出されるか
+  - スマートロジスティクス ← VL2-2（効率化価値）← やってみなはれ
+  - 天然水の森 ← VL2-4（持続可能性価値）← 水と生きる
+  - 日立協創トレーサビリティ ← VL2-3（品質保証価値）← Growing for Good
+  - 異業種共同配送 ← VL2-2（効率化価値）← 利益三分主義
+- **VS×BC マッピング**: 各顧客ステージで責務を持つBC
+- **検証結果**: 継承率100%、想像の設計0件の確認
+
+#### 活用シーン
+- **投資判断**: なぜこの機能に投資すべきか（価値根拠）
+- **設計レビュー**: 新機能がどの価値に貢献するか確認
+- **監査対応**: システム設計の根拠説明
 
 ### 8.3 BCドメインモデル分析図
 
 **ファイル**: [`diagrams/bc-domain-models.md`](./diagrams/bc-domain-models.md)
 
-8つのBounded Contextのドメインモデルを詳細に可視化：
+#### 目的
+8つのBounded Contextの内部構造（Aggregates、Entities、Value Objects）を詳細に可視化し、**実装レベルでの設計指針**を提供します。
 
-- 各BCのAggregates、Entities、Value Objects構造
-- Domain Events（Published/Subscribed）
-- BC間関係マトリクス（Upstream/Downstream/Partnership）
-- Published Language（Warehouse BC → FoodSafety/Traceability）
-- Saga Choreographyパターン（出荷処理フロー）
-- 差別化要素とBC/Aggregateの対応関係
-- 統計サマリー（24 Aggregates / 47 Entities / 71 Value Objects）
+#### 主要コンテンツ
+- **BC一覧とドメインタイプ**: Core/VCI/Supporting/Genericの分類と投資配分
+- **ドメインモデル詳細**:
+  - Core Domain（3 BC）: DemandPlanning、TransportPlanning、Order
+  - VCI Domain（3 BC）: Warehouse、FoodSafety、Traceability
+  - Supporting/Generic（2 BC）: WaterSustainability、EnvironmentalReporting
+- **統計サマリー**: 24 Aggregates / 47 Entities / 71 Value Objects / 34 Domain Events
+- **BC間関係マトリクス**: Upstream/Downstream/Partnership の関係
+- **DDDパターン**:
+  - Published Language: Warehouse BC → FoodSafety/Traceability への共通語彙
+  - Partnership: FoodSafety ↔ Traceability の協調関係
+  - Saga Choreography: 出荷処理フロー（Order→Warehouse→Transport→FoodSafety→Traceability）
+- **差別化要素マッピング**: 4つの差別化要素がどのBC/Aggregateに実装されるか
+
+#### 活用シーン
+- **チーム編成**: BC境界に沿ったチーム分割（Conway's Law適用）
+- **実装計画**: Aggregate単位でのスプリント計画
+- **API設計**: BC間のイベント/コマンド仕様策定
+- **テスト戦略**: Aggregate境界でのテスト設計
+
+### 8.4 図の整合性確認
+
+3つの図は相互に整合性を保っています：
+
+| 検証項目 | 結果 | 説明 |
+|---------|------|------|
+| VS→CL→BC継承 | ✅ | 全VSステージがCL1経由でBCにマッピング |
+| VL→CL→BC継承 | ✅ | 全VL3がCL3経由でBCに継承（継承率100%） |
+| BC数の一致 | ✅ | 全図で8 BC（同一定義） |
+| ドメインタイプ一致 | ✅ | Core(50%)/VCI(20%)/Supporting(20%)/Generic(10%) |
+| 差別化要素一致 | ✅ | 4要素が全図で同一定義・同一トレース |
 
 ---
 
