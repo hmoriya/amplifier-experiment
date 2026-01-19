@@ -398,6 +398,20 @@ CL3分布:
 - VS×BC マッピングマトリクス
 - トレーサビリティ検証結果
 
+### 8.3 BCドメインモデル分析図
+
+**ファイル**: [`diagrams/bc-domain-models.md`](./diagrams/bc-domain-models.md)
+
+8つのBounded Contextのドメインモデルを詳細に可視化：
+
+- 各BCのAggregates、Entities、Value Objects構造
+- Domain Events（Published/Subscribed）
+- BC間関係マトリクス（Upstream/Downstream/Partnership）
+- Published Language（Warehouse BC → FoodSafety/Traceability）
+- Saga Choreographyパターン（出荷処理フロー）
+- 差別化要素とBC/Aggregateの対応関係
+- 統計サマリー（24 Aggregates / 47 Entities / 71 Value Objects）
+
 ---
 
 ## 付録: 価値トレーサビリティ全体図
