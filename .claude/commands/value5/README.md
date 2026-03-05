@@ -61,7 +61,13 @@ value5/
 ├── imagination-detect.md
 ├── inheritance.md
 └── _knowledge/
-    └── patterns/
-        ├── _axes/
-        └── industries/
+    ├── README.md                    # ナレッジベース目次
+    ├── patterns/                    # 業界パターン・軸パターン
+    │   ├── _axes/
+    │   └── industries/
+    ├── methodology/                 # 価値方法論（VMS, トレーサビリティ）
+    ├── validators/                  # 価値バリデータ（エビデンス, 想像検出, 構造的必然性）
+    ├── concepts/                    # 概念フレームワーク（哲学, TVDC, VC）
+    ├── reference/                   # 外部標準参照（BIZBOK, TOGAF）
+    └── guides/                      # ガイド（V5総合, ビジュアルスタイル）
 ```

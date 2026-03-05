@@ -1,0 +1,211 @@
+# OS-Capability対応バリデータ（V5.6）
+# OS-Capability Mapping Validator
+#
+# 用途: Operational StageとCapabilityの1:1対応を検証
+# バージョン: V5.6
+# 作成日: 2026-01-14
+
+# ============================================================
+# 検証ルール
+# ============================================================
+validator:
+  name: "OS-Capability Mapping Validator"
+  version: "1.0"
+  target: "vs{N}-operational-stages.yaml"
+
+  rules:
+    # ============================================================
+    # Rule 1: OS-Capability 1:1対応
+    # ============================================================
+    - id: "OSCAP-001"
+      name: "OS-Capability One-to-One"
+      severity: "error"
+      description: "各OSに1つのCapabilityが対応していること"
+      check: |
+        各operational_stages.stages に対して:
+        - capability セクションが存在する
+        - capability.id が空でない
+      fix: "OSに対応するCapabilityを設定する"
+
+    # ============================================================
+    # Rule 2: Capability重複なし
+    # ============================================================
+    - id: "OSCAP-002"
+      name: "No Capability Duplication"
+      severity: "error"
+      description: "同一Capabilityが複数のOSに対応していないこと"
+      check: |
+        全OSの capability.id を収集:
+        - 重複するIDがないこと
+      fix: "重複するCapabilityを別のOSに再配置するか、OSを統合する"
+
+    # ============================================================
+    # Rule 3: Capability存在確認
+    # ============================================================
+    - id: "OSCAP-003"
+      name: "Capability Exists"
+      severity: "error"
+      description: "参照されるCapabilityがCL2定義に存在すること"
+      check: |
+        各OSの capability.id に対して:
+        - CL2定義ファイル内に該当IDが存在する
+      fix: "存在しないCapability IDを修正するか、CL2定義を追加する"
+
+    # ============================================================
+    # Rule 4: Value Stream整合性
+    # ============================================================
+    - id: "OSCAP-004"
+      name: "Value Stream Consistency"
+      severity: "error"
+      description: "OSが属するValue Streamが正しく設定されていること"
+      check: |
+        operational_stages.value_stream に対して:
+        - id が有効なVStr形式である（VStr-{N}）
+        - Phase 2で定義されたValue Streamと一致する
+      fix: "正しいValue Stream IDを設定する"
+
+    # ============================================================
+    # Rule 5: Value Stage整合性
+    # ============================================================
+    - id: "OSCAP-005"
+      name: "Value Stage Consistency"
+      severity: "error"
+      description: "Value Stageが正しい形式であること"
+      check: |
+        operational_stages.value_stream.value_stage に対して:
+        - 有効な形式である（VS{N}_VS{M}）
+        - N < M であること
+      fix: "正しいValue Stage範囲を設定する"
+
+    # ============================================================
+    # Rule 6: 価値蓄積ポイントの存在
+    # ============================================================
+    - id: "OSCAP-006"
+      name: "Value Accumulation Defined"
+      severity: "warning"
+      description: "各OSに価値蓄積ポイントが定義されていること"
+      check: |
+        各OSに対して:
+        - value_accumulation 配列が存在する
+        - 1つ以上の項目がある
+      fix: "価値蓄積ポイントを追加する"
+
+    # ============================================================
+    # Rule 7: 判断ポイントの存在
+    # ============================================================
+    - id: "OSCAP-007"
+      name: "Decision Points Defined"
+      severity: "warning"
+      description: "各OSに判断ポイントが定義されていること"
+      check: |
+        各OSに対して:
+        - decision_points 配列が存在する
+        - 1つ以上の項目がある
+      fix: "判断ポイントを追加する"
+
+    # ============================================================
+    # Rule 8: 測定ポイントの存在
+    # ============================================================
+    - id: "OSCAP-008"
+      name: "Measurement Points Defined"
+      severity: "warning"
+      description: "各OSに測定ポイントが定義されていること"
+      check: |
+        各OSに対して:
+        - measurement_points 配列が存在する
+        - 各ポイントに metric と target がある
+      fix: "測定ポイントとターゲット値を追加する"
+
+    # ============================================================
+    # Rule 9: OS IDの一意性
+    # ============================================================
+    - id: "OSCAP-009"
+      name: "OS ID Uniqueness"
+      severity: "error"
+      description: "OS IDがValue Stream内で一意であること"
+      check: |
+        全OSの id を収集:
+        - 重複するIDがないこと
+      fix: "重複するOS IDを修正する"
+
+    # ============================================================
+    # Rule 10: OS順序の妥当性
+    # ============================================================
+    - id: "OSCAP-010"
+      name: "OS Sequence Validity"
+      severity: "warning"
+      description: "OS IDの番号が連続していること"
+      check: |
+        OS IDの番号を抽出（OS-1, OS-2, ...）:
+        - 番号が1から始まる
+        - 番号が連続している（欠番がない）
+      fix: "OS IDを連番に修正する"
+
+    # ============================================================
+    # Rule 11: Capability-VC対応の存在
+    # ============================================================
+    - id: "OSCAP-011"
+      name: "Capability VC Mapping Exists"
+      severity: "warning"
+      description: "対応するCapabilityにVC対応が設定されていること"
+      check: |
+        各OSの capability.id に対して:
+        - vc-capability-mapping.yaml内に対応エントリがある
+        - primary_vc が設定されている
+      fix: "VC-Capability対応マッピングを追加する"
+
+    # ============================================================
+    # Rule 12: ステージ依存TVDCとの整合性
+    # ============================================================
+    - id: "OSCAP-012"
+      name: "Stage TVDC Consistency"
+      severity: "info"
+      description: "ステージ依存TVDCが設定されている場合、VSと整合すること"
+      check: |
+        各OSに対して:
+        - 対応Capabilityにstage_overridesがある場合
+        - OSのvalue_stageと一致するオーバーライドがあるか確認
+      fix: "情報として認識し、必要に応じてステージTVDCを調整"
+
+# ============================================================
+# 検証結果テンプレート
+# ============================================================
+result_template:
+  summary:
+    value_stream:
+      id: ""
+      name: ""
+    total_os: 0
+    total_capabilities: 0
+    one_to_one_valid: false
+    passed: 0
+    failed: 0
+    warnings: 0
+
+  details:
+    - os_id: ""
+      capability_id: ""
+      rules:
+        - rule_id: ""
+          status: "pass | fail | warning | info"
+          message: ""
+
+  coverage:
+    os_with_capability: 0
+    capabilities_mapped: 0
+    os_without_capability: []
+    unmapped_capabilities: []
+
+# ============================================================
+# 使用方法
+# ============================================================
+# 1. vs{N}-operational-stages.yaml を読み込む
+# 2. 関連するCL2定義ファイルを読み込む
+# 3. vc-capability-mapping.yaml を読み込む（オプション）
+# 4. 各ルールを順に適用
+# 5. 結果をresult_templateに記録
+# 6. サマリーを出力
+#
+# 実行コマンド（予定）:
+# /parasol:validate os-capability-mapping
+# ============================================================

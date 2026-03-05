@@ -1,0 +1,199 @@
+# ステージ依存TVDC整合性バリデータ（V5.6）
+# Stage-dependent TVDC Consistency Validator
+#
+# 用途: ステージ依存TVDCの設定が整合しているか検証
+# バージョン: V5.6
+# 作成日: 2026-01-14
+
+# ============================================================
+# 検証ルール
+# ============================================================
+validator:
+  name: "Stage TVDC Consistency Validator"
+  version: "1.0"
+  target: "stage-tvdc-overrides.yaml"
+
+  rules:
+    # ============================================================
+    # Rule 1: Capability参照の有効性
+    # ============================================================
+    - id: "STVDC-001"
+      name: "Capability Reference Valid"
+      severity: "error"
+      description: "参照するCapabilityがCL2定義に存在すること"
+      check: |
+        各stage_dependent_tvdc.capability.id に対して:
+        - CL2定義ファイル内に該当IDが存在する
+      fix: "存在しないCapability IDを修正する"
+
+    # ============================================================
+    # Rule 2: デフォルトTVDCの有効性
+    # ============================================================
+    - id: "STVDC-002"
+      name: "Default TVDC Valid"
+      severity: "error"
+      description: "tvdc_defaultが有効な値であること"
+      check: |
+        tvdc_default に対して:
+        - Core, VCI, Supporting, Generic のいずれかである
+      fix: "有効なTVDC分類を設定する"
+
+    # ============================================================
+    # Rule 3: オーバーライドTVDCの有効性
+    # ============================================================
+    - id: "STVDC-003"
+      name: "Override TVDC Valid"
+      severity: "error"
+      description: "stage_overridesのtvdcが有効な値であること"
+      check: |
+        enabled=true の各stage_overridesに対して:
+        - tvdc が Core, VCI, Supporting, Generic のいずれかである
+      fix: "有効なTVDC分類を設定する"
+
+    # ============================================================
+    # Rule 4: Value Stage形式の有効性
+    # ============================================================
+    - id: "STVDC-004"
+      name: "Value Stage Format Valid"
+      severity: "error"
+      description: "stage_overridesのキーが有効なVS形式であること"
+      check: |
+        各stage_overridesのキーに対して:
+        - VS{N}_VS{M} 形式である
+        - N, M は 0-7 の整数
+        - N < M である
+      fix: "正しいValue Stage形式に修正する"
+
+    # ============================================================
+    # Rule 5: オーバーライド理由の存在
+    # ============================================================
+    - id: "STVDC-005"
+      name: "Override Rationale Exists"
+      severity: "warning"
+      description: "enabled=trueの場合、rationaleが記載されていること"
+      check: |
+        enabled=true の各stage_overridesに対して:
+        - rationale が空でない
+      fix: "オーバーライドの理由を記載する"
+
+    # ============================================================
+    # Rule 6: デフォルト理由の存在
+    # ============================================================
+    - id: "STVDC-006"
+      name: "Default Rationale Exists"
+      severity: "warning"
+      description: "tvdc_rationaleが記載されていること"
+      check: |
+        各stage_dependent_tvdcに対して:
+        - tvdc_rationale が空でない
+      fix: "デフォルトTVDCの理由を記載する"
+
+    # ============================================================
+    # Rule 7: CL2のTVDCとの整合性
+    # ============================================================
+    - id: "STVDC-007"
+      name: "CL2 TVDC Alignment"
+      severity: "warning"
+      description: "tvdc_defaultがCL2定義のTVDCと一致すること"
+      check: |
+        対応するCL2定義のtvdc_defaultと比較:
+        - 値が一致すること
+      fix: "CL2定義またはステージTVDC設定を調整する"
+
+    # ============================================================
+    # Rule 8: オーバーライドの妥当性
+    # ============================================================
+    - id: "STVDC-008"
+      name: "Override Reasonability"
+      severity: "info"
+      description: "オーバーライドが妥当なパターンか情報提供"
+      check: |
+        各enabled=true のオーバーライドに対して:
+        - Generic→Core への昇格は珍しい → 情報表示
+        - Core→Generic への降格は珍しい → 情報表示
+      fix: "情報として認識し、意図的であれば問題なし"
+
+    # ============================================================
+    # Rule 9: ステージ重複チェック
+    # ============================================================
+    - id: "STVDC-009"
+      name: "Stage Overlap Check"
+      severity: "warning"
+      description: "オーバーライドのValue Stage範囲が重複していないこと"
+      check: |
+        enabled=true の全stage_overridesに対して:
+        - VS範囲が重複していないこと
+        - 例: VS1_VS3 と VS2_VS4 は重複
+      fix: "重複するステージ範囲を調整する"
+
+    # ============================================================
+    # Rule 10: OS対応との整合性
+    # ============================================================
+    - id: "STVDC-010"
+      name: "OS Mapping Alignment"
+      severity: "info"
+      description: "ステージTVDCがOS定義のvalue_stageと整合すること"
+      check: |
+        対応OSのvalue_stageに対して:
+        - そのステージ範囲に対応するオーバーライドがあるか確認
+      fix: "情報として整合性を確認"
+
+    # ============================================================
+    # Rule 11: 完全なステージカバレッジ
+    # ============================================================
+    - id: "STVDC-011"
+      name: "Stage Coverage"
+      severity: "info"
+      description: "全Value Stageに対してTVDCが決定可能か情報提供"
+      check: |
+        VS0_VS1 から VS6_VS7 まで:
+        - デフォルトまたはオーバーライドでTVDCが決定可能か
+      fix: "情報として認識"
+
+# ============================================================
+# 検証結果テンプレート
+# ============================================================
+result_template:
+  summary:
+    total_capabilities: 0
+    with_overrides: 0
+    total_overrides: 0
+    passed: 0
+    failed: 0
+    warnings: 0
+
+  override_summary:
+    by_stage:
+      VS0_VS2: 0
+      VS1_VS3: 0
+      VS2_VS4: 0
+      VS3_VS5: 0
+      VS4_VS7: 0
+    by_tvdc_change:
+      to_core: 0
+      to_vci: 0
+      to_supporting: 0
+      to_generic: 0
+
+  details:
+    - capability_id: ""
+      tvdc_default: ""
+      overrides:
+        - stage: ""
+          tvdc: ""
+          status: "pass | fail | warning | info"
+          message: ""
+
+# ============================================================
+# 使用方法
+# ============================================================
+# 1. stage-tvdc-overrides.yaml を読み込む
+# 2. CL2定義ファイル群を読み込む
+# 3. vs{N}-operational-stages.yaml を読み込む（オプション）
+# 4. 各ルールを順に適用
+# 5. 結果をresult_templateに記録
+# 6. サマリーを出力
+#
+# 実行コマンド（予定）:
+# /parasol:validate stage-tvdc-consistency
+# ============================================================

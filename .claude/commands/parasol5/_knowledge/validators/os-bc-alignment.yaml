@@ -1,0 +1,177 @@
+# OS-BC整合性バリデータ（V5.6）
+# OS-BC Alignment Validator
+#
+# 用途: Operational StageとBounded Contextの整合性を検証
+# バージョン: V5.6
+# 作成日: 2026-01-14
+
+# ============================================================
+# 検証ルール
+# ============================================================
+validator:
+  name: "OS-BC Alignment Validator"
+  version: "1.0"
+  target: "os-bc-mapping.yaml"
+
+  rules:
+    # ============================================================
+    # Rule 1: 全OSにBC対応があるか
+    # ============================================================
+    - id: "OSBC-001"
+      name: "OS BC Coverage"
+      severity: "error"
+      description: "すべてのOSに対応するBCが定義されていること"
+      check: |
+        各OSに対して:
+        - bc セクションが存在する
+        - bc.id が空でない
+      fix: "OSに対応するBCを設定する"
+
+    # ============================================================
+    # Rule 2: BC存在確認
+    # ============================================================
+    - id: "OSBC-002"
+      name: "BC Exists"
+      severity: "error"
+      description: "参照されるBCがPhase 4定義に存在すること"
+      check: |
+        各bc.id に対して:
+        - Phase 4のBC定義ファイル内に該当IDが存在する
+      fix: "存在しないBC IDを修正するか、BC定義を追加する"
+
+    # ============================================================
+    # Rule 3: 整合性ステータスの有効性
+    # ============================================================
+    - id: "OSBC-003"
+      name: "Alignment Status Valid"
+      severity: "error"
+      description: "alignment.statusが有効な値であること"
+      check: |
+        各alignment.status に対して:
+        - aligned, partial, misaligned のいずれかである
+      fix: "有効なステータス値を設定する"
+
+    # ============================================================
+    # Rule 4: misaligned時の対応
+    # ============================================================
+    - id: "OSBC-004"
+      name: "Misaligned Requires Action"
+      severity: "error"
+      description: "misaligned状態のマッピングには対応アクションがあること"
+      check: |
+        alignment.status = "misaligned" の場合:
+        - alignment.notes または remediation_action が設定されている
+      fix: "misaligned状態の解消アクションを記載する"
+
+    # ============================================================
+    # Rule 5: partial時の文書化
+    # ============================================================
+    - id: "OSBC-005"
+      name: "Partial Documented"
+      severity: "warning"
+      description: "partial状態のマッピングには理由が文書化されていること"
+      check: |
+        alignment.status = "partial" の場合:
+        - alignment.notes が空でない
+      fix: "partial状態の理由を記載する"
+
+    # ============================================================
+    # Rule 6: Capability-BC整合性
+    # ============================================================
+    - id: "OSBC-006"
+      name: "Capability BC Consistency"
+      severity: "warning"
+      description: "OS対応CapabilityとBC対応Capabilityが整合すること"
+      check: |
+        os.capability_id と bc に対して:
+        - BCの責務がCapabilityの責務と一致すること
+      fix: "Capability-BC対応を見直す"
+
+    # ============================================================
+    # Rule 7: Value Stream整合性
+    # ============================================================
+    - id: "OSBC-007"
+      name: "Value Stream Consistency"
+      severity: "error"
+      description: "マッピング内のValue Streamが有効であること"
+      check: |
+        value_stream.id に対して:
+        - Phase 2/3で定義されたValue Streamと一致する
+      fix: "正しいValue Stream IDを設定する"
+
+    # ============================================================
+    # Rule 8: BC責務の記載
+    # ============================================================
+    - id: "OSBC-008"
+      name: "BC Responsibility Defined"
+      severity: "warning"
+      description: "各BCに責務が記載されていること"
+      check: |
+        各bc に対して:
+        - responsibility が空でない
+      fix: "BC責務を記載する"
+
+    # ============================================================
+    # Rule 9: OS-BC重複チェック
+    # ============================================================
+    - id: "OSBC-009"
+      name: "No Duplicate Mapping"
+      severity: "warning"
+      description: "同一BCが複数OSに対応していないか確認"
+      check: |
+        全マッピングの bc.id を収集:
+        - 重複がある場合は情報提供
+      fix: "意図的な重複でなければBC境界を見直す"
+
+    # ============================================================
+    # Rule 10: 全BCのOS対応
+    # ============================================================
+    - id: "OSBC-010"
+      name: "All BCs Mapped"
+      severity: "info"
+      description: "すべてのBCにOSが対応しているか情報提供"
+      check: |
+        Phase 4の全BC に対して:
+        - os-bc-mapping.yaml内に対応エントリがあるか確認
+      fix: "情報として認識"
+
+# ============================================================
+# 検証結果テンプレート
+# ============================================================
+result_template:
+  summary:
+    value_stream:
+      id: ""
+      name: ""
+    total_os: 0
+    total_bc: 0
+    alignment_status:
+      aligned: 0
+      partial: 0
+      misaligned: 0
+    passed: 0
+    failed: 0
+    warnings: 0
+
+  details:
+    - os_id: ""
+      bc_id: ""
+      alignment: ""
+      rules:
+        - rule_id: ""
+          status: "pass | fail | warning | info"
+          message: ""
+
+# ============================================================
+# 使用方法
+# ============================================================
+# 1. os-bc-mapping.yaml を読み込む
+# 2. Phase 4のBC定義ファイル群を読み込む
+# 3. Phase 3のOS定義を読み込む
+# 4. 各ルールを順に適用
+# 5. 結果をresult_templateに記録
+# 6. サマリーを出力
+#
+# 実行コマンド:
+# /parasol:validate os-bc-alignment
+# ============================================================

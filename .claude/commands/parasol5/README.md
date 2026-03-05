@@ -83,8 +83,17 @@ parasol5/
 ├── execution/
 ├── utils/
 └── _knowledge/
-    ├── capability/
-    └── software-design/
+    ├── README.md                    # ナレッジベース目次
+    ├── capability/                  # ケイパビリティ分解パターン
+    ├── software-design/             # ソフトウェア設計（命名, オペレーション）
+    ├── philosophy/                  # 設計哲学（ZIGZAG, CL階層, 公理的設計）
+    ├── architecture/                # アーキテクチャ参照（API, DB, 統合）
+    ├── concepts/                    # 設計コンセプト（DDD, TVDC, BIZBOK）
+    ├── diagrams/                    # 構造図（三空間, CL3→BC）
+    ├── validators/                  # 品質ゲートバリデータ（YAML）
+    ├── reference/                   # フレームワーク参照（公理的設計, VS→CL）
+    ├── guides/                      # 設計ガイド（実装, V5総合）
+    └── versions/                    # バージョン仕様（V5.6, V5.7）
 ```
 
 ## Migration

@@ -1,0 +1,251 @@
+# Value Portfolioバランスバリデータ（V5.6）
+# Value Portfolio Balance Validator
+#
+# 用途: Value Portfolioの投資配分が適切かどうかを検証
+# バージョン: V5.6
+# 作成日: 2026-01-14
+
+# ============================================================
+# 検証ルール
+# ============================================================
+validator:
+  name: "Value Portfolio Balance Validator"
+  version: "1.0"
+  target: "value-declaration.yaml"
+
+  rules:
+    # ============================================================
+    # Rule 1: VC投資配分の完全性
+    # ============================================================
+    - id: "PORT-001"
+      name: "VC Investment Completeness"
+      severity: "error"
+      description: "VC別投資配分が5つすべて定義されていること"
+      check: |
+        value_portfolio.vc_investment に対して:
+        - VC1_product が存在する
+        - VC2_service が存在する
+        - VC3_experience が存在する
+        - VC4_relationship が存在する
+        - VC5_information が存在する
+      fix: "未定義のVC投資配分を追加する"
+
+    # ============================================================
+    # Rule 2: VC現在配分の合計
+    # ============================================================
+    - id: "PORT-002"
+      name: "VC Current Allocation Sum"
+      severity: "error"
+      description: "VC別current_allocationの合計が1.0であること"
+      check: |
+        vc_investment の全current_allocationを合計:
+        - 合計値が 1.0 であること（許容誤差: ±0.01）
+      fix: "current_allocationを調整して合計1.0にする"
+
+    # ============================================================
+    # Rule 3: VC目標配分の合計
+    # ============================================================
+    - id: "PORT-003"
+      name: "VC Target Allocation Sum"
+      severity: "error"
+      description: "VC別target_allocationの合計が1.0であること"
+      check: |
+        vc_investment の全target_allocationを合計:
+        - 合計値が 1.0 であること（許容誤差: ±0.01）
+      fix: "target_allocationを調整して合計1.0にする"
+
+    # ============================================================
+    # Rule 4: TVDC投資配分の完全性
+    # ============================================================
+    - id: "PORT-004"
+      name: "TVDC Investment Completeness"
+      severity: "error"
+      description: "TVDC別投資配分が4つすべて定義されていること"
+      check: |
+        value_portfolio.tvdc_investment に対して:
+        - Core が存在する
+        - VCI が存在する
+        - Supporting が存在する
+        - Generic が存在する
+      fix: "未定義のTVDC投資配分を追加する"
+
+    # ============================================================
+    # Rule 5: TVDC現在配分の合計
+    # ============================================================
+    - id: "PORT-005"
+      name: "TVDC Current Sum"
+      severity: "error"
+      description: "TVDC別currentの合計が1.0であること"
+      check: |
+        tvdc_investment の全currentを合計:
+        - 合計値が 1.0 であること（許容誤差: ±0.01）
+      fix: "currentを調整して合計1.0にする"
+
+    # ============================================================
+    # Rule 6: TVDC目標配分の合計
+    # ============================================================
+    - id: "PORT-006"
+      name: "TVDC Target Sum"
+      severity: "error"
+      description: "TVDC別targetの合計が1.0であること"
+      check: |
+        tvdc_investment の全targetを合計:
+        - 合計値が 1.0 であること（許容誤差: ±0.01）
+      fix: "targetを調整して合計1.0にする"
+
+    # ============================================================
+    # Rule 7: ギャップアクションの存在
+    # ============================================================
+    - id: "PORT-007"
+      name: "Gap Action Defined"
+      severity: "warning"
+      description: "現在と目標にギャップがある場合、gap_actionが定義されていること"
+      check: |
+        各vc_investmentに対して:
+        - current_allocation != target_allocation の場合
+        - gap_action が空でないこと
+      fix: "ギャップを埋めるためのアクションを記載する"
+
+    # ============================================================
+    # Rule 8: Core投資の優先度
+    # ============================================================
+    - id: "PORT-008"
+      name: "Core Investment Priority"
+      severity: "warning"
+      description: "Core領域への目標投資が適切であること"
+      check: |
+        tvdc_investment.Core に対して:
+        - target >= 0.25 であること
+        - または競争戦略の理由が明確であること
+      fix: "Core投資が低い場合は戦略的意図を明記する"
+
+    # ============================================================
+    # Rule 9: Generic投資の制限
+    # ============================================================
+    - id: "PORT-009"
+      name: "Generic Investment Limit"
+      severity: "warning"
+      description: "Generic領域への投資が過大でないこと"
+      check: |
+        tvdc_investment.Generic に対して:
+        - target <= 0.15 であること
+        - または明確な理由があること
+      fix: "Generic投資を削減するか、理由を明記する"
+
+    # ============================================================
+    # Rule 10: 投資配分の妥当な範囲
+    # ============================================================
+    - id: "PORT-010"
+      name: "Allocation Range Validity"
+      severity: "warning"
+      description: "各投資配分が0.0〜1.0の範囲内であること"
+      check: |
+        すべてのallocation値に対して:
+        - 0.0 <= 値 <= 1.0 であること
+      fix: "範囲外の値を修正する"
+
+    # ============================================================
+    # Rule 11: 極端な配分の警告
+    # ============================================================
+    - id: "PORT-011"
+      name: "Extreme Allocation Warning"
+      severity: "info"
+      description: "極端に高いまたは低い配分がある場合に情報提供"
+      check: |
+        各VC投資に対して:
+        - target_allocation > 0.5 の場合に情報表示
+        - target_allocation < 0.05 の場合に情報表示
+      fix: "情報として認識し、意図的であれば問題なし"
+
+    # ============================================================
+    # Rule 12: 主要VCとの整合性
+    # ============================================================
+    - id: "PORT-012"
+      name: "Primary VC Alignment"
+      severity: "warning"
+      description: "VL3の主要VC（★★★）とPortfolio配分の整合性"
+      check: |
+        VL3のvalue_componentsを集計:
+        - ★★★が多いVCに対応するVC投資のtarget_allocationが
+          相対的に高いこと
+      fix: "主要VCへの投資配分を見直す"
+
+    # ============================================================
+    # Rule 13: VC-TVDC整合性チェック
+    # ============================================================
+    - id: "PORT-013"
+      name: "VC-TVDC Consistency"
+      severity: "info"
+      description: "VC投資とTVDC投資の整合性情報"
+      check: |
+        以下のパターンを情報として表示:
+        - Core TVDC高投資 かつ VC1低投資 → 製品以外で差別化
+        - VCI高投資 かつ VC3低投資 → 体験以外で品質投資
+      fix: "情報として戦略の一貫性を確認"
+
+# ============================================================
+# 検証結果テンプレート
+# ============================================================
+result_template:
+  summary:
+    vc_investment:
+      complete: false
+      current_sum: 0.00
+      target_sum: 0.00
+      gaps_with_actions: 0
+    tvdc_investment:
+      complete: false
+      current_sum: 0.00
+      target_sum: 0.00
+    passed: 0
+    failed: 0
+    warnings: 0
+    info: 0
+
+  details:
+    - rule_id: ""
+      status: "pass | fail | warning | info"
+      message: ""
+      affected_items: []
+
+  recommendations:
+    - priority: "high | medium | low"
+      action: ""
+      rationale: ""
+
+# ============================================================
+# バランス分析テンプレート
+# ============================================================
+balance_analysis:
+  # VC投資バランス
+  vc_balance:
+    dominant_vc: ""        # 最も投資が高いVC
+    neglected_vc: ""       # 最も投資が低いVC
+    balance_score: 0.0     # 0=極端な偏り, 1=均等配分
+    pattern: ""            # 製品主導型, サービス主導型, etc.
+
+  # TVDC投資バランス
+  tvdc_balance:
+    competitive_focus: 0.0   # Core + VCI の合計
+    operational_focus: 0.0   # Supporting + Generic の合計
+    strategy_type: ""        # 差別化戦略, コスト戦略, etc.
+
+  # ギャップ分析
+  gap_analysis:
+    total_gap: 0.0           # 現在と目標の総ギャップ
+    largest_gap_vc: ""       # 最大ギャップのVC
+    requires_action: []      # アクション必要なVC/TVDCリスト
+
+# ============================================================
+# 使用方法
+# ============================================================
+# 1. value-declaration.yaml を読み込む
+# 2. value_portfolio セクションを抽出
+# 3. 各ルールを順に適用
+# 4. 結果をresult_templateに記録
+# 5. balance_analysisを計算
+# 6. サマリーと推奨アクションを出力
+#
+# 実行コマンド（予定）:
+# /parasol:validate portfolio-balance
+# ============================================================
