@@ -82,18 +82,23 @@ parasol5/
 ├── milestone/
 ├── execution/
 ├── utils/
-└── _knowledge/
-    ├── README.md                    # ナレッジベース目次
-    ├── capability/                  # ケイパビリティ分解パターン
-    ├── software-design/             # ソフトウェア設計（命名, オペレーション）
-    ├── philosophy/                  # 設計哲学（ZIGZAG, CL階層, 公理的設計）
-    ├── architecture/                # アーキテクチャ参照（API, DB, 統合）
-    ├── concepts/                    # 設計コンセプト（DDD, TVDC, BIZBOK）
-    ├── diagrams/                    # 構造図（三空間, CL3→BC）
-    ├── validators/                  # 品質ゲートバリデータ（YAML）
-    ├── reference/                   # フレームワーク参照（公理的設計, VS→CL）
-    ├── guides/                      # 設計ガイド（実装, V5総合）
-    └── versions/                    # バージョン仕様（V5.6, V5.7）
+├── _knowledge/
+│   ├── README.md                    # ナレッジベース目次
+│   ├── capability/                  # ケイパビリティ分解パターン
+│   ├── software-design/             # ソフトウェア設計（命名, オペレーション）
+│   ├── philosophy/                  # 設計哲学（ZIGZAG, CL階層, 公理的設計）
+│   ├── architecture/                # アーキテクチャ参照（API, DB, 統合）
+│   ├── concepts/                    # 設計コンセプト（DDD, TVDC, BIZBOK）
+│   ├── diagrams/                    # 構造図（三空間, CL3→BC）
+│   ├── validators/                  # 品質ゲートバリデータ（YAML）
+│   ├── reference/                   # フレームワーク参照（公理的設計, VS→CL）
+│   ├── guides/                      # 設計ガイド（実装, V5総合）
+│   └── versions/                    # バージョン仕様（V5.6, V5.7）
+└── _project/                        # プロジェクト固有（コア更新時に保持）
+    ├── README.md
+    ├── knowledge/                   # プロジェクト固有ナレッジ
+    ├── overrides/                   # コアコマンド上書き
+    └── outputs/                     # プロジェクト固有成果物
 ```
 
 ## Migration

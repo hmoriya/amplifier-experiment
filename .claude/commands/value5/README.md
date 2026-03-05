@@ -60,14 +60,19 @@ value5/
 ├── necessity-check.md
 ├── imagination-detect.md
 ├── inheritance.md
-└── _knowledge/
-    ├── README.md                    # ナレッジベース目次
-    ├── patterns/                    # 業界パターン・軸パターン
-    │   ├── _axes/
-    │   └── industries/
-    ├── methodology/                 # 価値方法論（VMS, トレーサビリティ）
-    ├── validators/                  # 価値バリデータ（エビデンス, 想像検出, 構造的必然性）
-    ├── concepts/                    # 概念フレームワーク（哲学, TVDC, VC）
-    ├── reference/                   # 外部標準参照（BIZBOK, TOGAF）
-    └── guides/                      # ガイド（V5総合, ビジュアルスタイル）
+├── _knowledge/
+│   ├── README.md                    # ナレッジベース目次
+│   ├── patterns/                    # 業界パターン・軸パターン
+│   │   ├── _axes/
+│   │   └── industries/
+│   ├── methodology/                 # 価値方法論（VMS, トレーサビリティ）
+│   ├── validators/                  # 価値バリデータ（エビデンス, 想像検出, 構造的必然性）
+│   ├── concepts/                    # 概念フレームワーク（哲学, TVDC, VC）
+│   ├── reference/                   # 外部標準参照（BIZBOK, TOGAF）
+│   └── guides/                      # ガイド（V5総合, ビジュアルスタイル）
+└── _project/                        # プロジェクト固有（コア更新時に保持）
+    ├── README.md
+    ├── knowledge/                   # プロジェクト固有ナレッジ
+    ├── overrides/                   # コアコマンド上書き
+    └── outputs/                     # プロジェクト固有成果物
 ```
