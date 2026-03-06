@@ -1,0 +1,197 @@
+# ステージ依存アーキテクチャ整合性バリデータ（V5.6）
+# Stage Architecture Consistency Validator
+#
+# 用途: ステージ依存TVDCに基づくアーキテクチャ判断の整合性を検証
+# バージョン: V5.6
+# 作成日: 2026-01-14
+
+# ============================================================
+# 検証ルール
+# ============================================================
+validator:
+  name: "Stage Architecture Consistency Validator"
+  version: "1.0"
+  target: "stage-architecture-decisions.yaml"
+
+  rules:
+    # ============================================================
+    # Rule 1: BC参照の有効性
+    # ============================================================
+    - id: "STARCH-001"
+      name: "BC Reference Valid"
+      severity: "error"
+      description: "参照するBCがPhase 4定義に存在すること"
+      check: |
+        各bc.id に対して:
+        - Phase 4のBC定義ファイル内に該当IDが存在する
+      fix: "存在しないBC IDを修正する"
+
+    # ============================================================
+    # Rule 2: ステージTVDCとの整合性
+    # ============================================================
+    - id: "STARCH-002"
+      name: "Stage TVDC Alignment"
+      severity: "error"
+      description: "stage_tvdcがPhase 3.4の設定と一致すること"
+      check: |
+        stage_tvdc.default と overrides に対して:
+        - stage-tvdc-overrides.yaml の該当Capabilityと一致する
+      fix: "Phase 3.4のステージ依存TVDC設定と同期する"
+
+    # ============================================================
+    # Rule 3: Build/Buy判断の存在
+    # ============================================================
+    - id: "STARCH-003"
+      name: "Build Buy Decision Exists"
+      severity: "error"
+      description: "各ステージにBuild/Buy判断があること"
+      check: |
+        enabled=trueの各stage_overridesに対して:
+        - architecture_decisions内に対応ステージのエントリがある
+        - recommendations.build_buy が設定されている
+      fix: "ステージ別のBuild/Buy判断を追加する"
+
+    # ============================================================
+    # Rule 4: Build/Buy値の有効性
+    # ============================================================
+    - id: "STARCH-004"
+      name: "Build Buy Value Valid"
+      severity: "error"
+      description: "build_buyが有効な値であること"
+      check: |
+        各recommendations.build_buy に対して:
+        - Build, Buy, Buy + Customize, Partner, SaaS のいずれかである
+      fix: "有効なBuild/Buy値を設定する"
+
+    # ============================================================
+    # Rule 5: TVDC-Build/Buy整合性
+    # ============================================================
+    - id: "STARCH-005"
+      name: "TVDC Build Buy Consistency"
+      severity: "warning"
+      description: "TVDCとBuild/Buy判断が整合すること"
+      check: |
+        各architecture_decisionsに対して:
+        - Core → Build が推奨
+        - VCI → Buy + Customize が推奨
+        - Supporting → Buy or Partner が推奨
+        - Generic → SaaS が推奨
+      fix: "TVDCに応じたBuild/Buy判断を見直す"
+
+    # ============================================================
+    # Rule 6: 理由の記載
+    # ============================================================
+    - id: "STARCH-006"
+      name: "Rationale Defined"
+      severity: "warning"
+      description: "Build/Buy判断の理由が記載されていること"
+      check: |
+        各recommendations に対して:
+        - rationale が空でない
+      fix: "判断理由を記載する"
+
+    # ============================================================
+    # Rule 7: 非機能要件の存在
+    # ============================================================
+    - id: "STARCH-007"
+      name: "NFR Defined"
+      severity: "warning"
+      description: "非機能要件が定義されていること"
+      check: |
+        各recommendations に対して:
+        - non_functional セクションが存在する
+      fix: "非機能要件を追加する"
+
+    # ============================================================
+    # Rule 8: NFR-TVDC整合性
+    # ============================================================
+    - id: "STARCH-008"
+      name: "NFR TVDC Consistency"
+      severity: "warning"
+      description: "非機能要件がTVDCレベルと整合すること"
+      check: |
+        各non_functional に対して:
+        - Core → availability: 99.99%, latency: <500ms
+        - VCI → availability: 99.9%, latency: <1s
+        - Supporting → availability: 99%, latency: <3s
+        - Generic → SaaS SLA準拠
+      fix: "TVDCレベルに応じた非機能要件に調整"
+
+    # ============================================================
+    # Rule 9: 統合パターンの有効性
+    # ============================================================
+    - id: "STARCH-009"
+      name: "Integration Pattern Valid"
+      severity: "warning"
+      description: "integration_patternが有効な値であること"
+      check: |
+        各recommendations.integration_pattern に対して:
+        - 有効なパターン名である
+        - 例: Direct API, SDK Integration, Event-Driven, Batch, etc.
+      fix: "有効な統合パターンを設定する"
+
+    # ============================================================
+    # Rule 10: デフォルトステージのカバレッジ
+    # ============================================================
+    - id: "STARCH-010"
+      name: "Default Stage Coverage"
+      severity: "info"
+      description: "オーバーライドがないステージにデフォルト判断が適用されるか確認"
+      check: |
+        stage_tvdc.default に対して:
+        - architecture_decisions 内にデフォルト用エントリがあるか
+        - またはデフォルトTVDCに応じた判断が暗黙適用されるか
+      fix: "情報として認識"
+
+    # ============================================================
+    # Rule 11: ステージ遷移の論理性
+    # ============================================================
+    - id: "STARCH-011"
+      name: "Stage Transition Logic"
+      severity: "info"
+      description: "ステージ間でのBuild/Buy判断変化が論理的か確認"
+      check: |
+        連続するステージ間で:
+        - Build → SaaS への急激な変化がある場合に情報表示
+        - TVDC変化と整合した判断変化か確認
+      fix: "情報として認識し、必要に応じて調整"
+
+# ============================================================
+# 検証結果テンプレート
+# ============================================================
+result_template:
+  summary:
+    total_bcs: 0
+    with_stage_decisions: 0
+    build_buy_distribution:
+      build: 0
+      buy: 0
+      buy_customize: 0
+      partner: 0
+      saas: 0
+    passed: 0
+    failed: 0
+    warnings: 0
+
+  details:
+    - bc_id: ""
+      stages:
+        - stage: ""
+          tvdc: ""
+          build_buy: ""
+          status: "pass | fail | warning | info"
+          message: ""
+
+# ============================================================
+# 使用方法
+# ============================================================
+# 1. stage-architecture-decisions.yaml を読み込む
+# 2. Phase 4のBC定義ファイル群を読み込む
+# 3. stage-tvdc-overrides.yaml を読み込む
+# 4. 各ルールを順に適用
+# 5. 結果をresult_templateに記録
+# 6. サマリーを出力
+#
+# 実行コマンド:
+# /parasol:validate stage-architecture-consistency
+# ============================================================

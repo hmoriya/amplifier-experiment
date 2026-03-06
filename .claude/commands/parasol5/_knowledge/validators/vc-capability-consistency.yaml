@@ -1,0 +1,186 @@
+# VC-Capability整合性バリデータ（V5.6）
+# VC-Capability Consistency Validator
+#
+# 用途: Value ComponentとCapabilityの対応が整合しているか検証
+# バージョン: V5.6
+# 作成日: 2026-01-14
+
+# ============================================================
+# 検証ルール
+# ============================================================
+validator:
+  name: "VC-Capability Consistency Validator"
+  version: "1.0"
+  target: "vc-capability-mapping.yaml"
+
+  rules:
+    # ============================================================
+    # Rule 1: Primary VCの存在
+    # ============================================================
+    - id: "VCCAP-001"
+      name: "Primary VC Exists"
+      severity: "error"
+      description: "すべてのCL2にprimary_vcが設定されていること"
+      check: |
+        各vc_capability_mappingエントリに対して:
+        - primary_vc セクションが存在する
+        - primary_vc.id が空でない
+      fix: "primary_vcを設定する"
+
+    # ============================================================
+    # Rule 2: Primary VCの有効性
+    # ============================================================
+    - id: "VCCAP-002"
+      name: "Primary VC Valid"
+      severity: "error"
+      description: "primary_vcが有効なVC ID（VC1〜VC5）であること"
+      check: |
+        各primary_vc.id に対して:
+        - VC1, VC2, VC3, VC4, VC5 のいずれかである
+      fix: "有効なVC IDを設定する"
+
+    # ============================================================
+    # Rule 3: Secondary VCsの有効性
+    # ============================================================
+    - id: "VCCAP-003"
+      name: "Secondary VCs Valid"
+      severity: "error"
+      description: "secondary_vcsが有効なVC IDであること"
+      check: |
+        各secondary_vcs[].id に対して:
+        - VC1, VC2, VC3, VC4, VC5 のいずれかである
+        - primary_vc.id と重複しない
+      fix: "有効なVC IDを設定し、重複を除去する"
+
+    # ============================================================
+    # Rule 4: Capability存在確認
+    # ============================================================
+    - id: "VCCAP-004"
+      name: "Capability Exists"
+      severity: "error"
+      description: "対応するCapabilityがCL2定義に存在すること"
+      check: |
+        各capability.id に対して:
+        - CL2定義ファイル内に該当IDが存在する
+      fix: "存在しないCapability IDを修正する"
+
+    # ============================================================
+    # Rule 5: VL3参照の有効性
+    # ============================================================
+    - id: "VCCAP-005"
+      name: "VL3 Reference Valid"
+      severity: "error"
+      description: "source_vl3の参照が有効であること"
+      check: |
+        各source_vl3[].id に対して:
+        - Phase 2のvalue-declaration.yaml内に存在する
+      fix: "存在しないVL3参照を修正する"
+
+    # ============================================================
+    # Rule 6: VL3のVCパターンとの整合性
+    # ============================================================
+    - id: "VCCAP-006"
+      name: "VL3 VC Pattern Consistency"
+      severity: "warning"
+      description: "VL3のVCパターンとprimary_vcが整合すること"
+      check: |
+        source_vl3の vc_pattern に対して:
+        - 製品主導型 → primary_vc = VC1
+        - サービス主導型 → primary_vc = VC2
+        - 体験主導型 → primary_vc = VC3
+        - 関係主導型 → primary_vc = VC4
+        - 情報主導型 → primary_vc = VC5
+        - バランス型 → 複数VCのいずれか
+      fix: "パターンとprimary_vcの整合性を確認し修正"
+
+    # ============================================================
+    # Rule 7: 貢献説明の存在
+    # ============================================================
+    - id: "VCCAP-007"
+      name: "Contribution Description"
+      severity: "warning"
+      description: "VC貢献の説明が記載されていること"
+      check: |
+        primary_vc と各 secondary_vcs に対して:
+        - contribution フィールドが空でない
+      fix: "貢献内容の説明を追加する"
+
+    # ============================================================
+    # Rule 8: Phase 2との整合性
+    # ============================================================
+    - id: "VCCAP-008"
+      name: "Phase 2 Alignment"
+      severity: "warning"
+      description: "Phase 2のvc_capability_mapping.expected_capabilitiesと整合すること"
+      check: |
+        Phase 2のvalue-declaration.yamlを参照:
+        - phase3_handoff.vc_capability_mapping.expected_capabilities に
+          このCapabilityが含まれているか確認
+      fix: "Phase 2の期待と実際のマッピングを調整する"
+
+    # ============================================================
+    # Rule 9: 全CL2のカバレッジ
+    # ============================================================
+    - id: "VCCAP-009"
+      name: "CL2 Coverage"
+      severity: "warning"
+      description: "すべてのCL2にVC対応が設定されていること"
+      check: |
+        CL2定義ファイルの全Capability に対して:
+        - vc-capability-mapping.yaml内にエントリがある
+      fix: "未定義のCapabilityにVC対応を追加する"
+
+    # ============================================================
+    # Rule 10: VCバランスチェック
+    # ============================================================
+    - id: "VCCAP-010"
+      name: "VC Balance Check"
+      severity: "info"
+      description: "primary_vcの分布が偏っていないか情報提供"
+      check: |
+        全primary_vcを集計:
+        - 特定VCに80%以上集中している場合に情報表示
+        - 使用されていないVCがある場合に情報表示
+      fix: "情報として認識し、意図的な偏りであれば問題なし"
+
+# ============================================================
+# 検証結果テンプレート
+# ============================================================
+result_template:
+  summary:
+    total_capabilities: 0
+    mapped_capabilities: 0
+    coverage_rate: 0.0
+    passed: 0
+    failed: 0
+    warnings: 0
+
+  vc_distribution:
+    VC1_product: 0
+    VC2_service: 0
+    VC3_experience: 0
+    VC4_relationship: 0
+    VC5_information: 0
+
+  details:
+    - capability_id: ""
+      primary_vc: ""
+      secondary_vcs: []
+      rules:
+        - rule_id: ""
+          status: "pass | fail | warning | info"
+          message: ""
+
+# ============================================================
+# 使用方法
+# ============================================================
+# 1. vc-capability-mapping.yaml を読み込む
+# 2. CL2定義ファイル群を読み込む
+# 3. value-declaration.yaml を読み込む（Phase 2参照用）
+# 4. 各ルールを順に適用
+# 5. 結果をresult_templateに記録
+# 6. サマリーを出力
+#
+# 実行コマンド（予定）:
+# /parasol:validate vc-capability-consistency
+# ============================================================
