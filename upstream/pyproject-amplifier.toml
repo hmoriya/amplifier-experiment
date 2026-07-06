@@ -9,8 +9,8 @@ authors = [
     { name = "Microsoft MADE:Explorations Team" },
 ]
 dependencies = [
-    "amplifier-core",
-    "amplifier-app-cli",
+    "amplifier-core>=1.0.10",
+    "amplifier-app-cli @ git+https://github.com/microsoft/amplifier-app-cli@main",
 ]
 
 [project.scripts]
@@ -26,7 +26,6 @@ build-backend = "hatchling.build"
 package = true
 
 [tool.uv.sources]
-amplifier-core = { git = "https://github.com/microsoft/amplifier-core", branch = "main" }
 amplifier-app-cli = { git = "https://github.com/microsoft/amplifier-app-cli", branch = "main" }
 
 [tool.hatch.build.targets.wheel]
