@@ -1,0 +1,93 @@
+# サントリープロジェクト コンプライアンス対応 マスキングルール
+# 作成日: 2026-09-16
+
+# 対象プロジェクト
+target_project: "projects/suntory"
+
+# 企業名マスキング
+company_names:
+  # プロジェクト主体
+  "サントリーホールディングス": "飲料メーカーA ホールディングス"
+  "サントリー": "飲料メーカーA"
+  "Suntory Holdings": "Beverage Company A Holdings"
+  "Suntory": "Beverage Company A"
+  "SUNTORY": "BEVERAGE_COMPANY_A"
+
+  # 競合企業
+  "キリン": "競合B"
+  "キリンホールディングス": "競合B ホールディングス"
+  "Kirin": "Competitor B"
+  "アサヒ": "競合C"
+  "アサヒグループ": "競合C グループ"
+  "Asahi": "Competitor C"
+  "コカ・コーラ": "競合D"
+  "Coca-Cola": "Competitor D"
+  "ペプシ": "競合E"
+  "Pepsi": "Competitor E"
+
+# 取引先マスキング
+partners:
+  # コンビニ
+  "セブン-イレブン": "小売A"
+  "セブンイレブン": "小売A"
+  "7-Eleven": "Retail A"
+  "ローソン": "小売B"
+  "Lawson": "Retail B"
+  "ファミリーマート": "小売C"
+  "FamilyMart": "Retail C"
+
+  # スーパー
+  "イオン": "小売D"
+  "AEON": "Retail D"
+  "イトーヨーカドー": "小売E"
+
+# 人名マスキング（正規表現パターン）
+person_patterns:
+  # 創業家
+  - pattern: "鳥居家"
+    replacement: "創業家X"
+  - pattern: "佐治家"
+    replacement: "創業家Y"
+  - pattern: "鳥居"
+    replacement: "創業者X"
+  - pattern: "佐治"
+    replacement: "創業者Y"
+
+# 連絡先マスキング（正規表現パターン）
+contact_patterns:
+  # メールアドレス
+  - pattern: "[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}"
+    replacement: "xxx@example.com"
+
+  # 電話番号（日本形式）
+  - pattern: "\\d{2,4}-\\d{2,4}-\\d{4}"
+    replacement: "XXX-XXXX-XXXX"
+  - pattern: "0\\d{1,4}[-(]?\\d{1,4}[-)\\s]?\\d{4}"
+    replacement: "XXX-XXXX-XXXX"
+
+  # 住所
+  - pattern: "東京都[一-龯]+区"
+    replacement: "東京都○○区"
+  - pattern: "大阪[府市][一-龯]+区"
+    replacement: "大阪府○○区"
+
+# 数値マスキング（機密KPI）
+numeric_patterns:
+  # 従業員数
+  - pattern: "\\d{1,3},?\\d{3}人"
+    replacement: "X,XXX人"
+  # 売上高
+  - pattern: "\\d+兆\\d*,?\\d*億円"
+    replacement: "X兆X,XXX億円"
+  - pattern: "\\d{1,3},?\\d{3}億円"
+    replacement: "X,XXX億円"
+
+# 完全削除対象ファイル
+delete_files:
+  - "outputs/0-init/raw-content.md"
+
+# 削除対象セクション（ファイル内の特定セクション）
+delete_sections:
+  - file_pattern: "**/stakeholder-map.md"
+    sections:
+      - "## 主要ステークホルダー詳細"

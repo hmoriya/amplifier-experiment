@@ -1,11 +1,11 @@
-# Suntory SCM Domain - Ubiquitous Language Definition
-# サントリーグループSCMドメイン ユビキタス言語定義
+# Beverage Company A SCM Domain - Ubiquitous Language Definition
+# 飲料メーカーA グループSCMドメイン ユビキタス言語定義
 
 domain: SCM
 version: "1.0"
 last_updated: "2025-12-12"
 organization:
-  name: サントリーグループ
+  name: 飲料メーカーA グループ
   revenue: 3.08兆円
   subsidiaries: 265社
   characteristics:
@@ -1546,7 +1546,7 @@ integration_points:
       - StatusChanged
 
 # ============================================================
-# サントリー固有の業界用語・規制対応
+# 飲料メーカーA 固有の業界用語・規制対応
 # ============================================================
 suntory_specific:
   liquor_tax:
@@ -1592,7 +1592,7 @@ suntory_specific:
     terms:
       - term_ja: 自販機
         term_en: VendingMachine
-        definition: 飲料自動販売機（サントリー66万台保有）
+        definition: 飲料自動販売機（飲料メーカーA 66万台保有）
 
       - term_ja: オペレーション
         term_en: VMOperation

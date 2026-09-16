@@ -1,7 +1,7 @@
-# サントリー SCM イベント駆動アーキテクチャ設計
+# 飲料メーカーA SCM イベント駆動アーキテクチャ設計
 
 **作成日**: 2025-12-12
-**プロジェクト**: サントリーグループ SCM
+**プロジェクト**: 飲料メーカーAグループ SCM
 **Phase**: 4 - Architecture Design (Event Architecture)
 
 ---
@@ -318,7 +318,7 @@ events:
     consumers:
       - MFG-BusinessUnit
       - BC-SCM-005-Inventory-Control
-    description: ウイスキー熟成計画が更新された（サントリー固有）
+    description: ウイスキー熟成計画が更新された（飲料メーカーA固有）
     payload:
       - field: maturationPlanId
         type: string
@@ -371,7 +371,7 @@ events:
 
     - name: WeatherForecastReceived
       source: External-Weather-API
-      description: 気象予報データを受信（サントリー固有）
+      description: 気象予報データを受信（飲料メーカーA固有）
       action: 夏季飲料需要予測に反映
 ```
 
@@ -687,7 +687,7 @@ events:
     consumers:
       - BC-SCM-005-Inventory-Control
       - BC-SCM-006-SCM-Analytics
-    description: 自販機への補充が完了した（サントリー固有）
+    description: 自販機への補充が完了した（飲料メーカーA固有）
     payload:
       - field: replenishmentId
         type: string
@@ -714,7 +714,7 @@ events:
     consumers:
       - BC-SCM-002-Demand-Planning
       - BC-SCM-006-SCM-Analytics
-    description: 自販機在庫アラートを発信（AIコラミング連携・サントリー固有）
+    description: 自販機在庫アラートを発信（AIコラミング連携・飲料メーカーA固有）
     payload:
       - field: alertId
         type: string
@@ -975,7 +975,7 @@ events:
     consumers:
       - MFG-BusinessUnit
       - BC-SCM-002-Demand-Planning
-    description: 熟成完了通知（ウイスキー・サントリー固有）
+    description: 熟成完了通知（ウイスキー・飲料メーカーA固有）
     payload:
       - field: maturationId
         type: string
@@ -1143,7 +1143,7 @@ events:
     consumers:
       - FIN-Accounting
       - COMP-Regulation
-    description: 酒税申告データが生成された（サントリー固有）
+    description: 酒税申告データが生成された（飲料メーカーA固有）
     payload:
       - field: taxReportId
         type: string
@@ -1204,7 +1204,7 @@ events:
 
     - name: WaterSourceDataReceived
       source: SUST-Environment
-      description: 水源地環境データを受信（サントリー固有）
+      description: 水源地環境データを受信（飲料メーカーA固有）
       action: サステナビリティKPIに反映
 ```
 
@@ -1318,7 +1318,7 @@ external_inbound_events:
     target:
       - BC-SCM-001-Strategic-Procurement
       - BC-SCM-006-SCM-Analytics
-    description: 水源地環境データを受信（サントリー固有）
+    description: 水源地環境データを受信（飲料メーカーA固有）
     payload:
       - field: sourceId
         type: string
@@ -1385,7 +1385,7 @@ external_outbound_events:
   - name: LiquorTaxReport
     source: BC-SCM-006-SCM-Analytics
     target: COMP-Regulation
-    description: 酒税申告データを送信（サントリー固有）
+    description: 酒税申告データを送信（飲料メーカーA固有）
     payload:
       - field: reportId
         type: string
@@ -1406,10 +1406,10 @@ external_outbound_events:
 ```yaml
 asyncapi: '2.6.0'
 info:
-  title: Suntory SCM Event API
+  title: Beverage Company A SCM Event API
   version: '1.0.0'
   description: |
-    サントリーグループ SCM（サプライチェーン管理）のイベント駆動アーキテクチャ定義。
+    飲料メーカーAグループ SCM（サプライチェーン管理）のイベント駆動アーキテクチャ定義。
     6つのBounded Context間およびび外部システムとの非同期連携を定義。
 
 servers:
@@ -1562,7 +1562,7 @@ channels:
         $ref: '#/components/messages/DeliveryCompleted'
 
   scm.logistics.vending-machine.replenished:
-    description: 自販機補充完了イベント（サントリー固有）
+    description: 自販機補充完了イベント（飲料メーカーA固有）
     subscribe:
       operationId: onVendingMachineReplenished
       message:
@@ -1618,7 +1618,7 @@ channels:
         $ref: '#/components/messages/ExpiryWarningRaised'
 
   scm.inventory.maturation.completed:
-    description: 熟成完了イベント（ウイスキー・サントリー固有）
+    description: 熟成完了イベント（ウイスキー・飲料メーカーA固有）
     subscribe:
       operationId: onMaturationCompleted
       message:
@@ -1641,7 +1641,7 @@ channels:
         $ref: '#/components/messages/KPIUpdated'
 
   scm.analytics.liquor-tax.generated:
-    description: 酒税申告データ生成イベント（サントリー固有）
+    description: 酒税申告データ生成イベント（飲料メーカーA固有）
     subscribe:
       operationId: onLiquorTaxDataGenerated
       message:
@@ -2670,7 +2670,7 @@ sequenceDiagram
     participant ANA as BC-006<br/>SCM分析
     participant DP as BC-002<br/>需給計画
 
-    Note over AI,DP: 自販機在庫アラート → 補充フロー（サントリー固有）
+    Note over AI,DP: 自販機在庫アラート → 補充フロー（飲料メーカーA固有）
 
     AI->>AI: 在庫センサー検知
     AI->>AI: AI予測モデル実行
@@ -2715,7 +2715,7 @@ sequenceDiagram
 
     SUST->>SUST: POL: ESGデータに反映
 
-    Note over INV,COMP: 酒税申告データフロー（サントリー固有）
+    Note over INV,COMP: 酒税申告データフロー（飲料メーカーA固有）
 
     ANA->>ANA: CMD: 酒税計算
     ANA->>ANA: 製造/出荷/在庫集計
