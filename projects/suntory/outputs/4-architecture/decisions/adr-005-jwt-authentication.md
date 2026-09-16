@@ -52,7 +52,7 @@
     "iat": 1735686000,
     "jti": "unique-token-id",
     "name": "山田太郎",
-    "email": "yamada@suntory.co.jp",
+    "email": "xxx@example.com",
     "roles": ["marketing-manager", "beverage-user"],
     "org": "ORG-BEV-001",
     "permissions": ["campaign:read", "campaign:write"]

@@ -1,7 +1,7 @@
 project:
-  name: suntory
-  display_name: サントリーホールディングス株式会社
-  url: https://www.suntory.co.jp/
+  name: beverage-company-a
+  display_name: 飲料メーカーA ホールディングス株式会社
+  url: https://www.example.co.jp/
   created: 2025-12-01
   updated: 2025-12-01
 

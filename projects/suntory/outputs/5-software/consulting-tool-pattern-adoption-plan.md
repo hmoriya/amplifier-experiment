@@ -1,8 +1,8 @@
 # ConsultingToolパターン適用プラン
 
 **作成日**: 2025-12-05
-**プロジェクト**: サントリーグループ
-**目的**: ConsultingToolのソフトウェアデザイン構成をサントリーのBounded Context以下の構成に適用
+**プロジェクト**: 飲料メーカーAグループ
+**目的**: ConsultingToolのソフトウェアデザイン構成を飲料メーカーAのBounded Context以下の構成に適用
 
 ---
 
@@ -84,7 +84,7 @@ bc-001-task-management/
 
 ---
 
-## 2. サントリーへの適用プラン
+## 2. 飲料メーカーAへの適用プラン
 
 ### 2.1 適用スコープ
 
@@ -99,7 +99,7 @@ Phase 4で定義した24 Bounded Contextsのうち、以下を優先対象とす
 | | BRAND-Corporate | Core、全社ブランド |
 | **Phase 3** | 残りのBC | 順次展開 |
 
-### 2.2 ディレクトリ構造（サントリー版）
+### 2.2 ディレクトリ構造（飲料メーカーA版）
 
 ```
 projects/suntory/outputs/5-software/
@@ -343,7 +343,7 @@ QualityStandardUpdated:
    ```
 
 2. **テンプレート作成**
-   - ConsultingToolのテンプレートをサントリー向けにカスタマイズ
+   - ConsultingToolのテンプレートを飲料メーカーA向けにカスタマイズ
 
 3. **BC-001 README作成**
    - スコープ、責務、成功指標を定義
@@ -360,7 +360,7 @@ QualityStandardUpdated:
 
 ### 6.1 成功パターン
 
-| パターン | 説明 | サントリーへの適用 |
+| パターン | 説明 | 飲料メーカーAへの適用 |
 |----------|------|-------------------|
 | 7階層設計 | Service→Capability→Operation→UseCase→Robustness→Page→Test | そのまま採用 |
 | 3要素命名 | 日本語/英語/定数 | そのまま採用 |
@@ -369,7 +369,7 @@ QualityStandardUpdated:
 
 ### 6.2 カスタマイズポイント
 
-| 項目 | ConsultingTool | サントリー版 |
+| 項目 | ConsultingTool | 飲料メーカーA版 |
 |------|---------------|-------------|
 | 規模 | 1 BC、12 UC | 24 BC、100+ UC |
 | 複雑性 | 単一事業 | 5事業×HD |

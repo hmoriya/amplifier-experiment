@@ -1,7 +1,7 @@
 # 統合パターン定義
 
 **作成日**: 2025-12-05
-**プロジェクト**: サントリーグループ
+**プロジェクト**: 飲料メーカーAグループ
 **Phase**: 4 - Architecture Design
 
 ---
@@ -116,7 +116,7 @@ HTTPメソッド:
   ヘッダー:
     - X-RateLimit-Limit: 1000
     - X-RateLimit-Remaining: 999
-    - X-RateLimit-Reset: 1640000000
+    - X-RateLimit-Reset: 164XXX-XXXX-XXXX
   制限超過: 429 Too Many Requests
 ```
 
